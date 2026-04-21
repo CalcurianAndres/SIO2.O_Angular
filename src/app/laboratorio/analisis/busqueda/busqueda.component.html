@@ -1,0 +1,35 @@
+<div class="modal" [ngClass]="{'is-active':busqueda}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <div class="modal-card-title fuente">
+                Resultados
+            </div>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light">
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Lote</th>
+                    <th>Resultado</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let resultado of Resultadoas;index as i">
+                        <td>{{resultado.material.material.nombre}} {{resultado.material.material.serie}} ({{resultado.material.material.fabricante.alias}})</td>
+                        <td>{{resultado.material.lote}}</td>
+                        <td>
+                            <div class="spinner left" *ngIf="!analisis.BuscarAnalisis(resultado.material.analisis)"></div>
+                            <span class="tag" [ngClass]="{'is-success':analisis.BuscarAnalisis(resultado.material.analisis).resultado.resultado === 'APROBADO', 'is-danger':analisis.BuscarAnalisis(resultado.material.analisis).resultado.resultado === 'RECHAZADO'}">
+                                {{analisis.BuscarAnalisis(resultado.material.analisis).resultado.resultado}}
+                            </span>
+                             <i class="fas fa-info-circle blue_" (click)="verInfo(resultado.Recepcion, resultado.material, 0, 5)"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

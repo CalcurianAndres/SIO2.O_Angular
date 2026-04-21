@@ -1,0 +1,182 @@
+.carousel-container {
+    position: relative;
+    width: 1100px; /* Largura de cada painel */
+    margin: 50px auto;
+    overflow: hidden; /* Adicionando overflow: hidden para esconder conteúdo que ultrapassa a largura */
+    background-color: transparent/* Cor de fundo do contêiner do carrossel */
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 8800px; /* Largura total do carrossel - 4 painéis * 1100px */
+    background-color: transparent;
+}
+
+.panel {
+    width: 1100px;
+    // height: 400px;
+    box-sizing: border-box;
+    display: relative;
+    justify-content: center;
+    align-items: center;
+    // font-size: 24px;
+    border: 1px solid #ccc; /* Cor da borda dos painéis */
+    border-radius: 10px; /* Adicionando bordas arredondadas */
+    // overflow: hidden; /* Garantindo que a imagem não ultrapasse as bordas arredondadas */
+    background-color: #fff; /* Cor de fundo dos painéis */
+}
+
+.content {
+    padding: 20px;
+}
+
+.button_ {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 200px;
+    color: rgba(228, 228, 228, .5);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 7;
+}
+.button_:hover{
+    color: rgb(173, 173, 173);
+}
+
+.total{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 50px;
+    color: rgba(228, 228, 228, .8);
+}
+
+.Finalizar{
+    position: absolute;
+    right: 100px;
+    bottom: 25px;
+}
+
+.prev {
+    left: -10px;
+}
+
+.next {
+    right: -10px;
+}
+
+.modal .modal-content{
+    width: 90%;
+    background-color: transparent;
+}
+.titulo{
+    display: block;
+    width: 100%;
+    height: 60px;
+    padding: 5px;
+    background-color: #363636;
+    color: #9fadbc;
+}
+
+.text_{
+    display: block;
+    color: #9fadbc;
+    margin-top: 15px;
+    font-family: 'Gilroy';
+}
+
+.tabla{
+    display: block;
+    width: 1000px;
+    margin-left: 50px;
+    margin-top: 15px;
+}
+
+.red_cross{
+    display: block;
+    color: red;
+    background-color: red;
+    position: relative;
+    float: right;
+    top: -25px;
+    right: 15px;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip::after {
+    content: 'Por cada 1.000 hojas';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip2 {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip2::after {
+    content: 'Cabida por caja de este producto';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip2:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.centered{
+    display: block;
+    margin-top: 23px;
+}
+
+
+
+/* app.component.css */
+.modal-content {
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+  }
+  
+  .card {
+    margin: 1em;
+    text-align: center;
+    transform: rotate(45deg);
+  }
+  

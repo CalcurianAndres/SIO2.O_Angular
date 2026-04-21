@@ -1,0 +1,257 @@
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    Planificación
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+            </div>
+            <br>
+
+            <div class="card">
+              <div class="card-content">
+                <div class="columns">
+                  <div class="column is-3">
+                    <span class="title">Órdenes</span>
+                    <hr>
+                    <br>
+                    <table class="table is-fullwidth is-striped" style="margin-top: 17px;">
+                      <tbody>
+                        <tr *ngFor="let op of api.orden">
+                          <th style="height: 40px;">{{op.numero_op}} {{op.producto[0].identificacion.producto}}</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="column">
+                    <span class="title">Febrero</span>
+                    <hr>
+                    <span class="bg">
+                      <div class="bars">
+                        <div *ngFor="let day of generateDates(); let i = index" class="dias_" [ngClass]="{'gray-tenue': i % 2 == 0, 'no-laboral': formatearFecha_(generateDates()[i-1]) === 'No laboral'}" style="min-width: 55px; max-width:25px; padding:0px;margin:0px;">
+                          {{generateDates()[i].split(' ')[0]}} <br>
+                          {{ formatearFecha(generateDates()[i]) }}
+                        </div>
+                      </div>
+  
+                      <div class="bars" *ngFor="let barras of api.orden;index as i" style="border-bottom: solid 1px black;">
+                        <div 
+                          class="order" 
+                          *ngFor="let op of generateDates(); index as j" 
+                          [ngStyle]="{
+                            'background-color':  Colors[isDateInRange(generateDates()[j], barras.fases, i)]
+                          }">
+                          <span class="icon_ban" *ngIf="isDateInRange(generateDates()[j], barras.fases, i) === 1">
+                            <i class="fas fa-ban"></i>
+                            <br>
+                          </span>
+                          <div class="motivo-popup" style="text-align: center;" *ngIf="BuscarFeriado(generateDates()[j])">
+                            {{BuscarFeriado(generateDates()[j])}}
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <div class="card">
+              <div class="card-content">
+                <div class="columns">
+                  <div class="column is-3">
+                    <span class="title">Órdenes</span>
+                    <hr>
+                    <br>
+                    <table class="table is-fullwidth is-striped" style="margin-top: 17px;">
+                      <tbody>
+                        <tr *ngFor="let maquina of maquinas.maquinas">
+                          <th style="height: 40px;">{{maquina.nombre}}</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="column">
+                    <span class="title">Febrero</span>
+                    <hr>
+                    <span class="bg">
+                      <div class="bars">
+                        <div *ngFor="let day of generateDates(); let i = index" class="dias_" [ngClass]="{'gray-tenue': i % 2 == 0, 'no-laboral': formatearFecha_(generateDates()[i-1]) === 'No laboral'}" style="min-width: 55px; max-width:25px; padding:0px;margin:0px;">
+                          {{generateDates()[i].split(' ')[0]}} <br>
+                          {{ formatearFecha(generateDates()[i]) }}
+                        </div>
+                      </div>
+  
+                      <div class="bars" *ngFor="let barras of maquinas.maquinas;index as i" style="border-bottom: solid 1px black;">
+                        <div 
+                          class="order" 
+                          *ngFor="let op of generateDates(); index as j" 
+                          [ngStyle]="{
+                            'background-color':  Colors[isDateInRangeMachine(generateDates()[j],barras._id)]
+                          }">
+                          <span class="icon_ban" *ngIf="isDateInRangeMachine(generateDates()[j],barras._id) === 1">
+                            <i class="fas fa-ban"></i>
+                            <br>
+                          </span>
+                          <div class="motivo-popup" style="text-align: center;" *ngIf="BuscarFeriado(generateDates()[j])">
+                            {{BuscarFeriado(generateDates()[j])}}
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+
+            <div class="columns">
+              <div class="column">
+                <div class="card">
+                  <div class="card-content" style="justify-content: center; justify-items: center;">
+                    <div class="columns">
+                      <div class="column is-4">
+                        <br>
+                        <table class="table is-fullwidth is-striped">
+                          <tbody>
+                            <tr *ngFor="let maquina of maquinas.maquinas">
+                              <td style="min-height: 50px; height: 50px;">{{maquina.nombre}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="column">
+                        <div class="dias_de_Semana">
+                          <div class="dias" *ngFor="let dia of semanas[Semana_selected]">
+                            {{dia}}
+                          </div>
+                        </div>
+                        <!-- <div class="informacion">
+                          <div *ngFor="let maquina of maquinas.maquinas" class="barras_">
+                            <div class="orden"
+                                      *ngFor="let op of buscarFase(maquina._id); trackBy: trackByFn; index as j"
+                                      cdkDrag
+                                      cdkDragLockAxis="x"
+                                      [ngStyle]="{
+                                      'background-color': Colors[2], 
+                                      'border':'solid 15px' + Colors2[2],
+                                      'width':'220px',
+                                      'margin-left':'110px',
+                                      'height':'50px'}">
+                            </div>
+                          </div>
+                        </div> -->
+                        <div class="info">
+                          <div *ngFor="let maquina of maquinas.maquinas" class="barras" style="height: 50px;">
+                            <ng-container *ngFor="let op of buscarFase(maquina._id);trackBy: trackByFn; index as j">
+                                  <div class="op"
+                                    cdkDrag
+                                    cdkDragLockAxis="x"
+                                    (cdkDragStarted)="onDragStart_($event, op)"
+                                    (cdkDragEnded)="_onDragEnd_($event, op)"
+                                    [ngStyle]="{
+                                    'background-color': Colors[j+2 % Colors.length], 
+                                    'border':'solid 15px' + Colors2[j+2 % Colors2.length],
+                                    'width':ExisteEnLaSemana(op,j,maquina._id).width,
+                                    'margin-left':ExisteEnLaSemana(op,j,maquina._id).ml,
+                                    'height':'50px'}" 
+                                    *ngIf="ExisteEnLaSemana(op,j,maquina._id).show">
+                                    {{op.fases[0].fases[0].fecha}} - {{op.fases[0].fases[0].final}} / {{ExisteEnLaSemana(op,j,maquina._id).ml}}
+                                  </div>
+                              </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="columns">
+              <div class="column">
+                <div class="card">
+                  <div class="card-content" style="overflow: hidden;">
+                    
+
+                    <div class="columns">
+                      <div class="column is-2">
+                        <span style="display:block; text-align: center; width: 100%; font-family: 'Gilroy'; font-size: 23px;">
+                          Maquinas
+                        </span>
+                        <hr>
+                        <table class="table is-fullwidth is-striped">
+                          <tbody>
+                            <tr *ngFor="let maquina of maquinas.maquinas">
+                              <td style="min-height: 50px; height: 50px;">{{maquina.nombre}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="column" style="overflow: hidden;">
+                        <span style="display:block; text-align: center; width: 100%; font-family: 'Gilroy'; font-size: 23px;">
+                          Febrero
+                        </span>
+                        <div class="calendar" style="position: relative;">
+                          <div class="calendar-day day-info" style="min-width: 10px; max-width:10px;"></div>
+                          <div *ngFor="let day of generateDates(); let i = index" class="calendar-day day-info" [ngClass]="{'gray-tenue': i % 2 == 0, 'no-laboral': formatearFecha_(generateDates()[i-1]) === 'No laboral'}" style="min-width: 55px; max-width:25px;">
+                            {{ formatearFecha(generateDates()[i]) }}
+                          </div>
+                        </div>
+
+                        <span style="display:block; margin-top: -34px;">
+                          <hr>
+                          <table class="table is-fullwidth is-striped">
+                            <tbody>
+                              <tr *ngFor="let maquina of maquinas.maquinas; index as i">
+                                <td style="min-height: 50px; height: 50px; max-height: 50px" class="td">
+                                  <ng-container *ngFor="let op of buscarFase(maquina._id); index as j">
+                                    <!-- {{j}} -->
+                                    <ng-container *ngFor="let fechas of op.fases[0].fases">
+                                      <!-- x -->
+                                      <div [ngStyle]="{'margin-left':calcularMargen(fechas.fecha, j)}" class="wrapp">
+                                        <div class="color" 
+                                        [ngStyle]="{'background-color': Colors[j % Colors.length], 'width':calcularWith(fechas.fecha, fechas.final)}"
+                                        mwlResizable
+                                        cdkDrag
+                                        cdkDragLockAxis="x"
+                                        [cdkDragDisabled]="dragDisabled" 
+                                        (cdkDragStarted)="onDragStart($event)"
+                                        (cdkDragEnded)="onDragEnd($event,i)"
+                                        [enableGhostResize]="true"
+                                        (resizeStart)="onResizeStart($event, i)"
+                                        (resizeEnd)="onResizeEnd($event, i)">
+                                        <!-- Solo esta parte permite el resize -->
+                                        <div class="fase" mwlResizeHandle [resizeEdges]="{right: true}"></div>
+                                      </div>
+                                      </div>
+                                    </ng-container>
+                                  </ng-container>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </span>
+                      </div>
+                    </div>
+                        
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

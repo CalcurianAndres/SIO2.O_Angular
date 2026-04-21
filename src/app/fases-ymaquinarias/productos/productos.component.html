@@ -1,0 +1,106 @@
+<app-nuevo-producto 
+[nuevo]="nuevo"
+[producto]="producto"
+(onCloseModal)="cerrar()">
+</app-nuevo-producto>
+
+<app-cambios
+[cambios]="cambios"
+[informacion]="cambios_todos"
+[fechas_cambios]="fechas_cambios"
+[titulo]="codigo_producto"
+(onCloseModal)="cambios = false; cambios_todos = []; fechas_cambios = []">
+
+</app-cambios>
+
+<app-new-producto 
+[nuevo]="nuevo"
+[producto]="Producto"
+[sustratos_nombres]="sustratos_nombres"
+[tinta_nombres]="tinta_nombres"
+[barniz_nombres]="barniz_nombres"
+[impresoras_nombre]="impresoras_nombre"
+[troqueladora_nombres]="troqueladora_nombres"
+[guillotina_nombres]="guillotina_nombres"
+[pegadora_nombres]="pegadora_nombres"
+[pega_nombres]="pega_nombres"
+[cajas_nombres]="cajas_nombres"
+[caja_nombre]="caja_nombre"
+(onCloseModal)="cerrar()">
+</app-new-producto>
+<div class="container_ mt-5 ">
+    <div class="card">
+      <div class="card-content darker">
+        <div class="card mt-5 title_">
+          <!-- <span class="red-bar"></span> -->
+          <div class="card-content">
+            <h1 class="title blancas">
+              Productos
+            </h1>
+            <h2 class="subtitle blancas">
+              Descripción
+            </h2>
+          </div>
+        </div>
+        <br>
+        <button class="button is-info" (click)="nuevoProducto()">
+          <span class="icon">
+            <i class="fas fa-plus-circle"></i>
+          </span>
+          <span>Producto</span>
+        </button> 
+        <br><br>
+        <div class="columns">
+          <div class="column is-3">
+            <div class="card">
+              <div class="card-content">
+                <div class="subtitles">Clientes</div>
+                <div class="clientes-list">
+                  <ul>
+                    <li *ngFor="let cliente of clientes.clientes" (click)="BuscarProductos(cliente._id)">{{cliente.nombre}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="card">
+              <div class="card-content">
+                <div class="subtitles">Productos</div>
+                <br>
+                <div class="message" *ngIf="productos.length < 1">
+                  <p>No hay productos <i class="fas fa-frown"></i></p>
+                </div>
+                <ng-container *ngIf="productos.length > 0">
+                  <table class="table is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Especificación</th>
+                        <th>Producto</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let producto of productos">
+                        <td>E-{{producto.identificacion.cliente.codigo}}-{{producto.identificacion.codigo}}-{{producto.identificacion.version}}-0{{this.productos_.buscarHistorialPorProducto(producto._id).length + 1}}</td>
+                        <td>{{producto.identificacion.categoria.nombre}} {{producto.identificacion.producto}}</td>
+                        <td>
+                          <i class="fas fa-edit green" style="cursor: pointer;" (click)="EditarProducto(producto)"></i>
+                           <i class="fas fa-download blue_" style="cursor: pointer;" (click)="DescargarPDF(producto)"></i>
+                           <i class="fas fa-comment" style="cursor: pointer;" (click)="Cambios_realizados(producto._id, producto)"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<!-- <button>Enviar notificación</button> -->

@@ -1,0 +1,645 @@
+<app-tickets-r
+[ver]="listaDeTicketsRojos"
+[tickets]="listado"
+[defectos]="defectos"
+[causas]="_causas"
+[orden]="orden_selected"
+(onCloseModal)="listaDeTicketsRojos = false"
+></app-tickets-r>
+
+<app-tickets-a
+[ver]="listaDeTicketsAmarillo"
+[tickets]="listado"
+[orden]="orden_selected"
+(onCloseModal)="listaDeTicketsAmarillo = false">
+
+</app-tickets-a>
+
+<div class="container_ mt-5 ">
+    <div class="card">
+      <div class="card-content darker">
+        <div class="card mt-5 title_">
+          <!-- <span class="red-bar"></span> -->
+          <div class="card-content">
+            <h1 class="title blancas">
+              Defectos
+            </h1>
+            <h2 class="subtitle blancas">
+              Descripción
+            </h2>
+          </div>
+        </div>
+        <br>
+        <!-- CREACION DE TICKETS ROJOS ::::::::::::::::::::::::::::::::::::::... -->
+<div class="card">
+<div class="card-content">
+<span class="title">Producto no conforme</span>
+<hr>
+<div class="card">
+    <div class="card-content">
+        <table class="table is-fullwidth is-striped">
+            <thead>
+                <tr>
+                    <th>Orden</th>
+                    <th>Producto</th>
+                    <th>Cliente</th>
+                    <th>Defectos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let orden of ordenes.orden; index as i">
+                    <td>{{orden.numero_op}}</td>
+                    <td>{{orden.producto[0].identificacion.producto}}</td>
+                    <td>{{orden.producto[0].identificacion.cliente.nombre}}</td>
+                    <td>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <span class="card_ yellow" (click)="listaDeTicketsAmarillo = true; MostrarListado(ordenes.buscarTicketAmarilloPorOrden(orden._id), orden)" style="cursor: pointer;">
+                                    {{ getTicketsAmarillosPorOrden(orden._id).length }}
+                                </span>
+                            </div>
+                            <div class="control">
+                                <span class="card_ red" style="cursor: pointer;" (click)="listaDeTicketsRojos = true; MostrarListado(ordenes.buscarTicketRojoPorOrden(orden._id), orden)" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length > 0">
+                                    {{ordenes.buscarTicketRojoPorOrden(orden._id).length}}
+                                    <span class="badge" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length > 0">{{ordenes.buscarTicketRojoPorCerrar(orden._id).length}}</span>
+                                </span>
+                                <span class="card_ red" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length < 1">
+                                    {{ordenes.buscarTicketRojoPorOrden(orden._id).length}}
+                                    <span class="badge" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length > 0">{{ordenes.buscarTicketRojoPorCerrar(orden._id).length}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button" style="background-color: transparent; border: none; color:rgb(54, 152, 232)" (click)="ticket_rojo = true; GenerarTicket(orden)">
+                                    <span class="icon"><i class="fa-solid fa-plus"></i></span>
+                                </button>
+                            </div>
+                            <div class="control" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length > 0">
+                                <button class="button" style="background:transparent; border:none; color:rgb(220, 107, 107)">
+                                    <span class="icon"><i class="fa-solid fa-xmark"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- FINAL DE CREACION DE TICKETS ROJOS::::::::::::::::::::::::::::: -->
+
+<hr>
+        <div class="card">
+            <div class="card-content dark">
+
+
+
+                <!-- <span class="subtitles">Nuevo</span> -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <label class="label">Cliente</label>
+                        <div class="select">
+                            <select [(ngModel)]="cliente_">
+                                <option value="{{cliente._id}}" *ngFor="let cliente of clientes.clientes">{{cliente.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control" *ngIf="cliente_">
+                        <label class="label">Categoría</label>
+                        <div class="select">
+                            <select [(ngModel)]="categoria_" (change)="BuscarDefectosAlmacenados()">
+                                <option value="{{categoria._id}}" *ngFor="let categoria of categorias.categorias">{{categoria.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="columns" *ngIf="categoria_">
+            <div class="column">
+                <div class="card tag_ unshadow" [ngClass]="{'azul':Tags[0] || !edicion_general, 'unselected':!Tags[0] && edicion_general}" (click)="seleccionTag(0)">
+                    <div class="card-content">
+                        <span class="__titulo">
+                            Menores
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card tag_ unshadow" [ngClass]="{'amarillo':Tags[1] || !edicion_general, 'unselected':!Tags[1] && edicion_general }" (click)="seleccionTag(1)">
+                    <div class="card-content">
+                        <span class="__titulo">
+                            Mayores
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card tag_ unshadow" [ngClass]="{'rojo':Tags[2] || !edicion_general, 'unselected':!Tags[2] && edicion_general}" (click)="seleccionTag(2)">
+                    <div class="card-content">
+                        <span class="__titulo">
+                            Críticos
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card unshadow bodies" *ngIf="categoria_">
+            <div class="card-content">
+                <div class="info_sinEdicion" *ngIf="!edicion_general">
+                    <div class="columns">
+                        <div class="column">
+                            <span class="__title">
+                                AQL: {{aqls[0]}}%
+                            </span>
+                            <hr>
+                            <table class="table is-fullwidth is-striped">
+                                <tbody>
+                                    <tr *ngFor="let menor of defectos.menores">
+                                        <td style="font-size: small;">
+                                            <span class="vineta">
+                                                {{menor}}
+                                            </span> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="column lbb">
+                            <span class="__title">
+                                AQL: {{aqls[1]}}%
+                            </span>
+                            <hr>
+                            <table class="table is-fullwidth is-striped">
+                                <tbody>
+                                    <tr *ngFor="let mayor of defectos.mayores">
+                                        <td style="font-size: small;">
+                                            <span class="vineta">
+                                                {{mayor}}
+                                            </span> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="column lbb">
+                            <span class="__title">
+                                AQL: {{aqls[2]}}%
+                            </span>
+                            <hr>
+                            <table class="table is-fullwidth is-striped">
+                                <tbody>
+                                    <tr *ngFor="let criticos of defectos.criticos">
+                                        <td style="font-size: small;">
+                                            <span class="vineta">
+                                                {{criticos}}
+                                            </span> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button class="button is-success" (click)="habilitarEdicion()">
+                        <span class="icon"><i class="far fa-edit"></i></span>
+                        <span>
+                            Editar
+                        </span>
+                    </button>
+                </div>
+                <div class="columns" *ngIf="edicion_general">
+                    <div class="column">
+                        <div class="card aqlInfo" >
+                            <div class="card-content">
+                                <div class="Informacion">
+        
+                                    <span class="__title">
+                                        <div class="columns">
+                                            <div class="column">
+                                                <span class="aql">
+                                                    AQL 
+                                                </span>
+                                            </div>
+                                            <div class="column">
+                                                <span class="acronimo">
+                                                    Acceptable <br>
+                                                    Quality <br>
+                                                    Level
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <div class="slidecontainer">
+                                        <input type="range" step=".025" min="0" max="5" class="slider" id="myRange" [(ngModel)]="valor" (change)="GuardandoCambios($event.target)">
+                                    </div>                              
+                                    <span class="value">
+                                        {{valor}}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="formulario">
+                                    <span class="subtitles">Descripción de defecto</span> <br>
+                                    <div class="field">
+                                        <div class="control" *ngIf="!edicion">
+                                            <textarea class="textarea" style="resize: none;" rows="2" columns="7" [(ngModel)]="defecto" width="80%" (keydown.enter)="$event.preventDefault(); onEnterPress()"></textarea>
+                                            <div style="position: absolute; bottom: 5px; right: 5px; color: #888;font-size: xx-small;">Presione Enter para agregar defecto</div>
+                                        </div>
+                                        <div class="control" *ngIf="edicion">
+                                            <textarea class="textarea" id="edition" style="resize: none;" rows="2" columns="7" [(ngModel)]="defectos[tipo][n]" width="80%" (keydown.enter)="$event.preventDefault(); edicion = false"></textarea>
+                                            <div style="position: absolute; bottom: 5px; right: 5px; color: #888;font-size: xx-small;">Presione Enter para editar defecto</div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="contenedor">
+                                        <table class="table is-fullwidth is-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th width="60px"></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody *ngIf="Tags[0]">
+                                                <tr *ngFor="let defectos of defectos.menores;index as i" [ngClass]="{'elemento-a-desintegrar':clases[i]}">
+                                                    <td style="font-size: small;">{{defectos}}
+                                                        <a (click)="toggleCausas(i, 'menores')" style="font-size: x-small; cursor: pointer;">
+                                                        <i [class]="mostrarCausas['menores'+i] ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                                        </a>
+                                                        <table class="table is-striped is-fullwidth" *ngIf="mostrarCausas['menores'+i]">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Posibles causas <i class="fas fa-plus" style="cursor: pointer; color:rgb(128, 180, 248)" (click)="causas = true;index_actual = i; index_tag = 0"></i></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let causa_ of _causas.menores[i]">
+                                                                    <td>{{causa_}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td style="font-size: small; width: 5px; text-align: right;"><i class="far fa-edit green" style="cursor: pointer;" (click)="editar(i,'menores')"></i>  <i class="fas fa-trash-alt red" (click)="deleteDefecto('menores',i)" style="cursor: pointer;"></i></td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody *ngIf="Tags[1]">
+                                                <tr *ngFor="let defectos of defectos.mayores;index as i">
+                                                    <td style="font-size: small;">{{defectos}}<a (click)="toggleCausas(i, 'mayores')" style="font-size: x-small; cursor: pointer;">
+                                                        <i [class]="mostrarCausas['mayores'+i] ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                                        </a>
+                                                        <table class="table is-striped is-fullwidth" *ngIf="mostrarCausas['mayores'+i]">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Posibles causas <i class="fas fa-plus" style="cursor: pointer; color:rgb(128, 180, 248)" (click)="causas = true;index_actual = i; index_tag = 1"></i></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let causa_ of _causas.mayores[i]">
+                                                                    <td>{{causa_}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td style="font-size: small; width: 5px; text-align: right;"><i class="far fa-edit green" style="cursor: pointer;" (click)="editar(i,'mayores')"></i>  <i class="fas fa-trash-alt red" (click)="deleteDefecto('mayores',i)" style="cursor: pointer;"></i></td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody *ngIf="Tags[2]">
+                                                <tr *ngFor="let defectos of defectos.criticos;index as i">
+                                                    <td style="font-size: small;">{{defectos}}<a (click)="toggleCausas(i, 'criticos')" style="font-size: x-small; cursor: pointer;">
+                                                        <i [class]="mostrarCausas['criticos'+i] ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                                        </a>
+                                                        <table class="table is-striped is-fullwidth" *ngIf="mostrarCausas['criticos'+i]">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Posibles causas <i class="fas fa-plus" style="cursor: pointer; color:rgb(128, 180, 248)" (click)="causas = true;index_actual = i; index_tag = 2"></i></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let causa_ of _causas.criticos[i]">
+                                                                    <td>{{causa_}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td style="font-size: small; width: 5px; text-align: right;"><i class="far fa-edit green" style="cursor: pointer;" (click)="editar(i,'criticos')"></i>  <i class="fas fa-trash-alt red" (click)="deleteDefecto('criticos',i)" style="cursor: pointer;"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <button class="button is-success" (click)="edicion_general = false; guardarCambios()">
+                                            <span class="icon"><i class="fas fa-save"></i></span>
+                                            <span>Guardar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+            </div>
+        </div>
+        <!-- <hr> -->
+
+        <!-- MODAL NUEVAS CAUSAS DE DEFECTOS::::::::::::::::::::::::::::::: -->
+         <div class="modal" [ngClass]="{'is-active':causas}">
+            <div class="modal-background"></div>
+            <div class="modal-card animate__animated animate__fadeInUp">
+                <div class="modal-card-head">
+                    <p class="modal-card-title fuente">
+                        Posible causa
+                    </p>
+                    <button class="delete red_cross" aria-label="close" (click)="causas = false; causas_array=[];causa_posible=''"></button>
+                </div>
+                <div class="modal-card-body light">
+                    <span>
+                        <textarea class="textarea" style="resize: none;" rows="2" columns="7" [(ngModel)]="causa_posible" width="80%" (keydown.enter)="$event.preventDefault(); addCausa()"></textarea>
+                        <div style="position: absolute; bottom: 5px; right: 5px; color: #888;font-size: xx-small;">Presione Enter para agregar defecto</div>
+                    </span>
+                    <hr>
+                    <table class="table is-fullwidth is-striped">
+                        <tbody>
+                            <tr *ngFor="let causa__ of causas_array; index as i">
+                                <td>
+                                    {{causa__}}
+                                </td>
+                                <td>
+                                    <i class="fas fa-trash-alt red" style="cursor: pointer; width: 5px; text-align: right;" (click)="causas_array.splice(i,1)"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button class="button is-success" [disabled]="causas_array.length < 1" (click)="guardarCausas()">
+                        <span>
+                            Guardar
+                        </span>
+                    </button>
+                </div>
+            </div>
+         </div>
+        <!-- MODAL NUEVAS CAUSAS DE DEFETOS:::::::::::::::::::::::::::::::: -->
+
+
+      </div>
+    </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active':ticket_rojo}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Ticket Rojo
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="ticket_rojo = false;"></button>
+        </div>
+        <div class="modal-card-body" *ngIf="orden_selected">
+            <div class="columns">
+                <div class="column">
+                    <figure class="image" style="width: 120px;">
+                        <img src="../../../assets/poli_cintillo.png" alt="">
+                    </figure>
+                </div>
+                <div class="column">
+                    <table class="table is-bordered is-fullwidth">
+                        <tr>
+                            <th style="text-align: center;">
+                                Orden de produccion: <br>
+                                <span style="font-family: 'Gilroy'; font-size: x-large;">{{orden_selected.numero_op}}</span>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <article class="message is-danger">
+                <div class="message-header" style="font-size: xx-large; color: white;font-family: 'Gilroy';text-align: center;">
+                    PRODUCTO NO CONFORME
+                </div>
+            </article>
+            <div class="columns">
+                <div class="column">
+                    <table class="table is-bordered is-fullwidth">
+                        <tr>
+                            <td>
+                                Producto: <br> <br>
+                                <span style="font-family: 'Gilroy';">{{orden_selected.producto[0].identificacion.producto}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="column">
+                    <table class="table is-bordered is-fullwidth">
+                        <tr>
+                            <td>
+                                Código del produco: <br> <br>
+                                <span style="font-family: 'Gilroy';">{{orden_selected.producto[0].identificacion.cliente.codigo}}-{{orden_selected.producto[0].identificacion.codigo}}-{{orden_selected.producto[0].identificacion.version}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="select">
+                        <select [(ngModel)]="fase_selected">
+                            <option value="{{i}}" *ngFor="let procesos of orden_selected.fases; index as i">{{procesos.nombre}} ({{procesos.maquina.nombre}} {{procesos.maquina.marca}})</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <label for="" class="label">Defecto</label>
+                    <div class="select">
+                        <select [(ngModel)]="tipo_selected">
+                            <option value="Menor">Menor</option>
+                            <option value="Mayor">Mayor</option>
+                            <option value="Critico">Crítico</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="tipo_selected">
+                    <label for="" class="label">Defecto</label>
+                    <div class="select">
+                        <select [(ngModel)]="defecto_selected">
+                            <ng-container *ngIf="tipo_selected == 'Menor'">
+                                <option value="{{i}}" *ngFor="let defecto of defectos.menores;index as i">{{defecto}}</option>
+                            </ng-container>
+                            <ng-container *ngIf="tipo_selected == 'Mayor'">
+                                <option value="{{i}}" *ngFor="let defecto of defectos.mayores;index as i">{{defecto}}</option>
+                            </ng-container>
+                            <ng-container *ngIf="tipo_selected == 'Critico'">
+                                <option value="{{i}}" *ngFor="let defecto of defectos.criticos; index as i">{{defecto}}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="defecto_selected">
+                    <label for="" class="label">Causa</label>
+                    <div class="select">
+                        <select [(ngModel)]="causa_selected">
+                            <ng-container *ngIf="tipo_selected == 'Menor'">
+                                <option value="{{causa}}" *ngFor="let causa of this._causas.menores[defecto_selected];index as i">{{causa}}</option>
+                            </ng-container>
+                            <ng-container *ngIf="tipo_selected == 'Mayor'">
+                                <option value="{{causa}}" *ngFor="let causa of this._causas.mayores[defecto_selected];index as i">{{causa}}</option>
+                            </ng-container>
+                            <ng-container *ngIf="tipo_selected == 'Critico'">
+                                <option value="{{causa}}" *ngFor="let causa of this._causas.criticos[defecto_selected]; index as i">{{causa}}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label for="" class="label">Descripción del defecto</label>
+                    <textarea name="" id="" class="textarea" placeholder="Descripción del defecto" [(ngModel)]="causa_"></textarea>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="" class="label">Supervisor</label>
+                            <input type="text" class="input" [(ngModel)]="searchText__" *ngIf="!supervisor">
+                            <div class="empleados_" *ngIf="filteredEmployees__().length">
+                            <div *ngFor="let trabajador of filteredEmployees__()">
+                                <div class="columns">
+                                <div class="column is-6" style="font-size: small;">
+                                    <br>
+                                    {{trabajador.datos_personales.nombres}} {{trabajador.datos_personales.apellidos}}<br>
+                                    <span style="font-family: 'Gilroy';">
+                                    {{trabajador.contratacion.cargo.nombre}}
+                                    </span>
+                                </div>
+                                <div class="column is-1">
+                                    <br>
+                                    <button class="button" style="background-color: transparent; border: none; color: rgb(72, 127, 237);" (click)="searchText__=''; supervisor = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos">
+                                    <span class="icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <b>
+                        {{supervisor}} 
+                        <button class="button is-small" style="background-color: transparent;border:none; color:hsl(207, 61%, 53%)" *ngIf="supervisor" (click)="supervisor = ''">
+                            <span class="icon"><i class="fas fa-redo"></i></span>
+                        </button>
+                    </b>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="" class="label">Analista</label>
+                            <input type="text" class="input" [(ngModel)]="searchText" *ngIf="!analista">
+                            <div class="empleados_" *ngIf="filteredEmployees_().length">
+                            <div *ngFor="let trabajador of filteredEmployees_()">
+                                <div class="columns">
+                                <div class="column is-6" style="font-size: small;">
+                                    <br>
+                                    {{trabajador.datos_personales.nombres}} {{trabajador.datos_personales.apellidos}}<br>
+                                    <span style="font-family: 'Gilroy';">
+                                    {{trabajador.contratacion.cargo.nombre}}
+                                    </span>
+                                </div>
+                                <div class="column is-1">
+                                    <br>
+                                    <button class="button" style="background-color: transparent; border: none; color: rgb(72, 127, 237);" (click)="searchText=''; analista = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos">
+                                    <span class="icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <b>
+                        {{analista}} 
+                        <button class="button is-small" style="background-color: transparent;border:none; color:hsl(207, 61%, 53%)" *ngIf="analista" (click)="analista = ''">
+                            <span class="icon"><i class="fas fa-redo"></i></span>
+                        </button>
+                    </b>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="no-one" class="label">Nº paleta</label>
+                            <input type="text" class="input" [(ngModel)]="paleta">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="" class="label">Cantidad destruido</label>
+                            <input type="number" name="" id="" class="input" [(ngModel)]="cantidad">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="" class="label">Persona que lo destruyo</label>
+                            <input type="text" class="input" [(ngModel)]="searchText_" *ngIf="!destructor">
+                            <div class="empleados_" *ngIf="filteredEmployees().length">
+                            <div *ngFor="let trabajador of filteredEmployees()">
+                                <div class="columns">
+                                <div class="column is-6" style="font-size: small;">
+                                    <br>
+                                    {{trabajador.datos_personales.nombres}} {{trabajador.datos_personales.apellidos}}<br>
+                                    <span style="font-family: 'Gilroy';">
+                                    {{trabajador.contratacion.cargo.nombre}}
+                                    </span>
+                                </div>
+                                <div class="column is-1">
+                                    <br>
+                                    <button class="button" style="background-color: transparent; border: none; color: rgb(72, 127, 237);" (click)="searchText_=''; destructor = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos">
+                                    <span class="icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <b>
+                        {{destructor}} 
+                        <button class="button is-small" style="background-color: transparent;border:none; color:hsl(207, 61%, 53%)" *ngIf="destructor" (click)="destructor = ''">
+                            <span class="icon"><i class="fas fa-redo"></i></span>
+                        </button>
+                    </b>
+                </div>
+            </div> -->
+            <hr>
+            <button class="button is-success" (click)="guardar()">
+                <span class="icon"><i class="fa-solid fa-floppy-disk"></i></span>
+                <span>Guardar</span>
+            </button>
+        </div>
+    </div>
+</div>

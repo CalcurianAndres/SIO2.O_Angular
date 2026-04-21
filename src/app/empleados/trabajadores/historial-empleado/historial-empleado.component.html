@@ -1,0 +1,33 @@
+<div class="modal is-active"  [ngClass]="{'is-active':historial}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Información empleado
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light" style="max-height: 500px;overflow-y: auto;">
+            <ng-container *ngIf="info_trabajador">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Departamentos</th>
+                            <th>Cargo</th>
+                            <th>Sueldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let historial of info_trabajador">
+                            <td>{{historial.fecha | date:'dd/MM/yyyy':'UTC'}}</td>
+                            <td>{{historial.departamento.nombre}}</td>
+                            <td>{{historial.cargo.nombre}} de {{historial.de.nombre}}</td>
+                            <td>{{historial.sueldo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+.cintillo_negro {
+    display: block;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
+
+.observacion {
+    display: flex;
+    /* Activa el alineamiento flexible */
+    justify-content: center;
+    /* Centra el contenido horizontalmente */
+    align-items: center;
+    /* Centra todo verticalmente */
+    gap: 20px;
+    /* Espacio entre imagen, barra y texto */
+    margin-top: 10px;
+    /* El margen superior que buscabas */
+
+    font-weight: bolder;
+    color: black;
+    font-family: 'Gilroy';
+}
+
+/* Estilo para el separador "|" */
+.separador {
+    font-size: 50px;
+    /* Tamaño mucho más grande */
+    font-weight: 100;
+    /* Más delgado para que parezca una línea elegante */
+    color: #ccc;
+    /* Un gris suave o el color que prefieras */
+    line-height: 1;
+}
+
+.observacion span {
+    font-size: xx-large;
+}
+
+.contenedor-imagen img {
+    display: block;
+    /* Evita espacios extra debajo de la imagen */
+}
+
+.analista {
+    color: black;
+    display: flex;
+    /* Activa el alineamiento flexible */
+    justify-content: center;
+    /* Centra el contenido horizontalmente */
+    align-items: center;
+    /* Centra todo verticalmente */
+    gap: 20px;
+    /* Espacio entre imagen, barra y texto */
+}
+
+.B {
+    font-family: 'Gilroy';
+}
+
+/* Quitamos el display: block general de los span */
+.informacion span {
+    padding: 5px;
+    /* Quitamos el border-bottom de aquí para ponerlo en el contenedor */
+}
+
+/* Creamos una clase para cada fila de información */
+.info-row {
+    display: block;
+    border-bottom: solid .5px black;
+    padding: 5px 0;
+    /* Espaciado entre filas */
+    color: black;
+}
+
+.B {
+    display: inline-block;
+    font-family: 'Gilroy';
+    font-weight: bold;
+    /* Espacio entre el título y el contenido */
+}

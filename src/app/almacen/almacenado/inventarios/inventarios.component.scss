@@ -1,0 +1,30 @@
+.angle_icon_span{
+    display: block;
+    position: absolute;
+    right: 40px;
+    margin-top: 10px;
+}
+
+.angle_icon_span:hover{
+    cursor: pointer;
+    background-color: rgb(223, 223, 223);
+    padding: 2px;
+    border-radius: 500px;
+}
+
+.hidden{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+.clicked{
+    transform: rotate(180deg);
+}
+
+.dark{
+    color: white;
+    background-color: #9fadbc;
+  }

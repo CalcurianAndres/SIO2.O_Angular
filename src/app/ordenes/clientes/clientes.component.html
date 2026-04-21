@@ -1,0 +1,80 @@
+<app-new-cliente
+[cliente]="cliente"
+[editar]="editar"
+[data]="data"
+(onCloseModal)="cerrar()"
+(onGuardarCliente)="GuardarCiente()">
+</app-new-cliente>
+
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    Clientes
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="cliente = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Cliente</span>
+            </button>
+            <br> <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="card">
+                        <div class="card-content">
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Clientes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let clientes of api.clientes;index as i">
+                                        <td class="clientes_hover" (click)="BuscarCliente(clientes._id, i)" [ngClass]="{'is-selected':seleccion[i]}">{{clientes.nombre}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card" *ngIf="cliente_seleccionado.direccion">
+                        <div class="card-content" style="color: black;">
+                            <b>Dirección:</b> <br>
+                            {{cliente_seleccionado.direccion}} <br>
+                            <b>Rif:</b> {{cliente_seleccionado.rif}}
+                            <hr>
+                            <b>Contactos:</b> <br>
+                            <span *ngFor="let contactos of cliente_seleccionado.contactos">
+                                {{contactos.titulo}} {{contactos.nombre}} - {{contactos.cargo}} <br>
+                                <i class="fas fa-phone"></i> {{contactos.telefono}} /  
+                                <i class="fas fa-at"></i> {{contactos.correo}}
+                            </span>
+                            <hr>
+                            <b>Almacenes:</b> <br>
+                            <span *ngFor="let almacenes of cliente_seleccionado.almacenes">
+                                {{almacenes.nombre}} <br>
+                            </span>
+                            <hr>
+                            <button class="button is-success" (click)="EditarCliente(cliente_seleccionado)">
+                                <span class="icon"><i class="fas fa-edit"></i></span>
+                                <span>Editar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

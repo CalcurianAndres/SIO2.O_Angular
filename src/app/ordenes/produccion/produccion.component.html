@@ -1,0 +1,703 @@
+<app-nueva-op [nueva]="nueva" (onCloseModal)="nueva = false">
+</app-nueva-op>
+
+<app-nueva-gestion [gestion]="nueva_gestion" [orden]="orden_selected" [fase]="fase_selected"
+    (onCloseModal)="cerrar_nueva_gestion()">
+</app-nueva-gestion>
+
+<app-devoluciones (onCloseModal)="devolucion = false" [op]="op" [devolucion]="devolucion">
+
+</app-devoluciones>
+
+<app-informacion [informacion]="informacion" [orden]="op" [info]="asignacionesYDevoluciones"
+    (onCloseModal)="informacion = false">
+</app-informacion>
+
+<app-solicitudes [solicitudes]="solicitudes" [orden]="op" [orden_solicitud]="orden_solicitud"
+    (onCloseModal)="solicitudes = false">
+</app-solicitudes>
+
+<!-- <app-nueva-op></app-nueva-op> -->
+
+<div class="modal" [ngClass]="{'is-active':gestiones}">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="width: 90%;">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                OP: {{orden_selected.numero_op}}
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="gestiones = false"></button>
+            <label for="" class="label">.</label>
+        </div>
+        <div class="modal-card-body">
+            <ng-container *ngIf="orden_selected.fases">
+                <ng-container *ngFor="let fases of orden_selected.fases; index as index_fase; last as isLast">
+                    <div class="card">
+                        <div class="card-header dark">
+                            <div class="card-header-title">
+                                <b style="font-family: 'Gilroy';">{{fases.nombre}}</b> - {{fases.maquina.nombre}}
+                                {{fases.maquina.marca}} {{fases.maquina.modelo}}
+                            </div>
+                        </div>
+                        <div class="card-content">
+
+
+                            <div class="top_Banner">
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <span class="icon" style="color: #3488ce; font-size: 30px;"
+                                            (click)="nueva_gestion = true; gestiones = false; fase_selected=index_fase"><i
+                                                class="fas fa-plus-circle"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="progress-container" *ngIf="!loading">
+                                    <div class="progress-bar" [style.width.%]="progressPercentage[index_fase]"></div>
+                                    <div class="progress-text"
+                                        [ngClass]="{'highlight': progressPercentage[index_fase] > 50}">
+                                        {{current[index_fase] | number}} / <span
+                                            style="font-family: 'Gilroy';">{{target[index_fase] | number}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table is-fullwidth is-striped" *ngIf="!loading">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;"><i class="fas fa-calendar-day"></i> Fecha
+                                            registro</th>
+                                        <th style="text-align: center;"><i class="fas fa-user"></i> Usuario</th>
+                                        <th style="text-align: center;"><i class="fas fa-list-ol"></i> Cantidad</th>
+                                        <th style="text-align: center;"><i class="fas fa-calendar-day"></i> Fecha de
+                                            Gestión</th>
+                                        <th style="text-align: center;"><i class="far fa-clock"></i> Inicio</th>
+                                        <th style="text-align: center;"><i class="far fa-clock"></i> Fin</th>
+                                        <th style="text-align: center;"><i class="fas fa-boxes"></i></th>
+                                        <th style="text-align: center;"><i class="fas fa-users"></i></th>
+                                        <th style="text-align: center;"><i class="far fa-comment"></i> Comentarios</th>
+                                        <th *ngIf="isLast">Etiquetas </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let gestion of api.GestionesDeFase(orden_selected, index_fase);index as index_gestion">
+                                        <td>{{gestion.createdAt | date: 'dd/MM/YYYY - hh:mm a'}}</td>
+                                        <td style="text-align: center;">{{gestion.usuario}}</td>
+                                        <td>
+                                            <ng-container *ngIf="visibilityFlags[index_fase]">
+                                                <i class="fas fa-random" style="color: #3488ce; cursor: pointer;"
+                                                    (click)="toggleVisibility(index_fase, index_gestion)">
+                                                </i>
+                                                <ng-container *ngIf="visibilityFlags[index_fase][index_gestion]">
+                                                    {{gestion.hojas | number}} Hojas
+                                                </ng-container>
+                                                <ng-container *ngIf="!visibilityFlags[index_fase][index_gestion]">
+                                                    {{gestion.productos | number}} Productos
+                                                </ng-container>
+
+
+                                            </ng-container>
+                                        </td>
+                                        <td style="text-align: center;">{{gestion.fecha | date :'dd/MM/YYYY'}}</td>
+                                        <td style="text-align: center;">{{formatearHora(gestion.inicio)}}</td>
+                                        <td style="text-align: center;">{{formatearHora(gestion.fin)}}</td>
+                                        <td style="text-align: center;">
+                                            <div class="container">
+                                                <div class="number" style="cursor: pointer;"
+                                                    (click)="togglePaletteList(index_fase,index_gestion)">
+                                                    {{gestion.paletas}}</div>
+                                                <ng-container>
+                                                    <div class="card_yellow">{{gestion.defectos.length -1}}</div>
+                                                </ng-container>
+                                                <div class="palette-list"
+                                                    *ngIf="palete_selected[index_fase][index_gestion]">
+                                                    <table class="table is-fullwidth is-striped">
+                                                        <thead style="background-color: #9fadbc;">
+                                                            <tr>
+                                                                <th>Nº</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr
+                                                                *ngFor="let i of [].constructor(gestion.paletas);index as i_">
+                                                                <td style="text-align: center;">{{i_+1}}</td>
+                                                                <td style="text-align: center;">
+                                                                    <ng-container
+                                                                        *ngIf="buscarSiExisteDefecto(gestion.defectos, i_ +1).existe">
+                                                                        <div class="tooltip">
+                                                                            <div class="card_yellow"
+                                                                                style="cursor: pointer;">
+                                                                                {{buscarSiExisteDefecto(gestion.defectos,
+                                                                                i_ +1).defectos.length}}</div>
+                                                                            <span class="tooltiptext">
+                                                                                <ul>
+                                                                                    <li
+                                                                                        *ngFor="let defecto of buscarSiExisteDefecto(gestion.defectos, i_ +1).defectos">
+                                                                                        • {{defecto}}</li>
+                                                                                </ul>
+                                                                            </span>
+                                                                        </div>
+                                                                    </ng-container>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <i class="fas fa-eye" style="cursor: pointer;"
+                                                (click)="showTeam(index_fase, index_gestion)"></i>
+                                            <div class="team-list" *ngIf="team_selected[index_fase][index_gestion]">
+                                                <!-- <div class="palette-list" *ngIf="team_selected[index_fase][index_gestion]"> -->
+                                                <table class="table is-fullwidth is-striped">
+                                                    <thead style="background-color: #9fadbc;">
+                                                        <tr>
+                                                            <th>Team work</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let empleado of gestion.team;index as i_">
+                                                            <td style="text-align: center;">
+                                                                {{empleado}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: center;"><i class="fas fa-comment"
+                                                (click)="comentarios = true; unique_id = gestion._id"></i></td>
+                                        <td>
+                                            <div class="tag-container" *ngIf="isLast" style="cursor: pointer;"
+                                                (click)="Impresion_presed = true">
+                                                <div class=" tag-icon-wrapper">
+                                                    <svg class="tag-svg" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <path
+                                                            d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z">
+                                                        </path>
+                                                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                                    </svg>
+                                                    <span class="tag-count" id="tagQuantity">{{tagsNumer}}</span>
+                                                </div>
+                                                <span class="tag-label">Etiquetas Generadas</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="totales[index_fase].hojas > 0">
+                                        <th style="background-color: rgb(190, 190, 190);"></th>
+                                        <th style="background-color: rgb(190, 190, 190); text-align: right;">Total</th>
+                                        <th style="background-color: rgb(190, 190, 190);">{{totales[index_fase].hojas |
+                                            number: '2.0-0'}} hojas</th>
+                                        <th style="background-color: rgb(190, 190, 190); text-align: right;"> Tiempo
+                                            invertido</th>
+                                        <th style="background-color: rgb(190, 190, 190);">{{totales[index_fase].horas |
+                                            number: '2.2-2'}}h</th>
+                                        <th style="background-color: rgb(190, 190, 190); text-align: right;">Paletas
+                                        </th>
+                                        <th style="background-color: rgb(190, 190, 190);">
+                                            <span style="display: flex; gap: 5px;">
+                                                <span>
+                                                    {{totales[index_fase].paletas}}
+                                                </span>
+                                                <span class="card_yellow"
+                                                    style="cursor: pointer;">{{totales[index_fase].tickets}}</span>
+                                            </span>
+                                        </th>
+                                        <th style="background-color: rgb(190, 190, 190);"></th>
+                                        <th style="background-color: rgb(190, 190, 190);"></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                </ng-container>
+
+                <div class="card animate__animated animate__fadeInUp" *ngIf="Impresion_presed">
+                    <div class="card-header dark">
+                        <div class="card-header-title">
+                            Impresión de etiqueta - <b
+                                style="font-family: 'Gilroy'; margin-left: 5px; margin-right: 5px;">0</b>
+                            etiquetas
+                            impresas
+                            actualmente.
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="columns p-4">
+                            <div class="column is-3">
+                                <div class="box" style="border-top: 4px solid #3273dc;">
+                                    <div class="is-flex is-align-items-center mb-5">
+                                        <span class="icon is-medium has-text-link mr-2">
+                                            <i class="fas fa-cogs fa-lg"></i>
+                                        </span>
+                                        <h3 class="title is-5 mb-0">Configuración de Impresión</h3>
+                                    </div>
+
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <label class="label has-text-grey">
+                                                <i class="fas fa-hashtag mr-1"></i> Orden
+                                            </label>
+                                            <div class="control has-icons-left">
+                                                <div class="select is-fullwidth">
+                                                    <select [(ngModel)]="selectedPo" (change)="onChange()">
+                                                        <option value="{{orden.orden}}"
+                                                            *ngFor='let orden of ordenesdeCompra(orden_selected.producto[0]._id)'>
+                                                            {{orden.orden}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="icon is-small is-left">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="control">
+                                            <label class="label has-text-grey">
+                                                <i class="fas fa-layer-group mr-1"></i> Sub-Orden
+                                            </label>
+                                            <div class="control has-icons-left">
+                                                <div class="select is-fullwidth">
+                                                    <select [(ngModel)]="selectedPo" (change)="onChange()">
+                                                        <option value="{{orden.nro}}"
+                                                            *ngFor='let orden of subOrdenes()'>
+                                                            {{orden.nro}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="icon is-small is-left">
+                                                    <i class="fas fa-clipboard-list"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <label class="label has-text-grey">
+                                                <i class="fas fa-sort-numeric-up mr-1"></i> Cantidad
+                                            </label>
+                                            <div class="control has-icons-left">
+                                                <input class="input" type="number" [(ngModel)]="printQuantity"
+                                                    (input)="onChange()" [disabled]="locked">
+                                                <div class="icon is-small is-left">
+                                                    <i class="fas fa-copy"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control">
+                                            <label for="" class="label">&nbsp;</label>
+                                            <button class="button" (click)="editarImpresion()">
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-unlock"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="field" *ngIf="!locked">
+                                        <textarea class="textarea" placeholder="Motivo de nueva impresión" rows="2"
+                                            [(ngModel)]="correccion"></textarea>
+                                    </div>
+
+                                    <hr class="my-5">
+
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <button class="button is-light" (click)="generarEtiqueta()"
+                                                style="border: 2px solid #dbdbdb;">
+                                                <span class="icon">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                </span>
+                                                <span>Prueba</span>
+                                            </button>
+                                        </div>
+                                        <div class="control">
+                                            <button class="button is-success" [disabled]="!locked && !correccion">
+                                                <span class=" icon">
+                                                    <i class="fas fa-print"></i>
+                                                </span>
+                                                <span>{{ printQuantity }} copias</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-4">
+                                <div class="box has-background-light"
+                                    style="border-top: 4px solid #48c78e; height: 100%;">
+                                    <div class="is-flex is-align-items-center mb-4">
+                                        <span class="icon is-medium has-text-success mr-2">
+                                            <i class="fas fa-eye fa-lg"></i>
+                                        </span>
+                                        <h3 class="title is-5 mb-0">Vista Previa</h3>
+                                    </div>
+
+                                    <div class="pdf-container shadow-sm"
+                                        style="position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
+                                        <div class="pdf-overlay" (contextmenu)="$event.preventDefault()"></div>
+                                        <iframe *ngIf="pdfUrl" [src]="pdfUrl | safe" class="pdf-frame"
+                                            style="width: 100%; min-height: 400px; border: none;">
+                                        </iframe>
+                                        <div *ngIf="!pdfUrl" class="has-text-centered p-6 has-text-grey-light">
+                                            <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                                            <p>Esperando documento...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-5">
+                                <div class="box" style="border-top: 4px solid #ffff36; height: 100%;">
+                                    <div class="is-flex is-align-items-center mb-4">
+                                        <span class="icon is-medium has-text-warning mr-2">
+                                            <i class="fa-solid fa-list"></i>
+                                        </span>
+                                        <h3 class="title is-5 mb-0">Historial</h3>
+                                    </div>
+                                    <table class="table is-fullwidth is-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Cantidad</th>
+                                                <th>Observación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>03/01/2026</td>
+                                                <td>300</td>
+                                                <td>Impresión SIO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>24/02/2026</td>
+                                                <td>600</td>
+                                                <td>Impresión SIO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>17/03/2026</td>
+                                                <td>2</td>
+                                                <td>Cambio de rollo en impresora</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                    <h1 class="title blancas">
+                        Ordenes de producción
+                    </h1>
+                    <h2 class="subtitle description blancas">
+                        Descripción
+                    </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="nueva = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Orden</span>
+            </button>
+            <br><br>
+            <div class="columns">
+                <div class="column">
+                    <div class="card" style="height: 400px;overflow-y: scroll;">
+                        <div class="card-content">
+                            <span class="title">Órdenes activas</span>
+                            <table class="table is-fullwidth is-striped">
+                                <thead>
+                                    <tr>
+                                        <th>OP</th>
+                                        <th>Producto</th>
+                                        <th>Cliente</th>
+                                        <th>Solicitud</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let orden of api.orden">
+                                        <td style="font-family: 'Gilroy';">{{orden.numero_op}}</td>
+                                        <td>{{orden.producto[0].identificacion.producto}}</td>
+                                        <td>{{orden.cliente.nombre}}</td>
+                                        <td>{{orden.solicitud | date:'dd/MM/yyyy'}}</td>
+                                        <td>
+                                            <button class="button" style="border: none;background: transparent;"
+                                                (click)="informacion = true; op = orden; obtenerDatos(orden)">
+                                                <span class="icon">
+                                                    <i class="fas fa-info-circle blue_"></i>
+                                                </span>
+                                            </button>
+                                            <button class="button" style="border: none;background: transparent;"
+                                                (click)="Gestiones(orden)">
+                                                <span class="icon">
+                                                    <i class="fas fa-tasks"></i>
+                                                </span>
+                                            </button>
+                                            <button class="button" style="border: none;background: transparent;"
+                                                (click)="devolucion = true; op = orden">
+                                                <span class="icon">
+                                                    <i class="fas fa-undo"></i>
+                                                </span>
+                                            </button>
+                                            <button class="button" style="border:none; background:transparent"
+                                                (click)="solicitudes = true; op = orden; se_prendio()">
+                                                <span class="icon">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-4">
+                    <div class="card tags">
+                        <div class="card-content ty orange">
+                            <div class="columns">
+                                <div class="column is-2">
+                                    <span class="number_" *ngIf="api.orden">
+                                        <h1>{{api.orden.length}}</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Órdenes</span> <br>
+                                </div>
+                                <div class="column">
+                                    <span class="Detalle">
+                                        Activas
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="position__">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card mt-5 tags">
+                        <div class="card-content ty green__">
+                            <div class="columns">
+                                <div class="column is-2">
+                                    <span class="number_" *ngIf="api.orden">
+                                        <h1>{{api.orden.length}}</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Órdenes</span> <br>
+                                    <span class="gruesa">Año</span>
+                                </div>
+                                <div class="column">
+                                    <span class="Detalle">
+                                        {{anoActual}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="position__">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card mt-5 tags">
+                        <div class="card-content ty blue___">
+                            <div class="columns info_">
+                                <div class="column is-2">
+                                    <span class="number_">
+                                        <h1>0</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Ordenes</span> <br>
+                                    <!-- <span class="gruesa">Dia(s)</span> -->
+                                </div>
+                                <div class="column">
+                                    <span class="Detalle">
+                                        Cerradas
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="position_" style="margin-left: -30px;">
+                                <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                    preserveAspectRatio="none" shape-rendering="auto">
+                                    <defs>
+                                        <path id="gentle-wave"
+                                            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                    </defs>
+                                    <g class="moving-waves">
+                                        <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card dark">
+                <div class="card-content">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <label for="" class="label">Buscar por</label>
+                            <div class="select">
+                                <select [(ngModel)]='parametro_busqueda'>
+                                    <option value="">Selccione una opción</option>
+                                    <option value="op">OP</option>
+                                    <option value="oc">OC</option>
+                                    <option value="cliente">Cliente</option>
+                                    <option value="producto">Producto</option>
+                                    <option value="fecha">Fecha</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'op'">
+                            <label for="" class="label">Ingresa Nº OP</label>
+                            <input type="text" class="input" (input)="filtrarResultados($event.target)">
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'oc'">
+                            <label for="" class="label">Ingresa Nº OC</label>
+                            <input type="text" class="input" (input)="filtrarResultadosOC($event.target)">
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'cliente'">
+                            <label for="" class="label">Selecciona un cliente</label>
+                            <div class="select">
+                                <select (change)="filtrarResultadosCliente($event.target)">
+                                    <option value="#">Cliente</option>
+                                    <option value="{{cliente._id}}" *ngFor="let cliente of clientes.clientes">
+                                        {{cliente.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'producto'">
+                            <label for="" class="label">Selecciona un cliente</label>
+                            <div class="select">
+                                <select (change)="BuscarProductos($event.target)">
+                                    <option value="#">Cliente</option>
+                                    <option value="{{cliente._id}}" *ngFor="let cliente of clientes.clientes">
+                                        {{cliente.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'producto'">
+                            <label for="" class="label">Selecciona un producto</label>
+                            <div class="select">
+                                <select (change)="filtrarResultadosProducto($event.target)">
+                                    <option value="#">Producto</option>
+                                    <option value="{{producto._id}}" *ngFor="let producto of productos_selected">
+                                        {{producto.identificacion.producto}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'fecha'">
+                            <label for="" class="label">Desde</label>
+                            <input type="date" class="input" [(ngModel)]="desde">
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'fecha'">
+                            <label for="" class="label">Hasta</label>
+                            <input type="date" class="input" [(ngModel)]="hasta">
+                        </div>
+                        <div class="control" *ngIf="parametro_busqueda === 'fecha'">
+                            <label for="" class="label"> </label>
+                            <button class="button is-success" (click)="BuscarPorFecha()">
+                                <span class="icon"><i class="fas fa-search"></i></span>
+                                <span>Buscar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-content">
+                    <span class="title">Resultados:</span>
+                    <hr>
+                    <table class="table is-fullwidth is-striped">
+                        <thead>
+                            <tr>
+                                <th>OC</th>
+                                <th>OP</th>
+                                <th>Producto</th>
+                                <th>Cliente</th>
+                                <th>Fecha Emisión</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let resultado of resultados">
+                                <td>{{resultado.oc.orden}}</td>
+                                <td>{{resultado.numero_op}}</td>
+                                <td>{{resultado.producto[0].identificacion.producto}}</td>
+                                <td>{{resultado.cliente.nombre}}</td>
+                                <td>{{resultado.createdAt | date: 'dd/MM/yyyy'}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<app-comentarios [comentarios]="comentarios" [recepcion_id]="unique_id" (onCloseModal)="comentarios = false">
+
+</app-comentarios>

@@ -1,0 +1,48 @@
+<app-conf-devoluciones
+[confirmacion]="confirmacion"
+[devolucion]="devolucion"
+(onCloseModal)="confirmacion = false"> 
+</app-conf-devoluciones>
+
+<app-conf-solicitud
+[solicitud]="solicitud"
+[id_solicitud]="devolucion"
+(onCloseModal)="solicitud = false">
+
+</app-conf-solicitud>
+
+<div class="notification-panel" [ngClass]="{'show':visible}">
+    <span class="title">Notificaciones</span>
+    <button class="close-btn" (click)="close()">×</button>
+    <hr>
+    <span class="body-notification">
+        <article
+        class="message is-info notification-exit" 
+        [ngClass]="{'removing': notificacion.removing}" 
+        *ngFor="let notificacion of api.notificaciones; index as i"
+        >
+          <div class="message-header">
+            <p>{{notificacion.titulo}}</p>
+            <button class="delete" aria-label="delete" (click)="api.VerNotificacion(notificacion._id)" *ngIf="!notificacion.devolucion && !notificacion.solicitud"></button>
+          </div>
+          <div class="message-body">
+            <p>
+              {{notificacion.mensaje}}
+            </p>
+            <ng-container *ngIf="notificacion.devolucion">
+              <button class="button is-small is-success" (click)="devolucion = notificacion.devolucion; confirmacion = true;close()">
+                <span>Detalles</span>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="notificacion.solicitud">
+              <button class="button is-small is-success" (click)="devolucion = notificacion.solicitud; solicitud = true; close()">
+                <span>Detalles</span>
+              </button>
+            </ng-container>
+            <span class="message-date">
+              {{notificacion.fecha | date: 'dd/MM/yyyy - h:ma'}}
+            </span>
+          </div>
+        </article>
+    </span>
+</div>

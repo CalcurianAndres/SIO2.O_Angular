@@ -1,0 +1,171 @@
+.title_{
+    background: rgb(76,175,80);
+    background: linear-gradient(45deg, rgba(76,175,80,1) 0%, rgba(82,190,87,1) 10%, rgba(86,200,91,1) 20%, rgba(97,219,102,1) 30%, rgba(105,232,110,1) 40%, rgba(105,232,173,1) 50%, rgba(72,208,145,1) 60%, rgba(49,164,151,1) 70%, rgba(42,157,144,1) 80%, rgba(14,107,97,1) 90%, rgba(4,73,65,1) 100%);
+    overflow: hidden;
+}
+
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+
+.dark{
+    color: white;
+    background-color: #9fadbc;
+  }
+
+.iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}
+
+/* Estilos principales del calendario */
+.calendar-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .month {
+    width: 27%;
+    padding: 15px;
+  }
+  
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  
+  .weekday {
+    font-weight: bold;
+    text-align: center;
+    padding: 2px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+  }
+  
+  .day {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .selected {
+    background-color: lightcoral;
+    color: white;
+  }
+  
+  .non-laboral {
+    background-color: lightblue;
+    color: black;
+  }
+  
+  .day:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .motivo-popup {
+    display: none;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2f2f2fde;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 10;
+    width: 150px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+  }
+  
+  .day:hover .motivo-popup {
+    display: block;
+  }
+
+  .grid-container_ {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 16px;
+    padding: 16px;
+  }
+  
+//   .tarjeta:first-child {
+//     margin-left: -13px; /* Elimina cualquier margen izquierdo de la primera tarjeta */
+//   }
+  
+  .star-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .star-toggle i {
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.4s;
+  }
+  
+  .star-toggle input:checked + i {
+    color: gold; /* Estrellas doradas */
+  }
+
+  .title__{
+    font-family: 'Gilroy';
+    font-size: large;
+  }
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin: 0px 0;
+}
+
+.tab {
+    background-color: white; /* Color de fondo blanco */
+    color: #333; /* Color del texto */
+    padding: 10px 80px; /* Espaciado interno */
+    margin: 0 0px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 10px 10px 0 0; /* Bordes redondeados en la parte superior */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+    transform: translateY(15px); /* Eleva la pestaña activa */
+}
+
+.tab.active {
+    background-color: white; /* Mantiene el fondo blanco */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más fuerte para la pestaña activa */
+    transform: translateY(0px); /* Eleva la pestaña activa */
+    z-index: 2; /* Asegura que la pestaña activa esté por encima */
+    font-size: xx-large;
+    font-family: 'Gilroy';
+}
+
+.tab span {
+    z-index: 1; /* Asegura que el texto esté en la parte superior */
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Alineación del texto centrado */
+.tab span {
+    display: inline-block; /* Para centrar el texto */
+    text-align: center; /* Centra el texto en la pestaña */
+}

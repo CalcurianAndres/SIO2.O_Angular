@@ -1,0 +1,506 @@
+.title_ {
+  background: rgb(76, 175, 80);
+  background: linear-gradient(45deg, rgba(76, 175, 80, 1) 0%, rgba(82, 190, 87, 1) 10%, rgba(86, 200, 91, 1) 20%, rgba(97, 219, 102, 1) 30%, rgba(105, 232, 110, 1) 40%, rgba(105, 232, 173, 1) 50%, rgba(72, 208, 145, 1) 60%, rgba(49, 164, 151, 1) 70%, rgba(42, 157, 144, 1) 80%, rgba(14, 107, 97, 1) 90%, rgba(4, 73, 65, 1) 100%);
+  overflow: hidden;
+}
+
+.tarjetas_menu {
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Gilroy';
+  color: white;
+  font-size: x-large;
+}
+
+
+.dark {
+  color: white;
+  background-color: #9fadbc;
+}
+
+.iconos {
+  position: absolute;
+  right: 45px;
+  top: -15px;
+}
+
+.iconos i {
+  font-size: 130px;
+  transform: rotate(30deg);
+  top: -150px;
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.tags {
+  overflow: hidden;
+}
+
+.card .card-content .ty {
+  overflow: hidden;
+}
+
+.number_ {
+  position: absolute;
+  font-size: 35px;
+  font-family: 'Gilroy';
+  margin-top: 10px;
+}
+
+.Detalle {
+  border-left: solid 1px white;
+  font-size: 35px;
+  padding-left: 15px;
+}
+
+.position_ {
+  position: absolute;
+  margin-bottom: -30px;
+}
+
+.position__ {
+  position: absolute;
+  margin-bottom: 20px;
+}
+
+.waves {
+  position: relative;
+  width: 500px;
+  height: 50px;
+  margin-bottom: -65px;
+  margin-left: -20px;
+  min-height: 50px;
+  max-height: 100px
+}
+
+.waves.no-animation .moving-waves>use {
+  animation: none
+}
+
+.wave-rotate {
+  transform: rotate(180deg)
+}
+
+.moving-waves>use {
+  animation: f 40s cubic-bezier(.55, .5, .45, .5) infinite
+}
+
+.moving-waves>use:first-child {
+  animation-delay: -2s;
+  animation-duration: 11s
+}
+
+.moving-waves>use:nth-child(2) {
+  animation-delay: -4s;
+  animation-duration: 13s
+}
+
+.moving-waves>use:nth-child(3) {
+  animation-delay: -3s;
+  animation-duration: 15s
+}
+
+.moving-waves>use:nth-child(4) {
+  animation-delay: -4s;
+  animation-duration: 20s
+}
+
+.moving-waves>use:nth-child(5) {
+  animation-delay: -4s;
+  animation-duration: 25s
+}
+
+.moving-waves>use:nth-child(6) {
+  animation-delay: -3s;
+  animation-duration: 30s
+}
+
+@keyframes f {
+  0% {
+    transform: translate3d(-90px, 0, 0)
+  }
+
+  to {
+    transform: translate3d(85px, 0, 0)
+  }
+}
+
+.card .card-content .orange {
+  background: rgb(245, 152, 28);
+  background: linear-gradient(90deg, rgba(245, 152, 28, 1) 25%, rgba(255, 184, 88, 1) 100%);
+  color: white;
+  width: 100%;
+}
+
+.card .card-content .green__ {
+  background: rgb(8, 172, 38);
+  background: linear-gradient(90deg, rgba(8, 172, 38, 1) 15%, rgba(44, 255, 82, 1) 100%);
+  color: white;
+  width: 100%;
+}
+
+.card .special {
+  height: 100px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  color: white;
+}
+
+.fina {
+  position: absolute;
+  font-size: 10px;
+  margin-top: 15px;
+}
+
+.gruesa {
+  font-size: 20px;
+  font-family: 'Gilroy';
+}
+
+.blue___ {
+  background: rgb(0, 56, 255);
+  background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, rgba(117, 180, 255, 1) 100%);
+  color: white;
+  height: 100px;
+  overflow: hidden;
+  width: 100%;
+
+}
+
+.blue___ .info_ {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+}
+
+.wave_ .p {
+  display: inline-block;
+  font-size: 24px;
+}
+
+.wave_ .p span {
+  display: inline-block;
+  animation: elevacion 0.6s linear infinite;
+}
+
+.wave_ .p span:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.wave_ .p span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.wave_ .p span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.wave_ .p span:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.wave_ .p span:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.wave_ .p span:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.wave_ .p span:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+.wave_ .p span:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+.wave_ .p span:nth-child(9) {
+  animation-delay: 0.9s;
+}
+
+.wave_ .p span:nth-child(10) {
+  animation-delay: 0.10s;
+}
+
+.wave_ .p span:nth-child(11) {
+  animation-delay: 0.11s;
+}
+
+.wave_ .p span:nth-child(12) {
+  animation-delay: 0.12s;
+}
+
+.wave_ .p span:nth-child(13) {
+  animation-delay: 0.13s;
+}
+
+.wave_ .p span:nth-child(14) {
+  animation-delay: 0.14s;
+}
+
+.wave_ .p span:nth-child(15) {
+  animation-delay: 0.15s;
+}
+
+.wave_ .p span:nth-child(16) {
+  animation-delay: 0.16s;
+}
+
+.wave_ .p span:nth-child(17) {
+  animation-delay: 0.17s;
+}
+
+.wave_ .p span:nth-child(18) {
+  animation-delay: 0.18s;
+}
+
+.wave_ .p span:nth-child(19) {
+  animation-delay: 0.19s;
+}
+
+.wave_ .p span:nth-child(20) {
+  animation-delay: 0.20s;
+}
+
+.wave_ .p span:nth-child(21) {
+  animation-delay: 0.21s;
+}
+
+
+.dark {
+  color: white;
+  background-color: #9fadbc;
+}
+
+
+.progress-container {
+  width: 380px;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+  margin-top: -15px;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: rgb(115, 226, 115);
+  border-radius: 25px 0 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-text {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  height: 100%;
+  line-height: 50px;
+  color: black;
+  font-weight: bold;
+}
+
+.highlight {
+  color: black;
+}
+
+.top_Banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Container with flexbox for positioning */
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  /* Adjust to control spacing between number and card */
+  // background-color: rgb(213, 213, 213);
+}
+
+/* Number styling */
+.number {
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Yellow card styling */
+.card_yellow {
+  font-family: 'Gilroy';
+  width: 15px;
+  /* Width of the card */
+  height: 20px;
+  /* Height of the card */
+  background-color: yellow;
+  /* Yellow background */
+  // border: 1px solid black; /* Border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  /* Font size of the number inside the card */
+  font-weight: bold;
+}
+
+.team-list {
+  position: absolute;
+  z-index: 1000;
+  display: block;
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+}
+
+.palette-list {
+  position: absolute;
+  left: -130px;
+  top: -150px;
+  width: 100px;
+  background-color: white;
+  z-index: 1000;
+  display: block;
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: rgb(251, 255, 172);
+  color: #000000;
+  text-align: left;
+  border-radius: 5px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  /* Adjust as needed */
+  left: 100px;
+  margin-left: -60px;
+  opacity: 0;
+  font-size: small;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+// .card_yellow {
+//   width: 40px;
+//   height: 60px;
+//   background-color: yellow;
+//   border: 1px solid black;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: 18px;
+//   font-weight: bold;
+// }
+
+.empleados {
+  display: flex;
+  gap: 10px;
+}
+
+.pdf-container {
+  position: relative;
+  aspect-ratio: 10 / 7;
+  border: 1px solid #ccc;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.pdf-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  /* Ajusta a tu necesidad */
+}
+
+.pdf-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  /* Asegura que esté por encima del iframe */
+  background: rgba(255, 255, 255, 0);
+  /* Totalmente transparente */
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.tag-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #f4f7f6;
+  border-radius: 8px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tag-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-svg {
+  width: 28px;
+  height: 28px;
+  color: #2c3e50;
+}
+
+.tag-count {
+  position: absolute;
+  /* Ajuste para que el número quede "dentro" del cuerpo del tag */
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6px;
+  font-weight: bold;
+  color: #2c3e50;
+  pointer-events: none;
+}
+
+.tag-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}

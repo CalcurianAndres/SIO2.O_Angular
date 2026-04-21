@@ -1,0 +1,69 @@
+<div class="modal" [ngClass]="{'is-active':mostrar}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <div class="modal-card-title fuente">
+                Resultados
+            </div>
+            <button class="delete red_cross" aria-label="close" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-card-body light">
+
+
+            <div class="card" *ngIf="informacion">
+                <div class="card-content">
+                    <div class="cintillo_negro">
+                        ESTATUS DE MATERIAL
+                    </div>
+                    <div class="observacion">
+                        <span class="contenedor-imagen">
+                            <img src="../../../assets/poli_cintillo.png" alt="" width="100px">
+                        </span>
+
+                        <span class="separador">|</span>
+
+                        <span>OBSERVACIÓN</span>
+                    </div>
+                    <div class="analista">
+                        <span class="analista B">ANALISTA:</span>
+                        <span class="nombre">Nombre Apellido</span>
+                        <span class="Fecha B">FECHA:</span>
+                        <span class="fecha">03/01/2026</span>
+                    </div>
+                    <div class="informacion">
+                        <div class="info-row">
+                            <span class="B">DESCRIPCIÓN:</span>
+                            <span>{{informacion[0].material.nombre}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="B">PROVEEDOR:</span>
+                            <span>{{recepcion.proveedor.nombre}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="B">FECHA DE RECEPCIÓN:</span>
+                            <span>{{recepcion.recepcion | date:'dd/MM/YYYY'}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="B">FECHA DE FABRICACIÓN:</span>
+                            <span>{{recepcion.materiales[0][0].fabricacion | date:'dd/MM/YYYY'}}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="B">LOTE:</span>
+                            <span class="B" style="font-size: x-large;">{{recepcion.materiales[0][0].lote}}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button class="button is-dark" (click)="descargarPDF()">
+                        <i class="fa-solid fa-file-pdf"></i>&nbsp; Descargar etiqueta
+                    </button>
+                    <hr>
+                    <button class="button is-dark" (click)="descargarPDFLab()">
+                        <i class="fa solid fa-file-pdf">Descargar Etiqueta</i>
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

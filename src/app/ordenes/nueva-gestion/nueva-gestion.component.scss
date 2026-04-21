@@ -1,0 +1,155 @@
+.paletas_container {
+    display: flex;
+    gap: 5px;
+}
+
+.paletas_container .palets {
+    display: flex;
+    /* Change from block to flex */
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(72, 127, 237);
+    color: white;
+    text-align: center;
+    font-family: 'Gilroy';
+    border-radius: 5px;
+}
+
+
+.paletas_container .palets:hover {
+    background-color: rgb(215, 215, 215);
+    cursor: pointer;
+}
+
+.paletas_diseno {
+    padding: 10px;
+    background-color: rgb(234, 234, 234);
+    border-radius: 5px;
+    min-height: 100px;
+}
+
+.paletas_container .yellow {
+    background-color: yellow;
+    color: black;
+}
+
+.empleados{
+    display:block;
+    padding: 5px;
+    background-color: rgb(190, 255, 190);
+    margin: 5px;
+    border-radius: 10px;
+}
+
+// .paletas_container .selected {
+//     -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+//     -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+//     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+// }
+
+.burbuja {
+    display: block;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+}
+
+.triangle {
+    display: block;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid white;
+}
+
+.Nonselected {
+    visibility: hidden;
+}
+
+.selected {
+    visibility: visible;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+  }
+  
+  .message-info {
+    font-size: 0.85rem;
+    color: #7a7a7a;
+    margin-bottom: 5px;
+  }
+  
+  .message-content {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 1rem;
+  }
+  
+  .sent {
+    text-align: right;
+  }
+  
+  .sent .message-content {
+    background-color: #178656; /* Bulma's is-info color */
+    color: white;
+    margin-left: auto;
+  }
+  
+  .received {
+    text-align: left;
+  }
+  
+  .received .message-content {
+    background-color: #eaeaea;
+    color: #363636;
+    margin-right: auto;
+  }
+
+  /* Styles for textarea and button */
+.message-input {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #dbdbdb;
+    resize: none;
+    font-size: 1rem;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #209cee; /* Bulma's is-info color */
+  }
+  
+  button {
+    margin-left: 10px;
+  }
+
+  .empleados_ {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  max-height: 600px;
+  overflow-y: auto;
+  width: 100%;
+  left: 0;
+  top: 100%;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 5px;
+}

@@ -1,0 +1,240 @@
+<app-nuevo-departamento
+[nuevo]="Nuevo"
+[unidades]="Departamentos"
+[unidad]="unidad"
+(onCloseModal)="Nuevo = false">
+</app-nuevo-departamento>
+<app-nuevo-cargo
+[cargo]="cargo"
+[departamentos]="Departamentos"
+[Departamento]="DepartamentoAbierto"
+[Cargos]="Cargos"
+[cargo_]="cargo_"
+(onCloseModal)="cargo = false; area = true;"
+(Update)="update($event)">
+</app-nuevo-cargo>
+<app-areas
+[Areas]="area"
+[Areas_creadas]="publicAreas"
+(onCloseModal)="area = false"
+(onNuevaSubUnidad)="area = false; cargo = true;"
+(onEditarSubUnidad)="EditarSubUnidad($event)"
+(onEditarSubSubUnidad)="EditarSubSubUnidad($event)"
+(Update)="update($event)">
+
+</app-areas>
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    Departamentos
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fa-solid fa-building-user"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="Nuevo = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Unidad</span>
+            </button> 
+            <br> <br>
+
+            <div class="Departamentos">
+                <div class="card dep" *ngFor="let dep of api.departamentos">
+                    <div class="card-header">
+                        <div class="card-header-title">
+                            <div class="subtitle">
+                                <div class="brillo" [style.background-color]='dep.color'></div> {{dep.nombre}}
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a class="card-footer-item"><i class="fas fa-info-circle blue_" (click)="showAreas(dep)"></i></a>
+                        <a class="card-footer-item"><i class="far fa-edit green" (click)="unidad = dep; Nuevo = true;"></i></a>
+                        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="eliminarDepartamento(dep)"></i></a>
+                    </footer>
+                </div>
+            </div>
+            <br> <br>
+            <!-- <div> 
+                <div> 
+
+                    <ng-container *ngFor="let dep of Departamentos">showAreas(dep)"
+                        <div class="card">
+                            <div class="card-header dark">
+                                <div class="card-header-title" [style.background-color]="dep.color">
+                                   {{dep.nombre}}
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <table class="table is-fullwidth is-bordered">
+                                    <ng-container *ngFor="let cargo of filtrarDepartamento(dep.nombre);index as i">
+                                        <tr>
+                                            <th>{{ cargo.nombre }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table class="table is-fullwidth is-bordered">
+                                                    <ng-container *ngTemplateOutlet="renderCargos_; context: {superior: cargo.nombre, index:i}"></ng-container>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </table>
+                                <table class="table is-fullwidth is-bordered">
+                                    <ng-container *ngFor="let cargo of filtrarDepartamento(dep.nombre);index as i">
+                                        
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="card-header-title">
+                                                    {{ cargo.nombre }}
+                                                </div>
+                                            </div>
+                                            <div class="card-content">
+                                                <ng-container *ngTemplateOutlet="renderCargos__; context: {superior: cargo.nombre, index:i}"></ng-container>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                </table>
+                                <hr>
+                                <div class="columns">
+                                    <div class="column" *ngFor="let cargo of filtrarDepartamento(dep.nombre)">
+                                      <div class="card">
+                                        <header class="card-header" [style.background-color]="dep.color">
+                                          <p class="card-header-title">
+                                            {{ cargo.nombre }}
+                                          </p>
+                                        </header>
+                                        <div class="card-content">
+                                          <div class="content">
+                                            <ng-container *ngTemplateOutlet="renderCargos; context: {superior: cargo.nombre}"></ng-container>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <ng-template #renderCargos__ let-superior="superior" let-index="index">
+                                    <ng-container *ngFor="let subcargo of obtenerSubcargos(superior, dep.nombre);index as i">
+                                        
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="card-header-title">
+                                                    {{ subcargo.nombre }}
+                                                </div>
+                                            </div>
+                                            <div class="card-content">
+                                                <ng-container *ngTemplateOutlet="renderCargos__; context: {superior: subcargo.nombre, index:i}"></ng-container>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                    <br> <br>
+                                  </ng-template>
+
+                                  <hr>
+
+                                  <ng-template #renderCargos_ let-superior="superior" let-index="index">
+                                    <ng-container *ngFor="let subcargo of obtenerSubcargos(superior, dep.nombre);index as i">
+                                        <tr>
+                                            <td style="background-color: rgb(238, 238, 238);">{{ subcargo.nombre }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table class="table is-fullwidth is-bordered">
+                                                    <ng-container *ngTemplateOutlet="renderCargos_; context: {superior: subcargo.nombre, index:i}"></ng-container>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                  </ng-template>
+                                  
+                                  <ng-template #renderCargos let-superior="superior">
+                                    <div class="columns">
+                                      <div class="column" *ngFor="let subcargo of obtenerSubcargos(superior, dep.nombre)">
+                                        <div class="card">
+                                          <header class="card-header">
+                                            <p class="card-header-title">
+                                              {{ subcargo.nombre }}
+                                            </p>
+                                          </header>
+                                          <div class="card-content">
+                                            <div class="content">
+                                              <ng-container *ngTemplateOutlet="renderCargos; context: {superior: subcargo.nombre}"></ng-container>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-template>
+                            </div>
+                        </div>
+                        <br>
+                    </ng-container>
+
+                     <div class="card" style="min-height: 300px; max-height: 300px; overflow-y: scroll;">
+                        <div class="card-content">
+                            <p class="title header-dep">Departamentos</p>
+                            <button class="button is-info" (click)="Nuevo = true">
+                                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                                <span>Nuevo</span>
+                            </button>
+                            <hr>
+                            <div class="Departamentos">
+                                <div class="card dep animate__animated animate__fadeInUp" *ngFor="let card of Departamentos">
+                                    <div class="card-header">
+                                        <div class="card-header-title">
+                                          <div class="subtitle">
+                                            {{card}}
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <a class="card-footer-item"><i class="far fa-edit green"></i></a>
+                                        <a class="card-footer-item"><i class="fas fa-trash-alt red"></i></a>
+                                      </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="card" style="min-height: 300px; max-height: 300px; overflow-y: scroll;">
+                        <div class="card-content">
+                            <p class="title">Cargos</p>
+                            <button class="button is-info">
+                                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                                <span>Cargo</span>
+                            </button>
+                            <hr>
+                            <div class="Departamentos">
+                                <div class="card cargo animate__animated animate__fadeInUp" *ngFor="let card of [].constructor(10);index as i">
+                                    <div class="card-header">
+                                        <div class="card-header-title">
+                                          <div class="subtitle">
+                                            Cargo {{i}}
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <footer class="card-footer">
+                                        <a class="card-footer-item"><i class="fas fa-info-circle blue_"></i></a>
+                                        <a class="card-footer-item"><i class="far fa-edit green"></i></a>
+                                        <a class="card-footer-item"><i class="fas fa-trash-alt red"></i></a>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

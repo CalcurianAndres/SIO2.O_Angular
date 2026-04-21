@@ -1,0 +1,435 @@
+<div class="modal" [ngClass]="{'is-active':Solicitud_Material}">
+    <div class="modal-background"></div>
+    <div class="modal-card longer">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+               Solicitud de material
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+
+            <div class="menu_circle" *ngIf="secciones.length < 1">
+                <div class="columns_">
+                    <div class="column_">
+                        <div class="circle orden" (click)="seccion(0)">
+                            <i class="fas fa-file-alt"></i>
+                            <p>Orden</p>
+                        </div>
+                    </div>
+                    <div class="column_">
+                        <div class="circle otros" (click)="seccion(1)">
+                            <i class="fas fa-palette"></i>
+                            <p>Otros</p>
+                        </div>
+                    </div>
+                    <div class="column_">
+                        <div class="circle tintas" (click)="seccion(3)">
+                            <i class="fas fa-swatchbook"></i>
+                            <p>Preparación de tintas</p>
+                        </div>
+                    </div>
+                    <div class="column_">
+                        <div class="circle repuestos" (click)="seccion(2)">
+                            <i class="fas fa-wrench"></i>
+                            <p>Repuestos</p>
+                        </div>
+                    </div>
+                    <div class="column_">
+                        <div class="circle dividido" (click)="seccion(4)">
+                            <i class="fas fa-check smaller"></i>
+                            <p>Pendientes</p>
+                        </div>
+                        <div class="circle dividido_">
+                            <i class="fas fa-history smaller"></i>
+                            <p>Historial</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="columns">
+                <!-- <div class="column is-3">
+                    <div class="card buttons primera" (click)="seccion(0)" [ngClass]="{'selected':secciones[0]}">Orden</div><br>
+                    <div class="card buttons segunda" (click)="seccion(1)" [ngClass]="{'selected':secciones[1]}">Otros</div><br>
+                    <div class="card buttons tercera" (click)="seccion(2)" [ngClass]="{'selected':secciones[2]}">Repuestos</div><br>
+                </div> -->
+                <div class="column">
+                    <div *ngIf="secciones[0]">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="title">Por Orden de Producción</span>
+                                <hr>
+                                <span class="link more" (click)="home()">
+                                    <i class="fas fa-home"></i> Inicio
+                                </span>
+                                <br> <br>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <label for="" class="label">Nº OP</label>
+                                        <input type="text" class="input is-small" placeholder="Orden de produccion">
+                                    </div>
+                                    <div class="control">
+                                        <label for="" class="label">.</label>
+                                        <i class="fas fa-search blue_"></i>
+                                    </div>
+                                    <div class="control">
+                                        <label for="" class="label">.</label>
+                                        <strong>
+                                            2024001 | Est. Gelatina Sonrissa Frambuesa 66g
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <label for="" class="label">.</label>
+                                        <span class="more" (click)="otros()">
+                                            <i class="fas fa-plus"></i> Otros materiales
+                                        </span>
+                                    </div>
+                                    <div class="control" *ngIf="otro">
+                                        <label for="" class="label">Grupo</label>
+                                        <div class="select">
+                                            <select name="" id="" [(ngModel)]="grupo">
+                                                <option value="grupo 1">Grupo 1</option>
+                                                <option value="grupo 2">Grupo 2</option>
+                                                <option value="grupo 3">Grupo 3</option>
+                                                <option value="grupo 4">Grupo 4</option>
+                                                <option value="grupo 5">Grupo 5</option>
+                                                <option value="grupo 6">Grupo 6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control" *ngIf="grupo">
+                                        <label for="" class="label">Material</label>
+                                        <div class="select">
+                                            <select name="" id="" [(ngModel)]="material">
+                                                <option value="Material 1">Material 1</option>
+                                                <option value="Material 2">Material 2</option>
+                                                <option value="Material 3">Material 3</option>
+                                                <option value="Material 4">Material 4</option>
+                                                <option value="Material 5">Material 5</option>
+                                                <option value="Material 6">Material 6</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control" *ngIf="material">
+                                        <label for="" class="label">.</label>
+                                        <div class="control blue_">
+                                            <i class="fas fa-plus" style="cursor: pointer;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br><br>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="card card___">
+                                    <div class="card-content">
+                                        <div class="subtitles">
+                                            Formulario de solicitud
+                                        </div>
+                                        <table class="table is-fullwidth is-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Material</th>
+                                                    <th width="150px">Cant. Solicitada</th>
+                                                    <th></th>
+                                                    <th>Motivo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Azul proceso Apache (olin)</td>
+                                                    <td><input type="text" class="input right-aligned-input" [(ngModel)]="inputValue" (keyup)="onInputChange($event)" (keydown)="keyDownEvent($event)"></td>
+                                                    <td>
+                                                        <div class="tooltip">
+                                                          <i class="fas fa-comment comentario" [ngClass]="{'used':motivos[0]}"></i>
+                                                          <div class="tooltip-text" id="tooltip"> <!-- Contenido del popup -->
+                                                            <div class="select is-small">
+                                                                <select (change)="motivo(0, $event.target)">
+                                                                    <option value="Fallas asociadas al sustrato">Fallas asociadas al sustrato</option>
+                                                                    <option value="Fallas asociadas a la tinta">Fallas asociadas a la tinta</option>
+                                                                    <option value="Inconsistencias en el inventario físico">Inconsistencias en el inventario físico</option>
+                                                                    <option value="Fallas asociadas al operador de impresión">Fallas asociadas al operador de impresión</option>
+                                                                    <option value="Fallas asociadas al operador de corte">Fallas asociadas al operador de corte</option>
+                                                                    <option value="Fallas asociadas al operador de troquelado">Fallas asociadas al operador de troquelado</option>
+                                                                    <option value="Fallas asociadas al operador de Pegado">Fallas asociadas al operador de Pegado</option>
+                                                                    <option value="Fallas del proceso de impresión">Fallas del proceso de impresión </option>
+                                                                    <option value="Fallas del proceso de pegado">Fallas del proceso de pegado</option>
+                                                                    <option value="Fallas operativa de maquina">Fallas operativa de maquina</option>
+                                                                    <option value="Fallas en el sistema">Fallas en el sistema</option>
+                                                                    <option value="Error de estimación de material">Error de estimación de material</option>
+                                                                    <option value="Error de estimación de material">Remplazo por devolución</option>
+                                                                </select>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </td>
+                                                      <td width="200px" style="text-align: center;">
+                                                        <div [ngClass]="{'motivo':motivos[0]}" *ngIf="motivos[0]">
+                                                            {{motivos[0].motivo}}
+                                                        </div>
+                                                      </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Azul proceso Apache (olin)</td>
+                                                    <td><input type="text" class="input right-aligned-input" [(ngModel)]="inputValue" (keyup)="onInputChange($event)" (keydown)="keyDownEvent($event)"></td>
+                                                    <td>
+                                                        <div class="tooltip">
+                                                          <i class="fas fa-comment comentario" [ngClass]="{'used':motivos[1]}"></i>
+                                                          <div class="tooltip-text" id="tooltip"> <!-- Contenido del popup -->
+                                                            <div class="select is-small">
+                                                                <select (change)="motivo(1, $event.target)">
+                                                                    <option value="Fallas asociadas al sustrato">Fallas asociadas al sustrato</option>
+                                                                    <option value="Fallas asociadas a la tinta">Fallas asociadas a la tinta</option>
+                                                                    <option value="Inconsistencias en el inventario físico">Inconsistencias en el inventario físico</option>
+                                                                    <option value="Fallas asociadas al operador de impresión">Fallas asociadas al operador de impresión</option>
+                                                                    <option value="Fallas asociadas al operador de corte">Fallas asociadas al operador de corte</option>
+                                                                    <option value="Fallas asociadas al operador de troquelado">Fallas asociadas al operador de troquelado</option>
+                                                                    <option value="Fallas asociadas al operador de Pegado">Fallas asociadas al operador de Pegado</option>
+                                                                    <option value="Fallas del proceso de impresión">Fallas del proceso de impresión </option>
+                                                                    <option value="Fallas del proceso de pegado">Fallas del proceso de pegado</option>
+                                                                    <option value="Fallas operativa de maquina">Fallas operativa de maquina</option>
+                                                                    <option value="Fallas en el sistema">Fallas en el sistema</option>
+                                                                    <option value="Error de estimación de material">Error de estimación de material</option>
+                                                                    <option value="Error de estimación de material">Remplazo por devolución</option>
+                                                                </select>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </td>
+                                                      <td width="200px" style="text-align: center;">
+                                                        <div [ngClass]="{'motivo':motivos[1]}" *ngIf="motivos[1]">
+                                                            {{motivos[1].motivo}}
+                                                        </div>
+                                                      </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                            <span class="subtitles">Motivo</span>
+                            <br>
+                            <textarea class="textarea" rows="5" [(ngModel)]="motivo_escrito" disabled></textarea>
+                    
+                            <br>
+                            <button class="button is-success">
+                                <span class="icon"><i class="fas fa-hand-holding"></i></span>
+                                <span>Solicitar</span>
+                            </button>
+                    </div>
+                    <div *ngIf="secciones[1]">
+                        <div class="card mt-5 title_ segunda">
+                            <!-- <span class="red-bar"></span> -->
+                            <div class="card-content">
+                              <h1 class="title blancas">
+                               Otros materiales
+                              </h1>
+                              <div class="iconos">
+                                <i class="fas fa-palette"></i>
+                              </div>
+                            </div>
+                        </div>
+                        <br>
+                        <span class="link more" (click)="home()">
+                            <i class="fas fa-home"></i> Inicio
+                        </span>
+                        <br> <br>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <label for="" class="label">Grupo</label>
+                                        <div class="select">
+                                            <select name="" id="" [(ngModel)]="grupo" (change)="ver($event)">
+                                                <option value="{{grupo_._id}}" *ngFor="let grupo_ of grupos.grupos">{{grupo_.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control" *ngIf="grupo">
+                                        <label for="" class="label">Material</label>
+                                        <div class="select">
+                                            <select name="" id="" [(ngModel)]="material" (change)="ver_($event)">
+                                                <option value="{{material_._id}}" *ngFor="let material_ of materiales.filtrarGrupos(grupo)">{{material_.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <label for="" class="label">Motivo</label>
+                                <textarea name="" id="" class="textarea" [(ngModel)]="motivo_" placeholder="Motivo de la solicitud"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="secciones[2]">
+                        <div class="card mt-5 title_ tercera">
+                            <!-- <span class="red-bar"></span> -->
+                            <div class="card-content">
+                              <h1 class="title blancas">
+                               Otros materiales
+                              </h1>
+                              <div class="iconos">
+                                <i class="fas fa-wrench"></i>
+                              </div>
+                            </div>
+                        </div>
+                        <br>
+                        <span class="link more" (click)="home()">
+                            <i class="fas fa-home"></i> Inicio
+                        </span>
+                        <br> <br>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field">
+                                    <label for="" class="label">Maquina</label>
+                                    <div class="field">
+                                        <div class="select">
+                                            <select name="" id="">
+                                                <option value="">Opción 1</option>
+                                                <option value="">Opción 2</option>
+                                                <option value="">Opción 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label for="" class="label">Categoria</label>
+                                    <div class="field">
+                                        <div class="select">
+                                            <select name="" id="">
+                                                <option value="">Opción 1</option>
+                                                <option value="">Opción 2</option>
+                                                <option value="">Opción 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label for="" class="label">Repuesto</label>
+                                    <div class="field">
+                                        <div class="select">
+                                            <select name="" id="">
+                                                <option value="">Opción 1</option>
+                                                <option value="">Opción 2</option>
+                                                <option value="">Opción 3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="secciones[3]">
+                        <app-color-mix
+                        (onCloseModal)="home()">
+
+                        </app-color-mix>
+                    </div>
+
+                    <div *ngIf="secciones[4]">
+                        <div class="card mt-5 title_ cheked">
+                            <!-- <span class="red-bar"></span> -->
+                            <div class="card-content">
+                              <h1 class="title blancas">
+                               Solicitudes pendientes
+                              </h1>
+                              <div class="iconos">
+                                <i class="fas fa-check"></i>
+                              </div>
+                            </div>
+                        </div>
+                        <br>
+                        <span class="link more" (click)="home()">
+                            <i class="fas fa-home"></i> Inicio
+                        </span>
+                        <br> <br>
+                        <div class="custom-card" *ngIf="NoHayPorAceptar()">
+                            <p class="message">No hay solicitudes pendientes</p>
+                        </div>
+                        <ng-container *ngFor="let solicitudes_ of solicitudes.solicitudes; index as index" >
+                            <ng-container *ngIf="solicitudes_.status == 'Por Aceptar'">
+                                <div class="card">
+                                    <div class="card-container" style="padding: 5px;">
+                                        <div class="subtitles">{{solicitudes_.motivo}}</div>
+                                        <table class="table is-fullwidth">
+                                            <thead>
+                                                <tr>
+                                                    <th>Material</th>
+                                                    <th>Cantidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let materiales of solicitudes_.materiales">
+                                                    <td>{{materiales.material.nombre}}</td>
+                                                    <td>{{materiales.cantidad}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <button class="button is-success" style="margin: 5px;" (click)="aceptarSolicitud(solicitudes_._id)">
+                                            <span class="icon"><i class="fas fa-check"></i></span>
+                                        </button>
+                                        <button class="button is-danger" style="margin: 5px;" (click)="cacelarSlicitud(solicitudes_._id)">
+                                            <span class="icon"><i class="fas fa-ban"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-card added animate__animated animate__fadeInUp longest" *ngIf="secciones[1] && materiales.filtrarPorMateriales(materiales_id).length > 0">
+            <div class="modal-card-body bg">
+                <table class="table is-fullwidth bg">
+                    <tr>
+                        <th class="bg" style="width: 400px;">Material</th>
+                        <!-- <th class="bg">Almacenado</th> -->
+                        <th class="bg">Solicitado</th>
+                        <th class="bg">Eliminar</th>
+                    </tr>
+                    <tr *ngFor="let material of materiales.filtrarPorMateriales(materiales_id);index as i">
+                        <td>{{material.nombre}}</td>
+                        <!-- <td>{{almacen.BuscarCantidadEnAlmacen(material._id)}}</td> -->
+                        <td>
+                            <input 
+                            style="width: 130px;"
+                            type="text" 
+                            class="input right-aligned-input" 
+                            (keyup)="onInputChange_($event, material)" 
+                            (keydown)="keyDownEvent($event)"
+                            (change)="AgregarCantidades(i, $event)"
+                            [(ngModel)]="inputValue"
+                            [ngClass]="{'error-input':showError}">
+                        <div *ngIf="showError" class="error-message">Cantidad solicitada supera cantidad en el almacén.</div>
+                        </td>
+                        <td>
+                            <i class="fas fa-trash-alt red" style="cursor: pointer;" (click)="eliminarMaterial(material._id)"></i>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button class="button is-success" [disabled]="showError || motivo_.length < 1" (click)="generarSolicitud()" >
+                    <span class="icon"><i class="fas fa-hand-holding"></i></span>
+                    <span>Solicitar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

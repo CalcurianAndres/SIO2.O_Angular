@@ -1,0 +1,463 @@
+<app-analisis-tinta [Tinta]="Tinta" [Materiales]="Material_selected" [Recepcion]="Recepcion_selected"
+    [Index]="index_material" [Analisis]="Analisis" [Preparacion]="Preparacion" (onCloseModal)="Cerrar()"
+    (onCloseSencillo)="Tinta = false">
+</app-analisis-tinta>
+
+<app-analisis-cajas [caja]="Caja" [Materiales]="Material_selected" [Recepcion]="Recepcion_selected"
+    [Index]="index_material" [analisis]="AnalisisCajas" (onCloseModal)="Caja = false" (onCloseMensaje)="cerrar_cajas()">
+</app-analisis-cajas>
+
+<app-analisis-pads [pads]="pads" [Materiales]="Material_selected" [Recepcion]="Recepcion_selected"
+    [Index]="index_material" [analisis]="analisisPads" (onCloseModal)="pads = false" (onCloseMensaje)="cerrar_cajas()">
+</app-analisis-pads>
+
+<app-analisis-otros [otro]="otro" [Materiales]="Material_selected" [Recepcion]="Recepcion_selected"
+    [Index]="index_material" [analisis]="AnalisisOtro" (onCloseModal)="otro = false" (onCloseMensaje)="cerrar_cajas()">
+
+</app-analisis-otros>
+
+<app-analisis-sustrato [sustrato]="Sustrato" [Materiales]="Material_selected" [Recepcion]="Recepcion_selected"
+    [analisis]="analisisSustrato" [Index]="index_material" (onCloseSencillo)="Sustrato = false"
+    (onCloseModal)="Cerrar_tinta()">
+</app-analisis-sustrato>
+
+<app-busqueda [busqueda]="Busqueda" [Resultadoas]="Materiales" [parametro]="parametro" (onCloseModal)="Busqueda = false"
+    (onBuscarParametro)="MostrarDesdeBusqueda($event)">
+
+</app-busqueda>
+
+<app-etiquetas-lab [mostrar]="mostrarEtiquetas" [recepcion]="recepcion_" [informacion]="informacion"
+    (cerrar)="mostrarEtiquetas = false">>
+
+</app-etiquetas-lab>
+
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                    <h1 class="title blancas">
+                        Análisis
+                    </h1>
+                    <h2 class="subtitle description blancas">
+                        Descripción
+                    </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fas fa-vials"></i>
+                </div>
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="card h-310">
+                        <div class="card-content">
+                            <ng-container>
+                                <span class="title">
+                                    Pendientes
+                                </span>
+                                <div class="message"
+                                    *ngIf="recepciones.recepciones && recepciones.recepciones.length < 1">
+                                    <h1 class="message-heading">No hay material por analizar</h1>
+                                </div>
+                                <table class="table is-fullwidth is-striped"
+                                    *ngIf="recepciones.recepciones && recepciones.recepciones.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>Estado</th>
+                                            <th>Lote</th>
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                            <th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let recepcion of recepciones.recepciones;index as index">
+                                            <ng-container *ngIf="recepcion.status === 'En observacion'">
+                                                <ng-container *ngFor="let material of recepcion.materiales;index as i">
+                                                    <tr
+                                                        *ngIf="verificarSiSerealizoAnalisis(material) && material[0].presentacion != 'bobinas'">
+                                                        <td>
+                                                            <ng-container *ngIf="!material[0].analisis">
+                                                                <span class="tag is-danger">PENDIENTE</span>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="material[0].analisis">
+                                                                <ng-container
+                                                                    *ngIf="!analisis.BuscarAnalisis(material[0].analisis).resultado.resultado">
+                                                                    <span class="tag is-warning">EN PROCESO</span>
+                                                                </ng-container>
+                                                                <ng-container
+                                                                    *ngIf="analisis.BuscarAnalisis(material[0].analisis).resultado.resultado">
+                                                                    <span class="tag is-success">POR VALIDAR</span>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </td>
+                                                        <td>{{material[0].lote}}</td>
+                                                        <td>{{material[0].material.nombre}}
+                                                            <ng-container *ngIf="material[0].material.gramaje">
+                                                                ({{material[0].ancho}}x{{material[0].largo}})
+                                                                {{material[0].material.gramaje}}g/m² -
+                                                                {{material[0].material.calibre}}pt
+                                                            </ng-container> {{material[0].material.fabricante.alias}} /
+                                                            {{material[0].material.serie}}
+                                                        </td>
+                                                        <td>{{CalcularPeso(material) | number:'1.0-2' }}
+                                                            {{material[0].unidad}}</td>
+                                                        <td>
+                                                            <span class="icon blue_"><i class="fas fa-vial"
+                                                                    (click)="Analizar(recepcion, material, index, i)"></i></span>
+                                                            <span class="icon blue_"
+                                                                (click)="abrirEtiquetas(material, recepcion)"><i
+                                                                    class="fa-solid fa-tags"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-container *ngIf="PreparacionesTinta().length > 0">
+                                            <ng-container *ngFor="let preparacion of PreparacionesTinta();index as i">
+                                                <tr>
+                                                    <td>
+                                                        <span class="tag is-danger">PENDIENTE</span>
+                                                    </td>
+                                                    <td></td>
+                                                    <td>{{preparacion.material.nombre}}</td>
+                                                    <td>{{preparacion.cantidad | number:'1.0-2'}} Kg.</td>
+                                                    <td>
+                                                        <span class="icon blue_"><i class="fas fa-vial"
+                                                                (click)="AnalizarPreparacion(preparacion)"></i></span>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-4">
+                    <div class="card tags">
+                        <div class="card-content ty orange">
+                            <div class="columns">
+                                <div class="column is-2">
+                                    <span class="number_">
+                                        <h1>{{analisis.analisisMensuales}}</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Análisis</span> <br>
+                                    <span class="gruesa">Mes</span>
+                                </div>
+                                <div class="column">
+                                    <span class="Detalle">
+                                        {{mesActual}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="position__">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card mt-5 tags">
+                        <div class="card-content ty green__">
+                            <div class="columns">
+                                <div class="column is-2">
+                                    <span class="number_">
+                                        <h1>{{analisis.analisisAnuales}}</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Análisis</span> <br>
+                                    <span class="gruesa">Año</span>
+                                </div>
+                                <div class="column">
+                                    <span class="Detalle">
+                                        {{yearActual}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="position__">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card mt-5 tags">
+                        <div class="card-content ty blue___">
+                            <div class="columns info_">
+                                <div class="column is-2">
+                                    <span class="number_">
+                                        <h1>2</h1>
+                                    </span>
+                                </div>
+                                <div class="column is-2">
+                                    <span class="fina">Dia(s)</span> <br>
+                                    <!-- <span class="gruesa">Dia(s)</span> -->
+                                </div>
+                                <div class="column">
+                                    <span class="low">
+                                        Tiempo promedio
+                                    </span><br>
+                                    <span class="lowl">
+                                        de análisis
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="position_">
+                                <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                    preserveAspectRatio="none" shape-rendering="auto">
+                                    <defs>
+                                        <path id="gentle-wave"
+                                            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                                    </defs>
+                                    <g class="moving-waves">
+                                        <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                                        <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card dark">
+                <div class="card-content">
+                    <span class="title">
+                        Buscador
+                    </span>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label for="" class="label">Buscar por</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select name="" id="" [(ngModel)]="tipo_de_busqueda" (change)="reset()">
+                                                    <option value="grupo">Grupo</option>
+                                                    <option value="lote">Lote</option>
+                                                    <option value="fecha">Fecha</option>
+                                                    <option value="fabricante">Fabricante</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field" *ngIf="tipo_de_busqueda === 'grupo'">
+                                        <label for="" class="label">Seleccione el grupo</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select [(ngModel)]="grupo_selected">
+                                                    <option value="{{grupo._id}}" *ngFor="let grupo of grupos.grupos">
+                                                        {{grupo.nombre}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="tipo_de_busqueda === 'lote'">
+                                        <div class="field">
+                                            <label for="" class="label">Nº Lote</label>
+                                            <div class="control">
+                                                <input type="text" class="input" [(ngModel)]="lote_selected">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="tipo_de_busqueda === 'fecha'">
+                                        <div class="columns">
+                                            <div class="column">
+                                                <div class="field">
+                                                    <label class="label">Desde</label>
+                                                    <div class="control">
+                                                        <input type="date" name="" id="" class="input"
+                                                            [(ngModel)]="desde">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column">
+                                                <div class="field">
+                                                    <label class="label">Hasta</label>
+                                                    <div class="control">
+                                                        <input type="date" name="" id="" class="input"
+                                                            [(ngModel)]="hasta">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field" *ngIf="grupo_selected">
+                                        <label class="label">Selecciona Material</label>
+                                        <div class="control">
+                                            <div class="select">
+                                                <select [(ngModel)]="material_selected">
+                                                    <option value="">Todos los materiales</option>
+                                                    <option value="{{material._id}}"
+                                                        *ngFor="let material of materiales.filtrarGrupos(grupo_selected);index as i">
+                                                        {{material.nombre}} {{material.serie}}
+                                                        ({{material.fabricante.alias}})
+                                                        <ng-container *ngIf="material.grupo.trato">
+                                                            {{material.gramaje}}g {{material.calibre}}pt
+                                                        </ng-container>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field button____">
+                                    <label for="" class="label"> </label>
+                                    <div class="control"
+                                        *ngIf="tipo_de_busqueda === 'grupo' || tipo_de_busqueda === 'lote' || tipo_de_busqueda === 'fecha'">
+                                        <button class="button is-success" (click)="buscar_()">
+                                            <span class="icon"><i class="fas fa-search"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <span class="resultado">
+                                <span *ngIf="Materiales.length < 1">{{Materiales.length}}</span>
+                                <span *ngIf="Materiales.length > 0"><a
+                                        (click)="MostrarBusquedad()">{{Materiales.length}}</a></span> Resultado(s)
+                                obtenido(s)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-content">
+                    <span class="title">
+                        Estadísticas
+                    </span>
+                    <div class="columns">
+                        <!-- <div class="column">
+                            <div class="chart-container">
+                                <canvas  id="Sustrato_chart" width="50" height="50">{{ sustrato_char }}</canvas>
+                            </div>
+                            <div class="carga" *ngIf="!sustrato_char">
+                                <div class="spinner left"></div>
+                            </div>
+                        </div> -->
+                        <div class="column">
+                            <span class="subtitles">
+                                Detalles
+                            </span>
+                            <table class="table is-fullwidth is-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Aprobados</th>
+                                        <th>Rechazados</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sustrato</td>
+                                        <td>{{analisis.SustratoAprobado}}</td>
+                                        <td>{{analisis.SustratoRechazado}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tinta</td>
+                                        <td>{{analisis.TintasAprobadas}}</td>
+                                        <td>{{analisis.TintasRechazadas}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cajas</td>
+                                        <td>{{analisis.CajasAceptadas}}</td>
+                                        <td>{{analisis.CajasRechazadas}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pads</td>
+                                        <td>{{analisis.PadsAprobados}}</td>
+                                        <td>{{analisis.PadsRechazados}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Otros</td>
+                                        <td>{{analisis.OtrosAprobados}}</td>
+                                        <td>{{analisis.OtrosRechazados}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="column">
+                            <span class="subtitles">
+                                Últimos 5
+                            </span>
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Lote</th>
+                                        <th>Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let analisis_ of analisis.lastFives">
+
+                                        <td>
+                                            <div class="tooltip">
+                                                0102
+                                                <span class="tooltiptext">Amarillo Proceso Apache (Olin)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="etiqueta">
+                                                <span class="tag"
+                                                    [ngClass]="{'is-success':analisis_.resultado.resultado === 'APROBADO', 'is-danger':analisis_.resultado.resultado === 'RECHAZADO'}">{{analisis_.resultado.resultado}}</span>
+                                            </span>
+                                             <i class="fas fa-info-circle blue_"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+.title_{
+  background: rgb(128,59,89);
+  background: linear-gradient(90deg, rgba(128,59,89,1) 0%, rgba(162,82,117,1) 100%);
+}
+
+.fuente{
+    font-family: 'Gilroy';
+}
+
+.tag.is-danger {
+    animation: titileo 1s infinite;
+  }
+
+  @keyframes titileo {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+
+.card-header-icon {
+    color: white;
+    transition: transform 0.5s;
+  }
+
+  .card-header-icon.clicked {
+    transform: rotate(180deg);
+ }
+
+ .card-content.info {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.8s ease-in-out;
+  }
+
+  .card-content.show {
+    max-height: 500px;
+  }
+
+  .hidden {
+    display: none;
+    max-height: 0px;
+  }
+
+  .circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #8bc34a;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 0 5px #d3d3d3;
+  }
+
+  .circle_ {
+    width: 5px;
+    height: 5px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .text {
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  @keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .blink {
+    animation: blink 1s infinite;
+  }
+
+
+  .material-link {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .material-link i {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 20px;
+    transition: transform 0.3s;
+  }
+
+  .material-link:hover i {
+    transform: rotate(360deg);
+  }
+
+  .material-link:hover {
+    color: #424242; /* Puedes cambiar el color al que desees */
+  }
+
+  .shake_button:hover {
+    cursor:pointer;
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    100% { transform: translateX(0); }
+  }
+
+.dark{
+    color: white;
+    background-color: #9fadbc;
+  }
+
+  .custom-card {
+    background-color: #c7f7d8;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .custom-card:hover {
+    transform: scale(1.05);
+  }
+
+  .message {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    background-color: #c7f7d8;
+  }
+
+  .blue_ {
+    cursor:pointer;
+  }

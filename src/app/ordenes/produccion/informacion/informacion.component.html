@@ -1,0 +1,76 @@
+<div class="modal" [ngClass]="{'is-active': informacion}">
+    <div class="modal-background"></div>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="modal-card animate__animated animate__fadeInUp">
+          <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+              Documentación OP
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+          </div>
+          <div class="modal-card-body light" *ngIf="orden">
+            <span class="title">
+              Orden: {{orden.numero_op}}
+            </span>
+            <button class="button is-info" (click)="descargarOrden(orden)">
+              <span class="icon"><i class="fas fa-download"></i></span>
+            </button>
+            <hr>
+            <table class="table is-fullwidth is-striped">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Número</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let movement of info">
+                  <td>{{movement.createdAt | date:'dd/MM/YYYY hh:mm a'}}</td>
+                  <td *ngIf="movement.status && !movement.motivo">
+                    AL-DEV-{{movement.numero}}
+                    <button class="button is-small" (click)="generatePdf(movement)" style="border: none; background-color: transparent; color:rgb(62, 142, 208)">
+                      <span class="icon">
+                        <i class="fas fa-info-circle"></i>
+                      </span>
+                    </button>
+                  </td>
+                  <td *ngIf="!movement.status && !movement.motivo">
+                    AL-ASG-{{movement.numero}}
+                    <button class="button is-small" (click)="generarAsignacion(movement)" style="border: none; background-color: transparent; color:rgb(62, 142, 208)">
+                        <span class="icon">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </button>
+                  </td>
+                  <td *ngIf="movement.motivo">
+                    AL-SOL-{{movement.numero}}
+                    <button class="button is-small" (click)="generarSolicitud(movement)" style="border: none; background-color: transparent; color:rgb(62, 142, 208)">
+                      <span class="icon">
+                        <i class="fas fa-info-circle"></i>
+                      </span>
+                    </button>
+                  </td>                        
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="column is-10" *ngIf="modalVisible">
+        <div class="modal-card animae__animated animate_fadeInUp" style="width: 100%;">
+          <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+              Documento
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar_modal()"></button>
+          </div>
+          <div class="modal-card-body">
+            <!-- <iframe *ngIf="pdfSrc" [src]="pdfSrc" width="100%" height="500px"></iframe> -->
+            <object *ngIf="pdfSrc" [data]="pdfSrc" type="application/pdf" width="100%" height="500px"></object>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,81 @@
+<app-sub-areas
+[Areas]="subareas"
+[Areas_Creadas]="Areas_creadas"
+[subunidad]="subunidad"
+[cargo_]="cargo_"
+(onCloseModal)="subareas = false; Areas = true"
+(Update)="upgrade($event)"
+>
+
+</app-sub-areas>
+<div class="modal" [ngClass]="{'is-active':Areas}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp long">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Subunidades de 
+                <span *ngIf="Areas_creadas[0]">
+                    {{Areas_creadas[0].departamento}}
+                </span>
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
+        </div>
+        <div class="modal-card-body light">
+            <button class="button is-info" (click)="onNuevaSubUnidad.emit()">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Subunidad</span>
+            </button>
+            <br>
+            <br>
+            <div class="columns">
+                <ng-container *ngFor="let area of Areas_creadas;index as i">
+                    <div class="column" *ngIf="area.sup === '#'">
+                        <div class="card">
+                            <div class="card-header dark">
+                                <div class="card-header-title">
+                                    <span style="font-family: 'Gilroy';">
+                                        {{area.nombre}}
+                                    </span>
+                                    <div class="field is-grouped margin-right">
+                                        <div class="control">
+                                            <button class="button is-small" style="background-color: transparent; border: none; color:#3e8ed0" (click)="subareas = true; Areas = false;subunidad = area.nombre">
+                                                <span class="icon"><i class="fas fa-plus"></i></span>
+                                            </button>
+                                        </div>
+                                        <div class="control">
+                                            <button class="button is-small" style="background-color: transparent; border: none; color:#2c9f6b" (click)="EditarSubUnidad(area)">
+                                                <span class="icon"><i class="fas fa-edit"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <table class="table is-fullwidth is-striped">
+                                    <tbody>
+                                        <tr *ngFor="let subarea of obtenerSubcargos(area.nombre, area.departamento)">
+                                            <td>{{subarea.nombre}}
+                                                <div class="field is-grouped forEach">
+                                                    <div class="control">
+                                                        <button class="button is-small" style="background-color: transparent; border: none; color:#2c9f6b" (click)="EditarSubSubUnidad(subarea, area)">
+                                                            <span class="icon"><i class="fas fa-edit"></i></span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="control">
+                                                        <button class="button is-small" style="background-color: transparent; border: none; color:#f03a5f" (click)="EliminarSubSubUnidad(subarea)">
+                                                            <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

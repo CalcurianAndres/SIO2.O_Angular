@@ -1,0 +1,53 @@
+.title_ {
+    // width: 100%;
+    // height: 80px;
+    /* O el tamaño que prefieras */
+    border-radius: 12px;
+    /* Un toque de redondeado para el flow */
+
+    /* Degradado ultra-saturado con angulo matador */
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    /* Esto es clave para que el color "corra" */
+
+    /* Animación fluida */
+    animation: gradient-flow 5s ease infinite;
+
+    /* Sombreado neón para que resalte del fondo */
+    box-shadow: 0 4px 15px rgba(231, 60, 126, 0.4);
+
+    /* Para centrar lo que le metas adentro */
+    // display: flex;
+    // // align-items: center;
+    // // justify-content: center;
+    overflow: hidden;
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.iconos {
+    position: absolute;
+    right: 45px;
+    top: -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}
+
+

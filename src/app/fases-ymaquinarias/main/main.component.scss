@@ -1,0 +1,38 @@
+.color1 {color: #453563;}
+.color2 {color: #7d3e75;}
+.color3 {color: #c55287;}
+.color4 {color: #ff7c9c;}
+.color5 {color: #ffb7aa;}
+
+.title_{
+    background: rgb(69,53,99);
+    background: linear-gradient(90deg, rgba(69,53,99,1) 0%, rgba(125,62,117,1) 100%);
+    overflow: hidden;
+}
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+.grupos{
+    background-color: #453563;
+}
+.fabricantes{
+    background-color: #7d3e75;
+}
+
+.iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}

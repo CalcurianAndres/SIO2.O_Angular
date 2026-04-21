@@ -1,0 +1,8 @@
+.bullet {
+  display: inline-block;
+  width: 10px;           /* ancho */
+  height: 10px;          /* alto */
+  background-color: red; /* color de la viñeta */
+  border-radius: 50%;    /* forma circular */
+  margin-right: 6px;     /* espacio con el texto */
+}

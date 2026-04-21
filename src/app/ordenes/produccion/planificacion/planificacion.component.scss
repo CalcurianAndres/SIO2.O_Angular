@@ -1,0 +1,430 @@
+.title_{
+    background: rgb(76,175,80);
+    background: linear-gradient(45deg, rgba(76,175,80,1) 0%, rgba(82,190,87,1) 10%, rgba(86,200,91,1) 20%, rgba(97,219,102,1) 30%, rgba(105,232,110,1) 40%, rgba(105,232,173,1) 50%, rgba(72,208,145,1) 60%, rgba(49,164,151,1) 70%, rgba(42,157,144,1) 80%, rgba(14,107,97,1) 90%, rgba(4,73,65,1) 100%);
+    overflow: hidden;
+}
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+
+.dark{
+    color: white;
+    background-color: #9fadbc;
+  }
+
+  .iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}
+
+.calendar {
+    display: flex;
+    margin-bottom: solid 0.5px rgb(255, 0, 0);
+    position: relative;
+    // justify-content: space-between;
+}
+
+.calendar-day {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* Ajusta el padding según tus necesidades */
+    padding: 5px;
+    box-sizing: border-box;
+    // border-right: solid 1px black;
+    max-width: 10px;
+    min-width: 10px;
+    border-top: solid 0.5px rgb(208, 208, 208);
+}
+
+.gray-tenue{
+    background-color: #f1f1f1;
+}
+
+.calendar-color{
+    width: 30%;
+    height: 40px;
+    // background-color: rgba(255, 0, 0, 0.383);
+    // border: solid 2px red;
+    border-radius: 7px;
+    cursor:move;
+    color: white;
+    padding: 0px;
+    position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        left: 110px;
+        // margin-top: 5px;
+}
+
+mwlResizable {
+    box-sizing: border-box; // required for the enableGhostResize option to work
+  }
+  
+  .fase{
+    position: absolute;
+        height: 100%;
+        cursor: col-resize;
+        width: 5px;
+  }
+
+  .fase{
+    right: 0;
+  }
+
+  .date-info{
+    position: absolute;
+    margin-top: -20px;
+    left: 135px;
+    // background-color: white;
+  }
+
+  .day-info{
+    color: black;
+    font-family: 'Gilroy';
+    text-align: center;
+    // position: sticky;
+    // position: absolute;
+    // left: 0px;
+  }
+
+  .x-stronger{
+    font-family: 'Gilroy';
+    
+  }
+
+  .fase-name{
+    flex: 1;
+    // margin-top: -25px;
+    min-width: 110px;
+    max-width: 110px;
+    // background-color: red;
+    text-align: left;
+  }
+
+  .color{
+    display:inline-block;
+    height: 24px;
+    // width: 55px;
+    position: relative;
+    cursor: grab;
+    border-radius: 5px;
+  }
+
+  .color:active{
+    cursor: grabbing;
+  }
+
+  mwlResizable {
+    box-sizing: border-box; // required for the enableGhostResize option to work
+  }
+  
+  .fase{
+    position: absolute;
+        height: 100%;
+        cursor: col-resize;
+        width: 5px;
+  }
+
+  .fase{
+    right: 0;
+  }
+
+  .wrapp{
+    display: inline-block;
+  }
+
+  td.td{
+    max-height: 20px;
+  }
+
+  table.tr.td{
+    max-height: 50px;
+  }
+
+
+
+  .dias_de_Semana{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+  }
+
+  .dias{
+    width: 110px;
+    text-align: center;
+  }
+
+  .dias:nth-child(odd) {
+    display: block;
+    background-color: #f0f0f0; /* Cambia el color de fondo de los días impares */
+    // border-right: solid 1px black;
+    // border-left: solid 1px black;
+    // color: #ff0000; /* Cambia el color del texto de los días impares (puedes poner el color que prefieras) */
+}
+
+.info{
+  width: 770px;
+  // height: 300px;
+  background: linear-gradient(
+    90deg,
+    rgba(240,240,240,1) 0%,
+    rgba(240,240,240,1) 14.28%,
+    rgba(255,255,255,1) 14.28%,
+    rgba(255,255,255,1) 28.56%,
+    rgba(240,240,240,1) 28.56%,
+    rgba(240,240,240,1) 42.84%,
+    rgba(255,255,255,1) 42.84%,
+    rgba(255,255,255,1) 57.12%,
+    rgba(240,240,240,1) 57.12%,
+    rgba(240,240,240,1) 71.4%,
+    rgba(255,255,255,1) 71.4%,
+    rgba(255,255,255,1) 85.68%,
+    rgba(240,240,240,1) 85.68%,
+    rgba(240,240,240,1) 100%
+);
+}
+
+
+.informacion{
+  width: 770px;
+  height: 300px;
+  background: linear-gradient(
+    90deg,
+    rgba(240,240,240,1) 0%,
+    rgba(240,240,240,1) 14.28%,
+    rgba(255,255,255,1) 14.28%,
+    rgba(255,255,255,1) 28.56%,
+    rgba(240,240,240,1) 28.56%,
+    rgba(240,240,240,1) 42.84%,
+    rgba(255,255,255,1) 42.84%,
+    rgba(255,255,255,1) 57.12%,
+    rgba(240,240,240,1) 57.12%,
+    rgba(240,240,240,1) 71.4%,
+    rgba(255,255,255,1) 71.4%,
+    rgba(255,255,255,1) 85.68%,
+    rgba(240,240,240,1) 85.68%,
+    rgba(240,240,240,1) 100%
+);
+}
+
+.orden{
+  display: inline-block;
+}
+
+.barras_{
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px black solid;
+}
+
+.barras{
+  display: block;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px black solid;
+}
+
+
+
+
+
+  /* Estilos básicos */
+.weeks-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.week {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  justify-content: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 80%;
+}
+
+.week-header {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.days {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.days span {
+  padding: 5px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+}
+
+.reverse-week {
+  flex-direction: row-reverse;
+}
+
+/* Botones de navegación */
+.navigation {
+  margin-top: 20px;
+  // display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.barras {
+  // display: flex;
+  align-items: center;
+  height: 50px;
+  overflow: hidden;
+  white-space: nowrap; /* Evita que los elementos se apilen */
+}
+
+.op {
+  display: inline-block;
+  position: relative;
+  height: 20px;
+  background-color: aquamarine;
+  flex-shrink: 0; /* Evita que se reduzcan de tamaño */
+  color: white;
+  font-size: xx-small;
+  border-radius: 5px;
+}
+
+.bg{
+  display: block;
+max-width: 65%;
+white-space: nowrap;
+overflow-x: scroll;
+}
+
+.bars{
+  background: linear-gradient(
+    90deg,
+    rgba(240,240,240,1) 0px,
+    rgba(240,240,240,1) 55px,
+    rgba(255,255,255,1) 55px,
+    rgba(255,255,255,1) 110px
+  );
+  background-size: 110px 200%;
+  background-position: 10px 0px;
+  background-repeat: repeat-x;
+  display: flex;
+      // justify-content: center; /* Alinea horizontalmente */
+      align-items: center;    /* Alinea verticalmente */
+  height: 41px;
+  padding-left: 10px;
+  width: 170%;
+}
+
+.dias_{
+  display: inline-block;
+  width: 55px;
+  font-family: 'Gilroy';
+  text-align: center;
+}
+
+
+.order{
+  display: inline-block;
+  width: 55px;
+  height: 40px;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  color: rgb(86, 86, 86);
+  
+}
+
+.order_{
+  display: inline-block;
+  width: 55px;
+  height: 40px;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  color: rgb(86, 86, 86);
+  
+}
+
+.icon_ban{
+  display: flex;
+  justify-content: center; /* Alinea horizontalmente */
+  align-items: center;    /* Alinea verticalmente */
+  height: 40px;  
+  width: 55px;        /* Altura completa de la ventana */
+  font-family: 'Gilroy';
+  font-size: larger
+      // border: 1px solid ;
+}
+
+.order:hover{
+  border: solid 2px red;
+}
+
+.order_:hover{
+  border: solid 2px red;
+}
+
+.motivo-popup {
+  display: none;
+  position: relative;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2f2f2fde;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 10;
+  width: 150px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  color: white;
+}
+
+.motivo-popup_ {
+  display: none;
+  position: relative;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2f2f2fde;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 10;
+  width: 150px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  color: white;
+}
+
+.order:hover .motivo-popup {
+  display: block;
+}
+
+.order_:hover .motivo-popup_ {
+  display: block;
+}

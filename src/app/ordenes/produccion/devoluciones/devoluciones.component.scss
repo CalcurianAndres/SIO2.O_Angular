@@ -1,0 +1,14 @@
+.long{
+    width: 80%;
+}
+
+.input-error {
+    border: 2px solid red;
+    background-color: #ffe6e6; /* Color de fondo rojo claro */
+}
+
+.error-message {
+    color: red;
+    font-size: 10px;
+    margin-top: 4px;
+}

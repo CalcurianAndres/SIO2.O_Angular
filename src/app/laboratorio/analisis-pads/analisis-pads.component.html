@@ -1,0 +1,155 @@
+<div class="modal" [ngClass]="{'is-active':pads}">
+    <div class="modal-background"></div>
+    <div class="modal-card longer">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+               Material Nombre
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <span class="titles">
+                Caracteristicas y propiedades
+            </span>
+            <br>
+            <div class="columns">
+                <div class="column is-2">
+                    Número de muestras:
+                </div>
+                <div class="column is-2">
+                    <div class="field">
+                        <div class="control mt">
+                            <input type="number" name="" id="" class="input" [(ngModel)]="analisis.muestras">
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-3">
+                </div>
+            </div>
+            <span class="titles">
+                Estadísticas
+            </span>
+            <br>
+            <table class="table is-fullwidth is-bordered" *ngIf="Materiales">
+                <tr>
+                    <th border="0px"></th>
+                    <th colspan="3" class="is-selected">Especificación</th>
+                    <th colspan="4" class="is-selected">Resultado</th>
+                </tr>
+                <tr>
+                    <td border="0px"></td>
+                    <td>Mín</td>
+                    <td>Estandar</td>
+                    <td>Máx</td>
+                    <td>X̅</td>
+                    <td>S</td>
+                    <td>Mín</td>
+                    <td>Máx</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Largo</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.largo_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.largo_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.largo_max}}</td>
+                    <td>{{analisis.largo.promedio.toFixed(analisis.largo.decimales)}}</td>
+                    <td>{{analisis.largo.desviacion.toFixed(analisis.largo.decimales)}}</td>
+                    <td>{{analisis.largo.min}}</td>
+                    <td>{{analisis.largo.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Ancho</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.ancho_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.ancho_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.ancho_max}}</td>
+                    <td>{{analisis.ancho.promedio.toFixed(analisis.ancho.decimales)}}</td>
+                    <td>{{analisis.ancho.desviacion.toFixed(analisis.ancho.decimales)}}</td>
+                    <td>{{analisis.ancho.min}}</td>
+                    <td>{{analisis.ancho.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Signado</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.signado_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.signado_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.signado_max}}</td>
+                    <td>{{analisis.signado.promedio.toFixed(analisis.signado.decimales)}}</td>
+                    <td>{{analisis.signado.desviacion.toFixed(analisis.signado.decimales)}}</td>
+                    <td>{{analisis.signado.min}}</td>
+                    <td>{{analisis.signado.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Espesor</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_max}}</td>
+                    <td>{{analisis.espesor.promedio.toFixed(analisis.espesor.decimales)}}</td>
+                    <td>{{analisis.espesor.desviacion.toFixed(analisis.espesor.decimales)}}</td>
+                    <td>{{analisis.espesor.min}}</td>
+                    <td>{{analisis.espesor.max}}</td>
+                </tr>
+            </table>
+            <br>
+
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Largo (cm)</th>
+                        <th>Ancho (cm)</th>
+                        <th>Signado (cm)</th>
+                        <th>Espesor (mm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.muestras);index as i">
+                        <td>{{i +1 }}</td>
+                        <td><input type="number" name="" id="" class="input" (change)="largo()" [(ngModel)]="analisis.largo.largo[i]"></td>
+                        <td><input type="number" name="" id="" class="input" (change)="ancho()" [(ngModel)]="analisis.ancho.ancho[i]"></td>
+                        <td><input type="number" name="" id="" class="input" (change)="signado()" [(ngModel)]="analisis.signado.signado[i]"></td>
+                        <td><input type="number" name="" id="" class="input" (change)="espesor()" [(ngModel)]="analisis.espesor.espesor[i]"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="field">
+                <label class="label">Observación</label>
+                <div class="control">
+                    <textarea class="textarea" id="" cols="30" rows="3" [(ngModel)]="analisis.resultado.observacion"></textarea>
+                </div>
+            </div>
+
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <button class="button is-success" (click)="guardar()">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                </div>
+                <div class="column">
+                    <table class="table is-fullwidth">
+                        <tr>
+                            <th>Resultado</th>
+                            <th>Generar Analisis</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="select">
+                                    <select name="" id="" [(ngModel)]="analisis.resultado.resultado">
+                                        <option value="APROBADO">APROBADO</option>
+                                        <option value="RECHAZADO">RECHAZADO</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="button is-success" *ngIf="analisis.resultado.resultado" (click)="AnalisisCompletado()">
+                                    <span>Descargar</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

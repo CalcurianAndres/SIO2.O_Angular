@@ -1,0 +1,194 @@
+<app-inventario
+[listado]="listado"
+[General]="Generales"
+[ByLotes]="ByLotes"
+(onCloseModal)="Inventario = false"
+>
+</app-inventario>
+
+<app-inventarios
+[Inventario]="Inventario"
+[agrupadoMateriales] = "Materiales_totales"
+(onCloseModal)="Inventario = false">
+
+</app-inventarios>
+
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                   Almacén de materiales
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                  <div class="iconos">
+                    <i class="fas fa-box-open"></i>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <div class="columns">
+              <div class="column">
+                <div class="columns">
+                  <div class="column">
+                    <div class="card">
+                      <div class="card-content tarjetas primera">
+                        <div class="columns">
+                          <div class="column is-2">
+                            <span class="number_">
+                                <h1>3</h1>
+                            </span>
+                        </div>
+                        <div class="column">
+                            <span class="low">
+                                Materiales en 
+                            </span><br>
+                            <span class="lowl">
+                              stock crítico
+                            </span>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="card">
+                      <div class="card-content tarjetas segunda">
+                        <div class="columns">
+                          <div class="column is-2">
+                            <span class="number_">
+                                <h1>5</h1>
+                            </span>
+                        </div>
+                        <div class="column">
+                            <span class="low">
+                                Materiales en 
+                            </span><br>
+                            <span class="lowl">
+                              cero stock
+                            </span>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="card">
+                      <div class="card-content tarjetas tercera">
+                        <div class="columns">
+                          <div class="column is-2">
+                            <span class="number_">
+                                <h1>2</h1>
+                            </span>
+                        </div>
+                        <div class="column">
+                            <span class="low">
+                                Materiales en 
+                            </span><br>
+                            <span class="lowl">
+                              observación
+                            </span>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-content dark">
+                    <div class="columns">
+                      <div class="column is-3">
+                        <span class=" mensaje">Busqueda:</span>
+                      </div>
+                      <div class="column">
+                        <input type="text" class="input Buscador is-small" placeholder="Ingrese palabra o número clave para la busqueda">
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+                <br>
+                <div class="card">
+                  <div class="card-content">
+                    <div class="subtitles">
+                      Inventario
+                    </div>
+                    <br>
+                    <ng-container *ngFor="let fila of [].constructor(filas());index as fila_i">
+                      <div class="columns">
+                        <div class="column" *ngFor="let tarjeta of [].constructor(3);index as i">
+                          <ng-container *ngIf="grupos.grupos[(3*fila_i)+i]">
+                              <div class="card animate__animated animate__fadeInUp grupos" (click)="detallar(grupos.grupos[(3*fila_i)+i]._id)">
+                                  <div class="card-content">
+                                    <div class="columns">
+                                      <div class="column is-3 blue_">
+                                          <i class="{{grupos.grupos[(3*fila_i)+i].icono}}" *ngIf="grupos.grupos[(3*fila_i)+i].icono"></i>
+                                          <i class="fas fa-paperclip" *ngIf="!grupos.grupos[(3*fila_i)+i].icono"></i>
+                                      </div>
+                                      <div class="column">
+                                        <p>{{grupos.grupos[(3*fila_i)+i].nombre}} <i class="fas fa-glass-whiskey indicator animate__animated animate__flash" *ngIf="grupos.grupos[(3*fila_i)+i].parcial"></i></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-4">
+                  <div class="card">
+                    <div class="card-content top">
+                      <div class="title smart">
+                        Con Mayor salida:
+                      </div>
+                      <ng-container *ngFor="let grupo of grupos.grupos; index as i">
+                        <span class="subtitles">
+                          {{ grupo.nombre }}
+                        </span>
+                        <div class="columns">
+                          <div class="column hidden">
+                            <span>
+                              Cartón Rev. Blanco 70x83 300g 75pt (Caracas, (Venezuela))
+                            </span>
+                          </div>
+                          <div class="column is-2">
+                            <strong>
+                              2
+                            </strong>
+                          </div>
+                        </div>
+                      </ng-container>                
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <!-- <ng-container *ngFor="let fila of [].constructor(filas());index as fila_i">
+                <div class="columns">
+                  <div class="column" *ngFor="let tarjeta of [].constructor(5);index as i">
+                    <ng-container *ngIf="grupos.grupos[(5*fila_i)+i]">
+                        <div class="card animate__animated animate__fadeInUp grupos" (click)="detallar(grupos.grupos[(5*fila_i)+i]._id)">
+                            <div class="card-content">
+                              <div class="columns">
+                                <div class="column is-half blue_">
+                                    <i class="{{grupos.grupos[(5*fila_i)+i].icono}}" *ngIf="grupos.grupos[(5*fila_i)+i].icono"></i>
+                                    <i class="fas fa-paperclip" *ngIf="!grupos.grupos[(5*fila_i)+i].icono"></i>
+                                </div>
+                                <div class="column is-half">
+                                  <p>{{grupos.grupos[(5*fila_i)+i].nombre}} <i class="fas fa-glass-whiskey indicator animate__animated animate__flash" *ngIf="grupos.grupos[(5*fila_i)+i].parcial"></i></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container> -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<app-nueva-gestion
+[nuevo]="nueva"
+[cargo]="cargo"
+[cargos]="Cargos"
+(onCloseModarl)="nueva = false;cargo = {nombre:'',funcion:''}">
+</app-nueva-gestion>
+
+<app-info-gestion
+[info]="info"
+[cargo]="cargo"
+(onCloseModal)="info =false;cargo = {nombre:'',funcion:''}">
+</app-info-gestion>
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    Cargos
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="nueva = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Cargo</span>
+            </button> 
+            <br> <br>
+
+            <div class="Departamentos">
+                <div class="card dep" *ngFor="let cargos of api.cargos">
+                    <div class="card-header">
+                        <div class="card-header-title">
+                            <div class="subtitle">
+                                <div class="brillo"></div> {{cargos.nombre}}
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a class="card-footer-item"><i class="fas fa-info-circle blue_" (click)="showInfo(cargos)"></i></a>
+                        <a class="card-footer-item"><i class="far fa-edit green" (click)="editar(cargos)"></i></a>
+                        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="EliminarCargo(cargos)"></i></a>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

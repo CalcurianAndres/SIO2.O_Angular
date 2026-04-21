@@ -1,0 +1,134 @@
+<app-nuevo-horario
+[nuevo]="nuevo"
+[Horario]="horario"
+(onCloseModel)="nuevo = false;horario = {
+    nombre:'',
+    de:'',
+    a:'',
+    inicio:'',
+    fin:''
+  }">
+
+</app-nuevo-horario>
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    Horarios
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="far fa-clock"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="nuevo = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>Horario</span>
+            </button> <br> <br>
+            <div class="grid-container_">
+                <div class="card tarjeta animate__animated animate__fadeInUp" *ngFor="let horario of api.horarios">
+                    <div class="card-header">
+                        <div class="card-header-title">
+                          <div class="subtitle">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <label class="star-toggle">
+                                      <input type="checkbox" [checked]="horario.default" (change)="setDefault(horario)">
+                                      <i [class]="horario.default ? 'fas fa-star' : 'far fa-star'"></i>
+                                    </label>
+                                </div> 
+                                <span style="font-family: 'Gilroy'; font-size: 15px;">
+                                    {{horario.nombre}}
+                                </span>
+                            </div>                    
+                          </div>
+                        </div>
+                      </div>
+                  <div class="card-content">
+                    <strong>Horario:</strong> {{ horario.de }} a {{ horario.a }} <br>
+                    <strong>Días:</strong> de {{ horario.inicio }} a {{ horario.fin }}
+                  </div>
+                  <footer class="card-footer">
+                    <a class="card-footer-item"><i class="far fa-edit green" (click)="editar(horario)"></i></a>
+                    <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="borrar(horario)"></i></a>
+                  </footer>
+            </div>
+            </div>             
+            <br>
+
+            <div class="tabs">
+                <div class="tab" (click)="selectYear(currentYear - 1)">
+                  <span>{{ currentYear - 1 }}</span>
+                </div>
+                <div class="tab active">
+                  <span>{{ currentYear }}</span>
+                </div>
+                <div class="tab" (click)="selectYear(currentYear + 1)">
+                  <span>{{ currentYear + 1 }}</span>
+                </div>
+              </div>
+            <div class="card">
+                <div class="calendar-container">
+                    <div class="month" *ngFor="let month of months; let i = index">
+                      <h3>{{ month }}</h3>
+                      <div class="days">
+                        <!-- Encabezados de los días de la semana -->
+                        <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
+                  
+                        <!-- Espacios vacíos para alinear los días según el inicio del mes -->
+                        <div *ngFor="let empty of getDaysInMonth(i) | slice:0:getDaysInMonth(i)[0].weekday" class="day empty"></div>
+                  
+                        <!-- Días del mes -->
+                        <div
+                          class="day"
+                          *ngFor="let dayObj of getDaysInMonth(i)"
+                          [ngClass]="{'selected': isNonLaboral(i, dayObj.day)}"
+                          (click)="toggleDaySelection(i, dayObj.day)"
+                        >
+                          {{ dayObj.day }}
+                          <div class="motivo-popup" *ngIf="isNonLaboral(i, dayObj.day)" style="text-align: center;">
+                            {{ getMotivo(i, dayObj.day) }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <!-- <div class="field is-grouped">
+                    <div class="control">
+                        Marcar todos lo:
+                    </div>
+                    <div class="control">
+                        <div class="select is-small">
+                            <select #dia_>
+                                <option value="1">Lunes</option>
+                                <option value="2">Martes</option>
+                                <option value="3">Miercoles</option>
+                                <option value="4">Jueves</option>
+                                <option value="5">Viernes</option>
+                                <option value="6">Sabado</option>
+                                <option value="0">Domingo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control">
+                        como "No laborales":
+                    </div>
+                    <div class="control" (click)="marcarDiaDeLaSemanaNoLaboral(dia_.value)">
+                        <div class="button is-small">
+                            <span class="icon"></span>
+                            <span>Marcar</span>
+                        </div>
+                    </div>
+                  </div> -->
+            </div>
+        </div>
+    </div>
+</div>

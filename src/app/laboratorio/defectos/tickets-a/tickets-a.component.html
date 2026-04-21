@@ -1,0 +1,33 @@
+<div class="modal" [ngClass]="{'is-active':ver}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                {{orden.numero_op}} - Producto defectuoso
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light" *ngIf="ver">
+            <ng-container *ngFor="let ticket of tickets">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="subtitles">
+                            {{ticket.fase}} - {{ticket.tipo}}
+                        </span>
+                        <span class="title" style="font-size:large;">{{ticket.causa}}</span><br>
+                        <span style="color:black">
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Persona que identificó:</span> {{ticket.identificacion}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Acción correctiva:</span> {{ticket.accion}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Responsable de AC:</span> {{ticket.responsable}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Area donde se ejecutará la acción:</span> {{ticket.area_accion}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Supervisor:</span> {{ticket.supervisor}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Analista:</span> {{ticket.analista}} <br>
+                            <span class="bullet"></span> <span style="font-weight: bold;"> Nº paleta:</span> {{ticket.paleta}} <br>
+                        </span>
+                    </div>
+                </div>
+                <br>
+            </ng-container>
+        </div>
+    </div>
+</div>

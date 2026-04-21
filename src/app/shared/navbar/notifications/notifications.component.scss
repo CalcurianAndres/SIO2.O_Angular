@@ -1,0 +1,60 @@
+.notification-panel {
+    position: fixed;
+    top: 0;
+    left: -450px; /* Oculto inicialmente */
+    width: 450px;
+    height: calc(100vh - 100px); /* Hasta 100px antes del final */
+    background: rgba(0, 0, 0, 0.5);
+    color: black;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    border-radius: 20px;
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    -webkit-backdrop-filter: blur(10px); /* Compatibilidad con Safari */
+  }
+  
+  .notification-panel.show {
+    left: 25px; /* Se muestra al activarse */
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 25px;
+    color: rgb(174, 174, 174);
+    cursor: pointer;
+  }
+
+  .title_2{
+    font-family: 'Gilroy';
+    font-size: 20px;
+  }
+  
+  .body-notification{
+    display: block;
+    width: 100%;
+    height:calc(100vh - 250px);
+    overflow-y: scroll;
+  }
+
+  .message-date {
+    font-size: 12px; /* Tamaño más pequeño */
+    color: #666; /* Color gris para menor importancia */
+    display: block; /* Para que se vea debajo */
+    margin-top: 5px;
+}
+
+.notification-exit {
+  opacity: 1;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.notification-exit.removing {
+  opacity: 0;
+  transform: translateX(20px);
+}

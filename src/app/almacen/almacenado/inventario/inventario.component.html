@@ -1,0 +1,77 @@
+<div class="modal" [ngClass]="{'is-active':Inventario}">
+    <div class="modal-background"></div>
+    <div class="modal-card long animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Inventario
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <div class="no-inventario" *ngIf="!listado">
+                <span>No hay inventario</span>
+            </div>
+            <ng-container *ngIf="listado">
+                <div class="General" *ngFor="let item of getObjectKeys(General);index as x">
+                    <!-- Mostrar el nombre, serie, fabricante, peso en gramos y calibre del material -->
+                    <span class="strong">
+                        <span class="bigger">
+                              {{ GetMaterial(item[0]).nombre }} <ng-container *ngIf="GetMaterial(item[0]).gramaje">{{item[0].split('-')[1]}}x{{item[0].split('-')[2]}}</ng-container> ({{ GetMaterial(item[0]).fabricante.alias }}) {{ GetMaterial(item[0]).serie }} 
+                        </span>
+                        <br>   
+                        <ng-container *ngIf="GetMaterial(item[0]).gramaje">
+                            {{ GetMaterial(item[0]).gramaje }}g/m² - {{ GetMaterial(item[0]).calibre }}pt 
+                        </ng-container>{{GetMaterial(item[0]).origen}}
+                    </span>
+                    <!-- Mostrar el valor correspondiente al material -->
+                    <span class="EnviarAlFinal peso">
+                        <span class="strong"><span class="bigger">{{ Format(item[1])}}</span>
+                            <br> <span *ngIf="GetMaterial(item[0]).gramaje">{{peso(item[1], GetMaterial(item[0]).gramaje, item[0].split('-')[1], item[0].split('-')[2])}} tm</span>
+                        </span> 
+                        <button class="Arrow" [ngClass]="{'clicked':GeneralOculto[x]}" (click)="showLotes(x)">
+                        <span class="icon">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                        </button>
+                    </span>
+                    <ng-container *ngIf="GeneralOculto[x]">
+                        <div *ngFor="let lotes of getObjectKeys(BuscarLotes(item[0]));index as y" class="Lotes">
+                            <!-- Mostrar el número de lote y su cantidad -->
+                            <span class="strong">
+                                Lote: <span class="red">{{lotes[0]}}</span>
+                            </span> ({{Format(lotes[1])}})
+                            <span class="EnviarAlFinal">
+                                <button class="Arrow" [ngClass]="{'clicked':MostrarDetalles(x,y)}" (click)="showDetalle(x,y)">
+                                    <span class="icon">
+                                      <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </span>
+                            <table class="table is-fullwidth is-striped" *ngIf="MostrarDetalles(x,y)">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Cantidad</th>
+                                        <th>Origenes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let detalle of getDetallado(lotes[0], GetMaterial(item[0])._id)">
+                                        <td>{{detalle.codigo}}</td>
+                                        <td>{{Format(detalle.neto)}}</td>
+                                        <td *ngIf="detalle.material.origen">
+                                            {{detalle.material.origen}}
+                                        </td>
+                                        <td *ngIf="!detalle.material.origen">
+                                            N/A
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

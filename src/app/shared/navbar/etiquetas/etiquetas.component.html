@@ -1,0 +1,39 @@
+<div class="modal" [ngClass]="{'is-active':Etiquetas}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Etiquetas
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light">
+            <div class="subtitles">
+                Orden de producción
+            </div>
+            <br>
+            <div class="field is-striped">
+                <div class="select">
+                    <select>
+                        <option value="">op1</option>
+                        <option value="">op2</option>
+                        <option value="">op3</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info">
+                <span class="icon"><i class="fas fa-print"></i></span>
+                <span>Imprimir prueba</span>
+            </button>
+            <br><br>
+            <iframe id="visor" width="300" height="200" style="border: none;"></iframe>
+            <iframe id="visor2" width="300" height="200" style="border: none;"></iframe>
+            <br>
+
+            <button class="button" (click)="mostrarPdf()">
+                <span>Vista previa</span>
+            </button>
+        </div>
+    </div>
+</div>

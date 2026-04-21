@@ -1,0 +1,35 @@
+.title_{
+    background: rgb(85,27,179);
+    background: linear-gradient(90deg, rgba(85,27,179,1) 0%, rgba(44,184,178,1) 50%, rgba(61,219,143,1) 100%);
+    overflow: hidden;
+}
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+.grupos{
+    background-color: #551bb3;
+}
+.fabricantes{
+    background-color: #2cb8b2;
+}
+.proveedores{
+    background-color: #3ddb8f;
+}
+
+.iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}

@@ -1,0 +1,33 @@
+
+.title_{
+    background: rgb(213,35,77);
+    background: linear-gradient(90deg, rgba(213,35,77,1) 0%, rgba(192,26,63,1) 100%);
+    overflow: hidden;
+}
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+.especificacion{
+    background-color: #d5234d;
+}
+.analisis{
+    background-color: #c01a3f;
+}
+
+.iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}

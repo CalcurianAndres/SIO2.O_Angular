@@ -1,0 +1,94 @@
+.title_{
+    background: rgb(76,175,80);
+    background: linear-gradient(45deg, rgba(76,175,80,1) 0%, rgba(82,190,87,1) 10%, rgba(86,200,91,1) 20%, rgba(97,219,102,1) 30%, rgba(105,232,110,1) 40%, rgba(105,232,173,1) 50%, rgba(72,208,145,1) 60%, rgba(49,164,151,1) 70%, rgba(42,157,144,1) 80%, rgba(14,107,97,1) 90%, rgba(4,73,65,1) 100%);
+    overflow: hidden;
+}
+
+.tarjetas_menu{
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Gilroy';
+    color: white;
+    font-size: x-large;
+}
+
+
+.dark{
+    color: white;
+    background-color: #9fadbc;
+  }
+
+.iconos{
+    position: absolute;
+    right: 45px;
+    top : -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    top: -150px;
+    color: rgba(255, 255, 255, 0.50);
+}
+
+.Departamentos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Cambia justify-content a flex-start */
+}
+
+.dep {
+    width: calc(25% - 5px); /* El 10px es para el espacio entre las tarjetas */
+    margin-bottom: 25px;
+    margin-right: 5px;
+}
+
+/* Añade un estilo para las tarjetas en la última fila */
+.dep:nth-last-child(-n+4) {
+    width: calc(25% - 5px); /* Ajusta el ancho para las tarjetas en la última fila */
+}
+
+.card_designed{
+    display: block;
+    background-color: white;
+    width: 100%;
+    height: 160px;
+    border-radius: 20px;
+}
+
+.color{
+    display: block;
+    width: 100%;
+    height: 80px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+}
+
+.profile_pic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75px;
+    height: 75px;
+    // margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 500px;
+    border: solid 3px white;
+    color: white;
+    font-size: 4em;
+    font-family: 'Gilroy';
+    text-align: center;
+    overflow: hidden;
+}
+
+.profile_pic img{
+    width: 75px;
+    height: 75px;
+}
+
+.info{
+    display: block;
+    color: black;
+    margin: 10px;
+}

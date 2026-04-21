@@ -1,0 +1,533 @@
+<app-listado [listado]="listado" [lista]="Listado_" [fabricacion]="fabricaciones" [n]="choosen"
+    (onCerrarModal)="CerrarListado()">
+</app-listado>
+
+<app-condicion [condicion]="condicion" [condicion__]="condicion____" [recepcion]="GrupoDeMateriales" [grupo]="grupo"
+    [trato]="trato" [n]="choosen" (onCloseModal)="cerrarCondicion()">
+</app-condicion>
+
+<div class="modal" [ngClass]="{'is-active':nueva}">
+    <div class="modal-background"></div>
+    <div class="modal-card long animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Nueva recepción de material
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <div class="field is-grouped">
+                <div class="control">
+                    <label for="" class="label">Proveedor</label>
+                    <div class="select">
+                        <select [(ngModel)]="proveedor_" (change)="onProveedorChange($event)">
+                            <option *ngFor="let p of opcionesProveedor" [value]="p._id">{{p.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="proveedor_">
+                    <label class="label">Tipo</label>
+                    <div class="select">
+                        <select [(ngModel)]="tipo_documento">
+                            <option value="F - ">F</option>
+                            <option value="N - ">N</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="proveedor_">
+                    <label class="label">Nº Documento</label>
+                    <input type="text" class="input" [(ngModel)]="documento_">
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control" *ngIf="documento_">
+                    <label class="label">Control</label>
+                    <input type="text" class="input" [(ngModel)]="control" (keydown)="generarNumeroDeControl()">
+                </div>
+                <div class="control" *ngIf="control">
+                    <label class="label">Base Imponible (Bs)</label>
+                    <input type="text" class="input right-aligned-input" [(ngModel)]="inputValue"
+                        (keyup)="onInputChange($event)" (change)="keyUpEvent($event.target)"
+                        (keydown)="keyDownEvent($event)">
+                </div>
+            </div>
+            <hr *ngIf="inputValue">
+            <div class="field is-grouped">
+                <div class="control" *ngIf="inputValue != '0,00' || control">
+                    <label class="label">Fecha recepción</label>
+                    <input type="date" class="input" [(ngModel)]="f_recepcion" [max]="today">
+                </div>
+                <div class="control" *ngIf="f_recepcion">
+                    <label class="label">Transportista</label>
+                    <input type="text" class="input" [(ngModel)]="transportista_">
+                </div>
+                <div class="control" *ngIf="transportista_ && !conversion">
+                    <label class="label">OC</label>
+                    <div class="select">
+                        <select (change)="seleccionarOC($event.target)" [(ngModel)]="OC__">
+                            <option value="{{i}}"
+                                *ngFor="let orden of OC_Poligrafica.filtrarPorProveedor(proveedor_);index as i">
+                                {{formatOrderNumber(orden.numero)}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="transportista_ && conversion">
+                    <label class="label">Conversión</label>
+                    <div class="select">
+                        <select
+                            (change)="seleccionarOC_();material_selected_in_OC = bobinas.conversiones[OC__].material._id; lote_ = bobinas.conversiones[OC__].lote; f_fabricacion = bobinas.conversiones[OC__].fabricacion; showInfo()"
+                            [(ngModel)]="OC__">
+                            <option value="{{i}}" *ngFor="let orden of bobinas.conversiones;index as i">
+                                {{formatOrderNumber(orden.conversion)}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control" *ngIf="OC__ && conversion">
+                    <label class="label">Material</label>
+                    <br>
+                    {{bobinas.conversiones[OC__].material.nombre}} {{bobinas.conversiones[OC__].material.gramaje}}g/m² -
+                    {{bobinas.conversiones[OC__].material.calibre}}pt
+                </div>
+                <div class="control" *ngIf="OC__ && !conversion">
+                    <label class="label">Material</label>
+                    <div class="select">
+                        <select [(ngModel)]="material_selected_in_OC" (change)="mostrarMaterial($event.target)">
+                            <option value="{{n}}" *ngFor="let materiales of Poligrafica_OC.pedido;index as n">
+                                {{materiales.material.nombre}}
+                                <ng-container *ngIf="materiales.material.gramaje">
+                                    {{materiales.material.gramaje}}g/m² - {{materiales.material.calibre}}pt
+                                </ng-container>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control"
+                    *ngIf="(material_selected_in_OC && material_selected_in_OC) && Poligrafica_OC.pedido[material_selected_in_OC].material.gramaje">
+                    <label for="" class="label">Ancho</label>
+                    <input type="number" class="input"
+                        [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].ancho" style="width: 70px;">
+                </div>
+                <div class="control"
+                    *ngIf="(material_selected_in_OC && material_selected_in_OC) && Poligrafica_OC.pedido[material_selected_in_OC].material.gramaje">
+                    <label for="" class="label">Largo</label>
+                    <input type="number" class="input"
+                        [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].largo" style="width: 70px;">
+                </div>
+                <div class="control" *ngIf="material_selected_in_OC && !conversion">
+                    <label class="label">Lote</label>
+                    <input type="text" class="input" [(ngModel)]="lote_">
+                </div>
+                <div class="control" *ngIf="material_selected_in_OC && conversion">
+                    <label class="label">Lote</label>
+                    <br>
+                    {{lote_}}
+                </div>
+
+                <div class="control" *ngIf="lote_ && !conversion">
+                    <label class="label">Cantidad {{Poligrafica_OC.pedido[material_selected_in_OC].unidad}}</label>
+                    <input type="number" class="input short"
+                        [value]="Poligrafica_OC.pedido[material_selected_in_OC].cantidad" [(ngModel)]="cantidad_">
+                </div>
+                <div class="control" *ngIf="lote_ && conversion">
+                    <label class="label">Cantidad Und.</label>
+                    <input type="number" class="input short" [(ngModel)]="cantidad_">
+                </div>
+            </div>
+            <div class="field is-grouped" *ngIf="cantidad_">
+                <div class="control">
+                    <label for="" class="label">Fecha fabricación</label>
+                    <input type="date" name="" [max]="_Hoy_" id="" class="input" [(ngModel)]="f_fabricacion"
+                        [disabled]="conversion">
+                </div>
+                <p class="control" *ngIf="!conversion">
+                    <label class="label">Presentación</label>
+                    <span class="select">
+                        <select [(ngModel)]="presentacion_">
+                            <option value="Lata">Lata</option>
+                            <option value="Paleta">Paleta</option>
+                            <option value="Paquete">Paquete</option>
+                            <option value="Env. Plastico">Env. Plástico</option>
+                            <option value="bobinas">Bobina</option>
+                        </select>
+                    </span>
+                </p>
+                <p class="control" *ngIf="conversion">
+                    <label class="label">Presentación</label>
+                    <span class="select">
+                        <select [(ngModel)]="presentacion_">
+                            <option value="Paleta">Paleta</option>
+                        </select>
+                    </span>
+                </p>
+                <p class="control" *ngIf="cantidad_ && !conversion">
+                    <label class="label">Neto / und({{Poligrafica_OC.pedido[material_selected_in_OC].unidad}})</label>
+                    <input type="text" class="input short" [(ngModel)]="neto_">
+                </p>
+                <p class="control" *ngIf="cantidad_ && conversion">
+                    <label class="label">Neto / und(Und)</label>
+                    <input type="text" class="input short" [(ngModel)]="neto_">
+                </p>
+
+                <p class="control" *ngIf="cantidad_ && neto_">
+                    <label class="label"> </label>
+                    <button class="button is-info" (click)="addMaterial()">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </button>
+                </p>
+            </div>
+            <span id="sobrante" class="informacion"></span><br>
+            <span id="info" class="informacion"></span>
+
+            <span *ngIf="done">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-info is-small" (click)="listado = true; nueva = false">
+                            <span class="icon"><i class="fas fa-info-circle"></i></span>
+                            <span>Detalles</span>
+                        </button>
+                    </div>
+                    <div class="control" *ngIf="revisado && !conversion">
+                        <button class="button is-small is-info"
+                            (click)="task(Listado_[0].material.grupo.nombre, Listado_[0].material.grupo.trato)">
+                            <span class="icon"><i class="fas fa-tasks"></i></span>
+                            <span>Control</span>
+                        </button>
+                    </div>
+                    <div class="control" *ngIf="revisado && conversion">
+                        <button class="button is-small is-info" (click)="task(Listado_[0].material.grupo.nombre, true)">
+                            <span class="icon"><i class="fas fa-tasks"></i></span>
+                            <span>Control</span>
+                        </button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-small is-info" (click)="triggerFileInputClick()">
+                            <span class="icon"><i class="fas fa-file-excel"></i></span>
+                            <span>Cargar Excel</span>
+                        </button>
+                        <input type="file" id="excel-file" #fileInput accept=".xls,.xlsx" style="display: none;"
+                            (change)="cargarArchivo($event)">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control" *ngIf="checked">
+                        <button class="button is-success" (click)="_guardar()">
+                            <span class="icon"><i class="fas fa-check"></i></span>
+                            <span>Agregar</span>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <!--   <i class="fas fa-info-circle blue_" style="font-size: larger;" ></i>  <i class="fas fa-tasks blue_" style="font-size: larger;" ></i>
+                  <label for="excel-file" style="background-image: url('../../../../assets/Excel.png'); width: 20px; height: 20px; display: block; cursor: pointer;background-size: cover;"></label>
+                <input type="file" id="excel-file" accept=".xls,.xlsx" style="display: none;" (change)="cargarArchivo($event)">  <i class="fa-solid fa-circle-plus green" *ngIf="revisado" (click)="_guardar()" style="cursor: pointer; font-size: large;"></i> -->
+            </span>
+
+            <br>
+            <button class="button is-success" *ngIf="ParaAlmacenar.length >0" (click)="guardar()">
+                <span class="icon">
+                    <i class="fas fa-save"></i>
+                </span>
+                <span>
+                    Guardar
+                </span>
+            </button>
+            <!-- ************************ DEPRECATED ************************ -->
+            <div class="columns" style="display: none;">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nº Documento</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]="documento"
+                                (input)="documentoLleno = documento !== ''">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="documentoLleno">
+                        <label for="" class="label">Recepción</label>
+                        <div class="control">
+                            <input type="date" class="input" [max]="Hoy" [(ngModel)]="recepcion"
+                                (input)="recepcionLleno = recepcion !== ''">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="recepcionLleno">
+                        <label for="" class="label">Transportista</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]="transportista"
+                                (input)="transportistaLleno = transportista !== ''">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4">
+                    <div class="field" *ngIf="transportistaLleno">
+                        <label for="" class="label">Proveedor</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="" id="" [(ngModel)]="proveedor"
+                                    (change)="buscarFabricantes($event.target)">
+                                    <option value="{{i}}" *ngFor="let proveedor of proveedores.proveedores;index as i">
+                                        {{proveedor.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-4">
+                    <div class="field" *ngIf="proveedor">
+                        <label for="" class="label">Fabricante</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="" id="" (change)="buscarmMateriales($event.target)">
+                                    <option value="·">Selecciona fabricante</option>
+                                    <option value="{{i}}" *ngFor="let fabricante of fabricante;index as i">
+                                        {{fabricante.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr *ngIf="this.material">
+            <div class="columns" *ngIf="this.material">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">OC</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]='OC'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" *ngIf='OC'>
+                    <div class="field">
+                        <label for="" class="label">Material</label>
+                        <div class="control">
+                            <div class="select">
+                                <select (change)="MaterialSeleccionado($event.target)">
+                                    <option value="">Selecciona Material</option>
+                                    <option value="{{i}}" *ngFor="let material of material;index as i">
+                                        {{material.nombre}} {{material.fabricante.alias}} {{material.serie}}
+                                        <ng-container *ngIf="material.gramaje">
+                                            {{material.gramaje}}g/m² {{material.calibre}}pt
+                                        </ng-container>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field" *ngIf="material_selected">
+                        <label for="" class="label">Nº Lote</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]="lote">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="lote && material_selected.grupo.trato">
+                        <label for="" class="label">Ancho</label>
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="ancho">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field" *ngIf="ancho">
+                        <label for="" class="label">Largo</label>
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="largo">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <ng-container *ngIf="lote && !material_selected.grupo.trato">
+                        <div class="field" *ngIf="lote">
+                            <label for="" class="label">Presentación</label>
+                            <div class="control" *ngIf="!conversion">
+                                <span class="select">
+                                    <select name="" id="" [(ngModel)]="presentacion">
+                                        <option value="Lata">Lata</option>
+                                        <option value="Envase plástico">Envase plástico</option>
+                                        <option value="Paleta">Paleta</option>
+                                        <option value="Tambor">Tambor</option>
+                                        <option value="Rollo">Rollo</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="control" *ngIf="conversion">
+                                <span class="select">
+                                    <select name="" id="" [(ngModel)]="presentacion">
+                                        <option value="Paleta">Paleta</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <div class="field" *ngIf="largo">
+                        <label for="" class="label">Presentación</label>
+                        <div class="control">
+                            <span class="select">
+                                <select name="" id="" [(ngModel)]="presentacion">
+                                    <option value="Lata">Lata</option>
+                                    <option value="Envase plástico">Envase plástico</option>
+                                    <option value="Paleta">Paleta</option>
+                                    <option value="Tambor">Tambor</option>
+                                    <option value="Rollo">Rollo</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" *ngIf="presentacion">
+                    <label for="" class="label">Fabricación</label>
+                    <input type="date" class="input" [max]="_Hoy_" [(ngModel)]="f_fabricacion">
+                </div>
+            </div>
+            <div class="columns" *ngIf="fabrication_">
+                <div class="column">
+                    <label for="" class="label">Neto / unid</label>
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="neto">
+                        </div>
+                        <p class="control">
+                            <span class="select">
+                                <select [(ngModel)]="unidad">
+                                    <option class="Und">Und</option>
+                                    <option class="L">L</option>
+                                    <option class="kg">kg</option>
+                                </select>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="column" *ngIf="neto && unidad">
+                    <div class="field">
+                        <label for="" class="label">Total {{unidad}}</label>
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="cantidad">
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-1" *ngIf="cantidad">
+                    <label for="" class="label"> </label>
+                    <button class="button is-success" (click)="crearLatas()">
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="column" *ngIf="GrupoDeMateriales.length >0">
+                <label for="" class="label"> </label>
+                <div *ngFor="let mensaje of GrupoDeMateriales;index as i">
+                    
+                    <div class="columns">
+                        <div class="column is-1">
+                            <i class="fas fa-info blue_" (click)="MostrarListado(i)"></i>
+                            <br>
+                            <i class="fas fa-trash-alt red" (click)="EliminarListado(i)"></i>
+                        </div>
+                        <div class="column">
+                            <ng-container *ngFor="let resumen of mensaje.resumen">
+                                  {{resumen}} <br>
+                            </ng-container>
+                        </div>
+                    </div>       
+                    <hr>
+                </div>
+            </div> -->
+            <!-- <hr> -->
+            <!-- <button class="button is-success" *ngIf="ParaAlmacenar.length >0" (click)="guardar()">
+                <span class="icon">
+                    <i class="fas fa-save"></i>
+                </span>
+                <span>
+                    Guardar
+                </span>
+            </button> -->
+        </div>
+    </div>
+    <div class="modal-card animate__animated animate__fadeInUp long" *ngIf="registro_lotes.length >0">
+        <div class="modal-card-body bg">
+            <table class="table">
+                <tr>
+                    <th>Material</th>
+                    <th>Registro</th>
+                    <th>OC</th>
+                    <th>Lote</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let registro of registro_lotes;index as i">
+                    <td>{{lotes_guardados[i][0].nombre}}
+                        ({{lotes_guardados[i][0].ancho}}x{{lotes_guardados[i][0].largo}})</td>
+                    <td [innerHTML]="registro"></td>
+                    <td *ngIf="lotes_guardados[i][0].oc">{{lotes_guardados[i][0].oc.numero}}</td>
+                    <td *ngIf="lotes_guardados[i][0].lote">{{lotes_guardados[i][0].lote}}</td>
+                    <td><i class="fas fa-trash-alt red"></i></td>
+                </tr>
+            </table>
+            <br>
+            <button class="button is-success" (click)="NuevoGuardarRegistro()" *ngIf="!conversion">
+                <span class="icon"><i class="fas fa-save"></i></span>
+                <span>Guardar</span>
+            </button>
+            <button class="button is-success" (click)="descuento = true" *ngIf="conversion">
+                <span class="icon"><i class="fas fa-save"></i></span>
+                <span>Descontar Bobinas</span>
+            </button>
+            <!-- <table class="table">
+                <ng-container *ngFor="let mensaje of GrupoDeMateriales;index as i">
+                    <tr>
+                        <td colspan="3">{{mensaje.nombre}} ({{mensaje.fabricante}}) - Lote: {{mensaje.materiales[0].lote}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i class="fas fa-info blue_" (click)="MostrarListado(i)"></i>
+                            <br>
+                            <i class="fas fa-trash-alt red" (click)="EliminarListado(i)"></i>
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let resumen of mensaje.resumen">
+                                  {{resumen}} <br>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="!mensaje.check">
+                                <i class="fas fa-search blue_" (click)="abrirCondicion(i)"></i>
+                            </ng-container>
+                            <ng-container *ngIf="mensaje.check">
+                                <i class="fas fa-check green" (click)="abrirCondicion(i)"></i>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
+            </table>
+            <hr>
+            <button class="button is-success" (click)="guardar()" *ngIf="todosLosChecksSonTrue()">
+                <span class="icon">
+                    <i class="fas fa-save"></i>
+                </span>
+                <span>
+                    Guardar
+                </span>
+            </button> -->
+        </div>
+    </div>
+</div>
+
+
+<app-descuento-bobina [descuento]="descuento" [Lote]="Lote_bobina" [conversion]="indice_oc"
+    [entregada]="cantidad_entregada" (onCloseModal)="descuento = false" (onGuardarRecepcion)="NuevoGuardarRegistro()">
+
+</app-descuento-bobina>

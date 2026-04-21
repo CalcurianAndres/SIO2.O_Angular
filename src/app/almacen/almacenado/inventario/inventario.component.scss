@@ -1,0 +1,90 @@
+.long{
+    width: 80%;
+}
+.no-inventario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: #555555;
+  position: relative;
+}
+
+.no-inventario::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.no-inventario span {
+  position: relative;
+  z-index: 1;
+}
+.EnviarAlFinal{
+    position: absolute;
+    right: 20px;
+    font-size: large;
+}
+
+.General {
+    position: relative;
+    background-color: #9fadbc;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 5px;
+    border: solid .5px rgb(210, 210, 210);
+  }
+
+
+  .Lotes {
+    border-radius: 4px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #ffffff;
+    border: solid .5px rgb(188, 188, 188);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .strong{
+    font-family: 'Gilroy';
+  }
+
+  .Arrow {
+    color: black;
+    border: none;
+    font-size: x-large;
+    cursor: pointer;
+    background-color: transparent;
+    transition: transform 0.5s;
+  }
+
+  .Arrow.clicked {
+    transform: rotate(180deg);
+ }
+
+ .bigger{
+    font-size: x-large;
+ }
+
+ .peso{
+    top: 20px;
+ }
+
+ .white_{
+    color: white;
+    text-shadow: #555555;
+ }

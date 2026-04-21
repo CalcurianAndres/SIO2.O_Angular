@@ -1,0 +1,135 @@
+<app-historial-empleado
+[historial]="historial"
+[info_trabajador]="info_trabajador"
+(onCloseModal)="historial = false;informacion = true">
+
+</app-historial-empleado>
+<div class="modal is-active"  [ngClass]="{'is-active':informacion}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Información empleado
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light" style="max-height: 500px;overflow-y: auto;" *ngIf="_informacion">
+            <div class="columns">
+                <div class="column">
+                    <figure class="image is-75x75 profile_pic">
+                        <img  src="https://192.168.0.22/api/imagen/empleado/{{_informacion.datos_personales.foto}}"/>
+                    </figure>
+                    <button class="button" (click)="historial = true;informacion = false;info_trabajador = empleados.buscarHistorialTrabajador(_informacion._id)">
+                        <span class="icon" style="color: #3488ce;"><i class="fas fa-info-circle"></i></span>
+                    </button>
+                </div>
+                <div class="column">
+                    <b style="font-family: 'Gilroy';">Apellidos: </b>{{_informacion.datos_personales.apellidos}} <br>
+                    <b style="font-family: 'Gilroy';">Nombres: </b>{{_informacion.datos_personales.nombres}} <br>
+                    <b style="font-family: 'Gilroy';">Cédula: </b><span *ngIf="_informacion.datos_personales.cedula < 80000000">
+                        V -
+                    </span>
+                    <span *ngIf="_informacion.datos_personales.cedula > 80000000">
+                        E -
+                    </span>
+                    {{_informacion.datos_personales.cedula}} <br>
+                    <b style="font-family: 'Gilroy';">Fecha de nacimiento: </b>{{_informacion.datos_personales.fecha_nac |date:'dd/MM/yyyy': 'UTC'}} <br>
+                    <b style="font-family: 'Gilroy';">Altura: </b>{{_informacion.datos_personales.altura}} m
+                    <b style="font-family: 'Gilroy';">Peso: </b> {{_informacion.datos_personales.peso}} kg <br>
+                    <b style="font-family: 'Gilroy';">Estado cívil: </b> {{_informacion.datos_personales.estado_civil}} <br>
+                    <b style="font-family: 'Gilroy';">Nacionalidad: </b> {{_informacion.datos_personales.nacionalidad}} <br>
+                    <b style="font-family: 'Gilroy';">Lugar de nacimiento: </b> {{_informacion.datos_personales.nacimiento}} <br>
+                    <b style="font-family: 'Gilroy';">Instrucción: </b> {{_informacion.instruccion_academica.grado.titulo}} - {{_informacion.instruccion_academica.grado.ano}} <br>
+                    <b style="font-family: 'Gilroy';">Licencia: </b>{{_informacion.datos_personales.licencia}} 
+                    <b style="font-family: 'Gilroy';">Grado: </b> {{_informacion.datos_personales.grado}}  <br>
+                    <b style="font-family: 'Gilroy';">Telefonos: </b> {{_informacion.datos_personales.telefono}} /  {{_informacion.datos_personales.celular}} <br>
+                </div>
+            </div>
+            <b style="font-family: 'Gilroy';">R.I.F: </b>{{_informacion.datos_personales.rif}} / 
+            <b style="font-family: 'Gilroy';">Correo: </b>{{_informacion.datos_personales.email}} <br>
+            <b style="font-family: 'Gilroy';">Dirección: </b>Estado {{_informacion.datos_personales.estado}},
+            {{_informacion.datos_personales.municipio}}, parroquia {{_informacion.datos_personales.parroquia}}, sector {{_informacion.datos_personales.sector}} <br>
+            <br><span class="subtitles">Referencias personales</span> <br>
+            <table class="table is-fullwidth is-stripped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Ocupación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let referencia of _informacion.informacion_adicional.referencias">
+                        <td>{{referencia.nombre}}</td>
+                        <td>{{referencia.direccion}}</td>
+                        <td>{{referencia.telefono}}</td>
+                        <td>{{referencia.ocupacion}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><span class="subtitles">Carga Familiar</span> <br>
+            <table class="table is-fullwidth is-stripped">
+                <thead>
+                    <tr>
+                        <th>Parentesco</th>
+                        <th>Nombre</th>
+                        <th>Fecha de nacimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let carga of _informacion.informacion_adicional.carga_familiar">
+                        <td>{{carga.parentesco}}</td>
+                        <td>{{carga.nombre}}</td>
+                        <td>{{carga.fecha | date:'dd/MM/yyyy':'UTC'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><span class="subtitles">Contacto en caso de emergencia</span><br>
+            <table class="table is-fullwidth is-stripped">
+                <thead>
+                    <tr>
+                        <th>Parentesco</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let emergencia of _informacion.informacion_adicional.emergencia">
+                        <td>{{emergencia.parentesco}}</td>
+                        <td>{{emergencia.nombre}}</td>
+                        <td>{{emergencia.direccion}}</td>
+                        <td>{{emergencia.telefono}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><span class="subtitles">Cursos realizados</span><br>
+            <table class="table is-fullwidth is-stripped">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Periodo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cursos of _informacion.instruccion_academica.cursos">
+                        <td>{{cursos.nombre}}</td>
+                        <td>{{cursos.periodo}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br><span class="subtitles">Manejo de herramientas</span><br>
+            <b style="font-family: 'Gilroy';">Uso de computadora: </b>{{_informacion.manejo_herramientas.computadora}} <br>
+            <br>  <b style="font-family: 'Gilroy';">Softwares que maneja: </b>
+            <ul>
+                <li *ngFor="let software of _informacion.manejo_herramientas.otros">{{software}}</li>
+            </ul>
+            <hr>
+            <button class="button is-success" (click)="DescargarFichaEmpleado(_informacion)">
+                <span class="icon"></span>
+                <span>Ficha del empleado</span>
+            </button>
+        </div>
+    </div>
+</div>

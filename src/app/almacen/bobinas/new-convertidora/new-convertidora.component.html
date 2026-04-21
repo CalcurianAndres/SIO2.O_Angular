@@ -1,0 +1,26 @@
+<div class="modal" [ngClass]="{'is-active':nueva}">
+    <div class="modal-background"></div>
+    <div class="modal-card long animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Nueva convertidora
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <div class="field">
+                <div class="control">
+                    <label for="" class="label">Nombre</label>
+                    <input type="text" class="input" [(ngModel)]="data.nombre">
+                </div>
+                <div class="control">
+                    <label for="" class="label">&nbsp;</label>
+                    <button class="button is-success" (click)="guardarData()" [disabled]="!data.nombre">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

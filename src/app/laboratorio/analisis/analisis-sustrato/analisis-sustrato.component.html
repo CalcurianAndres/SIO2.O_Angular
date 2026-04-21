@@ -1,0 +1,468 @@
+<div class="modal" [ngClass]="{'is-active':sustrato}">
+    <div class="modal-background"></div>
+    <div class="modal-card longer" style="height: 650px;" *ngIf="Materiales && sustrato">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                {{Materiales[0].material.nombre}}
+
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <ng-container *ngIf="analisis.resultado.resultado">
+                <div class="father">
+                    <span class="cintillo"
+                        [ngClass]="{'aprobado':analisis.resultado.resultado === 'APROBADO', 'rechazado': analisis.resultado.resultado != 'APROBADO'}">
+                        {{ analisis.resultado.resultado }} / {{ analisis.resultado.guardado.usuario }} - {{
+                        analisis.resultado.guardado.fecha }}
+                    </span>
+                </div>
+                <br><br>
+            </ng-container>
+            <br>
+            <span class="subtitles">
+                Tipo de análisis
+            </span>
+            <br>
+            <div class="field">
+                <div class="control">
+                    <label for="" class="label">Analisis:</label>
+                    <div class="select">
+                        <select (change)="tipoAnalisis($event.target)" [(ngModel)]="analisis.resultado.pendiente">
+                            <option value="false">Completo</option>
+                            <option value="true">Parcial</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
+            <span class="subtitles">
+                Detalles de la muestra
+            </span>
+            <br>
+            <div class="columns">
+                <div class="column is-2">
+                    <div class="field">
+                        <label for="" class="label">Número de muestras</label>
+                        <div class="control mt">
+                            <input type="number" name="" id="" class="input" [(ngModel)]="analisis.numero_muestras">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Tamaño de muestras</label>
+                        <div class="control">
+                            <div class="columns">
+                                <div class="column is-4">
+                                    <label for="" class="label">Ancho(cm)</label>
+                                    <input type="number" name="" id="" class="input" [(ngModel)]="analisis.ancho">
+                                </div>
+                                <div class="column is-4">
+                                    <label for="" class="label">Largo(cm)</label>
+                                    <input type="number" name="" id="" class="input" [(ngModel)]="analisis.largo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-3">
+                    <strong class="strong">
+                        Area: {{analisis.ancho * analisis.largo}}(cm²)
+                    </strong>
+                </div>
+            </div>
+            <span class="subtitles">
+                Estadísticas
+            </span>
+            <br>
+            <table class="table is-fullwidth is-bordered is-striped" *ngIf="Gramaje_Cobb">
+                <thead>
+
+                    <tr>
+                        <th border="0px"></th>
+                        <th colspan="3" class="is-selected">Especificación</th>
+                        <th colspan="4" class="is-selected">Resultado</th>
+                    </tr>
+                    <tr>
+                        <td border="0px"></td>
+                        <td>Mín</td>
+                        <td>Estandar</td>
+                        <td>Máx</td>
+                        <td>X̅</td>
+                        <td>S</td>
+                        <td>Mín</td>
+                        <td>Máx</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="Materiales[0].material.especificacion">
+                        <td>Gramaje</td>
+                        <td>{{Materiales[0].material.especificacion.gramaje.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.gramaje.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.gramaje.max}}</td>
+                        <td>{{analisis.gramaje.promedio.toFixed(analisis.gramaje.decimales)}}</td>
+                        <td>{{analisis.gramaje.desviacion.toFixed(analisis.gramaje.decimales)}}</td>
+                        <td>{{analisis.gramaje.min}}</td>
+                        <td>{{analisis.gramaje.max}}</td>
+                    </tr>
+                    <tr *ngIf="Materiales[0].material.especificacion">
+                        <td>Cobb Top</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.top.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.top.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.top.max}}</td>
+                        <td>{{analisis.cobb.top.promedio.toFixed(analisis.cobb.top.decimales)}}</td>
+                        <td>{{analisis.cobb.top.desviacion.toFixed(analisis.cobb.top.decimales)}}</td>
+                        <td>{{analisis.cobb.top.min}}</td>
+                        <td>{{analisis.cobb.top.max}}</td>
+                    </tr>
+                    <tr *ngIf="Materiales[0].material.especificacion">
+                        <td>Cobb Back</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.back.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.back.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.cobb.back.max}}</td>
+                        <td>{{analisis.cobb.back.promedio.toFixed(analisis.cobb.back.decimales)}}</td>
+                        <td>{{analisis.cobb.back.desviacion.toFixed(analisis.cobb.back.decimales)}}</td>
+                        <td>{{analisis.cobb.back.min}}</td>
+                        <td>{{analisis.cobb.back.max}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth is-bordered is-striped" *ngIf="calibre">
+                <thead>
+                    <tr>
+                        <th border="0px"></th>
+                        <th colspan="3" class="is-selected">Especificación</th>
+                        <th colspan="4" class="is-selected">Resultado</th>
+                    </tr>
+                    <tr>
+                        <td border="0px"></td>
+                        <td>Mín</td>
+                        <td>Estandar</td>
+                        <td>Máx</td>
+                        <td>X̅</td>
+                        <td>S</td>
+                        <td>Mín</td>
+                        <td>Máx</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calibre (mm)</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.mm.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.mm.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.mm.max}}</td>
+                        <td>{{analisis.calibre.mm.promedio.toFixed(analisis.calibre.mm.decimales)}}</td>
+                        <td>{{analisis.calibre.mm.desviacion.toFixed(analisis.calibre.mm.decimales)}}</td>
+                        <td>{{analisis.calibre.mm.min}}</td>
+                        <td>{{analisis.calibre.mm.max}}</td>
+                    </tr>
+                    <tr>
+                        <td>Calibre (µm)</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.um.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.um.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.um.max}}</td>
+                        <td>{{analisis.calibre.um.promedio.toFixed(analisis.calibre.um.decimales)}}</td>
+                        <td>{{analisis.calibre.um.desviacion.toFixed(analisis.calibre.um.decimales)}}</td>
+                        <td>{{analisis.calibre.um.min}}</td>
+                        <td>{{analisis.calibre.um.max}}</td>
+                    </tr>
+                    <tr>
+                        <td>Calibre (pt)</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.pt.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.pt.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.calibre.pt.max}}</td>
+                        <td>{{analisis.calibre.pt.promedio.toFixed(analisis.calibre.pt.decimales)}}</td>
+                        <td>{{analisis.calibre.pt.desviacion.toFixed(analisis.calibre.pt.decimales)}}</td>
+                        <td>{{analisis.calibre.pt.min}}</td>
+                        <td>{{analisis.calibre.pt.max}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth is-bordered is-striped" *ngIf="curling">
+                <thead>
+                    <tr>
+                        <th border="0px"></th>
+                        <th colspan="3" class="is-selected">Especificación</th>
+                        <th colspan="4" class="is-selected">Resultado</th>
+                    </tr>
+                    <tr>
+                        <td border="0px"></td>
+                        <td>Mín</td>
+                        <td>Estandar</td>
+                        <td>Máx</td>
+                        <td>X̅</td>
+                        <td>S</td>
+                        <td>Mín</td>
+                        <td>Máx</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Curling (s)</td>
+                        <td>{{Materiales[0].material.especificacion.curling.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.curling.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.curling.max}}</td>
+                        <td>{{analisis.curling_blancura.curling.promedio.toFixed(analisis.curling_blancura.curling.decimales)}}
+                        </td>
+                        <td>{{analisis.curling_blancura.curling.desviacion.toFixed(analisis.curling_blancura.curling.decimales)}}
+                        </td>
+                        <td>{{analisis.curling_blancura.curling.min}}</td>
+                        <td>{{analisis.curling_blancura.curling.max}}</td>
+                    </tr>
+                    <tr>
+                        <td>Grado de blancura (%)</td>
+                        <td>{{Materiales[0].material.especificacion.blancura.min}}</td>
+                        <td>{{Materiales[0].material.especificacion.blancura.nom}}</td>
+                        <td>{{Materiales[0].material.especificacion.blancura.max}}</td>
+                        <td>{{analisis.curling_blancura.blancura.promedio.toFixed(analisis.curling_blancura.blancura.decimales)}}
+                        </td>
+                        <td>{{analisis.curling_blancura.blancura.desviacion.toFixed(analisis.curling_blancura.blancura.decimales)}}
+                        </td>
+                        <td>{{analisis.curling_blancura.blancura.min}}</td>
+                        <td>{{analisis.curling_blancura.blancura.max}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tabs">
+                <ul>
+                    <li [ngClass]="{'is-active':Gramaje_Cobb}" (click)="tabs(1)"><a>Gramaje y Cobb</a></li>
+                    <li [ngClass]="{'is-active':calibre}" (click)="tabs(2)"><a>Calibre</a></li>
+                    <li [ngClass]="{'is-active':curling}" (click)="tabs(3)"><a>Curling y blancura</a></li>
+                    <li [ngClass]="{'is-active':dimensiones}" (click)="tabs(4)"><a>Dimensiones</a></li>
+                </ul>
+            </div>
+            <table class="table is-fullwidth is-striped" *ngIf="Gramaje_Cobb">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Masa inicial (g)</th>
+                        <th>Gramaje (g/m²)</th>
+                        <th>Masa Final (g)</th>
+                        <th>Cobb (g/m²)</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.numero_muestras);index as i">
+                        <td>{{i +1 }}</td>
+                        <td><input type="text" class="input" [(ngModel)]="analisis.gramaje.masa_inicial[i]"
+                                (change)="gramaje(i)"></td>
+                        <td width="25%">
+                            <div class="columns">
+                                <div class="column is-3">
+                                    {{analisis.gramaje.gramaje[i]}}  
+                                </div>
+                                <div class="column">
+                                    <span
+                                        *ngIf="analisis.gramaje.gramaje[i] < Materiales[0].material.especificacion.gramaje.min"
+                                        class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                    <span
+                                        *ngIf="analisis.gramaje.gramaje[i] > Materiales[0].material.especificacion.gramaje.max"
+                                        class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                    <span
+                                        *ngIf="analisis.gramaje.gramaje[i] < Materiales[0].material.especificacion.gramaje.max && analisis.gramaje.gramaje[i] > Materiales[0].material.especificacion.gramaje.min"
+                                        class="green-check"><i class="fas fa-check"></i></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input type="text" class="input" [(ngModel)]="analisis.gramaje.masa_final[i]"
+                                (change)="cobb(i)"></td>
+                        <td width="25%">
+                            <div class="columns">
+                                <div class="column is-3">
+                                    <ng-container *ngIf="analisis.cobb.top.cobb[i]">
+                                        {{analisis.cobb.top.cobb[i]}}
+                                    </ng-container>
+                                    <ng-container *ngIf="analisis.cobb.back.cobb[i]">
+                                        {{analisis.cobb.back.cobb[i]}}
+                                    </ng-container>
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="analisis.cobb.top.cobb[i]">
+                                        <span
+                                            *ngIf="analisis.cobb.top.cobb[i] < Materiales[0].material.especificacion.cobb.top.min"
+                                            class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span
+                                            *ngIf="analisis.cobb.top.cobb[i] > Materiales[0].material.especificacion.cobb.top.max"
+                                            class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span
+                                            *ngIf="analisis.cobb.top.cobb[i] < Materiales[0].material.especificacion.cobb.top.max && analisis.cobb.top.cobb[i] > Materiales[0].material.especificacion.cobb.top.min"
+                                            class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                    <ng-container *ngIf="analisis.cobb.back.cobb[i]">
+                                        <span
+                                            *ngIf="analisis.cobb.back.cobb[i] < Materiales[0].material.especificacion.cobb.back.min"
+                                            class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span
+                                            *ngIf="analisis.cobb.back.cobb[i] > Materiales[0].material.especificacion.cobb.back.max"
+                                            class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span
+                                            *ngIf="analisis.cobb.back.cobb[i] < Materiales[0].material.especificacion.cobb.back.max && analisis.cobb.back.cobb[i] > Materiales[0].material.especificacion.cobb.back.min"
+                                            class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <ng-container *ngIf="i+1 <= analisis.numero_muestras/2">
+                                <span class="type">TOP</span>
+                            </ng-container>
+                            <ng-container *ngIf="i+1 > analisis.numero_muestras/2">
+                                <span class="type">BACK</span>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth is-striped" *ngIf="calibre">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Calibre (mm)</th>
+                        <th>Calibre (µm)</th>
+                        <th>Calibre (pt)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.numero_muestras);index as i">
+                        <td>{{i+1}}</td>
+                        <td style="width: 150px;"><input type="number" class="input"
+                                [(ngModel)]="analisis.calibre.mm.mm[i]" (change)="calibre_(i)"></td>
+                        <td>{{analisis.calibre.um.um[i]}}</td>
+                        <td>{{analisis.calibre.pt.pt[i]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth is-striped" *ngIf="curling">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Curling (s)</th>
+                        <th>Grado de blancura (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.numero_muestras);index as i">
+                        <td>{{i+1}}</td>
+                        <td><input type="number" class="input"
+                                [(ngModel)]="analisis.curling_blancura.curling.curling[i]" (change)="curling_(i)"></td>
+                        <td><input type="number" class="input"
+                                [(ngModel)]="analisis.curling_blancura.blancura.blancura[i]" (change)="blancura_(i)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth is-striped" *ngIf="dimensiones">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Escuadra</th>
+                        <th>Contra escuadra</th>
+                        <th>Pinza</th>
+                        <th>Contra pinza</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.numero_muestras);index as i">
+                        <td>{{i+1}}</td>
+                        <td><input type="number" class="input" [(ngModel)]="analisis.dimensiones.Escuadra.escuadra[i]"
+                                (change)="escuadra_(i)"></td>
+                        <td><input type="number" class="input"
+                                [(ngModel)]="analisis.dimensiones.contraEscuadra.contraEscuadra[i]"
+                                (change)="contraEscuadra_(1)"></td>
+                        <td><input type="number" class="input" [(ngModel)]="analisis.dimensiones.Pinza.pinza[i]"
+                                (change)="Pinza_(i)"></td>
+                        <td><input type="number" class="input"
+                                [(ngModel)]="analisis.dimensiones.contraPinza.contraPinza[i]"
+                                (change)="contraPinza_(i)"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <div class="field">
+                <label for="" class="label">Observación</label>
+                <div class="control">
+                    <textarea class="textarea" placeholder="Observación"
+                        [(ngModel)]="analisis.resultado.observacion"></textarea>
+                </div>
+            </div>
+            <div class="columns is-mobile is-flex is-justify-content-flex-end">
+                <div class="column is-narrow">
+                    <button class="button is-info" (click)="guardar(false)">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Guardar progreso</span>
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="columns">
+                <div class="column">
+                    <button class="button is-success" (click)="guardar()">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                </div>
+                <div class="column">
+                    <table class="table is-fullwidth">
+                        <tr>
+                            <th>Resultado</th>
+                            <th>Generar Analisis</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="select">
+                                    <select name="" id="" [(ngModel)]="analisis.resultado.resultado">
+                                        <option value="APROBADO">APROBADO</option>
+                                        <option value="RECHAZADO">RECHAZADO</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="button is-success" (click)="AnalisisCompletado()" *ngIf="analisis.resultado.resultado">
+                                    <span>Descargar</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="modal-card added animate__animated animate__fadeInUp longer">
+        <div class="modal-card-body bg"
+            style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;"
+                *ngIf="!analisis.resultado.resultado">
+                <div class="control">
+                    <button class="button is-success" (click)="enviarAValidacion('APROBADO')">
+                        <span class="icon"><i class="fa-solid fa-check"></i></span>
+                        <span>Aprobado</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <button class="button is-danger" (click)="enviarAValidacion('RECHAZADO')">
+                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
+                        <span>Rechazado</span>
+                    </button>
+                </div>
+            </div> <br>
+
+            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;"
+                *ngIf="analisis.resultado.resultado">
+                <div class="control">
+                    <button class="button is-success" (click)="AnalisisCompletado()">
+                        <span class="icon"><i class="fa-solid fa-check"></i></span>
+                        <span>Validar</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <button class="button is-danger" (click)="AnalisisCompletado()">
+                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
+                        <span>Re analizar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

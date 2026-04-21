@@ -1,0 +1,68 @@
+.button.is-info.with_notification.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  /* Add any other desired styles for the button */
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  padding: 1px 3px;
+  border-radius: 50%;
+  /* Add any other desired styles for the notification badge */
+}
+
+  .long{
+    width: 50%;
+  }
+
+  .blue_{
+    cursor: pointer;
+  }
+  .red{
+    cursor: pointer;
+  }
+
+  .modal .modal-card .bg{
+    background-color:rgb(38, 52, 61);
+    color: white;
+}
+
+table tr td{
+  background-color: rgb(38, 52, 61);
+  color: white;
+}
+table tr th{
+  background-color: rgb(38, 52, 61);
+  color: white;
+}
+
+.right-aligned-input {
+  text-align: right;
+}
+
+.informacion{
+  font-family: 'Gilroy';
+  font-size: larger;
+}
+
+.short{
+  width: 100px;
+}
+
+.lupa{
+ font-size: x-large; 
+}
+
+.no-style{
+  background-color: white;
+  border: none;
+  box-shadow: none;
+  color: rgb(62, 142, 208);
+}

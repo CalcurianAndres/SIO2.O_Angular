@@ -1,0 +1,45 @@
+<div class="modal" [ngClass]="{'is-active':nuevaConformidad}">
+    <div class="modal-background"></div>
+    <div class="modal-card long animate__animated animate__fadeInUp longer">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Registro de no conformidad
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
+        </div>
+        <div class="modal-card-body">
+            <div class="field is-grouped">
+                <div class="control">
+                    <label for="" class="label">Recepcion</label>
+                    <div class="select">
+                        <select [(ngModel)]="recepcion_selected">
+                            <option value="{{i}}" *ngFor="let recepcion of recepcion.recepciones;index as i">{{recepcion.documento}} - OC:{{recepcion.OC}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control" *ngIf="recepcion_selected">
+                    <label for="" class="label">Producto</label>
+                    <div class="select">
+                        <select [(ngModel)]="material_selected">
+                            <option value="{{i}}" *ngFor="let producto of recepcion.recepciones[recepcion_selected].materiales;index as i">
+                                {{producto[0].material.nombre}} ({{producto[0].material.fabricante.alias}})
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label for="" class="label">Observación</label>
+                    <textarea name="" id="" class="textarea" [(ngModel)]="observacion"></textarea>
+                </div>
+            </div>
+            <div class="field">
+                <button class="button is-success" (click)="Guardar()">
+                    <span class="icon"></span>
+                    <span>Guardar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,136 @@
+<div class="modal" [ngClass]="{'is-active':Detalle}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <div class="modal-card-title fuente">
+                Material
+            </div>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light" *ngIf="Detalle">
+            <div>
+                <ng-container *ngIf="Especificacion.viscosidad">
+                    <span *ngIf="Especificacion.viscosidad.min >= 0 && Especificacion.viscosidad.max >0">
+                        <i class="fas fa-circle red"></i> Viscosidad: <br>
+                              {{Especificacion.viscosidad.min}} - {{Especificacion.viscosidad.max}} / {{Especificacion.viscosidad.con}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.rigidez">
+                    <span *ngIf="Especificacion.rigidez.min >= 0 && Especificacion.rigidez.max >0">
+                        <i class="fas fa-circle red"></i> Rígidez: <br>
+                              {{Especificacion.rigidez.min}} - {{Especificacion.rigidez.max}} / {{Especificacion.rigidez.con}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.tack">
+                    <span *ngIf="Especificacion.tack.min >= 0 && Especificacion.tack.max >0">
+                        <i class="fas fa-circle red"></i> Inko o Tack: <br>
+                              {{Especificacion.tack.min}} - {{Especificacion.tack.max}} / {{Especificacion.tack.con}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.finura">
+                    <span *ngIf="Especificacion.finura.min >= 0 && Especificacion.finura.max >0">
+                        <i class="fas fa-circle red"></i> Dispersión o Finura: <br>
+                              {{Especificacion.finura.min}} - {{Especificacion.finura.max}} / {{Especificacion.finura.con}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.secado">
+                    <span *ngIf="Especificacion.secado.min >= 0 && Especificacion.secado.max >0">
+                        <i class="fas fa-circle red"></i> Secado en capa fina: <br>
+                              {{Especificacion.secado.min}} - {{Especificacion.secado.max}} / {{Especificacion.secado.con}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.gramaje">
+                    <table class="table is-fullwidth is-striped">
+                        <tbody>
+                            <tr>
+                                <th> </th>
+                                <th>Mínimo</th>
+                                <th>Nominal</th>
+                                <th>Máximo</th>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Gramaje (g/m²)</th>
+                                <td>{{Especificacion.gramaje.min}}</td>
+                                <td>{{Especificacion.gramaje.nom}}</td>
+                                <td>{{Especificacion.gramaje.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Calibre (mm)</th>
+                                <td>{{Especificacion.calibre.mm.min}}</td>
+                                <td>{{Especificacion.calibre.mm.nom}}</td>
+                                <td>{{Especificacion.calibre.mm.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Calibre (pt)</th>
+                                <td>{{Especificacion.calibre.pt.min}}</td>
+                                <td>{{Especificacion.calibre.pt.nom}}</td>
+                                <td>{{Especificacion.calibre.pt.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Calibre (μm)</th>
+                                <td>{{Especificacion.calibre.um.min}}</td>
+                                <td>{{Especificacion.calibre.um.nom}}</td>
+                                <td>{{Especificacion.calibre.um.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Cobb TOP (g/m²)</th>
+                                <td>{{Especificacion.cobb.top.min}}</td>
+                                <td>{{Especificacion.cobb.top.nom}}</td>
+                                <td>{{Especificacion.cobb.top.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Cobb BACK (g/m²)</th>
+                                <td>{{Especificacion.cobb.back.min}}</td>
+                                <td>{{Especificacion.cobb.back.nom}}</td>
+                                <td>{{Especificacion.cobb.back.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Curling (s)</th>
+                                <td>{{Especificacion.curling.min}}</td>
+                                <td>{{Especificacion.curling.nom}}</td>
+                                <td>{{Especificacion.curling.max}}</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-circle red"></i> Blancura (%)</th>
+                                <td>{{Especificacion.blancura.min}}</td>
+                                <td>{{Especificacion.blancura.nom}}</td>
+                                <td>{{Especificacion.blancura.max}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.apariencia">
+                    <span *ngIf="Especificacion.apariencia">
+                        <i class="fas fa-circle red"></i> Apariencia: <br>
+                              {{Especificacion.apariencia}}
+                        <br>
+                    </span>
+                    <span *ngIf="Especificacion.ph_m">
+                        <i class="fas fa-circle red"></i> pH: <br>
+                              {{Especificacion.ph_m}} - {{Especificacion.ph_M}}
+                        <br>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="Especificacion.li_alto_nom">
+                    <span *ngIf="Especificacion.li_alto_nom">
+                        <i class="fas fa-circle red"></i> Longitud Interna (cm): <br>
+                               <span style="font-family: 'Gilroy';">Largo:</span> (min: {{Especificacion.li_largo_min}} - nom:{{Especificacion.li_largo_nom}} - max:{{Especificacion.li_largo_max}})<br>
+                               <span style="font-family: 'Gilroy';">Ancho:</span> (min: {{Especificacion.li_ancho_min}} - nom:{{Especificacion.li_ancho_nom}} - max:{{Especificacion.li_ancho_max}})<br>
+                               <span style="font-family: 'Gilroy';">Alto:</span> (min: {{Especificacion.li_alto_min}} - nom:{{Especificacion.li_alto_nom}} - max:{{Especificacion.li_alto_max}})<br>
+                    </span>
+                    <span *ngIf="Especificacion.le_alto_nom">
+                        <i class="fas fa-circle red"></i> Longitud Externa (cm): <br>
+                               <span style="font-family: 'Gilroy';">Largo:</span> (min: {{Especificacion.le_largo_min}} - nom:{{Especificacion.le_largo_nom}} - max:{{Especificacion.le_largo_max}})<br>
+                               <span style="font-family: 'Gilroy';">Ancho:</span> (min: {{Especificacion.le_ancho_min}} - nom:{{Especificacion.le_ancho_nom}} - max:{{Especificacion.le_ancho_max}})<br>
+                               <span style="font-family: 'Gilroy';">Alto:</span> (min: {{Especificacion.le_alto_min}} - nom:{{Especificacion.le_alto_nom}} - max:{{Especificacion.le_alto_max}})<br>
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

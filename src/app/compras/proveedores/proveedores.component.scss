@@ -1,0 +1,42 @@
+.title_ {
+  background: #3ddb8f;
+  background: linear-gradient(
+    90deg,
+    rgba(61, 219, 143, 1) 0%,
+    rgba(56, 231, 147, 1) 100%
+  );
+}
+.subtitle {
+  text-align: center;
+}
+.contenido {
+  font-size: 13px;
+}
+.blue {
+  background: rgb(0,56,255);
+  background: linear-gradient(90deg, rgba(0,56,255,1) 0%, rgba(117,180,255,1) 100%);
+  color: white;
+  font-size: 70px;
+  text-align: center;
+  height: 150px;
+}
+.description {
+  text-align: left;
+}
+
+.titulos {
+  height: 110px;
+}
+
+.icon {
+  padding: 20px;
+}
+
+.agregar {
+  display: block;
+  cursor: pointer;
+}
+
+.imagen_ {
+  height: 110px;
+}

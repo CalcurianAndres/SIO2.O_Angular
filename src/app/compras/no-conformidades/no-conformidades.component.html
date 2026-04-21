@@ -1,0 +1,108 @@
+<app-nueva-conformidad
+[nuevaConformidad]="nueva"
+(onCloseModal)="nueva = false">
+
+</app-nueva-conformidad>
+<div class="container_ mt-5">
+    <div class="card">
+        <div class="card-content darker">
+            <div class="card mt-5 title_">
+                <!-- <span class="red-bar"></span> -->
+                <div class="card-content">
+                  <h1 class="title blancas">
+                    No conformidades
+                  </h1>
+                  <h2 class="subtitle description blancas">
+                    Descripción
+                  </h2>
+                </div>
+                <div class="iconos">
+                    <i class="fas fa-ban"></i>
+                </div>
+            </div>
+            <br>
+            <button class="button is-info" (click)="nueva = true">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>No conformidad</span>
+            </button>
+            <br> <br>
+            <div class="card">
+                <div class="card-content">
+                    <table class="table is-fullwidth is-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Fecha</th>
+                                <th>Nº No conformidad</th>
+                                <th>Recepción</th>
+                                <th>OC</th>
+                                <th>Producto</th>
+                                <th>Descargar</th>
+                                <th>Plan de acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let no_conformidad of recepciones.reclamos;index as index">
+                                <td>
+                                    <ng-container *ngIf="no_conformidad.status === 'Por notificar'">
+                                        <span class="tag is-info" style="cursor: pointer;" (click)="notificar(no_conformidad)">Por notificar</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="no_conformidad.status === 'Notificado'">
+                                        <span class="tag is-success" style="cursor: pointer;">Notificado</span> <span style="font-weight: bold;" [ngClass]="{'orange':dias_desdeNotificacion(no_conformidad.updatedAt)>9, 'red':dias_desdeNotificacion(no_conformidad.updatedAt)>15}"> (Hace {{dias_desdeNotificacion(no_conformidad.updatedAt)}} dia(s))</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="no_conformidad.status === 'Seguimiento'">
+                                        <span class="tag is-warning" style="cursor: pointer;">Seguimiento</span> 
+                                    </ng-container>
+                                <button class="button is-small" style="background-color: transparent; border: none; color:#48c78e">
+                                    <span class="icon">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </button>
+                                </td>
+                                <td>{{no_conformidad.createdAt | date: 'dd/MM/YYYY'}}</td>
+                                <td>NCC-24-{{no_conformidad.numero}}</td>
+                                <td>{{no_conformidad.recepcion.documento}}</td>
+                                <td>{{no_conformidad.recepcion.OC}}</td>
+                                <td>{{no_conformidad.recepcion.materiales[no_conformidad.index_producto][0].material.nombre}} ({{no_conformidad.recepcion.materiales[no_conformidad.index_producto][0].material.fabricante.alias}})</td>
+                                <td><i style="cursor: pointer;" class="fas fa-download red" (click)="ProductoNoConforme( no_conformidad.recepcion,no_conformidad.recepcion.materiales[no_conformidad.index_producto],no_conformidad)"></i></td>
+                                <td>
+                                    <div class="field is-grouped" *ngIf="no_conformidad.status === 'Notificado'">
+                                        <div class="control">
+                                            <div class="file is-small is-info">
+                                                <label class="file-label">
+                                                  <input class="file-input" type="file" name="resume" (change)="onFileSelected($event,index)" accept=".pdf" />
+                                                  <span class="file-cta">
+                                                    <span class="file-icon">
+                                                      <i class="fas fa-upload"></i>
+                                                    </span>
+                                                    <span class="file-label"> Subir plan </span>
+                                                  </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="control" *ngIf="selectedFile && index === index_selected" (click)="onUpload(no_conformidad)">
+                                            <button class="button" style="background-color: transparent; border:none">
+                                                <span class="icon"><i class="fas fa-check"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="control" *ngIf="no_conformidad.status === 'Seguimiento'">
+                                        <button class="button is-info is-small" (click)="verPlan(no_conformidad.plan)">
+                                            <span class="icon"><i class="fas fa-eye"></i></span>
+                                            <span>ver</span>
+                                        </button>
+                                         
+                                        <button class="button is-danger is-small">
+                                            <span class="icon"><i class="fas fa-check"></i></span>
+                                            <span>Cerrar</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

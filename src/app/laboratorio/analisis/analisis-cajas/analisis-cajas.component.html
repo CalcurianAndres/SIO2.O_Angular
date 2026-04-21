@@ -1,0 +1,352 @@
+<div class="modal" [ngClass]="{'is-active':caja}">
+    <div class="modal-background"></div>
+    <div class="modal-card longer">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+               Material Nombre
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body">
+            <span class="titles">
+                Características y propiedades
+            </span>
+            <br>
+            <div class="columns">
+                <div class="column is-2">
+                    <div class="field">
+                        <label for="" class="label" style="text-align: center;">Número de muestras</label>
+                        <div class="control mt">
+                            <input type="number" name="" id="" class="input" [(ngModel)]="analisis.muestras">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                </div>
+                <div class="column is-3">
+                </div>
+            </div>
+            <span class="titles">
+                Estadísticas
+            </span>
+            <br>
+            <table class="table is-fullwidth is-bordered" *ngIf="interna && Materiales">
+                <tr>
+                    <th border="0px"></th>
+                    <th colspan="3" class="is-selected">Especificación</th>
+                    <th colspan="4" class="is-selected">Resultado</th>
+                </tr>
+                <tr>
+                    <td border="0px"></td>
+                    <td>Mín</td>
+                    <td>Estandar</td>
+                    <td>Máx</td>
+                    <td>X̅</td>
+                    <td>S</td>
+                    <td>Mín</td>
+                    <td>Máx</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Largo</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_largo_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_largo_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_largo_max}}</td>
+                    <td>{{analisis.longitud_interna.largo.promedio.toFixed(analisis.longitud_interna.largo.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.largo.desviacion.toFixed(analisis.longitud_interna.largo.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.largo.min}}</td>
+                    <td>{{analisis.longitud_interna.largo.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Ancho</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_ancho_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_ancho_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_ancho_max}}</td>
+                    <td>{{analisis.longitud_interna.ancho.promedio.toFixed(analisis.longitud_interna.ancho.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.ancho.desviacion.toFixed(analisis.longitud_interna.ancho.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.ancho.min}}</td>
+                    <td>{{analisis.longitud_interna.ancho.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Alto</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_alto_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_alto_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.li_alto_max}}</td>
+                    <td>{{analisis.longitud_interna.alto.promedio.toFixed(analisis.longitud_interna.alto.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.alto.desviacion.toFixed(analisis.longitud_interna.alto.decimales)}}</td>
+                    <td>{{analisis.longitud_interna.alto.min}}</td>
+                    <td>{{analisis.longitud_interna.alto.max}}</td>
+                </tr>
+            </table>
+            
+            <table class="table is-fullwidth is-bordered" *ngIf="externa">
+                <tr>
+                    <th border="0px"></th>
+                    <th colspan="3" class="is-selected">Especificación</th>
+                    <th colspan="4" class="is-selected">Resultado</th>
+                </tr>
+                <tr>
+                    <td border="0px"></td>
+                    <td>Mín</td>
+                    <td>Estandar</td>
+                    <td>Máx</td>
+                    <td>X̅</td>
+                    <td>S</td>
+                    <td>Mín</td>
+                    <td>Máx</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Largo</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_largo_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_largo_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_largo_max}}</td>
+                    <td>{{analisis.longitud_externa.largo.promedio.toFixed(analisis.longitud_externa.largo.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.largo.desviacion.toFixed(analisis.longitud_externa.largo.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.largo.min}}</td>
+                    <td>{{analisis.longitud_externa.largo.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Ancho</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_ancho_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_ancho_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_ancho_max}}</td>
+                    <td>{{analisis.longitud_externa.ancho.promedio.toFixed(analisis.longitud_externa.ancho.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.ancho.desviacion.toFixed(analisis.longitud_externa.ancho.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.ancho.min}}</td>
+                    <td>{{analisis.longitud_externa.ancho.max}}</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <th>Alto</th>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_alto_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_alto_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.le_alto_max}}</td>
+                    <td>{{analisis.longitud_externa.alto.promedio.toFixed(analisis.longitud_externa.alto.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.alto.desviacion.toFixed(analisis.longitud_externa.alto.decimales)}}</td>
+                    <td>{{analisis.longitud_externa.alto.min}}</td>
+                    <td>{{analisis.longitud_externa.alto.max}}</td>
+                </tr>
+            </table>
+
+            <table class="table is-fullwidth is-bordered" *ngIf="espesor">
+                <tr>
+                    <th border="0px"></th>
+                    <th colspan="3" class="is-selected">Especificación</th>
+                    <th colspan="4" class="is-selected">Resultado</th>
+                </tr>
+                <tr>
+                    <td border="0px"></td>
+                    <td>Mín</td>
+                    <td>Estandar</td>
+                    <td>Máx</td>
+                    <td>X̅</td>
+                    <td>S</td>
+                    <td>Mín</td>
+                    <td>Máx</td>
+                </tr>
+                <tr *ngIf="Materiales[0].material.especificacion2">
+                    <td>Espesor</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_min}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_nom}}</td>
+                    <td>{{Materiales[0].material.especificacion2.especificacion.espesor_max}}</td>
+                    <td>{{analisis.espesor.promedio.toFixed(analisis.espesor.decimales)}}</td>
+                    <td>{{analisis.espesor.desviacion.toFixed(analisis.espesor.decimales)}}</td>
+                    <td>{{analisis.espesor.min}}</td>
+                    <td>{{analisis.espesor.max}}</td>
+                </tr>
+            </table>
+
+            <!-- TABS  -->
+            <div class="tabs">
+                <ul>
+                  <li [ngClass]="{'is-active':interna}" (click)="change('a')"><a>Longitud interna</a></li>
+                  <li [ngClass]="{'is-active':externa}" (click)="change('b')"><a>Longitud externa</a></li>
+                  <li [ngClass]="{'is-active':espesor}" (click)="change('c')"><a>Espesor</a></li>
+                </ul>
+            </div>
+
+            <!-- MUESTRAS  -->
+            <table class="table is-fullwidth is-striped" *ngIf="interna">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Largo (cm)</th>
+                        <th>Ancho (cm)</th>
+                        <th>Alto (cm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.muestras);index as i">
+                        <td>{{i +1 }}</td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_interna.largo.largo[i]" (change)="interna_larga()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] < Materiales[0].material.especificacion2.especificacion.li_largo_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] > Materiales[0].material.especificacion2.especificacion.li_largo_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] < Materiales[0].material.especificacion2.especificacion.li_largo_max && analisis.longitud_interna.largo.largo[i] > Materiales[0].material.especificacion2.especificacion.li_largo_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_interna.ancho.ancho[i]" (change)="interna_ancha()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] < Materiales[0].material.especificacion2.especificacion.li_ancho_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] > Materiales[0].material.especificacion2.especificacion.li_ancho_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] < Materiales[0].material.especificacion2.especificacion.li_ancho_max && analisis.longitud_interna.ancho.ancho[i] > Materiales[0].material.especificacion2.especificacion.li_ancho_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_interna.alto.alto[i]" (change)="interna_alta()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] < Materiales[0].material.especificacion2.especificacion.li_alto_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] > Materiales[0].material.especificacion2.especificacion.li_alto_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] < Materiales[0].material.especificacion2.especificacion.li_alto_max && analisis.longitud_interna.alto.alto[i] > Materiales[0].material.especificacion2.especificacion.li_alto_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table class="table is-fullwidth is-striped" *ngIf="externa">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Largo (cm)</th>
+                        <th>Ancho (cm)</th>
+                        <th>Alto (cm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.muestras);index as i">
+                        <td>{{i +1 }}</td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_externa.largo.largo[i]" (change)="externa_larga()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] < Materiales[0].material.especificacion2.especificacion.le_largo_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] > Materiales[0].material.especificacion2.especificacion.le_largo_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.largo.largo[i] < Materiales[0].material.especificacion2.especificacion.le_largo_max && analisis.longitud_interna.largo.alto[i] > Materiales[0].material.especificacion2.especificacion.li_largo_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_externa.ancho.ancho[i]" (change)="externa_ancha()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] < Materiales[0].material.especificacion2.especificacion.le_ancho_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] > Materiales[0].material.especificacion2.especificacion.le_ancho_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.ancho.ancho[i] < Materiales[0].material.especificacion2.especificacion.le_ancho_max && analisis.longitud_interna.ancho.alto[i] > Materiales[0].material.especificacion2.especificacion.li_ancho_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.longitud_externa.alto.alto[i]" (change)="externa_alta()">
+                                </div>
+                                <div class="column is-1">
+                                    <ng-container>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] < Materiales[0].material.especificacion2.especificacion.le_alto_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] > Materiales[0].material.especificacion2.especificacion.le_alto_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.longitud_interna.alto.alto[i] < Materiales[0].material.especificacion2.especificacion.le_alto_max && analisis.longitud_interna.alto.alto[i] > Materiales[0].material.especificacion2.especificacion.li_alto_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table is-fullwidth is-striped" *ngIf="espesor">
+                <thead>
+                    <tr>
+                        <th>Muestra</th>
+                        <th>Espesor (mm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let muestra of [].constructor(analisis.muestras);index as i">
+                        <td>{{i +1 }}</td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input" [(ngModel)]="analisis.espesor.espesor[i]" (change)="externa_espesor()">
+                                </div>
+                                <div class="column">
+                                    <ng-container>
+                                        <span *ngIf="analisis.espesor.espesor[i] < Materiales[0].material.especificacion2.especificacion.espesor_min" class="red-triangle-down"><i class="fas fa-caret-down"></i></span>
+                                        <span *ngIf="analisis.espesor.espesor[i] > Materiales[0].material.especificacion2.especificacion.espesor_max" class="red-triangle-up"><i class="fas fa-caret-up"></i></span>
+                                        <span *ngIf="analisis.espesor.espesor[i] < Materiales[0].material.especificacion2.especificacion.espesor_max && analisis.espesor.espesor[i] > Materiales[0].material.especificacion2.especificacion.espesor_min" class="green-check"><i class="fas fa-check"></i></span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="field">
+                <label class="label">Observación</label>
+                <div class="control">
+                    <textarea class="textarea" id="" cols="30" rows="3" [(ngModel)]="analisis.resultado.observacion"></textarea>
+                </div>
+            </div>
+
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <button class="button is-success" (click)="guardar()">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Guardar</span>
+                    </button>
+                </div>
+                <div class="column">
+                    <table class="table is-fullwidth">
+                        <tr>
+                            <th>Resultado</th>
+                            <th>Generar Analisis</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="select">
+                                    <select name="" id="" [(ngModel)]="analisis.resultado.resultado">
+                                        <option value="APROBADO">APROBADO</option>
+                                        <option value="RECHAZADO">RECHAZADO</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="button is-success" *ngIf="analisis.resultado.resultado" (click)="AnalisisCompletado()">
+                                    <span>Descargar</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

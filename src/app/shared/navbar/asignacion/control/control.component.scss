@@ -1,0 +1,79 @@
+/* Estilos para el checkbox */
+.checkbox {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Estilos cuando el checkbox está marcado */
+.checkbox:checked {
+    background-color: #4caf50; /* Verde cuando está marcado */
+    border-color: #4caf50;
+}
+
+.checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+/* Estilos al pasar el ratón */
+.checkbox:hover {
+    border-color: #3e8e41;
+}
+
+/* Efecto cuando el checkbox está enfocado */
+.checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Estilos cuando el checkbox está deshabilitado */
+.checkbox:disabled {
+    background-color: #f0f0f0; /* Fondo gris claro */
+    border-color: #ddd; /* Borde gris claro */
+    cursor: not-allowed; /* Cursor de no permitido */
+}
+
+.checkbox:disabled:checked {
+    background-color: #b0b0b0; /* Fondo gris cuando está marcado */
+    border-color: #b0b0b0; /* Borde gris cuando está marcado */
+}
+
+.checkbox:disabled:hover {
+    border-color: #ddd; /* No cambia el borde cuando está deshabilitado */
+}
+
+.checkbox:disabled:focus {
+    box-shadow: none; /* El enfoque no se ve cuando está deshabilitado */
+}
+
+.banner{
+    position: fixed;
+    top: 64px;
+    // left: 0;
+    display: block;
+    width: 95%;
+    height: 150px;
+    background-color: white;
+    z-index: 1000;
+}
+.message{
+    padding: 2px;
+    margin-top:-40px;
+    color: white;
+    border: solid 2px rgb(76, 175, 80);
+    background-color: rgba(76, 175, 80, .8);
+    padding: 5px;
+}

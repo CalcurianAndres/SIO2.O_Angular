@@ -1,0 +1,40 @@
+<div class="modal" [ngClass]="{'is-active':condicion}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Condiciones del material
+            </p>
+        </div>
+        <div class="modal-card-body" *ngIf="condicion">
+            <ng-container *ngIf="!trato && grupo != 'Cajas corrugadas'">
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.calidad"> Certificado de calidad <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.identificacion"> Identificación de lote <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.cajas_buen_estado"> Cajas en buen estado <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.cajas_limpias"> Cajas limpias <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.envases_cerrados"> Envases cerrados herméticamente
+            </ng-container>
+            <ng-container *ngIf="trato && grupo != 'Cajas corrugadas'">
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.calidad"> Certificado de calidad <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.identificacion"> Identificación de lote <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.paleta_en_buen_estado"> Paletas en buen estado <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Paleta_sin_precencia_de_humedad"> Paletas sin precencia de humedad <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Paleta_libre_de_insectos"> Paletas libres de insectos <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Embalaje_limpio"> Embalaje limpio (libre de excrementos de animales, otros) <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Embalaje_sin_rotura"> Embalaje sin rotura <br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Embalaje_seco_externamente"> Embalaje seco externamente<br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Embalaje_seco_internamente"> Embalaje seco internamente<br>
+                <input type="checkbox" name="" id="" [(ngModel)]="condicion__.Evidencia_de_fumigacion"> Evidencia de fumigación o tratamiento térmico (sello)<br>
+            </ng-container>
+            <hr>
+            <button class="button is-success" (click)="cerrar()">
+                <span class="icon">
+                    <i class="fas fa-check"></i>
+                </span>
+                <span>
+                    Confirmar
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

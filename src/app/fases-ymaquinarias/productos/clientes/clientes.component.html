@@ -1,0 +1,165 @@
+<div class="modal" [ngClass]="{'is-active':cliente || editar}">
+    <div class="modal-background"></div>
+    <div class="modal-card animate__animated animate__fadeInUp">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente" *ngIf="cliente">
+                Nuevo cliente
+            </p>
+            <p class="modal-card-title fuente" *ngIf="editar">
+                Editar cliente
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+        </div>
+        <div class="modal-card-body light">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nombre del cliente</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Nombre" [(ngModel)]="data.nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Rif</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Rif" [(ngModel)]="data.rif">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Cod. Cliente</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Código del cliente" [(ngModel)]="data.codigo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label for="" class="label">Dirección fiscal</label>
+                <div class="control">
+                    <textarea name="" id="" cols="30" rows="3" class="textarea" placeholder="Dirección Fiscal" [(ngModel)]="data.direccion"></textarea>
+                </div>
+            </div>
+            <strong class="black">
+                <b>
+                    Contactos:
+                </b>
+            </strong>
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nombre</label>
+                        <div class="control">
+                            <div class="field has-addons">
+                                <p class="control">
+                                  <span class="select">
+                                    <select [(ngModel)]="cliente_temporal.titulo">
+                                      <option value="Sr.">Sr.</option>
+                                      <option value="Sra.">Sra</option>
+                                    </select>
+                                  </span>
+                                </p>
+                                <p class="control">
+                                  <input class="input" type="text" placeholder="Nombre" [(ngModel)]="cliente_temporal.nombre">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Cargo</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Cargo" [(ngModel)]="cliente_temporal.cargo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Correo electrónico</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Correo electrónico" [(ngModel)]="cliente_temporal.correo">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label"> </label>
+                        <div class="control">
+                            <button class="button is-info" (click)="aceptarCliente()">
+                                <span class="icon">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <strong class="black">
+                <b>Almacenes</b>
+            </strong>
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nombre</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Nombre del almacén" [(ngModel)]="Almacene_temporal.nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label"> </label>
+                        <div class="control">
+                            <button class="button is-info" (click)="aceptarAlmacen()">
+                                <span class="icon">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-card added animate__animated animate__fadeInUp" *ngIf="data.contactos.length > 0">
+        <div class="modal-card-body bg">
+            <div class="columns">
+                <div class="column">
+                    <i class="fas fa-users"></i> <strong>Contacto(s):</strong>
+                    <table class="table">
+                        <tr *ngFor="let contacto of data.contactos">
+                            <td>{{contacto.titulo}}{{contacto.nombre}}</td>
+                            <td>{{contacto.cargo}}</td>
+                            <td>{{contacto.correo}}</td>
+                            <td><i class="fas fa-trash-alt red"></i></td>
+                        </tr>
+                    </table>
+                    <i class="fas fa-warehouse"></i> <strong>Almacen(es):</strong>
+                    <table class="table">
+                        <tr *ngFor="let almacen of data.almacenes">
+                            <td>{{almacen.nombre}}</td>
+                            <td><i class="fas fa-trash-alt red"></i></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <button class="button is-success" (click)="guardar()" *ngIf="cliente">
+                <span class="icon"><i class="fas fa-save"></i></span>
+                <span>Guardar</span>
+            </button>
+            <button class="button is-success" (click)="editarCliente()" *ngIf="editar">
+                <span class="icon"><i class="fas fa-save"></i></span>
+                <span>Guardar</span>
+            </button>
+        </div>
+    </div>
+</div>

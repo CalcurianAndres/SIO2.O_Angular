@@ -1,0 +1,348 @@
+// .longer{
+//     width: 60%;
+// }
+
+.is-15_{
+    width:13%
+}
+
+.is-25_{
+    width:20%
+}
+
+.is-30_{
+    width: 30%;
+}
+
+.is-45_{
+    width:35%
+}
+
+.blue_{
+    position: relative;
+    top: 5px;
+    font-size: 30px;
+}
+
+.gray{
+    background-color: rgba(207, 207, 207, 0.5);
+}
+
+.notification {
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 15px;
+    top: -12px;
+    right: -2px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px;
+    font-size: 12px;
+    text-align: center;
+    font-family: 'Gilroy-light';
+}
+
+.back{
+    font-size: 55px;
+    position: absolute;
+    left: 15%;
+    background-color: transparent;
+}
+
+.back:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.front{
+    font-size: 55px;
+    position: absolute;
+    right: 15%;
+    background-color: transparent;
+}
+
+.front:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.subtitles_{
+    font-family: 'Gilroy';
+    color: black;
+    font-size: 18px;
+}
+
+.secuencia{
+    color: black;
+}
+
+.color___{
+    display: block;
+    padding: 5px;
+    width: 100px;
+    border: solid 1px rgb(213, 213, 213);
+    cursor: pointer;
+}
+
+.nombre_del_producto{
+    position: absolute;
+    bottom: 9px;
+    left: 21.5px;
+    color: rgb(252, 252, 199);
+}
+.fuente{
+    position: absolute;
+    top:10px;
+}
+
+color{
+    color: #e1e1e1;
+}
+
+.red_cross{
+    position: absolute;
+    background-color: #f03a5f;
+    font-size: 50px;
+    margin: 15px;
+    right: 15px;
+}
+
+
+.secuencia {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+  }
+
+  .color___ {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: move;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+
+  .color___:last-child {
+    margin-bottom: 0;
+  }
+
+  .color___:active {
+    box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+    // color: red;
+  }
+
+  .paper{
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+-webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+  }
+
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip::after {
+    content: 'Por cada 1.000 hojas';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip_pinza {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip_pinza::after {
+    content: 'Pinza';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip_pinza:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip_contrapinza {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip_contrapinza::after {
+    content: 'Contra pinza';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip_contrapinza:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip_contraescuadra {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip_contraescuadra::after {
+    content: 'Contra escuadra';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip_contraescuadra:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip_escuadra {
+    position: relative;
+    display: inline-block;
+    border-bottom:1px dotted #9999CC;
+    cursor: help;
+}
+
+.tooltip_escuadra::after {
+    content: 'Escuadra';
+    position: absolute;
+    background-color: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip_escuadra:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.motivo{
+    font-size: 13px;
+    display: block;
+    background-color: rgb(249, 249, 162);
+    padding: 5px;
+  }
+
+
+  .custom-checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px; /* Espacio a la izquierda para el checkbox */
+    cursor: pointer;
+    font-size: 18px; /* Tamaño del texto */
+    user-select: none; /* Evita que se seleccione el texto cuando se hace click */
+  }
+  
+  .custom-checkbox input {
+    position: absolute;
+    opacity: 0; /* Esconde el input checkbox por defecto */
+    cursor: pointer;
+  }
+  
+  .custom-checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px; /* Altura del checkbox */
+    width: 25px; /* Ancho del checkbox */
+    background-color: #ccc; /* Color de fondo del checkbox */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-checkbox:hover input ~ .checkmark {
+    background-color: #bbb; /* Cambia el color al hacer hover */
+  }
+  
+  .custom-checkbox input:checked ~ .checkmark {
+    background-color: #4caf50; /* Color verde cuando está seleccionado */
+  }
+  
+  .custom-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .custom-checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg); /* Rotación de la marca */
+  }
