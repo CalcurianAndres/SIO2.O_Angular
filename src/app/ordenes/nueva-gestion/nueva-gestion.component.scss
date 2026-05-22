@@ -10,7 +10,7 @@
   align-items: center;
   width: 30px;
   height: 30px;
-  background-color: rgb(72, 127, 237);
+  background-color: var(--status-info);
   color: white;
   text-align: center;
   font-family: 'Gilroy';
@@ -30,7 +30,7 @@
 }
 
 .paletas_container .yellow {
-  background-color: yellow;
+  background-color: var(--status-warning);
   color: var(--text-primary);
 }
 

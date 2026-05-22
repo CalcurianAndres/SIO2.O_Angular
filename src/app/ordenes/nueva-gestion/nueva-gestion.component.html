@@ -106,7 +106,7 @@
             <td>
               <i
                 class="fas fa-trash-alt"
-                style="color: rgb(245, 119, 119); cursor: pointer"
+                style="color: var(--status-danger); cursor: pointer"
                 (click)="defectos_agregados.splice(i, 1)"
               ></i>
             </td>
@@ -145,7 +145,7 @@
                         <br />
                         <button
                           class="button"
-                          style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
+                          style="background-color: transparent; border: none; color: var(--accent-blue)"
                           (click)="
                             searchText_ = '';
                             identificacion =
@@ -165,8 +165,8 @@
             {{ identificacion }}
             <button
               class="button is-small"
-              style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
-              *ngIf="identificacion"
+               style="background-color: transparent; border: none; color: var(--accent-blue)"
+               *ngIf="identificacion"
               (click)="identificacion = ''"
             >
               <span class="icon"><i class="fas fa-redo"></i></span>
@@ -203,12 +203,12 @@
                       <br />
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
-                        (click)="
-                          searchText__ = '';
-                          responsable =
-                            trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
-                        "
+                  style="background-color: transparent; border: none; color: var(--accent-blue)"
+                          (click)="
+                            searchText__ = '';
+                            responsable =
+                              trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
+                          "
                       >
                         <span class="icon">
                           <i class="fas fa-plus-circle"></i>
@@ -224,8 +224,8 @@
             {{ responsable }}
             <button
               class="button is-small"
-              style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
-              *ngIf="responsable"
+               style="background-color: transparent; border: none; color: var(--accent-blue)"
+               *ngIf="responsable"
               (click)="responsable = ''"
             >
               <span class="icon"><i class="fas fa-redo"></i></span>
@@ -284,11 +284,11 @@
                       <br />
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
-                        (click)="
-                          searchText___ = '';
-                          supervisor = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
-                        "
+                  style="background-color: transparent; border: none; color: var(--accent-blue)"
+                          (click)="
+                            searchText___ = '';
+                            supervisor = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
+                          "
                       >
                         <span class="icon">
                           <i class="fas fa-plus-circle"></i>
@@ -303,8 +303,8 @@
           {{ supervisor }}
           <button
             class="button is-small"
-            style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
-            *ngIf="supervisor"
+               style="background-color: transparent; border: none; color: var(--accent-blue)"
+               *ngIf="supervisor"
             (click)="supervisor = ''"
           >
             <span class="icon"><i class="fas fa-redo"></i></span>
@@ -329,11 +329,11 @@
                       <br />
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
-                        (click)="
-                          searchText____ = '';
-                          analista = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
-                        "
+                  style="background-color: transparent; border: none; color: var(--accent-blue)"
+                          (click)="
+                            searchText____ = '';
+                            analista = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
+                          "
                       >
                         <span class="icon">
                           <i class="fas fa-plus-circle"></i>
@@ -348,8 +348,8 @@
           {{ analista }}
           <button
             class="button is-small"
-            style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
-            *ngIf="analista"
+               style="background-color: transparent; border: none; color: var(--accent-blue)"
+               *ngIf="analista"
             (click)="analista = ''"
           >
             <span class="icon"><i class="fas fa-redo"></i></span>
@@ -453,7 +453,7 @@
         <div class="burbuja">
           <button
             class="button is-info"
-            style="color: rgb(72, 127, 237); background-color: transparent; border: none"
+            style="color: var(--accent-blue); background-color: transparent; border: none"
             *ngIf="p_selected"
             (click)="addNew()"
           >
@@ -499,7 +499,7 @@
             <br />
             <button
               class="button"
-              style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
               (click)="agregarEmpleado(trabajador.datos_personales.nombres, trabajador.datos_personales.apellidos)"
             >
               <span class="icon">
@@ -523,7 +523,7 @@
             <td>
               <i
                 class="fas fa-trash-alt"
-                style="cursor: pointer; color: rgb(255, 162, 162)"
+                style="cursor: pointer; color: var(--status-danger)"
                 (click)="data.team.splice(i, 1)"
               ></i>
             </td>

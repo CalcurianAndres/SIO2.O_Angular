@@ -36,17 +36,17 @@
               <span class="centered">
                 pH
                 <ng-container *ngIf="analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_M"
-                  ><i class="fas fa-sort-up" style="color: #f03a5f"></i
+                  ><i class="fas fa-sort-up" style="color: var(--status-danger)"></i
                 ></ng-container>
                 <ng-container *ngIf="analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_m"
-                  ><i class="fas fa-sort-down" style="color: #f03a5f"></i
+                  ><i class="fas fa-sort-down" style="color: var(--status-danger)"></i
                 ></ng-container>
                 <ng-container
                   *ngIf="
                     analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_m &&
                     analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_M
                   "
-                  ><i class="fas fa-check" style="color: #48c78e"></i
+                  ><i class="fas fa-check" style="color: var(--status-success)"></i
                 ></ng-container>
               </span>
             </th>

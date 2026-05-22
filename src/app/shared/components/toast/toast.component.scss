@@ -36,13 +36,13 @@
 }
 
 .toast-success i {
-  color: #48c78e;
+  color: var(--accent-green);
 }
 .toast-error i {
-  color: #f03a5f;
+  color: var(--accent-red);
 }
 .toast-warning i {
-  color: #ffc107;
+  color: var(--status-warning);
 }
 .toast-info i {
   color: #3b82f6;

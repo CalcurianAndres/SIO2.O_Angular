@@ -158,7 +158,7 @@ strong {
 .tooltip .tooltip-text {
   visibility: hidden;
   width: 120px;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   text-align: center;
   border-radius: 6px;
@@ -178,7 +178,7 @@ strong {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: var(--bg-secondary) transparent transparent transparent;
 }
 
 .tooltip:hover .tooltip-text {
@@ -186,7 +186,7 @@ strong {
 }
 
 .comentario {
-  color: rgb(206, 204, 204);
+  color: var(--text-muted);
 }
 
 .used {
@@ -205,7 +205,7 @@ strong {
 }
 
 .modal .modal-card .bg {
-  background-color: rgb(38, 52, 61);
+  background-color: var(--sidebar-bg);
   color: white;
 }
 .modal .longest {
@@ -223,8 +223,8 @@ strong {
   overflow: hidden; /* Oculta los bordes de los hijos si exceden */
   cursor: pointer;
   margin: 2px;
-  background: rgb(8, 172, 38);
-  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, rgba(8, 172, 38, 1) 100%);
+  background: var(--status-success);
+  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, var(--status-success) 100%);
   margin-top: -5px;
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 14px 3px rgba(122, 122, 122, 1);
@@ -233,8 +233,8 @@ strong {
 }
 
 .cheked {
-  background: rgb(8, 172, 38);
-  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, rgba(8, 172, 38, 1) 100%);
+  background: var(--status-success);
+  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, var(--status-success) 100%);
 }
 
 .dividido i {
@@ -248,8 +248,8 @@ strong {
   overflow: hidden; /* Oculta los bordes de los hijos si exceden */
   cursor: pointer;
   margin: 2px;
-  background: rgb(245, 152, 28);
-  background: radial-gradient(circle, rgba(255, 184, 88, 1) 0%, rgba(245, 152, 28, 1) 100%);
+  background: var(--status-warning);
+  background: radial-gradient(circle, rgba(255, 184, 88, 1) 0%, var(--status-warning) 100%);
   margin-top: 13px;
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 14px 3px rgba(122, 122, 122, 1);
@@ -277,16 +277,16 @@ strong {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  color: #333;
+  color: var(--text-primary);
   background-color: #c7f7d8;
 }
 
 .error-message {
   font-size: small;
-  color: rgb(255, 71, 71);
+  color: var(--status-danger);
 }
 
 .error-input {
-  border-color: #e74c3c; /* rojo para error */
+  border-color: var(--status-danger); /* rojo para error */
   background-color: #fff6f6;
 }

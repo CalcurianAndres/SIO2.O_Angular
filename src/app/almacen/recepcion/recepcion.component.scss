@@ -19,7 +19,7 @@
 }
 
 .card-header-icon {
-  color: white;
+  color: var(--text-heading);
   transition: transform 0.5s;
 }
 
@@ -46,10 +46,10 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: #8bc34a;
+  background-color: var(--accent-green);
   display: inline-block;
   vertical-align: middle;
-  box-shadow: 0 0 5px #d3d3d3;
+  box-shadow: 0 0 5px var(--border-color);
 }
 
 .circle_ {
@@ -84,7 +84,7 @@
   display: inline-block;
   position: relative;
   text-decoration: none;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .material-link i {
@@ -99,7 +99,7 @@
 }
 
 .material-link:hover {
-  color: #424242; /* Puedes cambiar el color al que desees */
+  color: var(--text-heading);
 }
 
 .shake_button:hover {
@@ -130,7 +130,7 @@
 
 
 .custom-card {
-  background-color: #c7f7d8;
+  background-color: var(--bg-secondary);
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -145,8 +145,8 @@
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  color: #333;
-  background-color: #c7f7d8;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
 }
 
 .blue_ {

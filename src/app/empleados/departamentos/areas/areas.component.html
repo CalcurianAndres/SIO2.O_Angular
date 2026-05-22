@@ -39,7 +39,7 @@
                     <div class="control">
                       <button
                         class="button is-small"
-                        style="background-color: transparent; border: none; color: #3e8ed0"
+                        style="background-color: transparent; border: none; color: var(--accent-blue)"
                         (click)="subareas = true; Areas = false; subunidad = area.nombre"
                       >
                         <span class="icon"><i class="fas fa-plus"></i></span>
@@ -48,7 +48,7 @@
                     <div class="control">
                       <button
                         class="button is-small"
-                        style="background-color: transparent; border: none; color: #2c9f6b"
+                        style="background-color: transparent; border: none; color: var(--accent-green)"
                         (click)="EditarSubUnidad(area)"
                       >
                         <span class="icon"><i class="fas fa-edit"></i></span>
@@ -67,7 +67,7 @@
                           <div class="control">
                             <button
                               class="button is-small"
-                              style="background-color: transparent; border: none; color: #2c9f6b"
+                              style="background-color: transparent; border: none; color: var(--accent-green)"
                               (click)="EditarSubSubUnidad(subarea, area)"
                             >
                               <span class="icon"><i class="fas fa-edit"></i></span>
@@ -76,7 +76,7 @@
                           <div class="control">
                             <button
                               class="button is-small"
-                              style="background-color: transparent; border: none; color: #f03a5f"
+                              style="background-color: transparent; border: none; color: var(--accent-red)"
                               (click)="EliminarSubSubUnidad(subarea)"
                             >
                               <span class="icon"><i class="fas fa-trash-alt"></i></span>

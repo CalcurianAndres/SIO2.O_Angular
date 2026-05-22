@@ -15,8 +15,8 @@
 
 /* Estilos cuando el checkbox está marcado */
 .checkbox:checked {
-  background-color: #4caf50; /* Verde cuando está marcado */
-  border-color: #4caf50;
+  background-color: var(--status-success);
+  border-color: var(--status-success);
 }
 
 .checkbox:checked::after {
@@ -75,7 +75,7 @@
   padding: 2px;
   margin-top: -40px;
   color: white;
-  border: solid 2px rgb(76, 175, 80);
+  border: solid 2px var(--status-success);
   background-color: rgba(76, 175, 80, 0.8);
   padding: 5px;
 }

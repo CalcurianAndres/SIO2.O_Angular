@@ -232,7 +232,7 @@ input[type='range']::-webkit-slider-thumb {
 input[type='range']::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4caf50; /* Green background */
+  background: var(--status-success); /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 

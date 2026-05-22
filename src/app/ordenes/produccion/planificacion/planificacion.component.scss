@@ -9,7 +9,7 @@
 
 .calendar {
   display: flex;
-  margin-bottom: solid 0.5px rgb(255, 0, 0);
+  margin-bottom: solid 0.5px var(--status-danger);
   position: relative;
   // justify-content: space-between;
 }
@@ -24,11 +24,11 @@
   // border-right: solid 1px black;
   max-width: 10px;
   min-width: 10px;
-  border-top: solid 0.5px rgb(208, 208, 208);
+  border-top: solid 0.5px var(--border-color);
 }
 
 .gray-tenue {
-  background-color: #f1f1f1;
+  background-color: var(--bg-secondary);
 }
 
 .calendar-color {
@@ -144,7 +144,7 @@ table.tr.td {
 
 .dias:nth-child(odd) {
   display: block;
-  background-color: #f0f0f0; /* Cambia el color de fondo de los días impares */
+  background-color: var(--bg-secondary); /* Cambia el color de fondo de los días impares */
   // border-right: solid 1px black;
   // border-left: solid 1px black;
   // color: #ff0000; /* Cambia el color del texto de los días impares (puedes poner el color que prefieras) */
@@ -223,7 +223,7 @@ table.tr.td {
   flex-direction: row;
   margin: 10px;
   justify-content: center;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   padding: 10px;
   width: 80%;
 }
@@ -243,7 +243,7 @@ table.tr.td {
 
 .days span {
   padding: 5px;
-  background-color: #e0e0e0;
+  background-color: var(--hover-bg);
   border-radius: 5px;
 }
 
@@ -318,7 +318,7 @@ table.tr.td {
   cursor: pointer;
   text-align: center;
   align-items: center;
-  color: rgb(86, 86, 86);
+  color: var(--text-muted);
 }
 
 .order_ {
@@ -328,7 +328,7 @@ table.tr.td {
   cursor: pointer;
   text-align: center;
   align-items: center;
-  color: rgb(86, 86, 86);
+  color: var(--text-muted);
 }
 
 .icon_ban {
@@ -343,11 +343,11 @@ table.tr.td {
 }
 
 .order:hover {
-  border: solid 2px red;
+  border: solid 2px var(--status-danger);
 }
 
 .order_:hover {
-  border: solid 2px red;
+  border: solid 2px var(--status-danger);
 }
 
 .motivo-popup {

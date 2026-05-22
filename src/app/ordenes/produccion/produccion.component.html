@@ -144,7 +144,7 @@
                   <div class="control">
                     <span
                       class="icon"
-                      style="color: #3488ce; font-size: 30px"
+                      style="color: var(--accent-blue); font-size: 30px"
                       (click)="nueva_gestion = true; gestiones = false; fase_selected = index_fase"
                       ><i class="fas fa-plus-circle"></i
                     ></span>
@@ -183,7 +183,7 @@
                       <ng-container *ngIf="visibilityFlags[index_fase]">
                         <i
                           class="fas fa-random"
-                          style="color: #3488ce; cursor: pointer"
+                          style="color: var(--accent-blue); cursor: pointer"
                           (click)="toggleVisibility(index_fase, index_gestion)"
                         >
                         </i>
@@ -329,7 +329,7 @@
           <div class="card-content">
             <div class="columns p-4">
               <div class="column is-3">
-                <div class="box" style="border-top: 4px solid #3273dc">
+                <div class="box border-top-info">
                   <div class="is-flex is-align-items-center mb-5">
                     <span class="icon is-medium has-text-link mr-2">
                       <i class="fas fa-cogs fa-lg"></i>
@@ -434,7 +434,7 @@
                 </div>
               </div>
               <div class="column is-4">
-                <div class="box has-background-light" style="border-top: 4px solid #48c78e; height: 100%">
+                <div class="box border-top-success" style="height: 100%">
                   <div class="is-flex is-align-items-center mb-4">
                     <span class="icon is-medium has-text-success mr-2">
                       <i class="fas fa-eye fa-lg"></i>
@@ -462,7 +462,7 @@
                 </div>
               </div>
               <div class="column is-5">
-                <div class="box" style="border-top: 4px solid #ffff36; height: 100%">
+                <div class="box border-top-warning" style="height: 100%">
                   <div class="is-flex is-align-items-center mb-4">
                     <span class="icon is-medium has-text-warning mr-2">
                       <i class="fa-solid fa-list"></i>

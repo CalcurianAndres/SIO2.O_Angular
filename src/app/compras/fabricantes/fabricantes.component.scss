@@ -7,8 +7,8 @@
 }
 
 .blue {
-  background: rgb(0, 56, 255);
-  background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, rgba(117, 180, 255, 1) 100%);
+  background: var(--accent-blue);
+  background: linear-gradient(90deg, var(--accent-blue) 0%, rgba(117, 180, 255, 1) 100%);
   color: white;
   font-size: 70px;
   text-align: center;
@@ -52,7 +52,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: var(--bg-secondary);
   border-radius: 10px;
 }
 

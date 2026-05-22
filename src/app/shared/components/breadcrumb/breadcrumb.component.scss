@@ -5,6 +5,7 @@
 
 .breadcrumb {
   font-size: 13px;
+  background-color: transparent;
 }
 
 .breadcrumb ul {
@@ -24,6 +25,6 @@
   font-weight: 600;
 }
 
-.breadcrumb li + li::before {
+.breadcrumb li+li::before {
   color: var(--text-muted);
 }

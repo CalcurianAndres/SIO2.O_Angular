@@ -82,14 +82,14 @@
                     <div class="control">
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(54, 152, 232)"
+                        style="background-color: transparent; border: none; color: var(--accent-blue)"
                         (click)="ticket_rojo = true; GenerarTicket(orden)"
                       >
                         <span class="icon"><i class="fa-solid fa-plus"></i></span>
                       </button>
                     </div>
                     <div class="control" *ngIf="ordenes.buscarTicketRojoPorCerrar(orden._id).length > 0">
-                      <button class="button" style="background: transparent; border: none; color: rgb(220, 107, 107)">
+                      <button class="button" style="background: transparent; border: none; color: var(--accent-red)">
                         <span class="icon"><i class="fa-solid fa-xmark"></i></span>
                       </button>
                     </div>
@@ -320,7 +320,7 @@
                                   Posibles causas
                                   <i
                                     class="fas fa-plus"
-                                    style="cursor: pointer; color: rgb(128, 180, 248)"
+                                    style="cursor: pointer; color: var(--accent-blue)"
                                     (click)="causas = true; index_actual = i; index_tag = 0"
                                   ></i>
                                 </th>
@@ -356,7 +356,7 @@
                                   Posibles causas
                                   <i
                                     class="fas fa-plus"
-                                    style="cursor: pointer; color: rgb(128, 180, 248)"
+                                    style="cursor: pointer; color: var(--accent-blue)"
                                     (click)="causas = true; index_actual = i; index_tag = 1"
                                   ></i>
                                 </th>
@@ -394,7 +394,7 @@
                                   Posibles causas
                                   <i
                                     class="fas fa-plus"
-                                    style="cursor: pointer; color: rgb(128, 180, 248)"
+                                    style="cursor: pointer; color: var(--accent-blue)"
                                     (click)="causas = true; index_actual = i; index_tag = 2"
                                   ></i>
                                 </th>
@@ -639,7 +639,7 @@
                       <br />
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
+                        style="background-color: transparent; border: none; color: var(--accent-blue)"
                         (click)="
                           searchText__ = '';
                           supervisor = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
@@ -659,7 +659,7 @@
             {{ supervisor }}
             <button
               class="button is-small"
-              style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
               *ngIf="supervisor"
               (click)="supervisor = ''"
             >
@@ -686,7 +686,7 @@
                       <br />
                       <button
                         class="button"
-                        style="background-color: transparent; border: none; color: rgb(72, 127, 237)"
+                        style="background-color: transparent; border: none; color: var(--accent-blue)"
                         (click)="
                           searchText = '';
                           analista = trabajador.datos_personales.nombres + ' ' + trabajador.datos_personales.apellidos
@@ -706,7 +706,7 @@
             {{ analista }}
             <button
               class="button is-small"
-              style="background-color: transparent; border: none; color: hsl(207, 61%, 53%)"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
               *ngIf="analista"
               (click)="analista = ''"
             >

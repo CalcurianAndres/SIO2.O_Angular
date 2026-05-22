@@ -36,7 +36,7 @@
   height: 15px;
   top: -12px;
   right: -2px;
-  background-color: red;
+  background-color: var(--accent-red);
   color: white;
   border-radius: 50%;
   padding: 3px;
@@ -147,14 +147,14 @@ color {
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted #9999cc;
+  border-bottom: 1px dotted var(--border-color);
   cursor: help;
 }
 
 .tooltip::after {
   content: 'Por cada 1.000 hojas';
   position: absolute;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   padding: 5px;
   border-radius: 6px;
@@ -175,14 +175,14 @@ color {
 .tooltip_pinza {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted #9999cc;
+  border-bottom: 1px dotted var(--border-color);
   cursor: help;
 }
 
 .tooltip_pinza::after {
   content: 'Pinza';
   position: absolute;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   padding: 5px;
   border-radius: 6px;
@@ -203,14 +203,14 @@ color {
 .tooltip_contrapinza {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted #9999cc;
+  border-bottom: 1px dotted var(--border-color);
   cursor: help;
 }
 
 .tooltip_contrapinza::after {
   content: 'Contra pinza';
   position: absolute;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   padding: 5px;
   border-radius: 6px;
@@ -231,14 +231,14 @@ color {
 .tooltip_contraescuadra {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted #9999cc;
+  border-bottom: 1px dotted var(--border-color);
   cursor: help;
 }
 
 .tooltip_contraescuadra::after {
   content: 'Contra escuadra';
   position: absolute;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   padding: 5px;
   border-radius: 6px;
@@ -259,14 +259,14 @@ color {
 .tooltip_escuadra {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted #9999cc;
+  border-bottom: 1px dotted var(--border-color);
   cursor: help;
 }
 
 .tooltip_escuadra::after {
   content: 'Escuadra';
   position: absolute;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   padding: 5px;
   border-radius: 6px;
@@ -326,11 +326,11 @@ color {
 }
 
 .custom-checkbox:hover input ~ .checkmark {
-  background-color: #bbb; /* Cambia el color al hacer hover */
+  background-color: var(--hover-bg); /* Cambia el color al hacer hover */
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: #4caf50; /* Color verde cuando está seleccionado */
+  background-color: var(--status-success); /* Color verde cuando está seleccionado */
 }
 
 .custom-checkbox .checkmark:after {

@@ -133,7 +133,7 @@ table tr th {
 }
 
 .modal .modal-background {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--modal-backdrop);
   backdrop-filter: blur(10px);
 }
 
@@ -167,6 +167,11 @@ table tr th {
   --stat-bg: #2a3843;
   --stat-text: #ffffff;
   --stat-number: #ffffff;
+  --modal-backdrop: rgba(0, 0, 0, 0.65);
+  --status-success: #4caf50;
+  --status-warning: #ffc107;
+  --status-danger: #ef5350;
+  --status-info: #42a5f5;
 }
 
 [data-theme='light'] {
@@ -185,6 +190,11 @@ table tr th {
   --stat-bg: #f8fafc;
   --stat-text: #475569;
   --stat-number: #1a1a2e;
+  --modal-backdrop: rgba(0, 0, 0, 0.4);
+  --status-success: #2e7d32;
+  --status-warning: #f9a825;
+  --status-danger: #c62828;
+  --status-info: #1565c0;
 }
 
 body {
@@ -200,11 +210,11 @@ body {
 }
 
 .green {
-  color: #48c78e;
+  color: var(--accent-green);
 }
 
 .red {
-  color: #f03a5f;
+  color: var(--accent-red);
   transition: filter 0.3s ease-in-out;
 }
 
@@ -222,7 +232,7 @@ body {
 }
 
 .blue_ {
-  color: hsl(207, 61%, 53%);
+  color: var(--accent-blue);
 }
 
 .fa-circle {
@@ -246,21 +256,19 @@ body {
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   position: relative;
   cursor: pointer;
-  background-color: #fff;
+  background-color: var(--bg-card);
   transition:
     background-color 0.3s,
     border-color 0.3s;
 }
 
-/* Estilos cuando el checkbox está marcado */
 .checkbox:checked {
-  background-color: #4caf50;
-  /* Verde cuando está marcado */
-  border-color: #4caf50;
+  background-color: var(--status-success);
+  border-color: var(--status-success);
 }
 
 .checkbox:checked::after {
@@ -274,42 +282,32 @@ body {
   border-radius: 50%;
 }
 
-/* Estilos al pasar el ratón */
 .checkbox:hover {
-  border-color: #3e8e41;
+  border-color: var(--accent-green);
 }
 
-/* Efecto cuando el checkbox está enfocado */
 .checkbox:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--status-success) 50%, transparent);
 }
 
-/* Estilos cuando el checkbox está deshabilitado */
 .checkbox:disabled {
-  background-color: #f0f0f0;
-  /* Fondo gris claro */
-  border-color: #ddd;
-  /* Borde gris claro */
+  background-color: var(--hover-bg);
+  border-color: var(--border-color);
   cursor: not-allowed;
-  /* Cursor de no permitido */
 }
 
 .checkbox:disabled:checked {
-  background-color: #b0b0b0;
-  /* Fondo gris cuando está marcado */
-  border-color: #b0b0b0;
-  /* Borde gris cuando está marcado */
+  background-color: var(--text-muted);
+  border-color: var(--text-muted);
 }
 
 .checkbox:disabled:hover {
-  border-color: #ddd;
-  /* No cambia el borde cuando está deshabilitado */
+  border-color: var(--border-color);
 }
 
 .checkbox:disabled:focus {
   box-shadow: none;
-  /* El enfoque no se ve cuando está deshabilitado */
 }
 
 @import '../node_modules/bulma/sass/utilities/_all.sass';
@@ -433,12 +431,64 @@ body {
   color: var(--text-heading);
   border-color: var(--text-muted);
 }
-.button.is-primary,
-.button.is-link,
-.button.is-danger,
-.button.is-success,
-.button.is-warning,
+.button.is-primary {
+  background-color: var(--status-info);
+  border-color: var(--status-info);
+  color: #fff;
+}
+.button.is-primary:hover {
+  background-color: color-mix(in srgb, var(--status-info) 85%, #000);
+  border-color: color-mix(in srgb, var(--status-info) 85%, #000);
+  color: #fff;
+}
+.button.is-link {
+  background-color: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #fff;
+}
+.button.is-link:hover {
+  background-color: color-mix(in srgb, var(--accent-red) 85%, #000);
+  border-color: color-mix(in srgb, var(--accent-red) 85%, #000);
+  color: #fff;
+}
+.button.is-danger {
+  background-color: var(--status-danger);
+  border-color: var(--status-danger);
+  color: #fff;
+}
+.button.is-danger:hover {
+  background-color: color-mix(in srgb, var(--status-danger) 85%, #000);
+  border-color: color-mix(in srgb, var(--status-danger) 85%, #000);
+  color: #fff;
+}
+.button.is-success {
+  background-color: var(--status-success);
+  border-color: var(--status-success);
+  color: #fff;
+}
+.button.is-success:hover {
+  background-color: color-mix(in srgb, var(--status-success) 85%, #000);
+  border-color: color-mix(in srgb, var(--status-success) 85%, #000);
+  color: #fff;
+}
+.button.is-warning {
+  background-color: var(--status-warning);
+  border-color: var(--status-warning);
+  color: #1a1a1a;
+}
+.button.is-warning:hover {
+  background-color: color-mix(in srgb, var(--status-warning) 85%, #000);
+  border-color: color-mix(in srgb, var(--status-warning) 85%, #000);
+  color: #1a1a1a;
+}
 .button.is-info {
+  background-color: var(--status-info);
+  border-color: var(--status-info);
+  color: #fff;
+}
+.button.is-info:hover {
+  background-color: color-mix(in srgb, var(--status-info) 85%, #000);
+  border-color: color-mix(in srgb, var(--status-info) 85%, #000);
   color: #fff;
 }
 
@@ -448,6 +498,34 @@ body {
 .message-body {
   border-color: var(--border-color);
   color: var(--text-primary);
+}
+.message.is-success {
+  background-color: color-mix(in srgb, var(--status-success) 15%, transparent);
+}
+.message.is-success .message-header {
+  background-color: var(--status-success);
+  color: #fff;
+}
+.message.is-danger {
+  background-color: color-mix(in srgb, var(--status-danger) 15%, transparent);
+}
+.message.is-danger .message-header {
+  background-color: var(--status-danger);
+  color: #fff;
+}
+.message.is-warning {
+  background-color: color-mix(in srgb, var(--status-warning) 15%, transparent);
+}
+.message.is-warning .message-header {
+  background-color: var(--status-warning);
+  color: #1a1a1a;
+}
+.message.is-info {
+  background-color: color-mix(in srgb, var(--status-info) 15%, transparent);
+}
+.message.is-info .message-header {
+  background-color: var(--status-info);
+  color: #fff;
 }
 
 .tabs a {
@@ -499,10 +577,42 @@ body {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 }
+.tag.is-success {
+  background-color: var(--status-success);
+  color: #fff;
+}
+.tag.is-danger {
+  background-color: var(--status-danger);
+  color: #fff;
+}
+.tag.is-warning {
+  background-color: var(--status-warning);
+  color: #1a1a1a;
+}
+.tag.is-info {
+  background-color: var(--status-info);
+  color: #fff;
+}
 
 .notification {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
+}
+.notification.is-success {
+  background-color: color-mix(in srgb, var(--status-success) 20%, var(--bg-card));
+  color: var(--status-success);
+}
+.notification.is-danger {
+  background-color: color-mix(in srgb, var(--status-danger) 20%, var(--bg-card));
+  color: var(--status-danger);
+}
+.notification.is-warning {
+  background-color: color-mix(in srgb, var(--status-warning) 20%, var(--bg-card));
+  color: var(--status-warning);
+}
+.notification.is-info {
+  background-color: color-mix(in srgb, var(--status-info) 20%, var(--bg-card));
+  color: var(--status-info);
 }
 
 .box {
@@ -555,6 +665,42 @@ body {
 
 .progress {
   background-color: var(--bg-secondary);
+}
+.progress.is-success::-webkit-progress-value {
+  background-color: var(--status-success);
+}
+.progress.is-danger::-webkit-progress-value {
+  background-color: var(--status-danger);
+}
+.progress.is-warning::-webkit-progress-value {
+  background-color: var(--status-warning);
+}
+.progress.is-info::-webkit-progress-value {
+  background-color: var(--status-info);
+}
+.progress.is-success::-moz-progress-bar {
+  background-color: var(--status-success);
+}
+.progress.is-danger::-moz-progress-bar {
+  background-color: var(--status-danger);
+}
+.progress.is-warning::-moz-progress-bar {
+  background-color: var(--status-warning);
+}
+.progress.is-info::-moz-progress-bar {
+  background-color: var(--status-info);
+}
+.progress.is-success::-ms-fill {
+  background-color: var(--status-success);
+}
+.progress.is-danger::-ms-fill {
+  background-color: var(--status-danger);
+}
+.progress.is-warning::-ms-fill {
+  background-color: var(--status-warning);
+}
+.progress.is-info::-ms-fill {
+  background-color: var(--status-info);
 }
 
 // ─── Modal z-index fix ───
@@ -659,6 +805,24 @@ body {
   border: none;
   color: var(--accent-blue);
 }
+
+// ─── Status utility classes ───
+.text-success { color: var(--status-success); }
+.text-danger { color: var(--status-danger); }
+.text-warning { color: var(--status-warning); }
+.text-info { color: var(--status-info); }
+.bg-success { background-color: color-mix(in srgb, var(--status-success) 15%, var(--bg-card)); }
+.bg-danger { background-color: color-mix(in srgb, var(--status-danger) 15%, var(--bg-card)); }
+.bg-warning { background-color: color-mix(in srgb, var(--status-warning) 15%, var(--bg-card)); }
+.bg-info { background-color: color-mix(in srgb, var(--status-info) 15%, var(--bg-card)); }
+.border-left-success { border-left: 4px solid var(--status-success); }
+.border-left-danger { border-left: 4px solid var(--status-danger); }
+.border-left-warning { border-left: 4px solid var(--status-warning); }
+.border-left-info { border-left: 4px solid var(--status-info); }
+.border-top-success { border-top: 4px solid var(--status-success); }
+.border-top-danger { border-top: 4px solid var(--status-danger); }
+.border-top-warning { border-top: 4px solid var(--status-warning); }
+.border-top-info { border-top: 4px solid var(--status-info); }
 
 // ─── Global transition ───
 * {

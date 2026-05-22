@@ -38,7 +38,7 @@
           <label for="" class="label"> </label>
           <button
             class="button"
-            style="border: none; background-color: transparent; color: #3e8ed0"
+            style="border: none; background-color: transparent; color: var(--accent-blue)"
             (click)="crearUsuario()"
           >
             <span><i class="fas fa-plus"></i></span>
@@ -76,10 +76,10 @@
             <td>
               <i
                 class="fas fa-trash-alt"
-                style="color: #f03a5f; cursor: pointer"
+                style="color: var(--accent-red); cursor: pointer"
                 (click)="eliminarUsuario(usuario, i)"
               ></i
-              >   <i class="fas fa-key" style="color: #3e8ed0; cursor: pointer" (click)="resetPassword(usuario)"></i>
+              >   <i class="fas fa-key" style="color: var(--accent-blue); cursor: pointer" (click)="resetPassword(usuario)"></i>
             </td>
           </tr>
         </tbody>

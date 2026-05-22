@@ -6,16 +6,16 @@
   cursor: pointer;
 }
 .primera {
-  background: rgb(0, 56, 255);
-  background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, #75b4ff 100%);
+  background: var(--accent-blue);
+  background: linear-gradient(90deg, var(--accent-blue) 0%, #75b4ff 100%);
   color: white;
   width: 100%;
   cursor: pointer;
 }
 
 .segunda {
-  background: rgb(8, 172, 38);
-  background: linear-gradient(90deg, rgba(8, 172, 38, 1) 15%, rgba(44, 255, 82, 1) 100%);
+  background: var(--status-success);
+  background: linear-gradient(90deg, var(--status-success) 15%, rgba(44, 255, 82, 1) 100%);
   color: white;
   width: 100%;
   cursor: pointer;
@@ -51,20 +51,20 @@
   text-align: center;
 }
 .orden {
-  background: rgb(0, 56, 255);
-  background: radial-gradient(circle, rgba(117, 180, 255, 1) 0%, rgba(0, 56, 255, 1) 100%);
+  background: var(--accent-blue);
+  background: radial-gradient(circle, rgba(117, 180, 255, 1) 0%, var(--accent-blue) 100%);
 }
 .otros {
-  background: rgb(8, 172, 38);
-  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, rgba(8, 172, 38, 1) 100%);
+  background: var(--status-success);
+  background: radial-gradient(circle, rgba(44, 255, 82, 1) 0%, var(--status-success) 100%);
 }
 .tintas {
   background: rgb(128, 0, 32); /* Vinotinto */
   background: radial-gradient(circle, rgba(179, 51, 102, 1) 0%, rgba(128, 0, 32, 1) 100%); /* Gradiente vinotinto */
 }
 .repuestos {
-  background: rgb(245, 152, 28);
-  background: radial-gradient(circle, rgba(255, 184, 88, 1) 0%, rgba(245, 152, 28, 1) 100%);
+  background: var(--status-warning);
+  background: radial-gradient(circle, rgba(255, 184, 88, 1) 0%, var(--status-warning) 100%);
 }
 
 .menu_circle {
@@ -153,7 +153,7 @@ strong {
 .tooltip .tooltip-text {
   visibility: hidden;
   width: 120px;
-  background-color: #555;
+  background-color: var(--bg-secondary);
   color: #fff;
   text-align: center;
   border-radius: 6px;
@@ -173,7 +173,7 @@ strong {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: var(--bg-secondary) transparent transparent transparent;
 }
 
 .tooltip:hover .tooltip-text {
@@ -181,7 +181,7 @@ strong {
 }
 
 .comentario {
-  color: rgb(206, 204, 204);
+  color: var(--text-muted);
 }
 
 .used {
@@ -200,7 +200,7 @@ strong {
 }
 
 .modal .modal-card .bg {
-  background-color: rgb(38, 52, 61);
+  background-color: var(--sidebar-bg);
   color: white;
 }
 .modal .longest {
@@ -217,7 +217,7 @@ strong {
   overflow-y: scroll;
   margin: 5px auto;
   padding: 2px;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: black;
@@ -226,7 +226,7 @@ strong {
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-color);
 }
 .color-box {
   width: 30px;
@@ -237,7 +237,7 @@ strong {
 
 .color-item:hover {
   cursor: pointer;
-  background-color: #e0e0e0;
+  background-color: var(--hover-bg);
 }
 
 /* Estilos para el checkbox */
@@ -245,11 +245,11 @@ strong {
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   position: relative;
   cursor: pointer;
-  background-color: #fff;
+  background-color: var(--bg-card);
   transition:
     background-color 0.3s,
     border-color 0.3s;
@@ -257,8 +257,8 @@ strong {
 
 /* Estilos cuando el checkbox está marcado */
 .checkbox:checked {
-  background-color: #4caf50; /* Verde cuando está marcado */
-  border-color: #4caf50;
+  background-color: var(--status-success);
+  border-color: var(--status-success);
 }
 
 .checkbox:checked::after {
@@ -268,13 +268,13 @@ strong {
   left: 4px;
   width: 8px;
   height: 8px;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 50%;
 }
 
 /* Estilos al pasar el ratón */
 .checkbox:hover {
-  border-color: #3e8e41;
+  border-color: var(--status-success);
 }
 
 /* Efecto cuando el checkbox está enfocado */
@@ -285,18 +285,18 @@ strong {
 
 /* Estilos cuando el checkbox está deshabilitado */
 .checkbox:disabled {
-  background-color: #f0f0f0; /* Fondo gris claro */
-  border-color: #ddd; /* Borde gris claro */
+  background-color: var(--bg-secondary); /* Fondo gris claro */
+  border-color: var(--border-color); /* Borde gris claro */
   cursor: not-allowed; /* Cursor de no permitido */
 }
 
 .checkbox:disabled:checked {
-  background-color: #b0b0b0; /* Fondo gris cuando está marcado */
-  border-color: #b0b0b0; /* Borde gris cuando está marcado */
+  background-color: var(--text-muted); /* Fondo gris cuando está marcado */
+  border-color: var(--text-muted); /* Borde gris cuando está marcado */
 }
 
 .checkbox:disabled:hover {
-  border-color: #ddd; /* No cambia el borde cuando está deshabilitado */
+  border-color: var(--border-color); /* No cambia el borde cuando está deshabilitado */
 }
 
 .checkbox:disabled:focus {

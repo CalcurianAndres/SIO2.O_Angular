@@ -3,13 +3,13 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
   border-radius: 10px;
 }
 
 .message-info {
   font-size: 0.85rem;
-  color: #7a7a7a;
+  color: var(--text-muted);
   margin-bottom: 5px;
 }
 
@@ -26,8 +26,8 @@
 }
 
 .sent .message-content {
-  background-color: #178656; /* Bulma's is-info color */
-  color: white;
+  background-color: var(--accent-green);
+  color: var(--text-heading);
   margin-left: auto;
 }
 
@@ -36,8 +36,8 @@
 }
 
 .received .message-content {
-  background-color: #eaeaea;
-  color: #363636;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
   margin-right: auto;
 }
 
@@ -51,14 +51,14 @@ textarea {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #dbdbdb;
+  border: 1px solid var(--border-color);
   resize: none;
   font-size: 1rem;
 }
 
 textarea:focus {
   outline: none;
-  border-color: #209cee; /* Bulma's is-info color */
+  border-color: var(--accent-blue);
 }
 
 button {

@@ -30,7 +30,7 @@
   background-color: #d1f5d3; /* Color verde claro */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
   font-size: 20px;
-  color: #333;
+  color: var(--text-primary);
   font-family: Arial, sans-serif;
   width: 100%;
 }
@@ -42,7 +42,7 @@
   background-color: #f5e1d1; /* Color verde claro */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
   font-size: 20px;
-  color: #333;
+  color: var(--text-primary);
   font-family: Arial, sans-serif;
   width: 100%;
 }
@@ -99,7 +99,7 @@
   justify-content: center;
   align-items: center;
   height: 100px;
-  background-color: #3498db; /* Blue color */
+  background-color: var(--accent-blue); /* Blue color */
   position: relative;
   overflow: hidden;
   border-radius: 20px;
@@ -176,15 +176,15 @@
 }
 
 .card .card-content .orange {
-  background: rgb(245, 152, 28);
-  background: linear-gradient(90deg, rgba(245, 152, 28, 1) 25%, rgba(255, 184, 88, 1) 100%);
+  background: var(--status-warning);
+  background: linear-gradient(90deg, var(--status-warning) 25%, rgba(255, 184, 88, 1) 100%);
   color: white;
   width: 100%;
 }
 
 .card .card-content .green__ {
-  background: rgb(8, 172, 38);
-  background: linear-gradient(90deg, rgba(8, 172, 38, 1) 15%, rgba(44, 255, 82, 1) 100%);
+  background: var(--status-success);
+  background: linear-gradient(90deg, var(--status-success) 15%, rgba(44, 255, 82, 1) 100%);
   color: white;
   width: 100%;
 }
@@ -203,7 +203,7 @@
   left: 0;
   width: 50%;
   height: 100%;
-  background: linear-gradient(to right, #3498db 50%, transparent 50%);
+  background: linear-gradient(to right, var(--accent-blue) 50%, transparent 50%);
   animation: liquidFill 4s linear;
 }
 
@@ -228,7 +228,7 @@
   height: 40px;
   border-radius: 50%;
   border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #3498db;
+  border-top: 4px solid var(--accent-blue);
   animation:
     spin 1s linear infinite,
     shadow 1s alternate infinite;
@@ -347,8 +347,8 @@
 }
 
 .blue___ {
-  background: rgb(0, 56, 255);
-  background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, rgba(117, 180, 255, 1) 100%);
+  background: var(--accent-blue);
+  background: linear-gradient(90deg, var(--accent-blue) 0%, rgba(117, 180, 255, 1) 100%);
   color: white;
   height: 100px;
   overflow: hidden;
@@ -511,9 +511,9 @@ a {
   visibility: hidden;
   width: 120px;
   background-color: rgb(255, 245, 152);
-  color: #333;
+  color: var(--text-primary);
   text-align: center;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   padding: 5px;
   position: absolute;

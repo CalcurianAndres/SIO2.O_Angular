@@ -26,7 +26,7 @@
   width: 60%;
 }
 .title_ {
-  background: rgb(76, 175, 80);
+  background: var(--status-success);
   background: linear-gradient(
     45deg,
     rgba(76, 175, 80, 1) 0%,
@@ -377,7 +377,7 @@ mwlResizable {
   margin-top: 6px;
   height: 62px;
   background-size: 200% auto;
-  background-image: linear-gradient(to right, transparent 50%, #c70039 50%);
+  background-image: linear-gradient(to right, transparent 50%, var(--accent-red) 50%);
   // background-image: linear-gradient(to right, transparent 50%, #900c3f 50%);
   transition: background-position 1s;
   transition: color 1s;
