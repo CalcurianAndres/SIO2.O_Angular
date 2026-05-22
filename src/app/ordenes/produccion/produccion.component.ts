@@ -81,6 +81,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
   public correccion = ''
 
+  public Despacho = false
+
   ngOnInit() {
   }
 
@@ -88,7 +90,60 @@ export class ProduccionComponent implements OnInit, OnChanges {
     this.locked = !this.locked
   }
 
+  op_seleccionada: any = ''
+  despachos_por_confirmar: any = {
+    observacion: '',
+    fecha: '',
+    despachos: []
+  }
+
+
+  add_orden_al_despacho() {
+
+    let data = {
+      op: this.op_seleccionada._id,
+      numero_op: this.op_seleccionada.numero_op,
+      producto: this.op_seleccionada.producto[0].identificacion.producto,
+      producto_id: this.op_seleccionada.producto[0]._id,
+      cantidad: this.op_seleccionada.cantidad,
+      cliente: this.op_seleccionada.cliente,
+      almacenes: '',
+      parcial: false
+
+    }
+    console.log(data.producto)
+    this.despachos_por_confirmar.despachos.push(data)
+    this.op_seleccionada = ''
+
+  }
+
   //ETIQUETAS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  public etiqueta_generada_por_imprimir: any
+
+  generarImpresion(indexEtiqueta, indexFase) {
+    let gestion = this.api.GestionesDeFase(this.orden_selected, indexFase)[indexEtiqueta]
+
+
+    let data = {
+      gestion: gestion._id,
+      completo: gestion,
+      op_completa: gestion.orden,
+      observacion: 'Impresion SIO',
+      cantidad: gestion.productos,
+      op: gestion.orden._id
+    }
+
+
+    this.selectedPo = data.op_completa.oc.orden
+    this.generarEtiqueta();
+
+    this.etiqueta_generada_por_imprimir = data;
+  }
+
+  ImprimirEtiquetaYMandarAProductoTerminado() {
+    this.api.etiquetarProducto(this.etiqueta_generada_por_imprimir)
+  }
 
   pdfUrl: string | null = null;
 
@@ -717,13 +772,23 @@ export class ProduccionComponent implements OnInit, OnChanges {
     // Array de pasos (steps) que puede variar en cantidad
     let steps: any = [];
 
+    const formatter = new Intl.DateTimeFormat('es-ES', {
+
+      day: '2-digit',
+
+      month: '2-digit',
+
+      year: 'numeric'
+
+    });
+
 
     for (let i = 0; i < orden.fases.length; i++) {
       steps.push(
         {
           title: orden.fases[i].maquina.nombre,
           subtitle: orden.fases[i].nombre,
-          date: moment(orden.fases[i].fases[0].fecha).format('DD/MM/YYYY')
+          date: formatter.format(new Date(orden.fases[i].fases[0].fecha))
         }
       )
     }
@@ -840,9 +905,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
     pdf.add(
       new Table([
         [
-          new Cell(new Txt('INFORMACIÓN DEL PRODUCTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
+          new Cell(new Txt('INFORMACIÓN DEL PRODUCTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('rgb(165, 172, 178)').end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end
+          new Cell(new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('rgb(165, 172, 178)').end
         ],
         [
           new Cell(new Txt('NOMBRE:').fontSize(5.7).end).border([true, false, true, false]).end,
@@ -863,12 +928,12 @@ export class ProduccionComponent implements OnInit, OnChanges {
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => 'rgb(85, 85, 85)',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
         }).widths(['69%', '1%', '30%']).end
     )
 
-    let emision = moment(orden.createdAt).format('DD/MM/YYYY')
+    let emision = formatter.format(new Date(orden.createdAt));
     pdf.add(
       new Table([
         [
@@ -909,7 +974,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
         .widths(['100%']).end
     )
 
-    let fecha_oc = moment(orden.solicitud).format('DD/MM/YYYY')
+    let fecha_oc = formatter.format(new Date(orden.solicitud));
 
     pdf.add(
       new Table([
@@ -978,7 +1043,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
     // Iteramos sobre los pedidos filtrados para formatear la fecha y la cantidad
     pedidosFiltrados.forEach(pedido => {
       // Formateamos la fecha
-      pedido.solicitud = moment(pedido.solicitud).format('DD/MM/YYYY');
+      pedido.solicitud = formatter.format(new Date(pedido.solicitud));
       // Formateamos la cantidad: separador de miles '.' y decimales ','
       // Usamos toLocaleString con la configuración de 'es-ES'
       pedido.cantidadFormateada = Number(pedido.cantidad).toLocaleString('es-ES');
@@ -1011,7 +1076,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
       celdas.push(
         [
-          new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [true, false, true, false] : [true, false, true, true]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+          new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [true, false, true, false] : [true, false, true, true]).fillColor(i % 2 === 0 ? 'rgb(242, 242, 242)' : '#FFFFFF').end,
           new Cell(new Txt(pedidosFiltrados[i].solicitud).fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [false, false, true, false] : [false, false, true, true]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
           new Cell(new Txt('Planta San Joaquin').fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [true, false, true, false] : [true, false, true, true]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
         ]
@@ -1609,10 +1674,23 @@ export class ProduccionComponent implements OnInit, OnChanges {
         let gestion_ = this.api.GestionesDeFase(this.orden_selected, i)[j];
         this.current[i] += Number(gestion_.productos);
 
-        const inicio = moment(gestion_.inicio, 'HH:mm');
-        const fin = moment(gestion_.fin, 'HH:mm');
-        const duracion = moment.duration(fin.diff(inicio));
-        const horas = duracion.asHours();
+        // Opción nativa: Creamos objetos Date y les asignamos la hora del string "HH:mm"
+        const [hInicio, mInicio] = gestion_.inicio.split(':');
+        const inicio: any = new Date();
+        inicio.setHours(hInicio, mInicio, 0, 0);
+
+        const [hFin, mFin] = gestion_.fin.split(':');
+        const fin: any = new Date();
+        fin.setHours(hFin, mFin, 0, 0);
+
+        let diffMs = fin - inicio;
+
+        // Si el resultado es negativo, significa que el fin es el día siguiente
+        if (diffMs < 0) {
+          diffMs += 24 * 60 * 60 * 1000; // Sumamos 24 horas en milisegundos
+        }
+
+        const horas = diffMs / 3600000;
 
         this.totales[i].hojas += gestion_.hojas;
         this.totales[i].horas += Number(horas);

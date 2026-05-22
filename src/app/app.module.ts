@@ -27,6 +27,7 @@ import { LOCALE_ID, isDevMode } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { RecibosComponent } from './shared/recibos/recibos.component';
 
 registerLocaleData(localeEs);
 

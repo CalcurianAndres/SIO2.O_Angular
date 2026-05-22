@@ -19,6 +19,96 @@
 
 <!-- <app-nueva-op></app-nueva-op> -->
 
+<div class="modal" [ngClass]="{'is-active':Despacho}">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="width: 90%;">
+        <div class="modal-card-head">
+            <p class="modal-card-title fuente">
+                Planificacón de despachos
+            </p>
+            <button class="delete red_cross" aria-label="close" (click)="Despacho = false"></button>
+            <label for="" class="label">.</label>
+        </div>
+        <div class="modal-card-body">
+            <div class="field is-grouped">
+                <div class="control">
+                    <label for="" class="label">Fecha del despacho:</label>
+                    <input type="date" name="" id="" class="input" [(ngModel)]="despachos_por_confirmar.fecha">
+                </div>
+                <div class="control">
+                    <label for="" class="label">Producto a despachar:</label>
+                    <div class="select">
+                        <select [(ngModel)]="op_seleccionada">
+                            <option [ngValue]="api.orden[i]" *ngFor="let orden of api.orden; index as i">
+                                {{orden.numero_op}} -
+                                {{orden.producto[0].identificacion.producto}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control">
+                    <label for="" class="label">&nbsp;</label>
+                    <button class="button is-info" (click)="add_orden_al_despacho()">
+                        <span>Añadir</span>
+                    </button>
+                </div>
+            </div>
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th>OP</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>OC</th>
+                        <th>Destino</th>
+                        <th>tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orden of despachos_por_confirmar.despachos">
+                        <td>{{orden.numero_op}}</td>
+                        <td>{{orden.producto}}</td>
+                        <td>{{orden.cantidad}}</td>
+                        <td>
+                            <div class="select is-small">
+                                <select>
+                                    <option value="" *ngFor="let orden of ordenesdeCompra(orden.producto_id)">
+                                        {{orden.orden}}</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select is-small">
+                                <select>
+                                    <option value="" *ngFor="let destino of orden.cliente.almacenes">{{destino.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="select is-small">
+                                <select>
+                                    <option value="">Pacial</option>
+                                    <option value="">Completo</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="field">
+                <label for="" class="label">Observación:</label>
+                <textarea name="" id="" class="textarea" placeholder="Observación" rows="2"
+                    [(ngModel)]="despachos_por_confirmar.observacion"></textarea>
+            </div>
+            <button class="button is-primary">
+                <span>
+                    Anunciar Despacho
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="modal" [ngClass]="{'is-active':gestiones}">
     <div class="modal-background"></div>
     <div class="modal-card" style="width: 90%;">
@@ -171,7 +261,7 @@
                                                 (click)="comentarios = true; unique_id = gestion._id"></i></td>
                                         <td>
                                             <div class="tag-container" *ngIf="isLast" style="cursor: pointer;"
-                                                (click)="Impresion_presed = true">
+                                                (click)="Impresion_presed = true; generarImpresion(index_gestion, index_fase)">
                                                 <div class=" tag-icon-wrapper">
                                                     <svg class="tag-svg" viewBox="0 0 24 24" fill="none"
                                                         stroke="currentColor" stroke-width="2">
@@ -316,7 +406,8 @@
                                             </button>
                                         </div>
                                         <div class="control">
-                                            <button class="button is-success" [disabled]="!locked && !correccion">
+                                            <button class="button is-success" [disabled]="!locked && !correccion"
+                                                (click)="ImprimirEtiquetaYMandarAProductoTerminado()">
                                                 <span class=" icon">
                                                     <i class="fas fa-print"></i>
                                                 </span>
@@ -366,20 +457,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>03/01/2026</td>
-                                                <td>300</td>
-                                                <td>Impresión SIO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>24/02/2026</td>
-                                                <td>600</td>
-                                                <td>Impresión SIO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>17/03/2026</td>
-                                                <td>2</td>
-                                                <td>Cambio de rollo en impresora</td>
+                                            <tr *ngFor="let producto of api.producto_terminado; index as i">
+                                                <td>{{producto.createdAt | date:'EEE, d MMM, h:mm a'}}</td>
+                                                <td>{{producto.cantidad}}</td>
+                                                <td>{{producto.observacion}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -411,11 +492,20 @@
                 </div>
             </div>
             <br>
-            <button class="button is-info" (click)="nueva = true">
-                <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                <span>Orden</span>
-            </button>
-            <br><br>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-info" (click)="nueva = true">
+                        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                        <span>Orden</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <button class="button is-info" (click)="Despacho = true">
+                        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                        <span>Despacho</span>
+                    </button>
+                </div>
+            </div>
             <div class="columns">
                 <div class="column">
                     <div class="card" style="height: 400px;overflow-y: scroll;">
@@ -460,6 +550,11 @@
                                                 (click)="solicitudes = true; op = orden; se_prendio()">
                                                 <span class="icon">
                                                     <i class="fas fa-shopping-cart"></i>
+                                                </span>
+                                            </button>
+                                            <button class="button" style="border: none; background:transparent;">
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-truck"></i>
                                                 </span>
                                             </button>
                                         </td>

@@ -20,6 +20,7 @@ import { DefectosComponent } from './defectos/defectos.component';
 import { TicketsRComponent } from './defectos/tickets-r/tickets-r.component';
 import { TicketsAComponent } from './defectos/tickets-a/tickets-a.component';
 import { EtiquetasComponent } from './etiquetas/etiquetas.component';
+import { CertificadoComponent } from './certificado/certificado.component';
 
 
 
@@ -41,6 +42,7 @@ import { EtiquetasComponent } from './etiquetas/etiquetas.component';
     TicketsRComponent,
     TicketsAComponent,
     EtiquetasComponent,
+    CertificadoComponent,
   ],
   imports: [
     CommonModule,

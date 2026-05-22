@@ -1,86 +1,83 @@
 <div class="container_ mt-5">
     <div class="card">
         <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                    <h1 class="title blancas">
-                        Producto terminado
-                    </h1>
-                    <h2 class="subtitle description blancas">
-                        Descripción
-                    </h2>
-                    <div class="iconos">
-                        <i class="fa-regular fa-circle-check"></i>
-                    </div>
+            <!-- <span class="red-bar"></span> -->
+            <section class="print-hero">
+                <div class="ink-blobs">
+                    <div class="blob cian"></div>
+                    <div class="blob magenta"></div>
+                    <div class="blob yellow"></div>
                 </div>
-            </div>
-            <br>
 
-            <div class="section">
-                <div class="container">
-                    <div class="columns is-multiline">
-
-                        <div class="column is-4" *ngFor="let prod of productos">
-                            <div class="card has-background-white-ter"
-                                style="border-radius: 15px; overflow: hidden; border-left: 8px solid #485fc7;">
-
-                                <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-content">
-                                            <p class="title is-5">{{ prod.nombre }}</p>
-                                            <p class="subtitle is-6">{{ prod.presentacion }}</p>
-                                        </div>
-                                        <div class="media-right">
-                                            <span class="tag is-info is-light is-medium">Total: {{ getTotal(prod) |
-                                                number }}</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="content">
-                                        <p class="is-size-7 has-text-weight-bold">DETALLE POR OC:</p>
-
-                                        <div class="box p-2 mb-2" *ngFor="let oc of prod.ocs"
-                                            [ngClass]="{'has-background-success-light': isEntregado(oc)}">
-                                            <div class="columns is-mobile is-vcentered">
-                                                <div class="column is-narrow">
-                                                    <input type="checkbox" [(ngModel)]="oc.seleccionada">
-                                                </div>
-                                                <div class="column">
-                                                    <span class="has-text-weight-semibold">OC: {{ oc.id }}</span><br>
-                                                    <span class="is-size-7">{{ oc.cantidad | number }} unds.</span>
-                                                </div>
-                                                <div class="column is-narrow">
-                                                    <span class="tag"
-                                                        [ngClass]="oc.preFacturada ? 'is-link' : 'is-light'">Pre-Fact</span>
-                                                    <span class="tag ml-1"
-                                                        [ngClass]="oc.facturada ? 'is-primary' : 'is-light'">Fact</span>
-                                                    <span *ngIf="isEntregado(oc)" class="icon has-text-success ml-1">
-                                                        <i class="fas fa-check-circle"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <footer class="card-footer has-background-white">
-                                    <a class="card-footer-item has-text-link has-tooltip-bottom"
-                                        data-tooltip="Notifica un nuevo despacho"
-                                        (click)="notificarDespacho(prod.nombre)">
-                                        <span class="icon mr-2"><i class="fas fa-truck"></i></span>
-                                        Despacho
-                                    </a>
-                                    <a class="card-footer-item has-text-grey">
-                                        <span class="icon mr-2"><i class="fas fa-file-invoice"></i></span>
-                                        Detalle
-                                    </a>
-                                </footer>
+                <div class="hero-body">
+                    <div class="container is-fluid">
+                        <div class="hero-wrapper">
+                            <div class="brand-accent"></div>
+                            <div class="text-content">
+                                <span class="upper-tag">Inventario</span>
+                                <h1 class="hero-title">Producto Terminado</h1>
+                                <p class="hero-subtitle">Producto finalizado para despacho.</p>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
+            <br>
+
+            <div class="accordion-wrapper">
+
+                <div class="accordion-item" *ngFor="let item of api.producto_terminado_agrupado; let i = index">
+                    <input type="checkbox" [id]="'check' + i" class="accordion-trigger">
+                    <label [for]="'check' + i" class="accordion-header">
+                        <div class="product-meta">
+                            <div class="product-info-text">
+                                <!-- Nombre del Producto -->
+                                <span class="product-name">{{ item.nombre }}</span>
+                                <div class="product-stats">
+                                    <!-- Suma total de cantidades -->
+                                    <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: #000;">
+                                        {{ item.cantidadTotal | number }}
+                                    </span>
+                                    <span class="dot"></span>
+                                    <!-- Conteo de OPs -->
+                                    <span class="stat-item">{{ item.totalOPs }} OP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chevron-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </label>
+
+                    <div class="accordion-content">
+                        <div class="detail-pane">
+                            <table class="table is-fullwidth is-striped">
+                                <thead>
+                                    <tr>
+                                        <th>OP</th>
+                                        <th class="has-text-centered">Cantidad</th>
+                                        <th class="has-text-right">Fecha de Fabricación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Filas detalladas de cada registro de Producto Terminado -->
+                                    <tr *ngFor="let detalle of item.detalles">
+                                        <td>{{ detalle.opNumero }}</td>
+                                        <td class="has-text-centered"><strong>{{ detalle.cantidad | number }}</strong>
+                                        </td>
+                                        <td class="has-text-right has-text-grey">{{detalle.fecha | date:'EEE, d MMM, h:mm a'
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>

@@ -7,30 +7,35 @@ import { AnalisisTintaComponent } from './analisis/analisis-tinta/analisis-tinta
 import { EspecificacionesComponent } from './especificaciones/especificaciones.component';
 import { AnalisisComponent } from './analisis/analisis.component';
 import { DefectosComponent } from './defectos/defectos.component';
+import { CertificadoComponent } from './certificado/certificado.component';
 
-const routes: Routes =[
+const routes: Routes = [
   {
-    path:'',
-    component:LaboratorioComponent,
-    children:[
+    path: '',
+    component: LaboratorioComponent,
+    children: [
       {
-        path:'',
-        component:LaboratorioIndexComponent
+        path: '',
+        component: LaboratorioIndexComponent
       },
       {
-        path:'especificacion',
-        component:EspecificacionesComponent
+        path: 'especificacion',
+        component: EspecificacionesComponent
       },
       {
-        path:'analisis',
-        component:AnalisisComponent
+        path: 'analisis',
+        component: AnalisisComponent
       },
       {
-        path:'defectos',
-        component:DefectosComponent
+        path: 'defectos',
+        component: DefectosComponent
+      },
+      {
+        path: 'certificado',
+        component: CertificadoComponent
       }
     ]
-}]
+  }]
 
 @NgModule({
   declarations: [],

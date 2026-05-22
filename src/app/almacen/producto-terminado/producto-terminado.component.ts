@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { OproduccionService } from 'src/app/services/oproduccion.service';
 
 @Component({
   selector: 'app-producto-terminado',
@@ -7,6 +8,8 @@ import { Component } from '@angular/core';
 })
 
 export class ProductoTerminadoComponent {
+
+  constructor(public api: OproduccionService) { }
   productos: Producto[] = [
     {
       nombre: 'Etiq. Mayonesa Mavesa',

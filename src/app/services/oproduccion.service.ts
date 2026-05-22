@@ -7,19 +7,21 @@ import { Mensaje } from '../compras/models/modelos-compra';
 })
 export class OproduccionService {
 
-  public orden!:any
-  public asignaciones!:any
-  public gestiones!:any;
-  public ticket_amarillo!:any
-  public ticket_rojo!:any
-  public mensaje!:Mensaje
+  public orden!: any
+  public asignaciones!: any
+  public gestiones!: any;
+  public ticket_amarillo!: any
+  public ticket_rojo!: any
+  public producto_terminado!: any
+  public producto_terminado_agrupado!: any;
+  public mensaje!: Mensaje
 
-  constructor(public socket:WebSocketService) { 
+  constructor(public socket: WebSocketService) {
     this.onOrdenPoligrafica()
   }
 
 
-  onOrdenPoligrafica(){
+  onOrdenPoligrafica() {
 
     this.socket.io.emit('CLIENTE:BuscarOrdenProduccion');
 
@@ -39,8 +41,9 @@ export class OproduccionService {
     });
 
     this.socket.io.emit('Cliente:Gestiones');
-    
-    this.socket.io.on('SERVER:Gestiones', (data)=>{
+    this.socket.io.emit('CLIENTE:buscarProductoTerminado');
+
+    this.socket.io.on('SERVER:Gestiones', (data) => {
       this.gestiones = data
     })
 
@@ -56,62 +59,74 @@ export class OproduccionService {
       this.ticket_rojo = data;
     })
 
+    this.socket.io.on('SERVIDOR:enviarProductoTerminado', (data) => {
+      this.producto_terminado = data
+    })
+
+    this.socket.io.on('SERVIDOR:enviarProductoTerminadoAgrupado', (data) => {
+      this.producto_terminado_agrupado = data
+    })
+
 
   }
 
-  buscarTicketRojoPorOrden(op){
+  buscarTicketRojoPorOrden(op) {
     return this.ticket_rojo.filter(tr => tr.op._id === op)
   }
 
-  buscarTicketRojoPorCerrar(op){
+  buscarTicketRojoPorCerrar(op) {
     let tickets = this.buscarTicketRojoPorOrden(op)
     return tickets.filter(t => !t.cerrado === false)
   }
 
-  buscarTicketAmarilloPorOrden(op){
+  buscarTicketAmarilloPorOrden(op) {
     return this.ticket_amarillo.filter(ta => ta.op._id === op)
   }
 
-  buscarAsignacionPorOrden(op:any){
+  buscarAsignacionPorOrden(op: any) {
     return this.asignaciones.filter(a => a.op._id === op._id)
   }
 
-  guardarOrdenProduccion(data, requisicion){
-    this.socket.io.emit('CLIENTE:NuevaOrdenProduccion',data, requisicion)
+  guardarOrdenProduccion(data, requisicion) {
+    this.socket.io.emit('CLIENTE:NuevaOrdenProduccion', data, requisicion)
   }
 
-  OrdenesPorAsignar(){
-    if(this.orden){
-      return this.orden.filter(orden => 
+  OrdenesPorAsignar() {
+    if (this.orden) {
+      return this.orden.filter(orden =>
         orden.status === 'Por asignar'
       )
     }
   }
 
-  EditarOrden(data){
+  EditarOrden(data) {
     this.socket.io.emit('CLIENTE:ActualizarOrdenProduccion', data)
   }
 
-  EditarOrden_(data){
+  EditarOrden_(data) {
     this.socket.io.emit('CLIENTE:ActualizarOrdenProduccion_', data)
   }
 
 
-  NuevaGestion(data){
+  NuevaGestion(data) {
     this.socket.io.emit('CLIENTE:NuevaGestion', data)
   }
 
-  GestionesDeFase(orden:any, fase:any){
+  GestionesDeFase(orden: any, fase: any) {
     return this.gestiones.filter(g => g.orden._id === orden._id && g.fase === fase)
   }
 
 
-  nuevoTicketAmarillo(data){
-    this.socket.io.emit('CLIENTE:NuevoTicketAmarillo',data)
+  nuevoTicketAmarillo(data) {
+    this.socket.io.emit('CLIENTE:NuevoTicketAmarillo', data)
   }
 
-  nuevoTicketRojo(data){
+  nuevoTicketRojo(data) {
     this.socket.io.emit('CLIENTE:NuevoTicketRojo', data)
+  }
+
+  etiquetarProducto(data) {
+    this.socket.io.emit('CLIENTE:NuevoProductoTerminado', data)
   }
 
 }

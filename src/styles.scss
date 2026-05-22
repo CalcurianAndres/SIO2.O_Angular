@@ -9,12 +9,13 @@
     // font-weight: normal;
     src: local('Gilroy'), url('./assets/fonts/Gilroy-ExtraBold.otf') format('truetype');
 }
+
 @font-face {
     font-family: 'Gilroy-light';
     // font-style: normal;
     // font-weight: normal;
     src: local('Gilroy-light'), url('./assets/fonts/Gilroy-Light.otf') format('truetype');
-  }
+}
 
 
 
@@ -28,152 +29,158 @@ $beige-lighter: #EFF0EB;
 $rojo-poligrafica: rgb(237, 0, 45);
 // $navBar: rgb(134, 37, 56);
 $navBar: $rojo-poligrafica;
-$card-radius:10px;
+$card-radius: 10px;
 // Update Bulma's global variables
 $family-sans-serif: 'Gilroy-light';
 $dark: $navBar;
 $grey-light: $beige-light;
 $primary: #26343d;
 $link: $rojo-poligrafica;
-$dark-color:#3c3f41;
-$dark-text:#9fadbc;
+$dark-color: #3c3f41;
+$dark-text: #9fadbc;
 $gray-hover: #e9e6e6;
-$darker-color:#c4d5db;
+$darker-color: #c4d5db;
 
 
 $body-background-color: $primary;
 // $card-background-color: $dark-color;
-$card-color:$dark-text;
-$title-color:$dark-text;
-$title-family:'Gilroy';
-$subtitle-family:'Gilroy';
-$subtitle-color:$dark-text;
-$subtitle-size:15px;
-$menu-item-color:$dark-text;
+$card-color: $dark-text;
+$title-color: $dark-text;
+$title-family: 'Gilroy';
+$subtitle-family: 'Gilroy';
+$subtitle-color: $dark-text;
+$subtitle-size: 15px;
+$menu-item-color: $dark-text;
 // $modal-card-body-background-color:$dark-color;
-$modal-card-head-background-color:$primary;
-$modal-card-title-color:$dark-text;
-$menu-item-hover-color:$dark-text;
-$menu-item-hover-background-color:$rojo-poligrafica;
+$modal-card-head-background-color: $primary;
+$modal-card-title-color: $dark-text;
+$menu-item-hover-color: $dark-text;
+$menu-item-hover-background-color: $rojo-poligrafica;
 // $input-background-color:$darker-color;
 // $input-color:$dark-text;
 // $label-color:$dark-text;
-$modal-card-head-radius:5px;
-$table-striped-row-even-background-color:$gray-hover;
-$card-shadow:0px;
-$modal-close-dimensions:80px;
-$card-shadow:0 0 1em 8px rgba(0, 0, 0, 0.1), 0 0px 0 1px rgba(0,0,0, 0.02);
+$modal-card-head-radius: 5px;
+$table-striped-row-even-background-color: $gray-hover;
+$card-shadow: 0px;
+$modal-close-dimensions: 80px;
+$card-shadow: 0 0 1em 8px rgba(0, 0, 0, 0.1), 0 0px 0 1px rgba(0, 0, 0, 0.02);
 
 
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
-  }
-  
-  ::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     -webkit-border-radius: 10px;
     border-radius: 10px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-  }
-  
-  ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255, 255, 255, 0.3);
-  }
+}
 
-.modal .modal-card .modal-card-head .red_cross{
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.modal .modal-card .modal-card-head .red_cross {
     background-color: #f03a5f;
     font-size: 50px;
 }
-  
-table tr th{
+
+table tr th {
     font-family: 'Gilroy';
 }
+
 .modal .modal-card {
     border-radius: 5px;
 }
 
-.mt-5{
+.mt-5 {
     display: block;
 }
 
-.red-bar{
-    display: block;
-    position: absolute;
-    height: 100%;
-    width: 10px;
-    background-color: $rojo-poligrafica;
-    border-right: solid 2px $dark-text;
+// .red-bar {
+//     display: block;
+//     position: absolute;
+//     height: 100%;
+//     width: 10px;
+//     background-color: $rojo-poligrafica;
+//     border-right: solid 2px $dark-text;
+// }
+
+.modal .fuente {
+    font-family: 'Gilroy';
 }
 
-.modal .fuente{
-    font-family:'Gilroy';
-}
-.card .darker{
+.card .darker {
     background-color: $darker-color;
     display: block;
     position: fixed;
     height: 95%;
     width: 84%;
 
-    overflow:scroll;
-    overflow-x:hidden;
-    
+    overflow: scroll;
+    overflow-x: hidden;
+
 
 }
 
-.modal .modal-background{
+.modal .modal-background {
     background-color: rgba(60, 63, 65, 0.30);
     backdrop-filter: blur(10px);
 }
 
-.modal .modal-card{
-    box-shadow: 0px 0px 29px 5px rgba(0,0,0,0.75);
--webkit-box-shadow: 0px 0px 29px 5px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 29px 5px rgba(0,0,0,0.75);
+.modal .modal-card {
+    box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
 }
 
 
-.container_{
+.container_ {
     display: block;
     margin-left: 15%;
     margin-right: 15px;
 }
 
 
-.green{
+.green {
     color: #48c78e;
 }
-.red{
+
+.red {
     color: #f03a5f;
     transition: filter 0.3s ease-in-out;
 }
-.red:hover{
+
+.red:hover {
     filter: brightness(1.2);
 }
 
-.color_bold{
+.color_bold {
     font-family: 'Gilroy';
     color: $dark-text;
 }
 
-.card .blancas{
+.card .blancas {
     color: white;
 }
-.blue_{
+
+.blue_ {
     color: hsl(207, 61%, 53%);
 }
-.fa-circle{
+
+.fa-circle {
     font-size: xx-small;
 }
 
-.subtitles{
+.subtitles {
     display: block;
     width: 100%;
     background-color: #3c3f41;
@@ -183,10 +190,10 @@ table tr th{
     font-family: 'Gilroy';
     font-size: large;
     padding-left: 15px;
-  }
+}
 
 
-  /* Estilos para el checkbox */
+/* Estilos para el checkbox */
 .checkbox {
     appearance: none;
     width: 20px;
@@ -201,7 +208,8 @@ table tr th{
 
 /* Estilos cuando el checkbox está marcado */
 .checkbox:checked {
-    background-color: #4caf50; /* Verde cuando está marcado */
+    background-color: #4caf50;
+    /* Verde cuando está marcado */
     border-color: #4caf50;
 }
 
@@ -229,22 +237,29 @@ table tr th{
 
 /* Estilos cuando el checkbox está deshabilitado */
 .checkbox:disabled {
-    background-color: #f0f0f0; /* Fondo gris claro */
-    border-color: #ddd; /* Borde gris claro */
-    cursor: not-allowed; /* Cursor de no permitido */
+    background-color: #f0f0f0;
+    /* Fondo gris claro */
+    border-color: #ddd;
+    /* Borde gris claro */
+    cursor: not-allowed;
+    /* Cursor de no permitido */
 }
 
 .checkbox:disabled:checked {
-    background-color: #b0b0b0; /* Fondo gris cuando está marcado */
-    border-color: #b0b0b0; /* Borde gris cuando está marcado */
+    background-color: #b0b0b0;
+    /* Fondo gris cuando está marcado */
+    border-color: #b0b0b0;
+    /* Borde gris cuando está marcado */
 }
 
 .checkbox:disabled:hover {
-    border-color: #ddd; /* No cambia el borde cuando está deshabilitado */
+    border-color: #ddd;
+    /* No cambia el borde cuando está deshabilitado */
 }
 
 .checkbox:disabled:focus {
-    box-shadow: none; /* El enfoque no se ve cuando está deshabilitado */
+    box-shadow: none;
+    /* El enfoque no se ve cuando está deshabilitado */
 }
 
 

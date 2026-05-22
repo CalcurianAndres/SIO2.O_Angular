@@ -57,4 +57,7 @@ export class ProductosService {
   buscarHistorialPorProducto(producto){
     return this.historial.filter((historial)=> historial.producto === producto)
   }
+
+
+  
 }
