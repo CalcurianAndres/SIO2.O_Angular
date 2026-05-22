@@ -17,20 +17,44 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 })
 export class NavbarComponent implements OnInit {
 
-  // Puedes inicializarlo con la ruta actual si deseas.
   menuAbierto: string = '';
+  _isCollapsed = true;
+  isPinned = false;
+
+  get isCollapsed(): boolean { return this._isCollapsed; }
+  set isCollapsed(val: boolean) {
+    this._isCollapsed = val;
+    document.documentElement.style.setProperty('--sidebar-width', val ? '65px' : '240px');
+  }
 
   toggleMenu(seccion: string) {
     this.menuAbierto = (this.menuAbierto === seccion) ? '' : seccion;
   }
 
-  // Estos métodos ahora solo sirven para el toggle
   showCompras() { this.toggleMenu('compras'); }
   showVentas() { this.toggleMenu('ventas'); }
   showInventario() { this.toggleMenu('inventario'); }
   ShowLaboratorio() { this.toggleMenu('laboratorio'); }
   showProduccion() { this.toggleMenu('produccion'); }
   showEmpresa() { this.toggleMenu('empresa'); }
+
+  onMouseEnter() {
+    this.isCollapsed = false;
+  }
+
+  onMouseLeave() {
+    if (!this.isPinned) {
+      this.isCollapsed = true;
+    }
+  }
+
+  togglePin(event: Event) {
+    event.stopPropagation();
+    this.isPinned = !this.isPinned;
+    if (this.isPinned) {
+      this.isCollapsed = false;
+    }
+  }
 
   constructor(public router: Router,
     public Login: LoginService,
@@ -43,7 +67,6 @@ export class NavbarComponent implements OnInit {
     public devolucuiones: DevolucionesService
   ) {
     this.usuario = Login.usuario;
-    console.log(this.usuario)
   }
 
   public Menu_: any = []
@@ -63,6 +86,7 @@ export class NavbarComponent implements OnInit {
 
 
   ngOnInit() {
+    document.documentElement.style.setProperty('--sidebar-width', '65px');
     const url = this.router.url;
     if (url.includes('compras')) this.menuAbierto = 'compras';
     else if (url.includes('ventas')) this.menuAbierto = 'ventas';

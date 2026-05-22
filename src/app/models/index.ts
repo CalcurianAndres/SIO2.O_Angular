@@ -1,0 +1,20 @@
+export {
+  Origenes,
+  Grupo,
+  Fabricante,
+  Fabricante_populated,
+  Materiales,
+  Proveedores,
+  Mensaje,
+  Gramaje,
+  Calibre,
+  Cobb,
+  EspecificacionSustrato,
+  AnalisisSustrato,
+  AnalisisSustrato2,
+  Tinta,
+  Barniz,
+  Pegamento,
+  Producto_,
+  Producto
+} from '../compras/models/modelos-compra';

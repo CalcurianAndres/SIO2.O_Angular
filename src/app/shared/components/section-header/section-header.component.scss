@@ -1,0 +1,38 @@
+.title_ {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.title_.red {
+    background: linear-gradient(135deg, rgb(213, 35, 77), rgba(192, 26, 63));
+}
+
+.title_.green {
+    background: linear-gradient(135deg, rgb(76, 175, 80), rgb(56, 231, 147));
+}
+
+.title_.purple {
+    background: linear-gradient(135deg, rgb(92, 44, 73), rgba(156, 82, 126));
+}
+
+.title_.blue {
+    background: linear-gradient(135deg, rgb(38, 52, 61), rgb(55, 75, 90));
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.iconos {
+    position: absolute;
+    right: 45px;
+    top: -15px;
+}
+
+.iconos i {
+    font-size: 130px;
+    transform: rotate(30deg);
+    color: rgba(255, 255, 255, 0.50);
+}

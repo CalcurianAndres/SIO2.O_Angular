@@ -33,7 +33,7 @@ const routes: Routes = [
   {
     path: 'maquinas',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./fases-ymaquinarias/fases-routing.module').then(m => m.FasesRoutingModule)
+    loadChildren: () => import('./fases-ymaquinarias/fases-ymaquinarias.module').then(m => m.FasesYmaquinariasModule)
   },
   {
     path: 'ventas',

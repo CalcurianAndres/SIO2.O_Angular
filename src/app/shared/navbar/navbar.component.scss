@@ -1,227 +1,100 @@
 .menu__ {
-    display: block;
-    position: fixed;
-    height: 100%;
-    width: 15%;
-    // background-color: rgb(55, 75, 90);
-    background-color: rgb(38, 52, 61);
-    backdrop-filter: blur(10px);
-    z-index: 1;
-    //     box-shadow: -2px 3px 5px 0px rgba(0,0,0,0.75);
-    // -webkit-box-shadow: -2px 3px 5px 0px rgba(0,0,0,0.75);
-    // -moz-box-shadow: -2px 3px 5px 0px rgba(0,0,0,0.75);
-    padding: 30px;
-    color: #9fadbc;
-    top: 0px
-}
-
-.close {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    cursor: pointer;
-    color: gray;
-}
-
-.menu_ {
-    cursor: pointer;
-    animation: bounce;
-    /* referring directly to the animation's @keyframe declaration */
-    animation-duration: 1s;
-}
-
-.down {
-    animation: heartBeat;
-    /* referring directly to the animation's @keyframe declaration */
-    animation-duration: 1s;
-}
-
-.red {
-    background-color: red;
-}
-
-#logo_menu {
-    margin-left: 20%;
-}
-
-.infoUsuario {
-    position: absolute;
-    bottom: 10px;
-}
-
-.popup-menu {
-    display: block;
-    background-color: white;
-    padding: 5px;
-    color: black;
-    margin: 0px;
-    width: 100%;
-    border-radius: 5px;
-}
-
-.popup-menu a {
-    color: black;
-    margin-bottom: 10px;
-}
-
-.popup-menu a:hover {
-    color: black;
-    margin-bottom: 10px;
-    background-color: beige;
-}
-
-.formated {
-    display: block;
-    padding: 5px;
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-
-.usuario {
-    position: absolute;
-    display: block;
-    width: 80%;
-    bottom: 10px;
-    margin-bottom: 0px;
-    background-color: rgba(255, 255, 255, .2);
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 0px;
-    max-height: 40px;
-    // text-align: center;
-}
-
-.iconos {
-    position: absolute;
-    display: block;
-    width: 80%;
-    bottom: 60px;
-    margin-bottom: 0px;
-    // background-color: rgba(255,255,255, .2);
-    // border-radius: 5px;
-    // overflow: hidden;
-    padding: 0px;
-    // max-height: 40px;
-    // text-align: center;
-}
-
-.usuario span {
-    position: relative;
-    top: -30%;
-    /* Move down 50% of the height */
-    // transform: translateY(-50%); /* Move back up 50% of its own height */
-}
-
-.fa-cog:hover {
-    color: rgb(112, 112, 112);
-}
-
-.users_information {
-    display: block;
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-    margin-top: 20px;
-    margin-bottom: 0px;
-    // background-color: red;
-    max-height: 20px;
-}
-
-.popup_menu {
-    position: absolute;
-    display: block;
-    width: 100%;
-    bottom: 60px;
-    left: 5px;
-    text-align: center;
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
-}
-
-.popup_menu a {
-    position: relative;
-    display: block;
-    background-color: white;
-    color: black;
-    width: 100%;
-}
-
-.popup_menu a:hover {
-    position: relative;
-    display: block;
-    background-color: white;
-    color: rgb(70, 70, 70);
-    width: 100%;
-}
-
-.triangulo-abajo {
-    position: relative;
-    margin-bottom: -15px;
-    right: -88%;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 10px solid #fff;
-    /* Cambia el color y el tamaño según tus necesidades */
-}
-
-
-.asignacion-container {
-    display: flex;
-    align-items: center;
-    /* Centra el texto y el círculo verticalmente */
-    gap: 5px;
-    /* Espacio entre el texto y el círculo */
-    text-decoration: none;
-    /* Opcional: quita el subrayado si es un enlace */
-}
-
-.blinking-light {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
-    animation: blink 0.5s infinite alternate;
-}
-
-/* Animación de parpadeo */
-@keyframes blink {
-    0% {
-        opacity: 1;
-        /* Estado visible */
-    }
-
-    100% {
-        opacity: 0.2;
-        /* Estado más tenue */
-    }
-}
-
-/* Contenedor principal - Manteniendo tu clase original */
-.menu__ {
-    width: 240px;
-    height: 100vh;
-    // background-color: #1a1c23;
-    /* Manteniendo tu fondo */
-    color: #9fadbc;
     display: flex;
     flex-direction: column;
+    position: fixed;
+    height: 100%;
+    width: 240px;
+    background-color: rgb(38, 52, 61);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
     padding: 10px 0;
-    overflow-x: hidden;
+    color: #9fadbc;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    white-space: nowrap;
+}
+
+.menu__.collapsed {
+    width: 65px;
+}
+
+.menu__.collapsed .logo-container img {
+    width: 30px;
+    margin-left: 0;
+}
+
+.menu__.collapsed .nav-label,
+.menu__.collapsed .arrow,
+.menu__.collapsed .user-text,
+.menu__.collapsed .settings-icon,
+.menu__.collapsed .submenu,
+.menu__.collapsed .menu-divider,
+.menu__.collapsed .pin-btn {
+    display: none;
+}
+
+.menu__.collapsed .parent-link {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.menu__.collapsed .parent-link i:first-child {
+    width: auto;
+    font-size: 18px;
+}
+
+.menu__.collapsed .iconos-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.menu__.collapsed .user-profile-trigger {
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.menu__.collapsed .avatar-wrapper {
+    margin: 0;
+}
+
+.menu__.collapsed #logo_menu {
+    margin-left: 0;
 }
 
 .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 15px;
-    text-align: center;
+    position: relative;
+}
+
+.pin-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.3s, background 0.3s;
+}
+
+.pin-btn:hover {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.pin-btn.pinned {
+    color: #ff4444;
 }
 
 .menu-divider {
@@ -236,7 +109,6 @@
     padding: 10px 15px;
 }
 
-/* Estilo de los items del menú */
 .menu-list-wrapper {
     list-style: none;
     padding: 0;
@@ -256,6 +128,7 @@
 
 .parent-link i:first-child {
     width: 25px;
+    font-size: 16px;
 }
 
 .parent-link .arrow {
@@ -269,7 +142,6 @@
     color: #ffffff;
 }
 
-/* Estado Activo (Rojo) */
 .parent-link.is-active {
     background-color: #ff4444;
     color: white !important;
@@ -277,7 +149,6 @@
     box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
 }
 
-/* Submenú Animado */
 .submenu {
     list-style: none;
     max-height: 0;
@@ -288,7 +159,6 @@
 
 .is-expanded .submenu {
     max-height: 500px;
-    /* Suficiente para expandir */
     margin: 5px 0;
 }
 
@@ -316,7 +186,6 @@
     font-weight: bold;
 }
 
-/* Footer Iconos */
 .iconos-footer {
     display: flex;
     justify-content: space-around;
@@ -354,19 +223,14 @@
     box-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
 }
 
-/* Sección Usuario */
-/* Contenedor del área de usuario */
 .user-area {
     position: relative;
-    /* Esto es vital para que el popup se posicione respecto a este div */
     padding: 10px 15px;
     margin-top: auto;
-    /* Empuja el perfil al fondo del sidebar */
     width: 100%;
     box-sizing: border-box;
 }
 
-/* El botón que activas */
 .user-profile-trigger {
     display: flex;
     align-items: center;
@@ -424,29 +288,29 @@
     color: #475569;
 }
 
-/* EL POPUP QUE NO SE VEÍA */
 .profile-menu {
     position: absolute;
-    /* Controlamos la posición: */
     bottom: calc(100% + 10px);
-    /* Se posiciona JUSTO ARRIBA del trigger */
     left: 15px;
     right: 15px;
-
     background: #1e2028;
-    /* Color sólido para asegurar visibilidad */
     border: 1px solid #3e4451;
     border-radius: 12px;
     padding: 8px;
-
-    /* Z-INDEX ALTO para que flote sobre todo */
     z-index: 9999;
-
-    /* Sombra fuerte para despegarlo del fondo */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Decoración del menú */
+.profile-menu.show-menu {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
 .menu-header-mini {
     font-size: 10px;
     font-weight: bold;
@@ -482,35 +346,161 @@
     background: rgba(255, 68, 68, 0.1);
 }
 
-.menu-divider {
-    height: 1px;
-    background: #3e4451;
-    margin: 5px 8px;
+#logo_menu {
+    margin-left: 20%;
+    transition: all 0.3s ease;
 }
 
-/* Estado inicial: oculto */
-.profile-menu {
+.close {
     position: absolute;
-    bottom: calc(100% + 10px);
-    left: 15px;
     right: 15px;
-    background: #1e2028;
-    border: 1px solid #3e4451;
-    border-radius: 12px;
-    padding: 8px;
-    z-index: 9999;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-
-    /* Animación de entrada */
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    top: 15px;
+    cursor: pointer;
+    color: gray;
 }
 
-/* Estado activo: visible */
-.profile-menu.show-menu {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
+.menu_ {
+    cursor: pointer;
+    animation: bounce;
+    animation-duration: 1s;
+}
+
+.down {
+    animation: heartBeat;
+    animation-duration: 1s;
+}
+
+.red {
+    background-color: red;
+}
+
+.infoUsuario {
+    position: absolute;
+    bottom: 10px;
+}
+
+.popup-menu {
+    display: block;
+    background-color: white;
+    padding: 5px;
+    color: black;
+    margin: 0px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.popup-menu a {
+    color: black;
+    margin-bottom: 10px;
+}
+
+.popup-menu a:hover {
+    color: black;
+    margin-bottom: 10px;
+    background-color: beige;
+}
+
+.formated {
+    display: block;
+    padding: 5px;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.usuario {
+    position: absolute;
+    display: block;
+    width: 80%;
+    bottom: 10px;
+    margin-bottom: 0px;
+    background-color: rgba(255, 255, 255, .2);
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 0px;
+    max-height: 40px;
+}
+
+.usuario span {
+    position: relative;
+    top: -30%;
+}
+
+.fa-cog:hover {
+    color: rgb(112, 112, 112);
+}
+
+.users_information {
+    display: block;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    max-height: 20px;
+}
+
+.popup_menu {
+    position: absolute;
+    display: block;
+    width: 100%;
+    bottom: 60px;
+    left: 5px;
+    text-align: center;
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+}
+
+.popup_menu a {
+    position: relative;
+    display: block;
+    background-color: white;
+    color: black;
+    width: 100%;
+}
+
+.popup_menu a:hover {
+    position: relative;
+    display: block;
+    background-color: white;
+    color: rgb(70, 70, 70);
+    width: 100%;
+}
+
+.triangulo-abajo {
+    position: relative;
+    margin-bottom: -15px;
+    right: -88%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid #fff;
+}
+
+.asignacion-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.blinking-light {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+    animation: blink 0.5s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.2; }
 }

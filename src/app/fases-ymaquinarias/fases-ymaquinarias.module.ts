@@ -16,7 +16,7 @@ import { NuevoProductoComponent } from './productos/nuevo-producto/nuevo-product
 import { ClientesComponent } from './productos/clientes/clientes.component';
 import { NewProductoComponent } from './productos/new-producto/new-producto.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ServiceWorkerModule } from '@angular/service-worker';
+
 import { CategoriasComponent } from './categorias/categorias.component';
 import { NuevaCategoriaComponent } from './categorias/nueva-categoria/nueva-categoria.component';
 import { PreparacionTintasComponent } from './preparacion-tintas/preparacion-tintas.component';
@@ -53,8 +53,7 @@ import { CambiosComponent } from './productos/cambios/cambios.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    DragDropModule,
-    ServiceWorkerModule
+    DragDropModule
   ]
 })
 export class FasesYmaquinariasModule { }

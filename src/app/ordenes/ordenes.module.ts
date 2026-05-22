@@ -15,14 +15,13 @@ import { NewClienteComponent } from './clientes/new-cliente/new-cliente.componen
 import { NuevaGestionComponent } from './nueva-gestion/nueva-gestion.component';
 import { PlanificacionComponent } from './produccion/planificacion/planificacion.component';
 import { DevolucionesComponent } from './produccion/devoluciones/devoluciones.component';
-import { ComentariosComponent } from '../almacen/recepcion/comentarios/comentarios.component';
 import { AlmacenModule } from '../almacen/almacen.module';
 import { InformacionComponent } from './produccion/informacion/informacion.component';
 import { AsignacionesComponent } from './produccion/asignaciones/asignaciones.component';
 import { DevolucionesProfileComponent } from './produccion/devoluciones-profile/devoluciones-profile.component';
 import { SolicitudesComponent } from './produccion/solicitudes/solicitudes.component';
 import { SolicitudesProfileComponent } from './produccion/solicitudes-profile/solicitudes-profile.component';
-import { SafePipe } from '../../../src/app/safe.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -41,9 +40,7 @@ import { SafePipe } from '../../../src/app/safe.pipe';
     AsignacionesComponent,
     DevolucionesProfileComponent,
     SolicitudesComponent,
-    AsignacionesComponent,
-    SolicitudesProfileComponent,
-    SafePipe
+    SolicitudesProfileComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +52,7 @@ import { SafePipe } from '../../../src/app/safe.pipe';
     ReactiveFormsModule,
     ResizableModule,
     AlmacenModule,
-    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class OrdenesModule { }

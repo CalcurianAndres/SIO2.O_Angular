@@ -1,0 +1,28 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*", "dist/**/*", "node_modules/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+        "prettier/prettier": ["warn", { "singleQuote": true, "semi": true, "tabWidth": 2, "trailingComma": "all", "printWidth": 120 }]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:prettier/recommended"],
+      "rules": {}
+    }
+  ]
+}

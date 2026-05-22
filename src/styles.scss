@@ -143,10 +143,15 @@ table tr th {
 }
 
 
+:root {
+  --sidebar-width: 65px;
+}
+
 .container_ {
     display: block;
-    margin-left: 15%;
+    margin-left: var(--sidebar-width);
     margin-right: 15px;
+    transition: margin-left 0.3s ease;
 }
 
 
@@ -287,4 +292,10 @@ table tr th {
 @import "../node_modules/bulma/css/bulma.css";
 @import "../node_modules/animate.css/animate.css";
 
-@import "../node_modules/bulma-o-steps/bulma-steps.css"
+@import "../node_modules/bulma-o-steps/bulma-steps.css";
+
+* {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
