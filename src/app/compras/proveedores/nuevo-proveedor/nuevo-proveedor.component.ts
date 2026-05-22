@@ -5,15 +5,14 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-proveedor',
-  standalone: false, templateUrl: './nuevo-proveedor.component.html',
-  styleUrls: ['./nuevo-proveedor.component.scss']
+  standalone: false,
+  templateUrl: './nuevo-proveedor.component.html',
+  styleUrls: ['./nuevo-proveedor.component.scss'],
 })
 export class NuevoProveedorComponent implements OnInit {
-
-
   @Input() nuevo!: boolean;
   @Input() editar!: boolean;
-  @Input() proveedor!: Proveedores
+  @Input() proveedor!: Proveedores;
   @Input() api: any;
   @Input() cargando!: boolean;
   @Output() onCloseModal = new EventEmitter();
@@ -22,20 +21,18 @@ export class NuevoProveedorComponent implements OnInit {
   public proveedor_directo: any = false;
   public nombre: string = '';
   public direccion: string = '';
-  public rif: string = ''
+  public rif: string = '';
   public contacto_nombre: string = '';
   public contacto_numero: string = '';
-  public contacto_email: string = ''
-  public fabricante: any
+  public contacto_email: string = '';
+  public fabricante: any;
   public contactos: any = [];
   public fabricantes_array: any = [];
   public fabricantes_array_name: any = [];
 
-  constructor(public fabricantes: FabricantesService) {
+  constructor(public fabricantes: FabricantesService) {}
 
-  }
-
-  public editar_contacto: boolean[] = []
+  public editar_contacto: boolean[] = [];
 
   ngOnInit(): void {
     var phrases = [
@@ -57,8 +54,6 @@ export class NuevoProveedorComponent implements OnInit {
     setInterval(changeRandomPhrase, 2000);
   }
 
-
-
   cerrar() {
     this.nombre = '';
     this.direccion = '';
@@ -76,7 +71,7 @@ export class NuevoProveedorComponent implements OnInit {
   }
 
   EliminarContacto(i: number) {
-    this.contactos.splice(i, 1)
+    this.contactos.splice(i, 1);
   }
 
   formatRif(event: any) {
@@ -104,7 +99,6 @@ export class NuevoProveedorComponent implements OnInit {
     } else {
       this.nombre = '';
       (<HTMLInputElement>document.getElementById('nombre')).disabled = false;
-
     }
   }
 
@@ -112,13 +106,13 @@ export class NuevoProveedorComponent implements OnInit {
     if (!this.fabricantes_array.includes(this.fabricantes.fabricantes[this.fabricante]._id)) {
       this.fabricantes_array.push(this.fabricantes.fabricantes[this.fabricante]._id);
       this.fabricantes_array_name.push(this.fabricantes.fabricantes[this.fabricante].alias);
-      this.fabricante = ''
+      this.fabricante = '';
     }
   }
   addFabricante_() {
     if (!this.proveedor.fabricantes.includes(this.fabricantes.fabricantes[this.fabricante])) {
       this.proveedor.fabricantes.push(this.fabricantes.fabricantes[this.fabricante]);
-      this.fabricante = ''
+      this.fabricante = '';
     }
   }
   EliminarFabricante(i: number) {
@@ -133,13 +127,11 @@ export class NuevoProveedorComponent implements OnInit {
   }
 
   NuevoContacto() {
-    this.contactos.push(
-      {
-        nombre: this.contacto_nombre,
-        numero: this.contacto_numero,
-        email: this.contacto_email
-      }
-    )
+    this.contactos.push({
+      nombre: this.contacto_nombre,
+      numero: this.contacto_numero,
+      email: this.contacto_email,
+    });
     this.contacto_email = '';
     this.contacto_nombre = '';
     this.contacto_numero = '';
@@ -149,8 +141,8 @@ export class NuevoProveedorComponent implements OnInit {
     this.proveedor.contactos.push({
       nombre: this.contacto_nombre,
       numero: this.contacto_numero,
-      email: this.contacto_email
-    })
+      email: this.contacto_email,
+    });
     this.contacto_email = '';
     this.contacto_nombre = '';
     this.contacto_numero = '';
@@ -162,9 +154,8 @@ export class NuevoProveedorComponent implements OnInit {
       nombre: this.nombre,
       direccion: this.direccion,
       rif: this.rif,
-      contactos: this.contactos
-
-    }
+      contactos: this.contactos,
+    };
 
     this.api.nuevoProveedor(data);
     this.cerrar();
@@ -175,6 +166,4 @@ export class NuevoProveedorComponent implements OnInit {
     this.api.editarProveedores(this.proveedor);
     this.cerrar();
   }
-
-
 }

@@ -13,7 +13,6 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ConfDevolucionesComponent } from './conf-devoluciones/conf-devoluciones.component';
 import { ConfSolicitudComponent } from './conf-solicitud/conf-solicitud.component';
 
-
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -25,14 +24,9 @@ import { ConfSolicitudComponent } from './conf-solicitud/conf-solicitud.componen
     EtiquetasComponent,
     NotificationsComponent,
     ConfDevolucionesComponent,
-    ConfSolicitudComponent
+    ConfSolicitudComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  exports:[NavbarComponent]
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  exports: [NavbarComponent],
 })
-export class NavbarModule { }
+export class NavbarModule {}

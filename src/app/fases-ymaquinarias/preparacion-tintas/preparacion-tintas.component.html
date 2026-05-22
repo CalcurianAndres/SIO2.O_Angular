@@ -1,90 +1,87 @@
 <app-nueva-formula
-[nuevo]="nuevo"
-[formular]="formular"
-[preparacion]="preparacion"
-[id]="id"
-(onCloseModal)="cerrar()"
-(onUpdateData)="updateFormulas_($event.pantone)">
-
+  [nuevo]="nuevo"
+  [formular]="formular"
+  [preparacion]="preparacion"
+  [id]="id"
+  (onCloseModal)="cerrar()"
+  (onUpdateData)="updateFormulas_($event.pantone)"
+>
 </app-nueva-formula>
-<div class="container_ mt-5 ">
-    <div class="card">
-      <div class="card-content darker">
-        <div class="card mt-5 title_">
-          <!-- <span class="red-bar"></span> -->
-          <div class="card-content">
-            <h1 class="title blancas">
-              Tintas
-            </h1>
-            <h2 class="subtitle blancas">
-              Fórmulas y solicitudes para la preparación de tinta
-            </h2>
+<app-page-layout>
+  <app-section-header
+    title="Tintas"
+    description="Fórmulas y solicitudes para la preparación de tinta"
+    icon="fa-industry"
+    color="purple"
+  ></app-section-header>
+  <br />
+  <div class="columns">
+    <div class="column is-3">
+      <div class="card">
+        <div class="card-content">
+          <div class="subtitles">Colores Pantone</div>
+          <div class="color-list">
+            <div
+              class="color-item"
+              *ngFor="let pantones of materiales.PantonesSolo()"
+              (click)="MostrarInfo(pantones.codigo, pantones.nombre)"
+            >
+              <div class="color-box" [style.background-color]="pantones.rgb"></div>
+              <span>Pantone {{ pantones.codigo }}</span>
+            </div>
           </div>
         </div>
-        <br>
-        <div class="columns">
-            <div class="column is-3">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="subtitles">Colores Pantone</div>
-                        <div class="color-list">
-                            <div class="color-item" *ngFor="let pantones of materiales.PantonesSolo()" (click)="MostrarInfo(pantones.codigo, pantones.nombre)">
-                                <div class="color-box" [style.background-color]="pantones.rgb"></div>
-                                <span>Pantone {{pantones.codigo}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="card-content" >
-                        <button class="button is-success" (click)="nuevo = true" [disabled]="!_seBusco">
-                            <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                            <span>Fórmula</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="subtitles">
-                            Nombre
-                        </div>
-                        <br>
-                        <span class="info">
-                            <ul>
-                                <li>{{name}}</li>
-                            </ul> 
-                        </span>
-                        <br>
-                        <div class="subtitles">
-                            Preparación
-                        </div>
-                        <br>
-                        
-                        <ng-container *ngIf="_seBusco">
-                            <div class="empty-message" *ngIf="formulas_.length < 1">
-                                <p>No hay fórmulas disponibles.</p>
-                            </div>
-                            <ng-container *ngFor="let formula of formulas_;index as i">
-                                <span class="preparacion">
-                                    Formula {{i+1}} <i class="fas fa-edit green" (click)="editar(formula)"></i> <i class="fas fa-trash-alt red"></i>
-                                </span> <br>
-                                <table class="table is-fullwidth is-striped">
-                                    <tbody>
-                                        <tr *ngFor="let material of formula.formula">
-                                            <td>{{material.material.nombre}} {{material.material.serie}} ({{material.material.fabricante.alias}})</td>
-                                            <td>{{material.cantidad}}kg</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </ng-container>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <br />
+      <div class="card">
+        <div class="card-content">
+          <button class="button is-success" (click)="nuevo = true" [disabled]="!_seBusco">
+            <span class="icon"><i class="fas fa-plus-circle"></i></span>
+            <span>Fórmula</span>
+          </button>
         </div>
       </div>
     </div>
-</div>
+    <div class="column">
+      <div class="card">
+        <div class="card-content">
+          <div class="subtitles">Nombre</div>
+          <br />
+          <span class="info">
+            <ul>
+              <li>{{ name }}</li>
+            </ul>
+          </span>
+          <br />
+          <div class="subtitles">Preparación</div>
+          <br />
+
+          <ng-container *ngIf="_seBusco">
+            <div class="empty-message" *ngIf="formulas_.length < 1">
+              <p>No hay fórmulas disponibles.</p>
+            </div>
+            <ng-container *ngFor="let formula of formulas_; index as i">
+              <span class="preparacion">
+                Formula {{ i + 1 }} <i class="fas fa-edit green" (click)="editar(formula)"></i>
+                <i class="fas fa-trash-alt red"></i>
+              </span>
+              <br />
+              <table class="table is-fullwidth is-striped">
+                <tbody>
+                  <tr *ngFor="let material of formula.formula">
+                    <td>
+                      {{ material.material.nombre }} {{ material.material.serie }} ({{
+                        material.material.fabricante.alias
+                      }})
+                    </td>
+                    <td>{{ material.cantidad }}kg</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

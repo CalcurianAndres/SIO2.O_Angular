@@ -4,120 +4,116 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-departamentos',
-  standalone: false,templateUrl: './departamentos.component.html',
-  styleUrls: ['./departamentos.component.scss']
+  standalone: false,
+  templateUrl: './departamentos.component.html',
+  styleUrls: ['./departamentos.component.scss'],
 })
-export class DepartamentosComponent implements OnInit{
-
+export class DepartamentosComponent implements OnInit {
   ngOnInit(): void {
-    this.cargosPrincipales = this.Cargos.filter(cargo => cargo.superior === '#');
+    this.cargosPrincipales = this.Cargos.filter((cargo) => cargo.superior === '#');
   }
 
-  constructor(public api:DepartamentosService,
-  ){
-  }
+  constructor(public api: DepartamentosService) {}
 
-  public unidad:any = {
-    nombre:'',
-    superior:'',
-    color:''
-  }
+  public unidad: any = {
+    nombre: '',
+    superior: '',
+    color: '',
+  };
 
-
-  cargosPrincipales:any = []
-  Departamentos:any = [
+  cargosPrincipales: any = [];
+  Departamentos: any = [
     // 'Desarrollo'
-  ]
+  ];
 
-  Cargos:any = []
+  Cargos: any = [];
 
   public Nuevo = false;
   public cargo = false;
   public area = false;
 
-  publicAreas:any = []
-  public DepartamentoAbierto= ''
+  publicAreas: any = [];
+  public DepartamentoAbierto = '';
 
   public cargo_ = {
-    nombre:'',
-    departamento:'',
-    sup:'#'
+    nombre: '',
+    departamento: '',
+    sup: '#',
+  };
+
+  buscarCargo(n: any) {
+    return this.Cargos.filter((x) => x.superior === n);
   }
 
-  buscarCargo(n:any){
-    return this.Cargos.filter(x=> x.superior === n)
-  }
-
-  showAreas(dep:any){
-    console.log(dep)
-    this.publicAreas = this.filtrarDepartamento(dep.nombre)
-    console.log(this.publicAreas)
+  showAreas(dep: any) {
+    console.log(dep);
+    this.publicAreas = this.filtrarDepartamento(dep.nombre);
+    console.log(this.publicAreas);
     this.DepartamentoAbierto = dep.nombre;
     this.area = true;
   }
 
-  obtenerSubcargos(superior: string, departamento:string): any {
-    return this.Cargos.filter(cargo => cargo.sup === superior && cargo.departamento === departamento);
+  obtenerSubcargos(superior: string, departamento: string): any {
+    return this.Cargos.filter((cargo) => cargo.sup === superior && cargo.departamento === departamento);
   }
 
-  update(e){
-    this.cargosPrincipales = this.api.subunidad.filter(cargo => cargo.sup === '#');
-    this.publicAreas = this.filtrarDepartamento(e)
+  update(e) {
+    this.cargosPrincipales = this.api.subunidad.filter((cargo) => cargo.sup === '#');
+    this.publicAreas = this.filtrarDepartamento(e);
   }
 
-  filtrarDepartamento(nombre:any){
-    return this.api.subunidad.filter(cargo => cargo.departamento === nombre)
+  filtrarDepartamento(nombre: any) {
+    return this.api.subunidad.filter((cargo) => cargo.departamento === nombre);
   }
 
-  eliminarDepartamento(dep:any){
+  eliminarDepartamento(dep: any) {
     Swal.fire({
-      icon:'question',
-      title:'¿Eliminar departamento?',
-      text:'¿Estas seguro que quieres eliminar este departamento?. El mismo no podra ser recuperdo luego.',
+      icon: 'question',
+      title: '¿Eliminar departamento?',
+      text: '¿Estas seguro que quieres eliminar este departamento?. El mismo no podra ser recuperdo luego.',
       showDenyButton: true,
       showCancelButton: false,
-      confirmButtonText: "Eliminar",
+      confirmButtonText: 'Eliminar',
       denyButtonText: `No eliminar`,
-      confirmButtonColor:'#f03a5f',
-      denyButtonColor:'#48c78e'
+      confirmButtonColor: '#f03a5f',
+      denyButtonColor: '#48c78e',
     }).then((result) => {
-      if(result.isConfirmed){
-        this.api.EliminarDepartamento(dep)
+      if (result.isConfirmed) {
+        this.api.EliminarDepartamento(dep);
         setTimeout(() => {
           Swal.fire({
-            text:this.api.mensaje.mensaje,
-            icon:this.api.mensaje.icon,
-            position:'top-end',
-            timerProgressBar:true,
-            showConfirmButton:false,
-            toast:true,
-            timer:5000
-          })
+            text: this.api.mensaje.mensaje,
+            icon: this.api.mensaje.icon,
+            position: 'top-end',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            timer: 5000,
+          });
         }, 500);
-      } else if(result.isDenied){
+      } else if (result.isDenied) {
         Swal.fire({
-          text:'El departamento aun se conserva',
-          icon:'success',
-          position:'top-end',
-          timerProgressBar:true,
-          showConfirmButton:false,
-          toast:true,
-          timer:5000
-        })
+          text: 'El departamento aun se conserva',
+          icon: 'success',
+          position: 'top-end',
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          timer: 5000,
+        });
       }
     });
-    }
-
-    EditarSubUnidad(e){
-      this.cargo_ = e;
-      this.area = false;
-      this.cargo = true;
-    }
-    EditarSubSubUnidad(e){
-      console.log('test');
-      this.cargo_ = e;
-      this.area = false;
-      this.cargo = true;
-    }
-
   }
+
+  EditarSubUnidad(e) {
+    this.cargo_ = e;
+    this.area = false;
+    this.cargo = true;
+  }
+  EditarSubSubUnidad(e) {
+    console.log('test');
+    this.cargo_ = e;
+    this.area = false;
+    this.cargo = true;
+  }
+}

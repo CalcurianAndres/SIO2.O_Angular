@@ -6,8 +6,9 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
 
 @Component({
   selector: 'app-nuevo-fabricante',
-  standalone: false, templateUrl: './nuevo-fabricante.component.html',
-  styleUrls: ['./nuevo-fabricante.component.scss']
+  standalone: false,
+  templateUrl: './nuevo-fabricante.component.html',
+  styleUrls: ['./nuevo-fabricante.component.scss'],
 })
 export class NuevoFabricanteComponent implements OnInit {
   @Input() nuevo: any;
@@ -21,16 +22,16 @@ export class NuevoFabricanteComponent implements OnInit {
   alias: string = '';
   pais: string = '';
   estado: string = '';
-  grupo: string = ''
+  grupo: string = '';
   proveedor_directo: boolean = false;
 
-  p_nombre: string = ''
-  p_telefono: string = ''
-  p_correo: string = ''
-  p_contacto: any = []
-  p_direccion: string = ''
-  p_rif: string = ''
-  p_cargo: string = ''
+  p_nombre: string = '';
+  p_telefono: string = '';
+  p_correo: string = '';
+  p_contacto: any = [];
+  p_direccion: string = '';
+  p_rif: string = '';
+  p_cargo: string = '';
 
   proveedor_directo_selected: any;
   proveedor_directo_abierto: boolean = false;
@@ -38,12 +39,12 @@ export class NuevoFabricanteComponent implements OnInit {
   elementosVisibles: boolean[] = [];
 
   public origenes: Array<Origenes> = [];
-  public grupos: Array<Grupo> = []
+  public grupos: Array<Grupo> = [];
 
-  constructor(public api: FabricantesService,
-    public proveedor_service: ProveedoresService) {
-
-  }
+  constructor(
+    public api: FabricantesService,
+    public proveedor_service: ProveedoresService,
+  ) {}
 
   ngOnInit(): void {
     var phrases = [
@@ -73,7 +74,6 @@ export class NuevoFabricanteComponent implements OnInit {
     this.elementosVisibles[i] = false;
   }
 
-
   // //genera una funcion llamada editar_() que coloque agregue es estilo display:none al elemento con id contacto_i
   // editar_(i:number) {
   //   const elemento = document.getElementById(`contactos_${i}`);
@@ -98,19 +98,19 @@ export class NuevoFabricanteComponent implements OnInit {
       nombre: this.p_nombre,
       numero: this.p_telefono,
       email: this.p_correo,
-      cargo: this.p_cargo
+      cargo: this.p_cargo,
     });
     this.p_nombre = '';
     this.p_telefono = '';
     this.p_correo = '';
-    this.p_cargo = ''
+    this.p_cargo = '';
   }
   AgregarContacto_() {
     this.proveedor_directo_selected[0].contactos.push({
       nombre: this.p_nombre,
       numero: this.p_telefono,
       email: this.p_correo,
-      cargo: this.p_cargo
+      cargo: this.p_cargo,
     });
     this.p_nombre = '';
     this.p_telefono = '';
@@ -142,21 +142,19 @@ export class NuevoFabricanteComponent implements OnInit {
     return true;
   }
 
-
   public correo_valido = false;
   validateEmail(correo: any) {
-    var validationMessage = document.getElementById("validationMessage");
+    var validationMessage = document.getElementById('validationMessage');
 
     if (this.checkValidity(correo)) {
       this.correo_valido = true;
-      validationMessage!.textContent = "";
-      validationMessage!.style.color = "green";
+      validationMessage!.textContent = '';
+      validationMessage!.style.color = 'green';
     } else {
-      validationMessage!.textContent = "correo Invalido";
-      validationMessage!.style.color = "red";
+      validationMessage!.textContent = 'correo Invalido';
+      validationMessage!.style.color = 'red';
     }
   }
-
 
   //crea una funcion llamada deletecontacto que reciba un indice que sera buscado en this.p_contacto y sera elminado del mismo
   deletecontacto(index: number) {
@@ -172,88 +170,87 @@ export class NuevoFabricanteComponent implements OnInit {
   }
 
   cerrar() {
-    this.onCloseModal.emit()
+    this.onCloseModal.emit();
   }
   cerrar_() {
-    console.log('close')
-    this.onCloseModal_.emit()
+    console.log('close');
+    this.onCloseModal_.emit();
   }
 
   addOrigen() {
-    let busqueda = this.origenes.find(x => x.pais === this.pais && x.estado === this.estado)
+    let busqueda = this.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
 
     if (!busqueda) {
-      this.origenes.push({ pais: this.pais, estado: this.estado })
-      this.estado = ''
+      this.origenes.push({ pais: this.pais, estado: this.estado });
+      this.estado = '';
     }
   }
 
   deleteOrigen(i: number) {
-    this.origenes.splice(i, 1)
+    this.origenes.splice(i, 1);
   }
 
   deleteGrupo(i: number) {
-    this.grupos.splice(i, 1)
+    this.grupos.splice(i, 1);
   }
 
   deleteOrigen_(i: number) {
-    this.data.origenes.splice(i, 1)
+    this.data.origenes.splice(i, 1);
   }
 
   deleteGrupo_(i: number) {
-    this.data.grupo.splice(i, 1)
+    this.data.grupo.splice(i, 1);
   }
 
   addOrigen_() {
-    let busqueda = this.data.origenes.find(x => x.pais === this.pais && x.estado === this.estado)
+    let busqueda = this.data.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
 
     if (!busqueda) {
-      this.data.origenes.push({ pais: this.pais, estado: this.estado })
-      this.estado = ''
+      this.data.origenes.push({ pais: this.pais, estado: this.estado });
+      this.estado = '';
     }
   }
 
   addGrupo_() {
-    let s_ = this.grupo.split('*')
-    let nombre = s_[0]
-    let id = s_[1]
-    let busqueda = this.data.grupo.find(x => x._id === id && x.nombre === nombre)
+    let s_ = this.grupo.split('*');
+    let nombre = s_[0];
+    let id = s_[1];
+    let busqueda = this.data.grupo.find((x) => x._id === id && x.nombre === nombre);
     if (!busqueda) {
-      this.data.grupo.push({ _id: id, nombre })
-      this.grupo = ''
+      this.data.grupo.push({ _id: id, nombre });
+      this.grupo = '';
     }
   }
 
-
   editGrupo(i) {
-    this.edicionGrupo[i] = true
+    this.edicionGrupo[i] = true;
   }
 
   public edicionGrupo: boolean[] = [];
 
   editarGrupoEspec(index: any) {
-
-    let data_actual: any = this.data.grupo[index]
-    console.log(data_actual)
-    data_actual.split('*')
-    let nombre = data_actual.split('*')[0]
-    let _id = data_actual.split('*')[1]
+    let data_actual: any = this.data.grupo[index];
+    console.log(data_actual);
+    data_actual.split('*');
+    let nombre = data_actual.split('*')[0];
+    let _id = data_actual.split('*')[1];
 
     this.data.grupo[index] = {
-      _id, nombre
-    }
-    this.edicionGrupo[index] = false
+      _id,
+      nombre,
+    };
+    this.edicionGrupo[index] = false;
   }
 
   addGrupo() {
-    console.log('aja')
-    let s_ = this.grupo.split('*')
-    let nombre = s_[0]
-    let id = s_[1]
-    let busqueda = this.grupos.find(x => x._id === id && x.nombre === nombre)
+    console.log('aja');
+    let s_ = this.grupo.split('*');
+    let nombre = s_[0];
+    let id = s_[1];
+    let busqueda = this.grupos.find((x) => x._id === id && x.nombre === nombre);
     if (!busqueda) {
-      this.grupos.push({ _id: id, nombre })
-      this.grupo = ''
+      this.grupos.push({ _id: id, nombre });
+      this.grupo = '';
     }
   }
 
@@ -264,8 +261,8 @@ export class NuevoFabricanteComponent implements OnInit {
       alias,
       origenes,
       proveedor: this.proveedor_directo,
-      grupo: grupos.map(grupo => grupo._id),
-      _id: ''
+      grupo: grupos.map((grupo) => grupo._id),
+      _id: '',
     };
     this.api.agregarFabricante(nuevoFabricante);
 
@@ -278,8 +275,8 @@ export class NuevoFabricanteComponent implements OnInit {
           contactos: p_contacto,
           direccion: p_direccion,
           rif: p_rif,
-        }
-        this.proveedor_service.nuevoProveedor(proveedor)
+        };
+        this.proveedor_service.nuevoProveedor(proveedor);
         this.onCloseModal.emit();
         this.nombre = '';
         this.alias = '';
@@ -288,42 +285,39 @@ export class NuevoFabricanteComponent implements OnInit {
         this.grupo = '';
         this.proveedor_directo = false;
 
-        this.p_nombre = ''
-        this.p_telefono = ''
-        this.p_correo = ''
-        this.p_contacto = []
-        this.p_direccion = ''
-        this.p_rif = ''
-        this.p_cargo = ''
-        this.origenes = []
-        this.grupos = []
-      }, 1000)
+        this.p_nombre = '';
+        this.p_telefono = '';
+        this.p_correo = '';
+        this.p_contacto = [];
+        this.p_direccion = '';
+        this.p_rif = '';
+        this.p_cargo = '';
+        this.origenes = [];
+        this.grupos = [];
+      }, 1000);
     }
     this.onCloseModal.emit();
   }
 
   BuscarProveedor() {
-    console.log(this.data)
+    console.log(this.data);
     if (!this.proveedor_directo_abierto) {
       this.proveedor_directo_selected = this.proveedor_service.seleccionarUnProveedor(this.data.nombre);
       this.proveedor_directo_abierto = true;
     } else {
       this.proveedor_directo_abierto = false;
     }
-
   }
 
   editarFabricante() {
-    this.api.editarFabricante(this.data)
-    console.log(this.proveedor_directo_selected)
+    this.api.editarFabricante(this.data);
+    console.log(this.proveedor_directo_selected);
     if (this.proveedor_directo_selected) {
       setTimeout(() => {
-        this.proveedor_service.editarProveedores(this.proveedor_directo_selected[0])
-        this.onCloseModal.emit()
-      }, 1000)
+        this.proveedor_service.editarProveedores(this.proveedor_directo_selected[0]);
+        this.onCloseModal.emit();
+      }, 1000);
     }
-    this.onCloseModal.emit()
+    this.onCloseModal.emit();
   }
-
-
 }

@@ -8,7 +8,7 @@ describe('NewConvertidoraComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewConvertidoraComponent]
+      declarations: [NewConvertidoraComponent],
     });
     fixture = TestBed.createComponent(NewConvertidoraComponent);
     component = fixture.componentInstance;

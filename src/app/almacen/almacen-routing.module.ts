@@ -14,28 +14,26 @@ const routes: Routes = [
     children: [
       {
         path: 'recepcion',
-        component: RecepcionComponent
+        component: RecepcionComponent,
       },
       {
         path: 'inventario',
-        component: AlmacenadoComponent
+        component: AlmacenadoComponent,
       },
       {
         path: 'bobinas',
-        component: BobinasComponent
+        component: BobinasComponent,
       },
       {
         path: 'producto-terminado',
-        component: ProductoTerminadoComponent
-      }
-    ]
-  }]
+        component: ProductoTerminadoComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class AlmacenRoutingModule { }
+export class AlmacenRoutingModule {}

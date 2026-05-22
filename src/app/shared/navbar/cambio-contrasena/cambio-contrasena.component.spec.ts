@@ -8,7 +8,7 @@ describe('CambioContrasenaComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CambioContrasenaComponent]
+      declarations: [CambioContrasenaComponent],
     });
     fixture = TestBed.createComponent(CambioContrasenaComponent);
     component = fixture.componentInstance;

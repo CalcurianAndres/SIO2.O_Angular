@@ -1,304 +1,344 @@
-<div class="modal is-active" [ngClass]="{'is-active':nuevo_trabajador}">
-    <div class="modal-background"></div>
-    <div class="modal-card long" *ngFor="let card of cards; let i = index" [style.display]="i === currentIndex ? 'block' : 'none'">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente" *ngIf="nuevo_trabajador">
-                Nuevo empleado
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body light" style="max-height: 500px;overflow-y: auto;">
-            <p class="title">{{card.title}}</p>
-                 
-    <ul class="steps has-content-centered">
-        <li class="steps-segment" [ngClass]="{'is-active':i === 0}"> 
-          <a (click)="currentIndex = 0" class="steps-marker" ><i class="fas fa-user"></i></a>
+<div class="modal is-active" [ngClass]="{ 'is-active': nuevo_trabajador }">
+  <div class="modal-background"></div>
+  <div
+    class="modal-card long"
+    *ngFor="let card of cards; let i = index"
+    [style.display]="i === currentIndex ? 'block' : 'none'"
+  >
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente" *ngIf="nuevo_trabajador">Nuevo empleado</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+    </div>
+    <div class="modal-card-body light" style="max-height: 500px; overflow-y: auto">
+      <p class="title">{{ card.title }}</p>
+
+      <ul class="steps has-content-centered">
+        <li class="steps-segment" [ngClass]="{ 'is-active': i === 0 }">
+          <a (click)="currentIndex = 0" class="steps-marker"><i class="fas fa-user"></i></a>
           <div class="steps-content">
-            <p class="is-size-6" style="font-family: 'Gilroy';color:dbdbdb;">Datos personales</p>
+            <p class="is-size-6" style="font-family: 'Gilroy'; color: dbdbdb">Datos personales</p>
           </div>
         </li>
-        <li class="steps-segment" [ngClass]="{'is-active':i === 1}">
-          <a (click)="currentIndex = 1" class="steps-marker" ><i class="fas fa-user-friends"></i></a>
+        <li class="steps-segment" [ngClass]="{ 'is-active': i === 1 }">
+          <a (click)="currentIndex = 1" class="steps-marker"><i class="fas fa-user-friends"></i></a>
           <div class="steps-content">
-          <p class="is-size-6" style="font-family: 'Gilroy';color:dbdbdb;">Referencias personales</p>
+            <p class="is-size-6" style="font-family: 'Gilroy'; color: dbdbdb">Referencias personales</p>
           </div>
         </li>
-        <li class="steps-segment" [ngClass]="{'is-active':i === 2}">
-          <a (click)="currentIndex = 2" class="steps-marker" ><i class="fas fa-users"></i></a>
+        <li class="steps-segment" [ngClass]="{ 'is-active': i === 2 }">
+          <a (click)="currentIndex = 2" class="steps-marker"><i class="fas fa-users"></i></a>
           <div class="steps-content">
-          <p class="is-size-6" style="font-family: 'Gilroy';color:dbdbdb;">Cargas familiares</p>
+            <p class="is-size-6" style="font-family: 'Gilroy'; color: dbdbdb">Cargas familiares</p>
           </div>
         </li>
-        <li class="steps-segment" [ngClass]="{'is-active':i === 3}">
-          <a (click)="currentIndex = 3" class="steps-marker" ><i class="fas fa-user-graduate"></i></a>
+        <li class="steps-segment" [ngClass]="{ 'is-active': i === 3 }">
+          <a (click)="currentIndex = 3" class="steps-marker"><i class="fas fa-user-graduate"></i></a>
           <div class="steps-content">
-          <p class="is-size-6" style="font-family: 'Gilroy';color:dbdbdb;">Instrucción académica</p>
+            <p class="is-size-6" style="font-family: 'Gilroy'; color: dbdbdb">Instrucción académica</p>
           </div>
         </li>
-        <li class="steps-segment" [ngClass]="{'is-active':i === 4}">
-          <a (click)="currentIndex = 4" class="steps-marker" ><i class="fas fa-user-tie"></i></a>
+        <li class="steps-segment" [ngClass]="{ 'is-active': i === 4 }">
+          <a (click)="currentIndex = 4" class="steps-marker"><i class="fas fa-user-tie"></i></a>
           <div class="steps-content">
-          <p class="is-size-6" style="font-family: 'Gilroy';color:dbdbdb;">Función en la empresa</p>
+            <p class="is-size-6" style="font-family: 'Gilroy'; color: dbdbdb">Función en la empresa</p>
           </div>
         </li>
       </ul>
-      <br>
-            <span class="content" *ngIf="i === 0">
-                <div class="columns">
-                    <div class="column">
-                        <div class="field is-grouped has-addons">
-                            <div class="control">
-                                <label for="" class="label">Apellidos</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.apellidos">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Nombres</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nombres">
-                            </div>
-                            <p class="control">
-                                <label for="" class="label">.</label>
-                                <span class="select">
-                                    <select>
-                                        <option>V</option>
-                                        <option>E</option>
-                                    </select>
-                                </span>
-                            </p>
-                            <p class="control" style="width: 110px;">
-                                <label for="" class="label">Cédula</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.cedula">
-                            </p>
-                            <div class="control">
-                                <label for="" class="label">Fecha nacimiento</label>
-                                <input type="date" class="input" [(ngModel)]="trabajador.datos_personales.fecha_nac">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Sexo</label>
-                                <fieldset>
-                                    M: <input type="radio" name="sexo" id="masculino" [(ngModel)]="trabajador.datos_personales.sexo" value="M">
-                                    F: <input type="radio" name="sexo" id="femenino" [(ngModel)]="trabajador.datos_personales.sexo" value="F">
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <label for="" class="label" >Altura (m)</label>
-                                <input type="text" class="input" style="width: 60px;" [(ngModel)]="trabajador.datos_personales.altura">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Peso (kg)</label>
-                                <input type="text" class="input" style="width: 60px;" [(ngModel)]="trabajador.datos_personales.peso">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Lugar de nacimiento</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacimiento">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Nacionalidad</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacionalidad">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Estado Civil</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.estado_civil">
-                            </div>
-                            
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <label for="" class="label">Licencia de conducir No.</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.licencia">
-                            </div>
-                            <div class="control" style="width: 60px;">
-                                <label for="" class="label" style="width: 30px;">Grado</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.grado">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Rif</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.rif">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Correo Electrónico</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.email">
-                            </div>
-                        </div>
-                        <span class="subtitles">Dirección</span> <br>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <label for="" class="label">Estado</label>
-                                <div class="select">
-                                    <select (change)="BuscarMunicipio($event.target)" [(ngModel)]="estado">
-                                        <option value="{{estado.geonameId}}-{{estado.name}}" *ngFor="let estado of estados">{{estado.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Municipio</label>
-                                <div class="select">
-                                    <select (change)="BuscarParroquia($event.target)" [(ngModel)]="municipio">
-                                        <option value="{{municipio.geonameId}}-{{municipio.toponymName}}" *ngFor="let municipio of Municipio">{{municipio.toponymName}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Parroquia</label>
-                                <div class="select">
-                                    <select [(ngModel)]="trabajador.datos_personales.parroquia">
-                                        <option value="{{parroquia.toponymName}}" *ngFor="let parroquia of Parroquia">{{parroquia.toponymName}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Sector/Urbanización</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.sector">
-                            </div>
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <label for="" class="label">Domicilio (Calle/Av.)</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.domicilio">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Teléfono</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.telefono">
-                            </div>
-                            <div class="control">
-                                <label for="" class="label">Teléfono Celular</label>
-                                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.celular">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column is-3">
-                        <label class="image-hover-wrapper" for="file-input">
-                          <figure class="image is-4by5">
-                            <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
-                          </figure>
-                          <div class="hover-overlay">
-                            <div class="content has-text-centered">
-                              <i class="fas fa-camera"></i>
-                              <p>Cargar Foto</p>
-                            </div>
-                          </div>
-                        </label>
-                        <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)">
-                    </div>
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 1">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Nombre</label>
-                        <input type="text" class="input" [(ngModel)]="REFERENCIA.nombre">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Dirección</label>
-                        <input type="text" class="input" [(ngModel)]="REFERENCIA.direccion">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Teléfono</label>
-                        <input type="text" class="input" [(ngModel)]="REFERENCIA.telefono">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Ocupación</label>
-                        <input type="text" class="input" [(ngModel)]="REFERENCIA.ocupacion">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">.</label>
-                        <button class="button" style="background-color: transparent;border: none;color: #3e8ed0;" (click)="addReferencia()">
-                            <span><i class="fas fa-plus"></i></span>
-                        </button>
-                    </div>
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 2">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Parentesco</label>
-                        <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.parentesco">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Apellidos y Nombres</label>
-                        <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.nombre">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Fecha de nacimiento</label>
-                        <input type="date" name="" id="" class="input" [(ngModel)]="CARGA_FAMILIAR.fecha">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">.</label>
-                        <button class="button" style="background-color: transparent;border: none;color: #3e8ed0;" (click)="addCarga()">
-                            <span><i class="fas fa-plus"></i></span>
-                        </button>
-                    </div>
-                </div>
-                <span class="subtitles">A quien notificar en caso de emergencia</span> <br>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Parentesco</label>
-                        <input type="text" class="input" [(ngModel)]="EMERGENCIA.parentesco">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Nombre</label>
-                        <input type="text" class="input" [(ngModel)]="EMERGENCIA.nombre">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Dirección</label>
-                        <input type="text" class="input" [(ngModel)]="EMERGENCIA.direccion">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Teléfono</label>
-                        <input type="text" class="input" [(ngModel)]="EMERGENCIA.telefono">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">.</label>
-                        <button class="button" style="background-color: transparent;border: none;color: #3e8ed0;" (click)="addEmergencia()">
-                            <span><i class="fas fa-plus"></i></span>
-                        </button>
-                    </div>
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 3">
-                <span class="subtitles">Grado de instrucción</span> <br>
-
-                <span class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Instrucción</label>
-                        <div class="select">
-                            <select [(ngModel)]="trabajador.instruccion_academica.grado.instruccion">
-                                <option value="Primaria">Primaria</option>
-                                <option value="Secundaria">Secundaria</option>
-                                <option value="Universitaria">Universitaria</option>
-                                <option value="Comercial">Comercial</option>
-                                <option value="Técnica">Técnica</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control" style="width: 120px;">
-                        <label for="" class="label">Título obtenido</label>
-                        <input type="text" class="input" [(ngModel)]="trabajador.instruccion_academica.grado.titulo">
-                    </div>
-                    <div class="control" style="width: 60px;">
-                        <label for="" class="label">Año</label>
-                        <input type="text" class="input" [(ngModel)]="trabajador.instruccion_academica.grado.ano">
-                    </div>
+      <br />
+      <span class="content" *ngIf="i === 0">
+        <div class="columns">
+          <div class="column">
+            <div class="field is-grouped has-addons">
+              <div class="control">
+                <label for="" class="label">Apellidos</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.apellidos" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Nombres</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nombres" />
+              </div>
+              <p class="control">
+                <label for="" class="label">.</label>
+                <span class="select">
+                  <select>
+                    <option>V</option>
+                    <option>E</option>
+                  </select>
                 </span>
-                <span class="subtitles">Cursos realizados</span> <br>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Nombre del curso</label>
-                        <input type="text" class="input" [(ngModel)]="CURSO.nombre">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Período</label>
-                        <input type="text" class="input" [(ngModel)]="CURSO.periodo">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">.</label>
-                        <button class="button" style="background-color: transparent;border: none;color: #3e8ed0;" (click)="addCurso()">
-                            <span><i class="fas fa-plus"></i></span>
-                        </button>
-                    </div>
+              </p>
+              <p class="control" style="width: 110px">
+                <label for="" class="label">Cédula</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.cedula" />
+              </p>
+              <div class="control">
+                <label for="" class="label">Fecha nacimiento</label>
+                <input type="date" class="input" [(ngModel)]="trabajador.datos_personales.fecha_nac" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Sexo</label>
+                <fieldset>
+                  M:
+                  <input
+                    type="radio"
+                    name="sexo"
+                    id="masculino"
+                    [(ngModel)]="trabajador.datos_personales.sexo"
+                    value="M"
+                  />
+                  F:
+                  <input
+                    type="radio"
+                    name="sexo"
+                    id="femenino"
+                    [(ngModel)]="trabajador.datos_personales.sexo"
+                    value="F"
+                  />
+                </fieldset>
+              </div>
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <label for="" class="label">Altura (m)</label>
+                <input type="text" class="input" style="width: 60px" [(ngModel)]="trabajador.datos_personales.altura" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Peso (kg)</label>
+                <input type="text" class="input" style="width: 60px" [(ngModel)]="trabajador.datos_personales.peso" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Lugar de nacimiento</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacimiento" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Nacionalidad</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacionalidad" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Estado Civil</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.estado_civil" />
+              </div>
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <label for="" class="label">Licencia de conducir No.</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.licencia" />
+              </div>
+              <div class="control" style="width: 60px">
+                <label for="" class="label" style="width: 30px">Grado</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.grado" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Rif</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.rif" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Correo Electrónico</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.email" />
+              </div>
+            </div>
+            <span class="subtitles">Dirección</span> <br />
+            <div class="field is-grouped">
+              <div class="control">
+                <label for="" class="label">Estado</label>
+                <div class="select">
+                  <select (change)="BuscarMunicipio($event.target)" [(ngModel)]="estado">
+                    <option value="{{ estado.geonameId }}-{{ estado.name }}" *ngFor="let estado of estados">
+                      {{ estado.name }}
+                    </option>
+                  </select>
                 </div>
-                <!-- <span class="subtitles">Habla otros idiomas</span> <br>
+              </div>
+              <div class="control">
+                <label for="" class="label">Municipio</label>
+                <div class="select">
+                  <select (change)="BuscarParroquia($event.target)" [(ngModel)]="municipio">
+                    <option
+                      value="{{ municipio.geonameId }}-{{ municipio.toponymName }}"
+                      *ngFor="let municipio of Municipio"
+                    >
+                      {{ municipio.toponymName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <label for="" class="label">Parroquia</label>
+                <div class="select">
+                  <select [(ngModel)]="trabajador.datos_personales.parroquia">
+                    <option value="{{ parroquia.toponymName }}" *ngFor="let parroquia of Parroquia">
+                      {{ parroquia.toponymName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <label for="" class="label">Sector/Urbanización</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.sector" />
+              </div>
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <label for="" class="label">Domicilio (Calle/Av.)</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.domicilio" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Teléfono</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.telefono" />
+              </div>
+              <div class="control">
+                <label for="" class="label">Teléfono Celular</label>
+                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.celular" />
+              </div>
+            </div>
+          </div>
+          <div class="column is-3">
+            <label class="image-hover-wrapper" for="file-input">
+              <figure class="image is-4by5">
+                <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
+              </figure>
+              <div class="hover-overlay">
+                <div class="content has-text-centered">
+                  <i class="fas fa-camera"></i>
+                  <p>Cargar Foto</p>
+                </div>
+              </div>
+            </label>
+            <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" />
+          </div>
+        </div>
+      </span>
+      <span class="content" *ngIf="i === 1">
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Nombre</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.nombre" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Dirección</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.direccion" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Teléfono</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.telefono" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Ocupación</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.ocupacion" />
+          </div>
+          <div class="control">
+            <label for="" class="label">.</label>
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: #3e8ed0"
+              (click)="addReferencia()"
+            >
+              <span><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+      </span>
+      <span class="content" *ngIf="i === 2">
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Parentesco</label>
+            <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.parentesco" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Apellidos y Nombres</label>
+            <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.nombre" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Fecha de nacimiento</label>
+            <input type="date" name="" id="" class="input" [(ngModel)]="CARGA_FAMILIAR.fecha" />
+          </div>
+          <div class="control">
+            <label for="" class="label">.</label>
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: #3e8ed0"
+              (click)="addCarga()"
+            >
+              <span><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <span class="subtitles">A quien notificar en caso de emergencia</span> <br />
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Parentesco</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.parentesco" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Nombre</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.nombre" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Dirección</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.direccion" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Teléfono</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.telefono" />
+          </div>
+          <div class="control">
+            <label for="" class="label">.</label>
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: #3e8ed0"
+              (click)="addEmergencia()"
+            >
+              <span><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+      </span>
+      <span class="content" *ngIf="i === 3">
+        <span class="subtitles">Grado de instrucción</span> <br />
+
+        <span class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Instrucción</label>
+            <div class="select">
+              <select [(ngModel)]="trabajador.instruccion_academica.grado.instruccion">
+                <option value="Primaria">Primaria</option>
+                <option value="Secundaria">Secundaria</option>
+                <option value="Universitaria">Universitaria</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Técnica">Técnica</option>
+              </select>
+            </div>
+          </div>
+          <div class="control" style="width: 120px">
+            <label for="" class="label">Título obtenido</label>
+            <input type="text" class="input" [(ngModel)]="trabajador.instruccion_academica.grado.titulo" />
+          </div>
+          <div class="control" style="width: 60px">
+            <label for="" class="label">Año</label>
+            <input type="text" class="input" [(ngModel)]="trabajador.instruccion_academica.grado.ano" />
+          </div>
+        </span>
+        <span class="subtitles">Cursos realizados</span> <br />
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Nombre del curso</label>
+            <input type="text" class="input" [(ngModel)]="CURSO.nombre" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Período</label>
+            <input type="text" class="input" [(ngModel)]="CURSO.periodo" />
+          </div>
+          <div class="control">
+            <label for="" class="label">.</label>
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: #3e8ed0"
+              (click)="addCurso()"
+            >
+              <span><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <!-- <span class="subtitles">Habla otros idiomas</span> <br>
 
                 <div class="field is-grouped">
                     <div class="control">
@@ -322,34 +362,52 @@
                         </button>
                     </div>
                 </div> -->
-                <span class="subtitles">Manejo de herramientas informáticas</span> <br>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Sabe utilizar computadora</label>
-                        <fieldset>
-                            Si: <input type="radio" name="computadora" id="" value="Si" [(ngModel)]="trabajador.manejo_herramientas.computadora">
-                            No: <input type="radio" name="computadora" id="" value="No" [(ngModel)]="trabajador.manejo_herramientas.computadora">
-                        </fieldset>
-                    </div>
-                    <!-- <div class="control">
+        <span class="subtitles">Manejo de herramientas informáticas</span> <br />
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Sabe utilizar computadora</label>
+            <fieldset>
+              Si:
+              <input
+                type="radio"
+                name="computadora"
+                id=""
+                value="Si"
+                [(ngModel)]="trabajador.manejo_herramientas.computadora"
+              />
+              No:
+              <input
+                type="radio"
+                name="computadora"
+                id=""
+                value="No"
+                [(ngModel)]="trabajador.manejo_herramientas.computadora"
+              />
+            </fieldset>
+          </div>
+          <!-- <div class="control">
                         <label for="" class="label">Software que domina</label>
                         Word: <input type="checkbox" name="word" id="wordCheckbox" (change)="updateSoftwares()">
                         Excel: <input type="checkbox" name="excel" id="excelCheckbox" (change)="updateSoftwares()">
                         PowerPoint: <input type="checkbox" name="power_point" id="powerPointCheckbox" (change)="updateSoftwares()">
                         Acrobat: <input type="checkbox" name="acrobat" id="acrobatCheckbox" (change)="updateSoftwares()">
                     </div> -->
-                    <div class="control">
-                        <label for="" class="label">Softwares que domina</label>
-                        <input type="text" class="input" [(ngModel)]="SOFTWARE">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">.</label>
-                        <button class="button" style="background-color: transparent;border: none;color: #3e8ed0;" (click)="addSoftware()">
-                            <span><i class="fas fa-plus"></i></span>
-                        </button>
-                    </div>
-                </div>
-                <!-- <span class="subtitles">Referencia de trabajos anteriores</span> <br>
+          <div class="control">
+            <label for="" class="label">Softwares que domina</label>
+            <input type="text" class="input" [(ngModel)]="SOFTWARE" />
+          </div>
+          <div class="control">
+            <label for="" class="label">.</label>
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: #3e8ed0"
+              (click)="addSoftware()"
+            >
+              <span><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <!-- <span class="subtitles">Referencia de trabajos anteriores</span> <br>
                 <div class="field is-grouped">
                     <div class="control">
                         <label for="" class="label">Datos de la empresa</label>
@@ -378,146 +436,160 @@
                         </button>
                     </div>
                 </div> -->
-            </span>
-            <span class="content" *ngIf="i === 4">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Fecha de ingreso</label>
-                        <input type="date" class="input" [(ngModel)]="trabajador.contratacion.fecha">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Departamento</label>
-                        <div class="select">
-                            <select [(ngModel)]="trabajador.contratacion.departamento" (change)="buscarSubArea($event.target)">
-                                <option value="{{departamento._id}}" *ngFor="let departamento of departamentos.departamentos">{{departamento.nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Cargo</label>
-                        <div class="select">
-                            <select [(ngModel)]="trabajador.contratacion.cargo">
-                                <option value="{{cargo._id}}" *ngFor="let cargo of cargos.cargos">{{cargo.nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">De</label>
-                        <div class="select">
-                            <select [(ngModel)]="trabajador.contratacion.de">
-                                <option value="6696bc0c3b59a8877b99bf36">Departamento</option>
-                                <option value="{{unidad._id}}" *ngFor="let unidad of subAreas">{{unidad.nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Sueldo inicial</label>
-                        <input type="text" class="input" [(ngModel)]="trabajador.contratacion.sueldo">
-                    </div>
-                </div>
-                <hr>
-                <button class="button is-success" (click)="guardar_trabajo()">
-                    <span class="icon"><i class="fas fa-save"></i></span>
-                    <span>Guardar</span>
-                </button>
-            </span>
+      </span>
+      <span class="content" *ngIf="i === 4">
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Fecha de ingreso</label>
+            <input type="date" class="input" [(ngModel)]="trabajador.contratacion.fecha" />
+          </div>
+          <div class="control">
+            <label for="" class="label">Departamento</label>
+            <div class="select">
+              <select [(ngModel)]="trabajador.contratacion.departamento" (change)="buscarSubArea($event.target)">
+                <option value="{{ departamento._id }}" *ngFor="let departamento of departamentos.departamentos">
+                  {{ departamento.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <label for="" class="label">Cargo</label>
+            <div class="select">
+              <select [(ngModel)]="trabajador.contratacion.cargo">
+                <option value="{{ cargo._id }}" *ngFor="let cargo of cargos.cargos">{{ cargo.nombre }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <label for="" class="label">De</label>
+            <div class="select">
+              <select [(ngModel)]="trabajador.contratacion.de">
+                <option value="6696bc0c3b59a8877b99bf36">Departamento</option>
+                <option value="{{ unidad._id }}" *ngFor="let unidad of subAreas">{{ unidad.nombre }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <label for="" class="label">Sueldo inicial</label>
+            <input type="text" class="input" [(ngModel)]="trabajador.contratacion.sueldo" />
+          </div>
         </div>
+        <hr />
+        <button class="button is-success" (click)="guardar_trabajo()">
+          <span class="icon"><i class="fas fa-save"></i></span>
+          <span>Guardar</span>
+        </button>
+      </span>
     </div>
-    <div class="modal-card long">
-        <div class="modal-card-body bg" *ngFor="let card of cards; let i = index" [style.display]="i === currentIndex ? 'block' : 'none'">
-            <span class="content" *ngIf="i === 1">
-                <div class="titulos">
-                    <div class="dot"></div> <div class="titulo">Referencias personales</div>
-                </div>
-                <table class="table is-fullwidth dark_">
-                    <thead>
-                        <tr>
-                            <th style="color: white;">Nombre</th>
-                            <th style="color: white;">Dirección</th>
-                            <th style="color: white;">Teléfono</th>
-                            <th style="color: white;">Ocupación</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let referencia of referencias;index as i">
-                            <td>{{referencia.nombre}}</td>
-                            <td>{{referencia.direccion}}</td>
-                            <td>{{referencia.telefono}}</td>
-                            <td>{{referencia.ocupacion}}</td>
-                            <td><i class="fas fa-trash-alt red" style="cursor: pointer;" (click)="this.referencias.splice(i,1)"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </span>
-            <span class="content" *ngIf="i === 2">
-                <div class="titulos">
-                    <div class="dot"></div> <div class="titulo">Carga familiar</div>
-                </div>
-                <table class="table is-fullwidth dark_">
-                    <thead>
-                        <tr>
-                            <th style="color: white;">Parentesco</th>
-                            <th style="color: white;">Apellidos y Nombre</th>
-                            <th style="color: white;">Fecha de nacimiento</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let carga of carga">
-                            <td>{{carga.parentesco}}</td>
-                            <td>{{carga.nombre}}</td>
-                            <td>{{carga.fecha}}</td>
-                            <td><i class="fas fa-trash-alt red" style="cursor: pointer;" (click)="this.carga.splice(i,1)"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr>
-                <div class="titulos">
-                    <div class="dot"></div> <div class="titulo">A quien notificar en caso de emergencia</div>
-                </div>
-                <table class="table is-fullwidth dark_">
-                    <thead>
-                        <tr>
-                            <th style="color: white;">Parentesco</th>
-                            <th style="color: white;">Nombre</th>
-                            <th style="color: white;">Dirección</th>
-                            <th style="color: white;">Teléfono</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let emergencia of emergencias">
-                            <td>{{emergencia.parentesco}}</td>
-                            <td>{{emergencia.nombre}}</td>
-                            <td>{{emergencia.direccion}}</td>
-                            <td>{{emergencia.telefono}}</td>
-                            <td><i class="fas fa-trash-alt red" style="cursor: pointer;" (click)="this.emergencia.splice(i,1)"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </span>
-            <span class="content" *ngIf="i === 3">
-                <div class="titulos">
-                    <div class="dot"></div> <div class="titulo">Cursos realizados</div>
-                </div>
-                <table class="table dark_">
-                    <thead>
-                        <tr>
-                            <th style="color: white;">Curso</th>
-                            <th style="color: white;">Período</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let curso of cursos_realizados;index as i">
-                            <td>{{curso.nombre}}</td>
-                            <td>{{curso.periodo}}</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- <div class="titulos">
+  </div>
+  <div class="modal-card long">
+    <div
+      class="modal-card-body bg"
+      *ngFor="let card of cards; let i = index"
+      [style.display]="i === currentIndex ? 'block' : 'none'"
+    >
+      <span class="content" *ngIf="i === 1">
+        <div class="titulos">
+          <div class="dot"></div>
+          <div class="titulo">Referencias personales</div>
+        </div>
+        <table class="table is-fullwidth dark_">
+          <thead>
+            <tr>
+              <th style="color: white">Nombre</th>
+              <th style="color: white">Dirección</th>
+              <th style="color: white">Teléfono</th>
+              <th style="color: white">Ocupación</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let referencia of referencias; index as i">
+              <td>{{ referencia.nombre }}</td>
+              <td>{{ referencia.direccion }}</td>
+              <td>{{ referencia.telefono }}</td>
+              <td>{{ referencia.ocupacion }}</td>
+              <td>
+                <i class="fas fa-trash-alt red" style="cursor: pointer" (click)="this.referencias.splice(i, 1)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </span>
+      <span class="content" *ngIf="i === 2">
+        <div class="titulos">
+          <div class="dot"></div>
+          <div class="titulo">Carga familiar</div>
+        </div>
+        <table class="table is-fullwidth dark_">
+          <thead>
+            <tr>
+              <th style="color: white">Parentesco</th>
+              <th style="color: white">Apellidos y Nombre</th>
+              <th style="color: white">Fecha de nacimiento</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let carga of carga">
+              <td>{{ carga.parentesco }}</td>
+              <td>{{ carga.nombre }}</td>
+              <td>{{ carga.fecha }}</td>
+              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="this.carga.splice(i, 1)"></i></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <div class="titulos">
+          <div class="dot"></div>
+          <div class="titulo">A quien notificar en caso de emergencia</div>
+        </div>
+        <table class="table is-fullwidth dark_">
+          <thead>
+            <tr>
+              <th style="color: white">Parentesco</th>
+              <th style="color: white">Nombre</th>
+              <th style="color: white">Dirección</th>
+              <th style="color: white">Teléfono</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emergencia of emergencias">
+              <td>{{ emergencia.parentesco }}</td>
+              <td>{{ emergencia.nombre }}</td>
+              <td>{{ emergencia.direccion }}</td>
+              <td>{{ emergencia.telefono }}</td>
+              <td>
+                <i class="fas fa-trash-alt red" style="cursor: pointer" (click)="this.emergencia.splice(i, 1)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </span>
+      <span class="content" *ngIf="i === 3">
+        <div class="titulos">
+          <div class="dot"></div>
+          <div class="titulo">Cursos realizados</div>
+        </div>
+        <table class="table dark_">
+          <thead>
+            <tr>
+              <th style="color: white">Curso</th>
+              <th style="color: white">Período</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let curso of cursos_realizados; index as i">
+              <td>{{ curso.nombre }}</td>
+              <td>{{ curso.periodo }}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="titulos">
                     <div class="dot"></div> <div class="titulo">Habla otro idioma (A parte del nativo)</div>
                 </div>
                 <table class="table dark_">
@@ -536,22 +608,23 @@
                         </tr>
                     </tbody>
                 </table> -->
-                <div class="titulos">
-                    <div class="dot"></div> <div class="titulo">Softwares que domina:</div>
-                </div>
-                <table class="table dark_">
-                    <thead>
-                        <tr>
-                            <th style="color: white;">Nombre:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let sfw of softwares;index as i">
-                            <td>{{sfw}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- <div class="titulos">
+        <div class="titulos">
+          <div class="dot"></div>
+          <div class="titulo">Softwares que domina:</div>
+        </div>
+        <table class="table dark_">
+          <thead>
+            <tr>
+              <th style="color: white">Nombre:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sfw of softwares; index as i">
+              <td>{{ sfw }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div class="titulos">
                     <div class="dot"></div> <div class="titulo">Referencia trabajos anteriores:</div>
                 </div>
                 <table class="table dark_">
@@ -575,9 +648,9 @@
                         </tr>
                     </tbody>
                 </table> -->
-            </span>
-        </div>
+      </span>
     </div>
-    <button class="button is-info back" (click)="previous()"><i class="fas fa-chevron-left"></i></button>
-    <button class="button is-info front" (click)="next()"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <button class="button is-info back" (click)="previous()"><i class="fas fa-chevron-left"></i></button>
+  <button class="button is-info front" (click)="next()"><i class="fas fa-chevron-right"></i></button>
 </div>

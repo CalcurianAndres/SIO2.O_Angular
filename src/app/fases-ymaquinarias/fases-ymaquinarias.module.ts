@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FasesRoutingModule } from './fases-routing.module';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FasesComponent } from './fases/fases.component';
@@ -24,8 +25,6 @@ import { NuevaFormulaComponent } from './preparacion-tintas/nueva-formula/nueva-
 import { ProductosComponent } from './productos/productos.component';
 import { CambiosComponent } from './productos/cambios/cambios.component';
 
-
-
 @NgModule({
   declarations: [
     FasesComponent,
@@ -44,7 +43,7 @@ import { CambiosComponent } from './productos/cambios/cambios.component';
     PreparacionTintasComponent,
     NuevaFormulaComponent,
     ProductosComponent,
-    CambiosComponent
+    CambiosComponent,
   ],
   imports: [
     CommonModule,
@@ -53,7 +52,8 @@ import { CambiosComponent } from './productos/cambios/cambios.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    DragDropModule
-  ]
+    DragDropModule,
+    SharedModule,
+  ],
 })
-export class FasesYmaquinariasModule { }
+export class FasesYmaquinariasModule {}

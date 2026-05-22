@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmpleadosComponent } from './empleados.component';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { EmpleadosRoutingModule } from './empleados-routing.module';
 import { GestionComponent } from './gestion/gestion.component';
@@ -21,9 +22,6 @@ import { HistorialEmpleadoComponent } from './trabajadores/historial-empleado/hi
 import { HorariosComponent } from './horarios/horarios.component';
 import { NuevoHorarioComponent } from './horarios/nuevo-horario/nuevo-horario.component';
 
-
-
-
 @NgModule({
   declarations: [
     EmpleadosComponent,
@@ -40,7 +38,7 @@ import { NuevoHorarioComponent } from './horarios/nuevo-horario/nuevo-horario.co
     InformacionEmpleadoComponent,
     HistorialEmpleadoComponent,
     HorariosComponent,
-    NuevoHorarioComponent
+    NuevoHorarioComponent,
   ],
   imports: [
     CommonModule,
@@ -49,7 +47,8 @@ import { NuevoHorarioComponent } from './horarios/nuevo-horario/nuevo-horario.co
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
-  ]
+    HttpClientModule,
+    SharedModule,
+  ],
 })
-export class EmpleadosModule { }
+export class EmpleadosModule {}

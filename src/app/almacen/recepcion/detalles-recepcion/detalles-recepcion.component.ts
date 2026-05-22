@@ -2,17 +2,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-detalles-recepcion',
-  standalone: false,templateUrl: './detalles-recepcion.component.html',
-  styleUrls: ['./detalles-recepcion.component.scss']
+  standalone: false,
+  templateUrl: './detalles-recepcion.component.html',
+  styleUrls: ['./detalles-recepcion.component.scss'],
 })
 export class DetallesRecepcionComponent {
+  constructor() {}
 
-  constructor(){
-  }
-
-  @Input() detalle!:any
-  @Input() n!:any
-  @Input() lista!:any
+  @Input() detalle!: any;
+  @Input() n!: any;
+  @Input() lista!: any;
   @Output() onCloseModal = new EventEmitter();
 
   currentDate = new Date();
@@ -21,7 +20,7 @@ export class DetallesRecepcionComponent {
   day = String(this.currentDate.getDate()).padStart(2, '0');
   Hoy = `${this.year}-${this.month}-${this.day}`;
 
-  cerrar(){
+  cerrar() {
     this.onCloseModal.emit();
   }
 }

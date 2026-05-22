@@ -4,27 +4,21 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 
 @Component({
   selector: 'app-notifications',
-  standalone:false,
+  standalone: false,
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+  styleUrls: ['./notifications.component.scss'],
 })
-export class NotificationsComponent implements OnInit{
-  
+export class NotificationsComponent implements OnInit {
   @Input() visible = false;
-  @Output() onCloseModal = new EventEmitter()
+  @Output() onCloseModal = new EventEmitter();
 
-  public confirmacion:boolean = false;
-  public solicitud:boolean = false;
-  public devolucion = ''
+  public confirmacion: boolean = false;
+  public solicitud: boolean = false;
+  public devolucion = '';
 
-  constructor(public api:NotificationsService){
+  constructor(public api: NotificationsService) {}
 
-  }
-
-  ngOnInit(): void {
-    
-  }
-  
+  ngOnInit(): void {}
 
   close() {
     this.onCloseModal.emit();

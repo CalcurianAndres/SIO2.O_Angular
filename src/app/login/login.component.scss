@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700");
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,600,700');
 
 * {
   box-sizing: border-box;
 }
 
 body {
-//   font-family: "Gilroy", sans-serif;
+  //   font-family: "Gilroy", sans-serif;
   color: rgba(#000, 0.7);
 }
 
@@ -70,7 +70,7 @@ body {
 
   &-button {
     color: darken(#e97575, 5%);
-    font-family: "Nunito", sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 18px;
     cursor: pointer;
     border: 0;
@@ -80,7 +80,7 @@ body {
     background: rgb(255, 255, 255);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.16);
     transition: 0.3s;
-    
+
     &:hover {
       border-color: rgba(255, 255, 255, 0.2);
       background: rgba(#fff, 0.8);
@@ -157,7 +157,7 @@ body {
   color: #fff;
   border-radius: 4px;
   background: #cd5656;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
   transition: 0.3s;
   cursor: pointer;
 
@@ -169,7 +169,7 @@ body {
 .input-label {
   font-size: 11px;
   text-transform: uppercase;
-//   font-family: "Gilroy";
+  //   font-family: "Gilroy";
   font-weight: 600;
   letter-spacing: 0.7px;
   color: #8c7569;
@@ -190,7 +190,7 @@ body {
     border: 0;
     padding: 4px 0 0;
     font-size: 14px;
-    font-family: "Nunito", sans-serif;
+    font-family: 'Nunito', sans-serif;
 
     &::placeholder {
       color: #ccc;
@@ -239,8 +239,7 @@ body {
   }
 }
 
-
-@media(max-width: 750px) {
+@media (max-width: 750px) {
   .modal-container {
     width: 90%;
   }
@@ -248,7 +247,7 @@ body {
     display: none;
   }
 
-  .hidden_item{
+  .hidden_item {
     display: none;
   }
 }

@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-almacen',
   standalone: false,
   templateUrl: './almacen.component.html',
-  styleUrls: ['./almacen.component.scss']
+  styleUrls: ['./almacen.component.scss'],
 })
-export class AlmacenComponent {
-
-}
+export class AlmacenComponent {}

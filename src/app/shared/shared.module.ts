@@ -5,18 +5,8 @@ import { NumberFormatDirective } from '../number-format.directive';
 import { SharedComponentsModule } from './components/shared-components.module';
 
 @NgModule({
-  declarations: [
-    SafePipe,
-    NumberFormatDirective
-  ],
-  imports: [
-    CommonModule,
-    SharedComponentsModule
-  ],
-  exports: [
-    SafePipe,
-    NumberFormatDirective,
-    SharedComponentsModule
-  ]
+  declarations: [SafePipe, NumberFormatDirective],
+  imports: [CommonModule, SharedComponentsModule],
+  exports: [SafePipe, NumberFormatDirective, SharedComponentsModule],
 })
-export class SharedModule { }
+export class SharedModule {}

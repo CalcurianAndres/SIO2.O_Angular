@@ -3,14 +3,15 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-listado',
-  standalone: false,templateUrl: './listado.component.html',
-  styleUrls: ['./listado.component.scss']
+  standalone: false,
+  templateUrl: './listado.component.html',
+  styleUrls: ['./listado.component.scss'],
 })
 export class ListadoComponent {
-  @Input() listado!:boolean;
-  @Input() lista:any;
-  @Input() fabricacion!:string[];
-  @Input() n!:number;
+  @Input() listado!: boolean;
+  @Input() lista: any;
+  @Input() fabricacion!: string[];
+  @Input() n!: number;
   @Output() onCerrarModal = new EventEmitter();
 
   currentDate = new Date();
@@ -19,26 +20,24 @@ export class ListadoComponent {
   day = String(this.currentDate.getDate()).padStart(2, '0');
   Hoy = `${this.year}-${this.month}-${this.day}`;
 
-  cerrar(){
+  cerrar() {
     this.onCerrarModal.emit();
   }
 
   verificarCodigoUnico(codigo, i): void {
-    
-    let existencia = this.lista.filter((x:any, n:number) => x.codigo === codigo.value && n != i)
-    console.log(existencia)
-    if(existencia.length > 0){
+    let existencia = this.lista.filter((x: any, n: number) => x.codigo === codigo.value && n != i);
+    console.log(existencia);
+    if (existencia.length > 0) {
       Swal.fire({
-        icon:'error',
-        text:'El codigo debe ser único.',
-        timer:5000,
-        timerProgressBar:true,
-        toast:true,
-        position:'top-end',
-        showConfirmButton:false
-      })
-      this.lista[i].codigo = ''
+        icon: 'error',
+        text: 'El codigo debe ser único.',
+        timer: 5000,
+        timerProgressBar: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+      });
+      this.lista[i].codigo = '';
     }
-  }  
-
+  }
 }

@@ -5,7 +5,7 @@ import { MaterialesService } from 'src/app/services/materiales.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { RecepcionService } from 'src/app/services/recepcion.service';
 import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import Swal from 'sweetalert2';
 import { OpoligraficaService } from 'src/app/services/opoligrafica.service';
 import * as XLSX from 'xlsx';
@@ -13,61 +13,61 @@ import { BobinasService } from 'src/app/services/bobinas.service';
 
 @Component({
   selector: 'app-nueva-recepcion',
-  standalone: false, templateUrl: './nueva-recepcion.component.html',
-  styleUrls: ['./nueva-recepcion.component.scss']
+  standalone: false,
+  templateUrl: './nueva-recepcion.component.html',
+  styleUrls: ['./nueva-recepcion.component.scss'],
 })
 export class NuevaRecepcionComponent implements OnChanges {
-
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   triggerFileInputClick() {
     this.fileInput.nativeElement.click();
   }
 
-
-  public opcionesProveedor
+  public opcionesProveedor;
 
   ngOnChanges(): void {
     this.opcionesProveedor = [
-      ...this.proveedores.proveedores.map(p => ({ ...p, tipo: 'proveedor' })),
-      ...this.bobinas.convertidora.map(c => ({ ...c, tipo: 'convertidora' }))
+      ...this.proveedores.proveedores.map((p) => ({ ...p, tipo: 'proveedor' })),
+      ...this.bobinas.convertidora.map((c) => ({ ...c, tipo: 'convertidora' })),
     ];
   }
 
-  constructor(public proveedores: ProveedoresService,
+  constructor(
+    public proveedores: ProveedoresService,
     public fabricantes: FabricantesService,
     public materiales: MaterialesService,
     public OC_Poligrafica: OpoligraficaService,
     public api: RecepcionService,
-    public bobinas: BobinasService) { }
+    public bobinas: BobinasService,
+  ) {}
 
   @Input() nueva!: boolean;
   @Output() onCloseModal = new EventEmitter();
-
 
   public Poligrafica_OC;
   public material_selected_in_OC;
   public materiales_recibidos;
   public control = '';
-  public proveedor_ = ''
-  public OC__
+  public proveedor_ = '';
+  public OC__;
   public inputValue: string = '0,00';
   public textoSinFormato = '';
   public cantidad_ = 0;
   public neto_ = 0;
-  public presentacion_
-  public documento_
-  public f_recepcion
-  public transportista_
-  public lote_
+  public presentacion_;
+  public documento_;
+  public f_recepcion;
+  public transportista_;
+  public lote_;
   public done = false;
   today = new Date().toISOString().split('T')[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
-  public Listado_
-  public revisado = false
-  public registro_lotes: any = []
-  public lotes_guardados: any = []
-  public grupo: any = ''
-  public trato: any = ''
+  public Listado_;
+  public revisado = false;
+  public registro_lotes: any = [];
+  public lotes_guardados: any = [];
+  public grupo: any = '';
+  public trato: any = '';
   public condicion____ = {
     Certificado_de_calidad: false,
     Identificacion_del_lote: false,
@@ -81,42 +81,42 @@ export class NuevaRecepcionComponent implements OnChanges {
     Embalaje_sin_rotura: false,
     Embalaje_seco_externamente: false,
     Embalaje_seco_internamente: false,
-    Evidencia_de_fumigacion: false
-  }
+    Evidencia_de_fumigacion: false,
+  };
 
-  public tipo_documento = 'F - '
+  public tipo_documento = 'F - ';
 
   public documento!: string;
   public condicion: boolean = false;
   public OC!: string;
   public recepcion!: string;
-  public transportista!: string
-  public proveedor!: string
-  public fabricante: any
-  public material: any
-  public fabricacion: any
+  public transportista!: string;
+  public proveedor!: string;
+  public fabricante: any;
+  public material: any;
+  public fabricacion: any;
   public es_sustrato = false;
 
   public documentoLleno: boolean = false;
   public OCLLeno: boolean = false;
   public recepcionLleno: boolean = false;
   public transportistaLleno: boolean = false;
-  public ParaAlmacenar: any = []
+  public ParaAlmacenar: any = [];
   public listado: boolean = false;
-  public netoEspecifico: any = {}
-  public totalizacion: any = []
-  public GrupoDeMateriales: any = []
+  public netoEspecifico: any = {};
+  public totalizacion: any = [];
+  public GrupoDeMateriales: any = [];
   public choosen: any;
-  public cantidades: number[] = []
-  public fabricaciones: string[] = []
+  public cantidades: number[] = [];
+  public fabricaciones: string[] = [];
   public condiciones: any;
-  public f_fabricacion = ''
+  public f_fabricacion = '';
 
   public checked = false;
   public conversion = false;
   public descuento = false;
-  public Lote_bobina = ''
-  public fabrication_
+  public Lote_bobina = '';
+  public fabrication_;
 
   material_selected!: any;
   cantidad!: number;
@@ -134,28 +134,26 @@ export class NuevaRecepcionComponent implements OnChanges {
   Hoy = `${this.year}-${this.month}-${this.day}`;
   _Hoy_ = `${this.year}-${this.month}-${this.day}`;
 
-
   mostrarMaterial(evento: any) {
-    console.log(evento.value)
+    console.log(evento.value);
   }
-
 
   onProveedorChange(event: any) {
     const selectedId = this.proveedor_;
-    const seleccion = this.opcionesProveedor.find(p => p._id === selectedId);
+    const seleccion = this.opcionesProveedor.find((p) => p._id === selectedId);
     this.conversion = seleccion?.tipo === 'convertidora';
     this.OC__ = ''; // según tu lógica
   }
 
   seleccionarOC(e) {
-    this.Poligrafica_OC = this.OC_Poligrafica.filtrarPorProveedor(this.proveedor_)[e.value]
-    console.log(this.Poligrafica_OC)
+    this.Poligrafica_OC = this.OC_Poligrafica.filtrarPorProveedor(this.proveedor_)[e.value];
+    console.log(this.Poligrafica_OC);
   }
 
   seleccionarOC_() {
     this.Poligrafica_OC = {
-      numero: this.bobinas.conversiones[this.OC__].conversion
-    }
+      numero: this.bobinas.conversiones[this.OC__].conversion,
+    };
   }
 
   formatOrderNumber(orderNumber: any): string {
@@ -182,7 +180,6 @@ export class NuevaRecepcionComponent implements OnChanges {
       // Convierte los datos a un objeto JSON
       const excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-
       // Crea el objeto 'data' con los valores del Excel
       const dataObj = excelData.map((row: any) => ({
         codigo: row.Codigo,
@@ -190,7 +187,7 @@ export class NuevaRecepcionComponent implements OnChanges {
       }));
 
       // Check if all values in dataObj are undefined
-      const allUndefined = dataObj.every(obj => obj.codigo === undefined && obj.cantidad === undefined);
+      const allUndefined = dataObj.every((obj) => obj.codigo === undefined && obj.cantidad === undefined);
       if (allUndefined) {
         Swal.fire({
           text: 'El documento debe contener las columnas <Codigo> y <Cantidades> para proceder a cargar la recepción',
@@ -199,10 +196,10 @@ export class NuevaRecepcionComponent implements OnChanges {
           timer: 5000,
           toast: true,
           position: 'top-end',
-          showConfirmButton: false
+          showConfirmButton: false,
         });
 
-        return
+        return;
       }
 
       for (let i = 0; i < dataObj.length; i++) {
@@ -230,35 +227,32 @@ export class NuevaRecepcionComponent implements OnChanges {
       } else {
         console.error('Element with ID "sobrante" not found.');
       }
-
     };
 
     reader.readAsArrayBuffer(file);
   }
 
-
-
   addMaterial() {
-    let leyenda = ''
-    let sobrante = ''
-    let resultado = this.calcularLatasYSobrante(this.cantidad_, this.neto_)
+    let leyenda = '';
+    let sobrante = '';
+    let resultado = this.calcularLatasYSobrante(this.cantidad_, this.neto_);
     if (!this.conversion) {
       if (resultado.sobrante > 0) {
-        sobrante = `1 ${this.presentacion_} de ${resultado.sobrante.toFixed(2)} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`
-        leyenda = `${resultado.latas.length - 1} ${this.presentacion_}(s) de ${this.neto_} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`
+        sobrante = `1 ${this.presentacion_} de ${resultado.sobrante.toFixed(2)} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`;
+        leyenda = `${resultado.latas.length - 1} ${this.presentacion_}(s) de ${this.neto_} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`;
       } else {
-        leyenda = `${resultado.latas.length} ${this.presentacion_}(s) de ${this.neto_} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`
+        leyenda = `${resultado.latas.length} ${this.presentacion_}(s) de ${this.neto_} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`;
       }
     } else {
       if (resultado.sobrante > 0) {
-        sobrante = `1 ${this.presentacion_} de ${resultado.sobrante.toFixed(2)} Und.`
-        leyenda = `${resultado.latas.length - 1} ${this.presentacion_}(s) de ${this.neto_} Und.`
+        sobrante = `1 ${this.presentacion_} de ${resultado.sobrante.toFixed(2)} Und.`;
+        leyenda = `${resultado.latas.length - 1} ${this.presentacion_}(s) de ${this.neto_} Und.`;
       } else {
-        leyenda = `${resultado.latas.length} ${this.presentacion_}(s) de ${this.neto_} Und.`
+        leyenda = `${resultado.latas.length} ${this.presentacion_}(s) de ${this.neto_} Und.`;
       }
     }
 
-    // Update the 'info' span element with the 'leyenda' text 
+    // Update the 'info' span element with the 'leyenda' text
     const infoElement = document.getElementById('info');
     if (infoElement) {
       infoElement.textContent = leyenda;
@@ -290,7 +284,6 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.control = nuevoValor;
   }
 
-
   keyDownEvent(e: KeyboardEvent): boolean {
     // Permitir la tecla para borrar
     if (e.key === 'Backspace') return true;
@@ -311,16 +304,15 @@ export class NuevaRecepcionComponent implements OnChanges {
       .replace(/\s/g, '');
     // Guardar el texto sin formato en la variable textoSinFormato
     this.textoSinFormato = numeros.value;
-    numeros.value = numeros.value
+    numeros.value = numeros.value;
     // // Agregar un espacio cada dos números
     // .replace(/\D/g, '')
     // .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     // // Borrar espacio al final
     // .trim();
 
-    console.log(this.textoSinFormato)
+    console.log(this.textoSinFormato);
   }
-
 
   onInputChange(event: any) {
     let newValue = event.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
@@ -328,9 +320,9 @@ export class NuevaRecepcionComponent implements OnChanges {
       newValue = newValue.slice(1);
     }
     if (newValue.length > 2) {
-      let format = newValue.slice('0', -2)
-      format = format.replace(/\D/g, '')
-      format = format.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+      let format = newValue.slice('0', -2);
+      format = format.replace(/\D/g, '');
+      format = format.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
       newValue = format + ',' + newValue.slice(-2); // Agregar el punto decimal
     } else if (newValue.length === 2) {
       newValue = '0,' + newValue; // Agregar el punto decimal al inicio si solo hay 2 dígitos
@@ -363,7 +355,7 @@ export class NuevaRecepcionComponent implements OnChanges {
           ancho: this.Poligrafica_OC.pedido[this.material_selected_in_OC].ancho,
           largo: this.Poligrafica_OC.pedido[this.material_selected_in_OC].largo,
           fabricacion: this.f_fabricacion,
-          oc: this.Poligrafica_OC
+          oc: this.Poligrafica_OC,
         });
       }
 
@@ -380,7 +372,7 @@ export class NuevaRecepcionComponent implements OnChanges {
           ancho: this.Poligrafica_OC.pedido[this.material_selected_in_OC].ancho,
           largo: this.Poligrafica_OC.pedido[this.material_selected_in_OC].largo,
           fabricacion: this.f_fabricacion,
-          oc: this.Poligrafica_OC
+          oc: this.Poligrafica_OC,
         });
       }
     } else {
@@ -396,7 +388,7 @@ export class NuevaRecepcionComponent implements OnChanges {
           ancho: this.bobinas.conversiones[this.OC__].ancho,
           largo: this.bobinas.conversiones[this.OC__].largo,
           fabricacion: this.f_fabricacion,
-          oc: this.Poligrafica_OC
+          oc: this.Poligrafica_OC,
         });
       }
 
@@ -413,13 +405,13 @@ export class NuevaRecepcionComponent implements OnChanges {
           ancho: this.bobinas.conversiones[this.OC__].ancho,
           largo: this.bobinas.conversiones[this.OC__].largo,
           fabricacion: this.f_fabricacion,
-          oc: this.Poligrafica_OC
+          oc: this.Poligrafica_OC,
         });
       }
     }
 
-    this.Listado_ = datosLatas
-    console.log(this.Listado_)
+    this.Listado_ = datosLatas;
+    console.log(this.Listado_);
     // Retornar el resultado
     return {
       sobrante,
@@ -429,13 +421,11 @@ export class NuevaRecepcionComponent implements OnChanges {
 
   showInfo() {
     setTimeout(() => {
-      console.warn(this.bobinas.conversiones[this.OC__])
-    }, 1000
-    );
+      console.warn(this.bobinas.conversiones[this.OC__]);
+    }, 1000);
   }
 
   NuevoGuardarRegistro = async () => {
-
     let data = {
       proveedor: this.proveedor_,
       documento: `${this.tipo_documento}${this.documento_}`,
@@ -461,14 +451,13 @@ export class NuevaRecepcionComponent implements OnChanges {
       }),
     };
 
-    proveedor: this.proveedor_,
-      this.tipo_documento = 'F - '
-    this.documento_ = ''
-    this.control = ''
-    this.textoSinFormato = ''
-    this.f_recepcion = ''
-    this.transportista_ = ''
-    await this.api.GuardarRecepcion(data)
+    proveedor: this.proveedor_, (this.tipo_documento = 'F - ');
+    this.documento_ = '';
+    this.control = '';
+    this.textoSinFormato = '';
+    this.f_recepcion = '';
+    this.transportista_ = '';
+    await this.api.GuardarRecepcion(data);
     this.onCloseModal.emit();
 
     setTimeout(() => {
@@ -479,16 +468,15 @@ export class NuevaRecepcionComponent implements OnChanges {
         timerProgressBar: true,
         toast: true,
         position: 'top-end',
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     }, 1000);
-
-  }
+  };
 
   contarPresentaciones(arreglo): string | any {
     const presentaciones = {};
 
-    arreglo.forEach(item => {
+    arreglo.forEach((item) => {
       const key = `${item.presentacion} de ${item.neto}`;
       if (presentaciones[key]) {
         presentaciones[key]++;
@@ -498,27 +486,27 @@ export class NuevaRecepcionComponent implements OnChanges {
     });
 
     let result = '';
-    Object.keys(presentaciones).forEach(key => {
+    Object.keys(presentaciones).forEach((key) => {
       result += `${presentaciones[key]} ${key} <br>`;
     });
 
-    return result
+    return result;
   }
 
-  public indice_oc
-  public cantidad_entregada
+  public indice_oc;
+  public cantidad_entregada;
   _guardar() {
-    this.registro_lotes.push(this.contarPresentaciones(this.Listado_))
-    this.lotes_guardados.push(this.Listado_)
+    this.registro_lotes.push(this.contarPresentaciones(this.Listado_));
+    this.lotes_guardados.push(this.Listado_);
     this.indice_oc = this.OC__;
     this.cantidad_entregada = this.cantidad_;
-    this.OC__ = ''
-    this.material_selected_in_OC = ''
-    this.Lote_bobina = this.lote_
-    this.lote_ = ''
-    this.cantidad_ = 0
-    this.presentacion_ = ''
-    this.neto_ = 0
+    this.OC__ = '';
+    this.material_selected_in_OC = '';
+    this.Lote_bobina = this.lote_;
+    this.lote_ = '';
+    this.cantidad_ = 0;
+    this.presentacion_ = '';
+    this.neto_ = 0;
     this.revisado = false;
 
     const sobrante__ = document.getElementById('sobrante');
@@ -531,20 +519,28 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.done = false;
   }
 
-  calcularRecepcion() {
-
-  }
+  calcularRecepcion() {}
 
   guardar = async () => {
-    const { f_fabricacion, GrupoDeMateriales, cantidades, documento, OC, recepcion, transportista, proveedor, fabricacion, ParaAlmacenar } = this;
+    const {
+      f_fabricacion,
+      GrupoDeMateriales,
+      cantidades,
+      documento,
+      OC,
+      recepcion,
+      transportista,
+      proveedor,
+      fabricacion,
+      ParaAlmacenar,
+    } = this;
 
     const proveedorData = this.proveedores.proveedores[proveedor]._id;
 
-    const materiales = GrupoDeMateriales.map((materiales: any) => materiales.materiales)
-    const condicion = GrupoDeMateriales.map((materiales: any) => materiales.condicion)
+    const materiales = GrupoDeMateriales.map((materiales: any) => materiales.materiales);
+    const condicion = GrupoDeMateriales.map((materiales: any) => materiales.condicion);
 
-    console.log(materiales)
-
+    console.log(materiales);
 
     const data = {
       OC,
@@ -556,21 +552,17 @@ export class NuevaRecepcionComponent implements OnChanges {
       documento,
       fabricacion: this.fabricaciones,
       materiales,
-      cantidad: cantidades
+      cantidad: cantidades,
     };
 
-    this.OC = ''
-    this.recepcion = '',
-      this.transportista = '',
-      this.proveedor = ''
-    this.documento = '',
-      this.fabricacion = ''
-    this.GrupoDeMateriales = []
-    this.cantidades = []
-    this.fabricaciones = []
+    this.OC = '';
+    (this.recepcion = ''), (this.transportista = ''), (this.proveedor = '');
+    (this.documento = ''), (this.fabricacion = '');
+    this.GrupoDeMateriales = [];
+    this.cantidades = [];
+    this.fabricaciones = [];
 
-
-    await this.api.GuardarRecepcion(data)
+    await this.api.GuardarRecepcion(data);
     this.onCloseModal.emit();
 
     setTimeout(() => {
@@ -581,10 +573,10 @@ export class NuevaRecepcionComponent implements OnChanges {
         timerProgressBar: true,
         toast: true,
         position: 'top-end',
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     }, 1000);
-  }
+  };
 
   cerrar() {
     this.onCloseModal.emit();
@@ -597,9 +589,9 @@ export class NuevaRecepcionComponent implements OnChanges {
   }
 
   EliminarListado(i: number) {
-    this.GrupoDeMateriales.splice(i, 1)
-    this.cantidades.splice(i, 1)
-    this.fabricaciones.splice(i, 1)
+    this.GrupoDeMateriales.splice(i, 1);
+    this.cantidades.splice(i, 1);
+    this.fabricaciones.splice(i, 1);
   }
 
   CerrarListado() {
@@ -607,8 +599,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.listado = false;
 
     this.cantidad_ = this.Listado_.reduce((acc, material) => acc + parseFloat(material.neto), 0);
-    this.cantidad_ = Number(this.cantidad_.toFixed(2))
-
+    this.cantidad_ = Number(this.cantidad_.toFixed(2));
 
     const infoElement = document.getElementById('info');
     if (infoElement) {
@@ -628,28 +619,28 @@ export class NuevaRecepcionComponent implements OnChanges {
   }
 
   task(grupo, trato) {
-    this.grupo = grupo
-    this.trato = trato
+    this.grupo = grupo;
+    this.trato = trato;
     this.condicion = true;
-    this.nueva = false
+    this.nueva = false;
   }
 
   buscarFabricantes = async (e: any) => {
     let fabricantes = this.proveedores.proveedores[e.value].fabricantes;
-    fabricantes = fabricantes.map((fabricantes: any) => fabricantes._id)
-    this.fabricante = this.fabricantes.buscarFabricantesPorId(fabricantes)
-  }
+    fabricantes = fabricantes.map((fabricantes: any) => fabricantes._id);
+    this.fabricante = this.fabricantes.buscarFabricantesPorId(fabricantes);
+  };
 
   buscarmMateriales = async (e: any) => {
-    let grupos = this.fabricante[e.value].grupo.map((fabricante: any) => fabricante._id)
-    this.material = this.materiales.filtrarPorGrupos(grupos)
-  }
+    let grupos = this.fabricante[e.value].grupo.map((fabricante: any) => fabricante._id);
+    this.material = this.materiales.filtrarPorGrupos(grupos);
+  };
 
   //crea una funcion llamada crearLatas() que al ser ejecutada tome el valos de this.cantidad y agregue a un arreglo latas de this.neto sin sobrepasar a this.cantidad sino agregando una lata con un resto de ser necesario
   crearLatas() {
-    this.ParaAlmacenar = []
-    this.netoEspecifico = []
-    this.totalizacion = []
+    this.ParaAlmacenar = [];
+    this.netoEspecifico = [];
+    this.totalizacion = [];
     let resto = this.cantidad % this.neto;
     const cantidadLatas = Math.floor(this.cantidad / this.neto);
     if (resto > 0) {
@@ -662,11 +653,11 @@ export class NuevaRecepcionComponent implements OnChanges {
         unidad: this.unidad,
         material: this.material_selected,
         fabricacion: this.fabricacion,
-        codigo: 1
+        codigo: 1,
       });
     }
     for (let i = 0; i < cantidadLatas; i++) {
-      const codigo = (resto > 0) ? i + 2 : i + 1;
+      const codigo = resto > 0 ? i + 2 : i + 1;
       this.ParaAlmacenar.push({
         presentacion: this.presentacion,
         neto: this.neto.toFixed(2),
@@ -676,7 +667,7 @@ export class NuevaRecepcionComponent implements OnChanges {
         unidad: this.unidad,
         material: this.material_selected,
         fabricacion: this.fabricacion,
-        codigo: codigo
+        codigo: codigo,
       });
     }
 
@@ -684,22 +675,22 @@ export class NuevaRecepcionComponent implements OnChanges {
       if (this.netoEspecifico[`${almacenado.neto}`]) {
         this.netoEspecifico[`${almacenado.neto}`]++;
       } else {
-        this.netoEspecifico[`${almacenado.neto}`] = 1
+        this.netoEspecifico[`${almacenado.neto}`] = 1;
       }
     });
 
     for (const [neto, cantidad] of Object.entries(this.netoEspecifico)) {
-      this.totalizacion.push(`${cantidad} ${this.presentacion}(s) de ${neto}${this.unidad}`)
+      this.totalizacion.push(`${cantidad} ${this.presentacion}(s) de ${neto}${this.unidad}`);
     }
 
     const materiales = this.ParaAlmacenar.map((material: any) => {
       return {
         ...material,
-        material: material.material._id
+        material: material.material._id,
       };
     });
 
-    console.log(materiales)
+    console.log(materiales);
     this.GrupoDeMateriales.push({
       materiales,
       nombre: this.ParaAlmacenar[0].material.nombre,
@@ -719,43 +710,38 @@ export class NuevaRecepcionComponent implements OnChanges {
         Embalaje_sin_rotura: false,
         Embalaje_seco_externamente: false,
         Embalaje_seco_internamente: false,
-        Evidencia_de_fumigacion: false
-      }
+        Evidencia_de_fumigacion: false,
+      },
     });
-    this.cantidades.push(this.cantidad)
-    this.fabricaciones.push(this.fabricacion)
-    this.lote = ''
-    this.ancho = 0
-    this.largo = 0
-    this.presentacion = ''
-    this.fabricacion = ''
-    this.neto = 0
-    this.unidad = ''
+    this.cantidades.push(this.cantidad);
+    this.fabricaciones.push(this.fabricacion);
+    this.lote = '';
+    this.ancho = 0;
+    this.largo = 0;
+    this.presentacion = '';
+    this.fabricacion = '';
+    this.neto = 0;
+    this.unidad = '';
   }
 
   abrirCondicion(i: number) {
-    this.choosen = i
+    this.choosen = i;
     this.condicion = true;
     this.nueva = false;
   }
 
   cerrarCondicion() {
     this.condicion = false;
-    this.nueva = true
+    this.nueva = true;
     this.checked = true;
   }
 
   MaterialSeleccionado(e: any) {
     this.material_selected = this.material[e.value];
-    if (this.material_selected)
-      console.log(this.material_selected)
+    if (this.material_selected) console.log(this.material_selected);
   }
 
   todosLosChecksSonTrue(): boolean {
     return this.GrupoDeMateriales.map((item: any) => item.check).every((check: any) => check === true);
   }
-
-
-
-
 }

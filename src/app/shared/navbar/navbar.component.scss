@@ -1,28 +1,28 @@
 .menu__ {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100%;
-    width: 240px;
-    background-color: rgb(38, 52, 61);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    padding: 10px 0;
-    color: #9fadbc;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    transition: width 0.3s ease;
-    white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100%;
+  width: 240px;
+  background-color: rgb(38, 52, 61);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 10px 0;
+  color: #9fadbc;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  white-space: nowrap;
 }
 
 .menu__.collapsed {
-    width: 65px;
+  width: 65px;
 }
 
 .menu__.collapsed .logo-container img {
-    width: 30px;
-    margin-left: 0;
+  width: 30px;
+  margin-left: 0;
 }
 
 .menu__.collapsed .nav-label,
@@ -32,475 +32,481 @@
 .menu__.collapsed .submenu,
 .menu__.collapsed .menu-divider,
 .menu__.collapsed .pin-btn {
-    display: none;
+  display: none;
 }
 
 .menu__.collapsed .parent-link {
-    justify-content: center;
-    padding: 12px 0;
+  justify-content: center;
+  padding: 12px 0;
 }
 
 .menu__.collapsed .parent-link i:first-child {
-    width: auto;
-    font-size: 18px;
+  width: auto;
+  font-size: 18px;
 }
 
 .menu__.collapsed .iconos-footer {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
 }
 
 .menu__.collapsed .user-profile-trigger {
-    justify-content: center;
-    padding: 8px 0;
+  justify-content: center;
+  padding: 8px 0;
 }
 
 .menu__.collapsed .avatar-wrapper {
-    margin: 0;
+  margin: 0;
 }
 
 .menu__.collapsed #logo_menu {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 .logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  position: relative;
 }
 
 .pin-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    color: #64748b;
-    cursor: pointer;
-    font-size: 12px;
-    padding: 4px;
-    border-radius: 4px;
-    transition: color 0.3s, background 0.3s;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 4px;
+  transition:
+    color 0.3s,
+    background 0.3s;
 }
 
 .pin-btn:hover {
-    color: #ff4444;
-    background: rgba(255, 68, 68, 0.1);
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
 }
 
 .pin-btn.pinned {
-    color: #ff4444;
+  color: #ff4444;
 }
 
 .menu-divider {
-    border: 0;
-    border-top: 1px solid #2d2f39;
-    margin: 10px 20px;
+  border: 0;
+  border-top: 1px solid #2d2f39;
+  margin: 10px 20px;
 }
 
 .menu {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px 15px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 15px;
 }
 
 .menu-list-wrapper {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 5px;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 5px;
 }
 
 .parent-link {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    color: #9fadbc;
-    text-decoration: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #9fadbc;
+  text-decoration: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .parent-link i:first-child {
-    width: 25px;
-    font-size: 16px;
+  width: 25px;
+  font-size: 16px;
 }
 
 .parent-link .arrow {
-    margin-left: auto;
-    font-size: 10px;
-    transition: transform 0.3s ease;
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform 0.3s ease;
 }
 
 .parent-link:hover {
-    background-color: rgba(255, 68, 68, 0.1);
-    color: #ffffff;
+  background-color: rgba(255, 68, 68, 0.1);
+  color: #ffffff;
 }
 
 .parent-link.is-active {
-    background-color: #ff4444;
-    color: white !important;
-    font-weight: bold;
-    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+  background-color: #ff4444;
+  color: white !important;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
 }
 
 .submenu {
-    list-style: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-    padding-left: 25px;
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding-left: 25px;
 }
 
 .is-expanded .submenu {
-    max-height: 500px;
-    margin: 5px 0;
+  max-height: 500px;
+  margin: 5px 0;
 }
 
 .is-expanded .arrow {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .submenu a {
-    display: block;
-    padding: 8px 15px;
-    color: #8394a5;
-    font-size: 14px;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: 0.2s;
+  display: block;
+  padding: 8px 15px;
+  color: #8394a5;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.2s;
 }
 
 .submenu a:hover {
-    color: #ff4444;
-    background-color: rgba(255, 68, 68, 0.05);
+  color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.05);
 }
 
 .sub-active {
-    color: #ff4444 !important;
-    font-weight: bold;
+  color: #ff4444 !important;
+  font-weight: bold;
 }
 
 .iconos-footer {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px;
-    border-top: 1px solid #2d2f39;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+  border-top: 1px solid #2d2f39;
 }
 
 .action-btn {
-    background: transparent;
-    border: none;
-    color: #9fadbc;
-    cursor: pointer;
-    position: relative;
-    font-size: 16px;
-    transition: 0.3s;
+  background: transparent;
+  border: none;
+  color: #9fadbc;
+  cursor: pointer;
+  position: relative;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 .action-btn:hover {
-    color: #ff4444;
+  color: #ff4444;
 }
 
 .badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background-color: #ff4444;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 5px;
-    font-size: 9px;
-    font-weight: bold;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 9px;
+  font-weight: bold;
 }
 
 .red-glow {
-    box-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
 }
 
 .user-area {
-    position: relative;
-    padding: 10px 15px;
-    margin-top: auto;
-    width: 100%;
-    box-sizing: border-box;
+  position: relative;
+  padding: 10px 15px;
+  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .user-profile-trigger {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    background: #252831;
-    border-radius: 14px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #252831;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .user-profile-trigger:hover,
 .user-profile-trigger.active {
-    background: #2d313d;
-    border-color: rgba(255, 68, 68, 0.4);
+  background: #2d313d;
+  border-color: rgba(255, 68, 68, 0.4);
 }
 
 .avatar-wrapper {
-    position: relative;
-    font-size: 28px;
-    color: #ff4444;
+  position: relative;
+  font-size: 28px;
+  color: #ff4444;
 }
 
 .status-dot {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border: 2px solid #252831;
-    border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border: 2px solid #252831;
+  border-radius: 50%;
 }
 
 .user-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .full-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .user-role {
-    font-size: 10px;
-    color: #64748b;
+  font-size: 10px;
+  color: #64748b;
 }
 
 .settings-icon {
-    font-size: 14px;
-    color: #475569;
+  font-size: 14px;
+  color: #475569;
 }
 
 .profile-menu {
-    position: absolute;
-    bottom: calc(100% + 10px);
-    left: 15px;
-    right: 15px;
-    background: #1e2028;
-    border: 1px solid #3e4451;
-    border-radius: 12px;
-    padding: 8px;
-    z-index: 9999;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 15px;
+  right: 15px;
+  background: #1e2028;
+  border: 1px solid #3e4451;
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .profile-menu.show-menu {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
 }
 
 .menu-header-mini {
-    font-size: 10px;
-    font-weight: bold;
-    color: #475569;
-    padding: 8px 12px;
-    text-transform: uppercase;
+  font-size: 10px;
+  font-weight: bold;
+  color: #475569;
+  padding: 8px 12px;
+  text-transform: uppercase;
 }
 
 .menu-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    background: transparent;
-    border: none;
-    color: #cbd5e1;
-    cursor: pointer;
-    border-radius: 8px;
-    text-align: left;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
 }
 
 .menu-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 
 .menu-item.logout {
-    color: #ff4444;
+  color: #ff4444;
 }
 
 .menu-item.logout:hover {
-    background: rgba(255, 68, 68, 0.1);
+  background: rgba(255, 68, 68, 0.1);
 }
 
 #logo_menu {
-    margin-left: 20%;
-    transition: all 0.3s ease;
+  margin-left: 20%;
+  transition: all 0.3s ease;
 }
 
 .close {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    cursor: pointer;
-    color: gray;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+  color: gray;
 }
 
 .menu_ {
-    cursor: pointer;
-    animation: bounce;
-    animation-duration: 1s;
+  cursor: pointer;
+  animation: bounce;
+  animation-duration: 1s;
 }
 
 .down {
-    animation: heartBeat;
-    animation-duration: 1s;
+  animation: heartBeat;
+  animation-duration: 1s;
 }
 
 .red {
-    background-color: red;
+  background-color: red;
 }
 
 .infoUsuario {
-    position: absolute;
-    bottom: 10px;
+  position: absolute;
+  bottom: 10px;
 }
 
 .popup-menu {
-    display: block;
-    background-color: white;
-    padding: 5px;
-    color: black;
-    margin: 0px;
-    width: 100%;
-    border-radius: 5px;
+  display: block;
+  background-color: white;
+  padding: 5px;
+  color: black;
+  margin: 0px;
+  width: 100%;
+  border-radius: 5px;
 }
 
 .popup-menu a {
-    color: black;
-    margin-bottom: 10px;
+  color: black;
+  margin-bottom: 10px;
 }
 
 .popup-menu a:hover {
-    color: black;
-    margin-bottom: 10px;
-    background-color: beige;
+  color: black;
+  margin-bottom: 10px;
+  background-color: beige;
 }
 
 .formated {
-    display: block;
-    padding: 5px;
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-    box-sizing: border-box;
+  display: block;
+  padding: 5px;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .usuario {
-    position: absolute;
-    display: block;
-    width: 80%;
-    bottom: 10px;
-    margin-bottom: 0px;
-    background-color: rgba(255, 255, 255, .2);
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 0px;
-    max-height: 40px;
+  position: absolute;
+  display: block;
+  width: 80%;
+  bottom: 10px;
+  margin-bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 0px;
+  max-height: 40px;
 }
 
 .usuario span {
-    position: relative;
-    top: -30%;
+  position: relative;
+  top: -30%;
 }
 
 .fa-cog:hover {
-    color: rgb(112, 112, 112);
+  color: rgb(112, 112, 112);
 }
 
 .users_information {
-    display: block;
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-    margin-top: 20px;
-    margin-bottom: 0px;
-    max-height: 20px;
+  display: block;
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  max-height: 20px;
 }
 
 .popup_menu {
-    position: absolute;
-    display: block;
-    width: 100%;
-    bottom: 60px;
-    left: 5px;
-    text-align: center;
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+  position: absolute;
+  display: block;
+  width: 100%;
+  bottom: 60px;
+  left: 5px;
+  text-align: center;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 7px -6px 5px -4px rgba(0, 0, 0, 0.75);
 }
 
 .popup_menu a {
-    position: relative;
-    display: block;
-    background-color: white;
-    color: black;
-    width: 100%;
+  position: relative;
+  display: block;
+  background-color: white;
+  color: black;
+  width: 100%;
 }
 
 .popup_menu a:hover {
-    position: relative;
-    display: block;
-    background-color: white;
-    color: rgb(70, 70, 70);
-    width: 100%;
+  position: relative;
+  display: block;
+  background-color: white;
+  color: rgb(70, 70, 70);
+  width: 100%;
 }
 
 .triangulo-abajo {
-    position: relative;
-    margin-bottom: -15px;
-    right: -88%;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 10px solid #fff;
+  position: relative;
+  margin-bottom: -15px;
+  right: -88%;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid #fff;
 }
 
 .asignacion-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
 }
 
 .blinking-light {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
-    animation: blink 0.5s infinite alternate;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+  animation: blink 0.5s infinite alternate;
 }
 
 @keyframes blink {
-    0% { opacity: 1; }
-    100% { opacity: 0.2; }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
 }

@@ -4,6 +4,7 @@ import { ComprasComponent } from './compras.component';
 import { MainComponent } from './main/main.component';
 import { ComprasRoutingModule } from './compras-routing.module';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { GruposComponent } from './grupos/grupos.component';
 import { NuevoGrupoComponent } from './grupos/nuevo-grupo/nuevo-grupo.component';
@@ -20,8 +21,6 @@ import { OrdenesComponent } from './ordenes/ordenes.component';
 import { NuevoOrdenComponent } from './ordenes/nuevo-orden/nuevo-orden.component';
 import { NoConformidadesComponent } from './no-conformidades/no-conformidades.component';
 import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/nueva-conformidad.component';
-
-
 
 @NgModule({
   declarations: [
@@ -40,7 +39,7 @@ import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/
     OrdenesComponent,
     NuevoOrdenComponent,
     NoConformidadesComponent,
-    NuevaConformidadComponent
+    NuevaConformidadComponent,
   ],
   imports: [
     CommonModule,
@@ -48,7 +47,8 @@ import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/
     NavbarModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    SharedModule,
+  ],
 })
-export class ComprasModule { }
+export class ComprasModule {}

@@ -4,28 +4,29 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
 @font-face {
-    font-family: 'Gilroy';
-    // font-style: normal;
-    // font-weight: normal;
-    src: local('Gilroy'), url('./assets/fonts/Gilroy-ExtraBold.otf') format('truetype');
+  font-family: 'Gilroy';
+  // font-style: normal;
+  // font-weight: normal;
+  src:
+    local('Gilroy'),
+    url('./assets/fonts/Gilroy-ExtraBold.otf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Gilroy-light';
-    // font-style: normal;
-    // font-weight: normal;
-    src: local('Gilroy-light'), url('./assets/fonts/Gilroy-Light.otf') format('truetype');
+  font-family: 'Gilroy-light';
+  // font-style: normal;
+  // font-weight: normal;
+  src:
+    local('Gilroy-light'),
+    url('./assets/fonts/Gilroy-Light.otf') format('truetype');
 }
 
-
-
-
 // Set your brand colors
-$purple: #8A4D76;
-$pink: #FA7C91;
+$purple: #8a4d76;
+$pink: #fa7c91;
 $brown: #757763;
-$beige-light: #D0D1CD;
-$beige-lighter: #EFF0EB;
+$beige-light: #d0d1cd;
+$beige-lighter: #eff0eb;
 $rojo-poligrafica: rgb(237, 0, 45);
 // $navBar: rgb(134, 37, 56);
 $navBar: $rojo-poligrafica;
@@ -40,7 +41,6 @@ $dark-color: #3c3f41;
 $dark-text: #9fadbc;
 $gray-hover: #e9e6e6;
 $darker-color: #c4d5db;
-
 
 $body-background-color: $primary;
 // $card-background-color: $dark-color;
@@ -63,46 +63,47 @@ $modal-card-head-radius: 5px;
 $table-striped-row-even-background-color: $gray-hover;
 $card-shadow: 0px;
 $modal-close-dimensions: 80px;
-$card-shadow: 0 0 1em 8px rgba(0, 0, 0, 0.1), 0 0px 0 1px rgba(0, 0, 0, 0.02);
-
+$card-shadow:
+  0 0 1em 8px rgba(0, 0, 0, 0.1),
+  0 0px 0 1px rgba(0, 0, 0, 0.02);
 
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.3);
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .modal .modal-card .modal-card-head .red_cross {
-    background-color: #f03a5f;
-    font-size: 50px;
+  background-color: #f03a5f;
+  font-size: 50px;
 }
 
 table tr th {
-    font-family: 'Gilroy';
+  font-family: 'Gilroy';
 }
 
 .modal .modal-card {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
 .mt-5 {
-    display: block;
+  display: block;
 }
 
 // .red-bar {
@@ -115,184 +116,180 @@ table tr th {
 // }
 
 .modal .fuente {
-    font-family: 'Gilroy';
+  font-family: 'Gilroy';
 }
 
 .card .darker {
-    background-color: $darker-color;
-    display: block;
-    position: fixed;
-    height: 95%;
-    width: 84%;
-
-    overflow: scroll;
-    overflow-x: hidden;
-
-
+  background-color: $darker-color;
+  display: block;
+  position: fixed;
+  height: 95%;
+  width: calc(100vw - var(--sidebar-width) - 30px);
+  left: calc(var(--sidebar-width) + 15px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .modal .modal-background {
-    background-color: rgba(60, 63, 65, 0.30);
-    backdrop-filter: blur(10px);
+  background-color: rgba(60, 63, 65, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .modal .modal-card {
-    box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 29px 5px rgba(0, 0, 0, 0.75);
 }
-
 
 :root {
   --sidebar-width: 65px;
 }
 
 .container_ {
-    display: block;
-    margin-left: var(--sidebar-width);
-    margin-right: 15px;
-    transition: margin-left 0.3s ease;
+  display: block;
+  margin-left: var(--sidebar-width);
+  margin-right: 15px;
+  transition: margin-left 0.3s ease;
 }
 
-
 .green {
-    color: #48c78e;
+  color: #48c78e;
 }
 
 .red {
-    color: #f03a5f;
-    transition: filter 0.3s ease-in-out;
+  color: #f03a5f;
+  transition: filter 0.3s ease-in-out;
 }
 
 .red:hover {
-    filter: brightness(1.2);
+  filter: brightness(1.2);
 }
 
 .color_bold {
-    font-family: 'Gilroy';
-    color: $dark-text;
+  font-family: 'Gilroy';
+  color: $dark-text;
 }
 
 .card .blancas {
-    color: white;
+  color: white;
 }
 
 .blue_ {
-    color: hsl(207, 61%, 53%);
+  color: hsl(207, 61%, 53%);
 }
 
 .fa-circle {
-    font-size: xx-small;
+  font-size: xx-small;
 }
 
 .subtitles {
-    display: block;
-    width: 100%;
-    background-color: #3c3f41;
-    padding: 3px;
-    border-radius: 5px;
-    color: white;
-    font-family: 'Gilroy';
-    font-size: large;
-    padding-left: 15px;
+  display: block;
+  width: 100%;
+  background-color: #3c3f41;
+  padding: 3px;
+  border-radius: 5px;
+  color: white;
+  font-family: 'Gilroy';
+  font-size: large;
+  padding-left: 15px;
 }
-
 
 /* Estilos para el checkbox */
 .checkbox {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    position: relative;
-    cursor: pointer;
-    background-color: #fff;
-    transition: background-color 0.3s, border-color 0.3s;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  background-color: #fff;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
 }
 
 /* Estilos cuando el checkbox está marcado */
 .checkbox:checked {
-    background-color: #4caf50;
-    /* Verde cuando está marcado */
-    border-color: #4caf50;
+  background-color: #4caf50;
+  /* Verde cuando está marcado */
+  border-color: #4caf50;
 }
 
 .checkbox:checked::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 8px;
-    height: 8px;
-    background-color: #fff;
-    border-radius: 50%;
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 50%;
 }
 
 /* Estilos al pasar el ratón */
 .checkbox:hover {
-    border-color: #3e8e41;
+  border-color: #3e8e41;
 }
 
 /* Efecto cuando el checkbox está enfocado */
 .checkbox:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 /* Estilos cuando el checkbox está deshabilitado */
 .checkbox:disabled {
-    background-color: #f0f0f0;
-    /* Fondo gris claro */
-    border-color: #ddd;
-    /* Borde gris claro */
-    cursor: not-allowed;
-    /* Cursor de no permitido */
+  background-color: #f0f0f0;
+  /* Fondo gris claro */
+  border-color: #ddd;
+  /* Borde gris claro */
+  cursor: not-allowed;
+  /* Cursor de no permitido */
 }
 
 .checkbox:disabled:checked {
-    background-color: #b0b0b0;
-    /* Fondo gris cuando está marcado */
-    border-color: #b0b0b0;
-    /* Borde gris cuando está marcado */
+  background-color: #b0b0b0;
+  /* Fondo gris cuando está marcado */
+  border-color: #b0b0b0;
+  /* Borde gris cuando está marcado */
 }
 
 .checkbox:disabled:hover {
-    border-color: #ddd;
-    /* No cambia el borde cuando está deshabilitado */
+  border-color: #ddd;
+  /* No cambia el borde cuando está deshabilitado */
 }
 
 .checkbox:disabled:focus {
-    box-shadow: none;
-    /* El enfoque no se ve cuando está deshabilitado */
+  box-shadow: none;
+  /* El enfoque no se ve cuando está deshabilitado */
 }
 
+@import '../node_modules/bulma/sass/utilities/_all.sass';
+@import '../node_modules/bulma/sass/base/_all.sass';
+@import '../node_modules/bulma/sass/elements/button.sass';
+@import '../node_modules/bulma/sass/elements/container.sass';
+@import '../node_modules/bulma/sass/elements/title.sass';
+@import '../node_modules/bulma/sass/elements/tag.sass';
+@import '../node_modules/bulma/sass/elements/icon.sass';
+@import '../node_modules/bulma/sass/form/_all.sass';
+@import '../node_modules/bulma/sass/components/navbar.sass';
+@import '../node_modules/bulma/sass/layout/hero.sass';
+@import '../node_modules/bulma/sass/layout/section.sass';
+@import '../node_modules/bulma/sass/grid/columns.sass';
+@import '../node_modules/bulma/sass/components/card.sass';
+@import '../node_modules/bulma/sass/elements/table.sass';
+@import '../node_modules/bulma/sass/components/modal.sass';
+@import '../node_modules/bulma/sass/components/message.sass';
+@import '../node_modules/bulma/sass/components/tabs.sass';
+@import '../node_modules/bulma/sass/components/breadcrumb.sass';
+@import '../node_modules/bulma/sass/elements/progress.sass';
+@import '../node_modules/bulma/sass/elements/image.sass';
+@import '../node_modules/bulma/sass/components/menu.sass';
+@import '../node_modules/bulma/css/bulma.css';
+@import '../node_modules/animate.css/animate.css';
 
-@import "../node_modules/bulma/sass/utilities/_all.sass";
-@import "../node_modules/bulma/sass/base/_all.sass";
-@import "../node_modules/bulma/sass/elements/button.sass";
-@import "../node_modules/bulma/sass/elements/container.sass";
-@import "../node_modules/bulma/sass/elements/title.sass";
-@import "../node_modules/bulma/sass/elements/tag.sass";
-@import "../node_modules/bulma/sass/elements/icon.sass";
-@import "../node_modules/bulma/sass/form/_all.sass";
-@import "../node_modules/bulma/sass/components/navbar.sass";
-@import "../node_modules/bulma/sass/layout/hero.sass";
-@import "../node_modules/bulma/sass/layout/section.sass";
-@import "../node_modules/bulma/sass/grid/columns.sass";
-@import "../node_modules/bulma/sass/components/card.sass";
-@import "../node_modules/bulma/sass/elements/table.sass";
-@import "../node_modules/bulma/sass/components/modal.sass";
-@import "../node_modules/bulma/sass/components/message.sass";
-@import "../node_modules/bulma/sass/components/tabs.sass";
-@import "../node_modules/bulma/sass/components/breadcrumb.sass";
-@import "../node_modules/bulma/sass/elements/progress.sass";
-@import "../node_modules/bulma/sass/elements/image.sass";
-@import "../node_modules/bulma/sass/components/menu.sass";
-@import "../node_modules/bulma/css/bulma.css";
-@import "../node_modules/animate.css/animate.css";
-
-@import "../node_modules/bulma-o-steps/bulma-steps.css";
+@import '../node_modules/bulma-o-steps/bulma-steps.css';
 
 * {
   transition-property: background-color, border-color, color, box-shadow;

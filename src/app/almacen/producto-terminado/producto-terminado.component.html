@@ -1,83 +1,63 @@
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <!-- <span class="red-bar"></span> -->
-            <section class="print-hero">
-                <div class="ink-blobs">
-                    <div class="blob cian"></div>
-                    <div class="blob magenta"></div>
-                    <div class="blob yellow"></div>
+<app-page-layout>
+  <app-section-header title="Producto Terminado" description="Producto finalizado para despacho" icon="fa-warehouse" color="orange"></app-section-header>
+  <br />
+
+  <div class="accordion-wrapper">
+        <div class="accordion-item" *ngFor="let item of api.producto_terminado_agrupado; let i = index">
+          <input type="checkbox" [id]="'check' + i" class="accordion-trigger" />
+          <label [for]="'check' + i" class="accordion-header">
+            <div class="product-meta">
+              <div class="product-info-text">
+                <!-- Nombre del Producto -->
+                <span class="product-name">{{ item.nombre }}</span>
+                <div class="product-stats">
+                  <!-- Suma total de cantidades -->
+                  <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: #000">
+                    {{ item.cantidadTotal | number }}
+                  </span>
+                  <span class="dot"></span>
+                  <!-- Conteo de OPs -->
+                  <span class="stat-item">{{ item.totalOPs }} OP</span>
                 </div>
-
-                <div class="hero-body">
-                    <div class="container is-fluid">
-                        <div class="hero-wrapper">
-                            <div class="brand-accent"></div>
-                            <div class="text-content">
-                                <span class="upper-tag">Inventario</span>
-                                <h1 class="hero-title">Producto Terminado</h1>
-                                <p class="hero-subtitle">Producto finalizado para despacho.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <br>
-
-            <div class="accordion-wrapper">
-
-                <div class="accordion-item" *ngFor="let item of api.producto_terminado_agrupado; let i = index">
-                    <input type="checkbox" [id]="'check' + i" class="accordion-trigger">
-                    <label [for]="'check' + i" class="accordion-header">
-                        <div class="product-meta">
-                            <div class="product-info-text">
-                                <!-- Nombre del Producto -->
-                                <span class="product-name">{{ item.nombre }}</span>
-                                <div class="product-stats">
-                                    <!-- Suma total de cantidades -->
-                                    <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: #000;">
-                                        {{ item.cantidadTotal | number }}
-                                    </span>
-                                    <span class="dot"></span>
-                                    <!-- Conteo de OPs -->
-                                    <span class="stat-item">{{ item.totalOPs }} OP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chevron-circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-                    </label>
-
-                    <div class="accordion-content">
-                        <div class="detail-pane">
-                            <table class="table is-fullwidth is-striped">
-                                <thead>
-                                    <tr>
-                                        <th>OP</th>
-                                        <th class="has-text-centered">Cantidad</th>
-                                        <th class="has-text-right">Fecha de Fabricación</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Filas detalladas de cada registro de Producto Terminado -->
-                                    <tr *ngFor="let detalle of item.detalles">
-                                        <td>{{ detalle.opNumero }}</td>
-                                        <td class="has-text-centered"><strong>{{ detalle.cantidad | number }}</strong>
-                                        </td>
-                                        <td class="has-text-right has-text-grey">{{detalle.fecha | date:'EEE, d MMM, h:mm a'
-                                            }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
+              </div>
             </div>
+            <div class="chevron-circle">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </label>
+
+          <div class="accordion-content">
+            <div class="detail-pane">
+              <table class="table is-fullwidth is-striped">
+                <thead>
+                  <tr>
+                    <th>OP</th>
+                    <th class="has-text-centered">Cantidad</th>
+                    <th class="has-text-right">Fecha de Fabricación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Filas detalladas de cada registro de Producto Terminado -->
+                  <tr *ngFor="let detalle of item.detalles">
+                    <td>{{ detalle.opNumero }}</td>
+                    <td class="has-text-centered">
+                      <strong>{{ detalle.cantidad | number }}</strong>
+                    </td>
+                    <td class="has-text-right has-text-grey">{{ detalle.fecha | date: 'EEE, d MMM, h:mm a' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+</app-page-layout>

@@ -1,30 +1,32 @@
-.modal .modal-card{
-    width: 70%;
+.modal .modal-card {
+  width: 70%;
 }
 
-.dark{
-    color: black;
-    background-color: #9fadbc;
-  }
-
-.info{
-    max-height: 0px;
-    padding: 0px;
-    overflow: hidden;
-    transition: max-height 1s ease, padding 0.5s ease;
+.dark {
+  color: black;
+  background-color: #9fadbc;
 }
 
-.info table{
-    padding: 0px;
-    margin: 0px;
+.info {
+  max-height: 0px;
+  padding: 0px;
+  overflow: hidden;
+  transition:
+    max-height 1s ease,
+    padding 0.5s ease;
 }
 
-.Showed{
-    max-height: 5000px;
-    padding: 5px;
+.info table {
+  padding: 0px;
+  margin: 0px;
 }
 
-.DESHABILITADOS{
-    color: #9fadbc;
-    cursor: not-allowed;
+.Showed {
+  max-height: 5000px;
+  padding: 5px;
+}
+
+.DESHABILITADOS {
+  color: #9fadbc;
+  cursor: not-allowed;
 }

@@ -1,22 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import io from 'socket.io-client'
-
-
+import io from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class WebSocketService {
-
   io = io('https://192.168.0.22:443', {
     transports: ['websocket'],
     withCredentials: true,
-    autoConnect: true
-  })
+    autoConnect: true,
+  });
 
-  constructor() { }
-
+  constructor() {}
 }
-

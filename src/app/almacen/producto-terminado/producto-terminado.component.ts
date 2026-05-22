@@ -4,12 +4,10 @@ import { OproduccionService } from 'src/app/services/oproduccion.service';
 @Component({
   selector: 'app-producto-terminado',
   templateUrl: './producto-terminado.component.html',
-  styleUrls: ['./producto-terminado.component.scss']
+  styleUrls: ['./producto-terminado.component.scss'],
 })
-
 export class ProductoTerminadoComponent {
-
-  constructor(public api: OproduccionService) { }
+  constructor(public api: OproduccionService) {}
   productos: Producto[] = [
     {
       nombre: 'Etiq. Mayonesa Mavesa',
@@ -17,25 +15,21 @@ export class ProductoTerminadoComponent {
       unidades: 'Vidrio',
       ocs: [
         { id: '001', cantidad: 500000, preFacturada: true, facturada: true, seleccionada: false },
-        { id: '002', cantidad: 500000, preFacturada: true, facturada: false, seleccionada: false }
-      ]
+        { id: '002', cantidad: 500000, preFacturada: true, facturada: false, seleccionada: false },
+      ],
     },
     {
       nombre: 'Etiq. Cerveza Regional',
       presentacion: '222mL',
       unidades: 'Lata',
-      ocs: [
-        { id: '003', cantidad: 200000, preFacturada: true, facturada: true, seleccionada: false }
-      ]
+      ocs: [{ id: '003', cantidad: 200000, preFacturada: true, facturada: true, seleccionada: false }],
     },
     {
       nombre: 'Est. Flips Chocolate',
       presentacion: '220g',
       unidades: 'Caja',
-      ocs: [
-        { id: '004', cantidad: 80000, preFacturada: false, facturada: false, seleccionada: false }
-      ]
-    }
+      ocs: [{ id: '004', cantidad: 80000, preFacturada: false, facturada: false, seleccionada: false }],
+    },
   ];
 
   getTotal(producto: Producto): number {

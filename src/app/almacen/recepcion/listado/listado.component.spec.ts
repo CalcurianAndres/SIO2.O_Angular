@@ -8,7 +8,7 @@ describe('ListadoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ListadoComponent]
+      declarations: [ListadoComponent],
     });
     fixture = TestBed.createComponent(ListadoComponent);
     component = fixture.componentInstance;

@@ -1,5 +1,5 @@
-.long{
-    width: 80%;
+.long {
+  width: 80%;
 }
 .no-inventario {
   display: flex;
@@ -18,7 +18,7 @@
 }
 
 .no-inventario::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -33,58 +33,57 @@
   position: relative;
   z-index: 1;
 }
-.EnviarAlFinal{
-    position: absolute;
-    right: 20px;
-    font-size: large;
+.EnviarAlFinal {
+  position: absolute;
+  right: 20px;
+  font-size: large;
 }
 
 .General {
-    position: relative;
-    background-color: #9fadbc;
-    padding: 20px;
-    margin-top: 15px;
-    border-radius: 5px;
-    border: solid .5px rgb(210, 210, 210);
-  }
+  position: relative;
+  background-color: #9fadbc;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: solid 0.5px rgb(210, 210, 210);
+}
 
+.Lotes {
+  border-radius: 4px;
+  padding: 10px;
+  margin: 5px;
+  background-color: #ffffff;
+  border: solid 0.5px rgb(188, 188, 188);
+  position: relative;
+  overflow: hidden;
+}
 
-  .Lotes {
-    border-radius: 4px;
-    padding: 10px;
-    margin: 5px;
-    background-color: #ffffff;
-    border: solid .5px rgb(188, 188, 188);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .strong{
-    font-family: 'Gilroy';
-  }
+.strong {
+  font-family: 'Gilroy';
+}
 
-  .Arrow {
-    color: black;
-    border: none;
-    font-size: x-large;
-    cursor: pointer;
-    background-color: transparent;
-    transition: transform 0.5s;
-  }
+.Arrow {
+  color: black;
+  border: none;
+  font-size: x-large;
+  cursor: pointer;
+  background-color: transparent;
+  transition: transform 0.5s;
+}
 
-  .Arrow.clicked {
-    transform: rotate(180deg);
- }
+.Arrow.clicked {
+  transform: rotate(180deg);
+}
 
- .bigger{
-    font-size: x-large;
- }
+.bigger {
+  font-size: x-large;
+}
 
- .peso{
-    top: 20px;
- }
+.peso {
+  top: 20px;
+}
 
- .white_{
-    color: white;
-    text-shadow: #555555;
- }
+.white_ {
+  color: white;
+  text-shadow: #555555;
+}

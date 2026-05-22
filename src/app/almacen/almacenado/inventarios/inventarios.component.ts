@@ -3,16 +3,14 @@ import { AlmacenService } from 'src/app/services/almacen.service';
 
 @Component({
   selector: 'app-inventarios',
-  standalone: false,templateUrl: './inventarios.component.html',
-  styleUrls: ['./inventarios.component.scss']
+  standalone: false,
+  templateUrl: './inventarios.component.html',
+  styleUrls: ['./inventarios.component.scss'],
 })
 export class InventariosComponent {
+  constructor(private almacen: AlmacenService) {}
 
-  constructor(private almacen:AlmacenService){
-
-  }
-
-  @Input() Inventario:any;
+  @Input() Inventario: any;
   @Input() agrupadoMateriales!: Array<{
     nombre: string;
     materialesPorId: Array<{
@@ -38,9 +36,9 @@ export class InventariosComponent {
   public clicked_: any = [];
   public clicked__: any = [];
 
-  public registro_:boolean = false;
+  public registro_: boolean = false;
 
-  public registro:any = []
+  public registro: any = [];
 
   showInfo(i) {
     if (!this.clicked[i]) {
@@ -65,23 +63,22 @@ export class InventariosComponent {
     }
   }
 
-  totalizar(values){
-    return values.reduce((sum, mat) => sum + Number(mat.neto), 0)
+  totalizar(values) {
+    return values.reduce((sum, mat) => sum + Number(mat.neto), 0);
   }
 
   totalizarPorNombre(material_: any): number {
     return material_.materialesPorId.reduce((acc: number, material: any) => acc + material.netoTotal, 0);
   }
 
-  cerrar(){
+  cerrar() {
     this.onCloseModal.emit();
   }
 
-
-  buscarRegistro(material){
-      this.registro = this.almacen.Registro.filter(x => x.material.nombre === material.nombre)
-      console.log(this.registro)
-      this.Inventario = false;
-      this.registro_ = true;
+  buscarRegistro(material) {
+    this.registro = this.almacen.Registro.filter((x) => x.material.nombre === material.nombre);
+    console.log(this.registro);
+    this.Inventario = false;
+    this.registro_ = true;
   }
 }

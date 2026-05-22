@@ -9,45 +9,41 @@ import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import { NoConformidadesComponent } from './no-conformidades/no-conformidades.component';
 
-
-const routes: Routes =[
+const routes: Routes = [
   {
-    path:'',
-    component:ComprasComponent,
-    children:[
+    path: '',
+    component: ComprasComponent,
+    children: [
       {
-        path:'',
-        component:MainComponent
+        path: '',
+        component: MainComponent,
       },
       {
-        path:'grupos',
-        component:GruposComponent
+        path: 'grupos',
+        component: GruposComponent,
       },
       {
-        path:'fabricantes',
-        component:FabricantesComponent
+        path: 'fabricantes',
+        component: FabricantesComponent,
       },
       {
-        path:'proveedores',
-        component:ProveedoresComponent
+        path: 'proveedores',
+        component: ProveedoresComponent,
       },
       {
-        path:'ordenes',
-        component:OrdenesComponent
+        path: 'ordenes',
+        component: OrdenesComponent,
       },
       {
-        path:'ncc',
-        component:NoConformidadesComponent
-      }
-    ]
-}]
-
+        path: 'ncc',
+        component: NoConformidadesComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class ComprasRoutingModule { }
+export class ComprasRoutingModule {}

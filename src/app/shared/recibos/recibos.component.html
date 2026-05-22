@@ -1,68 +1,71 @@
 <div class="container p-5">
-    <div class="card">
-        <header class="card-header has-background-link">
-            <p class="card-header-title has-text-white">Gestión de Tareas - Poligráfica Industrial</p>
-        </header>
-        <div class="card-content">
-
-            <div class="columns is-multiline is-mobile mb-4">
-                <div class="column is-3-desktop is-6-mobile">
-                    <input class="input" type="date" [(ngModel)]="nuevaTarea.fecha">
-                </div>
-                <div class="column is-2-desktop is-6-mobile">
-                    <input class="input" type="number" placeholder="Horas" [(ngModel)]="nuevaTarea.horas">
-                </div>
-                <div class="column is-5-desktop is-12-mobile">
-                    <input class="input" type="text" placeholder="Descripción de la actividad"
-                        [(ngModel)]="nuevaTarea.descripcion">
-                </div>
-                <div class="column is-2-desktop is-12-mobile">
-                    <button (click)="agregarTarea()" class="button is-success is-fullwidth">
-                        <span class="icon"><i class="fas fa-plus"></i></span>
-                        <span>Añadir</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="table-container">
-                Dias trabajados ({{tareas.length}})
-                <hr>
-                <table class="table is-fullwidth is-hoverable is-narrow">
-                    <thead>
-                        <tr class="has-background-light">
-                            <th>Fecha</th>
-                            <th>Descripción</th>
-                            <th class="has-text-centered">Horas</th>
-                            <th class="has-text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let t of tareas; let i = index">
-                            <td>{{ t.fecha }}</td>
-                            <td>{{ t.descripcion }}</td>
-                            <td class="has-text-centered"><strong>{{ t.horas }}</strong></td>
-                            <td class="has-text-right">
-                                <button (click)="eliminarTarea(i)"
-                                    class="button is-danger is-small is-light">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr class="is-selected">
-                            <th colspan="2">TOTAL ACUMULADO</th>
-                            <th class="has-text-centered">{{ calcularTotalHoras() }} hrs</th>
-                            <th class="has-text-right">${{ (calcularTotalHoras() * 8).toFixed(2) }}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <div class="mt-5">
-                <button (click)="generarPDF()" class="button is-link is-large is-fullwidth"
-                    [disabled]="tareas.length === 0">
-                    Descargar Recibo Profesional
-                </button>
-            </div>
+  <div class="card">
+    <header class="card-header has-background-link">
+      <p class="card-header-title has-text-white">Gestión de Tareas - Poligráfica Industrial</p>
+    </header>
+    <div class="card-content">
+      <div class="columns is-multiline is-mobile mb-4">
+        <div class="column is-3-desktop is-6-mobile">
+          <input class="input" type="date" [(ngModel)]="nuevaTarea.fecha" />
         </div>
+        <div class="column is-2-desktop is-6-mobile">
+          <input class="input" type="number" placeholder="Horas" [(ngModel)]="nuevaTarea.horas" />
+        </div>
+        <div class="column is-5-desktop is-12-mobile">
+          <input
+            class="input"
+            type="text"
+            placeholder="Descripción de la actividad"
+            [(ngModel)]="nuevaTarea.descripcion"
+          />
+        </div>
+        <div class="column is-2-desktop is-12-mobile">
+          <button (click)="agregarTarea()" class="button is-success is-fullwidth">
+            <span class="icon"><i class="fas fa-plus"></i></span>
+            <span>Añadir</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        Dias trabajados ({{ tareas.length }})
+        <hr />
+        <table class="table is-fullwidth is-hoverable is-narrow">
+          <thead>
+            <tr class="has-background-light">
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th class="has-text-centered">Horas</th>
+              <th class="has-text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of tareas; let i = index">
+              <td>{{ t.fecha }}</td>
+              <td>{{ t.descripcion }}</td>
+              <td class="has-text-centered">
+                <strong>{{ t.horas }}</strong>
+              </td>
+              <td class="has-text-right">
+                <button (click)="eliminarTarea(i)" class="button is-danger is-small is-light">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="is-selected">
+              <th colspan="2">TOTAL ACUMULADO</th>
+              <th class="has-text-centered">{{ calcularTotalHoras() }} hrs</th>
+              <th class="has-text-right">${{ (calcularTotalHoras() * 8).toFixed(2) }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="mt-5">
+        <button (click)="generarPDF()" class="button is-link is-large is-fullwidth" [disabled]="tareas.length === 0">
+          Descargar Recibo Profesional
+        </button>
+      </div>
     </div>
+  </div>
 </div>

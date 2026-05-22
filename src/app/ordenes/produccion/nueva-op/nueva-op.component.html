@@ -1,383 +1,528 @@
-<div class="modal" [ngClass]="{'is-active':nueva}">
-    <div class="modal-background"></div>
-    <div class="modal-content longer" *ngIf="nueva">
-      <div class="card" *ngFor="let card of cards; let i = index" [style.display]="i === currentIndex ? 'block' : 'none'">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Nueva Orden de producción
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
-            <label for="" class="label">.</label>
-        </div>
-        <div class="card-content">
-          <p class="title">{{card.title}}</p>
-          <hr>
-            <span class="content" *ngIf="i === 0">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label class="label">Cliente</label>
-                        <div class="select">
-                            <select [(ngModel)]="OP.cliente" (change)="findOC()">
-                                <option value="{{cliente._id}}" *ngFor="let cliente of clientes.clientes">{{cliente.nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label class="label">OC</label>
-                        <div class="select">
-                            <select [(ngModel)]="OP.oc" (change)="findProducts()">
-                                <option value="{{ordenes._id}}" *ngFor="let ordenes of Ordenes">{{ordenes.orden}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label class="label">Producto</label>
-                        <div class="select">
-                            <select (change)="mostrarProducto($event.target)" [(ngModel)]="id_producto">
-                                <option value="{{i}}" *ngFor="let producto of productos;index as i">E-{{producto.producto.identificacion.cliente.codigo}}-{{producto.producto.identificacion.codigo}}-{{producto.producto.identificacion.version}} {{producto.producto.identificacion.producto}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label class="label">Fecha Solicitada</label>
-                        <input type="date" class="input" [(ngModel)]="OP.solicitud">
-                    </div>
-                </div>
-                <div class="field is-grouped" *ngIf="producto">
-                    <div class="control">
-                        <label for="" class="label">Montaje</label>
-                        <div class="select">
-                            <select [(ngModel)]="OP.montaje" (change)="calcularHojas()">
-                                <option value="{{i}}" *ngFor="let montaje of [].constructor(ToNumber_(producto.pre_impresion.montajes));index as i">Montaje {{ ShowLetter(i) }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <label for="" class="label">Ejemplares</label>
-                        <input type="number" class="input" [(ngModel)]="OP.ejemplares" min="1" (input)="calcularHojas_()">
-                    </div>
-                    <div class="control">
-                        <label class="label">Cantidad (Producto)</label>
-                        <input type="number" class="input" [(ngModel)]="OP.cantidad" (change)="calcularHojas()">
-                    </div>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label class="label">Hojas</label>
-                        <input type="number" class="input short" disabled [value]="OP.hojas + OP.demasia">
-                    </div>
-                    <div class="control">
-                        <label class="label">Demasia (hojas)</label>
-                        <input type="number" class="input short" [(ngModel)]="OP.demasia">
-                    </div>
-                    <div class="control">
-                        <label class="label">Demasia (%)</label>
-                        <input type="number" class="input short" [value]="calcularDesmasia()" disabled>
-                    </div>
-                    <!-- <div class="control">
+<div class="modal" [ngClass]="{ 'is-active': nueva }">
+  <div class="modal-background"></div>
+  <div class="modal-content longer" *ngIf="nueva">
+    <div class="card" *ngFor="let card of cards; let i = index" [style.display]="i === currentIndex ? 'block' : 'none'">
+      <div class="modal-card-head">
+        <p class="modal-card-title fuente">Nueva Orden de producción</p>
+        <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
+        <label for="" class="label">.</label>
+      </div>
+      <div class="card-content">
+        <p class="title">{{ card.title }}</p>
+        <hr />
+        <span class="content" *ngIf="i === 0">
+          <div class="field is-grouped">
+            <div class="control">
+              <label class="label">Cliente</label>
+              <div class="select">
+                <select [(ngModel)]="OP.cliente" (change)="findOC()">
+                  <option value="{{ cliente._id }}" *ngFor="let cliente of clientes.clientes">
+                    {{ cliente.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <label class="label">OC</label>
+              <div class="select">
+                <select [(ngModel)]="OP.oc" (change)="findProducts()">
+                  <option value="{{ ordenes._id }}" *ngFor="let ordenes of Ordenes">{{ ordenes.orden }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <label class="label">Producto</label>
+              <div class="select">
+                <select (change)="mostrarProducto($event.target)" [(ngModel)]="id_producto">
+                  <option value="{{ i }}" *ngFor="let producto of productos; index as i">
+                    E-{{ producto.producto.identificacion.cliente.codigo }}-{{
+                      producto.producto.identificacion.codigo
+                    }}-{{ producto.producto.identificacion.version }} {{ producto.producto.identificacion.producto }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <label class="label">Fecha Solicitada</label>
+              <input type="date" class="input" [(ngModel)]="OP.solicitud" />
+            </div>
+          </div>
+          <div class="field is-grouped" *ngIf="producto">
+            <div class="control">
+              <label for="" class="label">Montaje</label>
+              <div class="select">
+                <select [(ngModel)]="OP.montaje" (change)="calcularHojas()">
+                  <option
+                    value="{{ i }}"
+                    *ngFor="let montaje of [].constructor(ToNumber_(producto.pre_impresion.montajes)); index as i"
+                  >
+                    Montaje {{ ShowLetter(i) }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <label for="" class="label">Ejemplares</label>
+              <input type="number" class="input" [(ngModel)]="OP.ejemplares" min="1" (input)="calcularHojas_()" />
+            </div>
+            <div class="control">
+              <label class="label">Cantidad (Producto)</label>
+              <input type="number" class="input" [(ngModel)]="OP.cantidad" (change)="calcularHojas()" />
+            </div>
+          </div>
+          <div class="field is-grouped">
+            <div class="control">
+              <label class="label">Hojas</label>
+              <input type="number" class="input short" disabled [value]="OP.hojas + OP.demasia" />
+            </div>
+            <div class="control">
+              <label class="label">Demasia (hojas)</label>
+              <input type="number" class="input short" [(ngModel)]="OP.demasia" />
+            </div>
+            <div class="control">
+              <label class="label">Demasia (%)</label>
+              <input type="number" class="input short" [value]="calcularDesmasia()" disabled />
+            </div>
+            <!-- <div class="control">
                         <label for="" class="label">.</label>
                         <input type="checkbox" name="" id=""> Estándar de colores
                     </div> -->
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 1">
-                <div class="field">
-                    <div class="control" *ngIf="producto">
-                        <label class="label">Sustrato</label>
-                        <div class="select">
-                            <select [(ngModel)]="OP.sustrato.sustrato" (change)="BuscarEnAlmacen($event.target)">
-                                <option value="{{sustrato._id}}" *ngFor="let sustrato of producto.materia_prima.sustrato">{{sustrato.nombre}} ({{sustrato.serie}}) {{sustrato.origen}} {{sustrato.gramaje}}g {{sustrato.calibre}}pt</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <table class="table is-full-width">
-                    <thead>
-                        <tr>
-                            <th>Necesario:</th>
-                            <th>En almacen:</th>
-                            <th>Restante:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{(OP.hojas + OP.demasia)| number}}</td>
-                            <td>{{almacenado | number}}</td>
-                            <td [ngClass]="{'alerta':(almacenado - (OP.hojas + OP.demasia)) < 0}">{{Absolute(almacenado - (OP.hojas + OP.demasia)) | number}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </span>
-            <span class="content" *ngIf="i === 2">
-                <table class="table is-fullwidth" *ngIf="producto">
-                    <ng-container *ngFor="let colores of producto.pre_impresion.pelicula; index as i">
-                        <tr>
-                          <th class="is-selected">{{colores.color}}</th>
-                        </tr>
-                        <td>
-                          <div class="field is-grouped">
-                            <div class="control">
-                              <div class="select">
-                                <select (change)="onTintaChange(colores.color, $event)">
-                                  <option value="#">Seleccionar Tinta</option>
-                                  <option 
-                                    *ngFor="let tinta of producto.pre_impresion.pelicula[i].tintas"
-                                    value="{{i}}_{{tinta.tinta._id}}_{{tinta.cantidad}}"
-                                    [disabled]="isDisabled(tinta)">
-                                    {{tinta.tinta.nombre}} {{tinta.tinta.serie}} - Necesario: {{Necesario(tinta.cantidad) | number}}kg - En almacen: {{buscarEnAlmacenDirecto(tinta.tinta._id) | number}}kg
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="control" *ngIf="selectedTintas[colores.color] && !isDisabled({tinta: {tinta: {_id: selectedTintas[colores.color]}}})">
-                              <button class="button" style="background-color: transparent; border:none; color:#48c78e">
-                                <span class="icon"><i class="fas fa-check"></i></span>
-                              </button>
-                            </div>
-                          </div>
-                        </td>
-                      </ng-container>
-                      
-                </table>
-                <hr>
-            </span>
-            <span class="content" *ngIf="i === 3">
-                <div class="columns" *ngIf="producto">
-                    <div class="column">
-                        <span class="barniz">
-                            <div class="field">
-                                <div class="control">
-                                    <label for="" class="label">Barnices aprobados</label>
-                                    <div class="select">
-                                        <select (change)="CalcularBarniz($event.target)">
-                                            <option value="#">Seleccione Barniz</option>
-                                            <option value="{{i}}" *ngFor="let barniz of producto.materia_prima.barnices;index as i">{{barniz.barniz.nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </span>
-                        <table class="table is-full-width" *ngIf="barniz_selected">
-                            <thead>
-                                <tr>
-                                    <th>Necesario:</th>
-                                    <th>En almacen:</th>
-                                    <th>Restante:</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{Necesario(barniz_selected.cantidad) | number}}</td>
-                                    <td>{{buscarEnAlmacenDirecto(barniz_selected.barniz._id) | number}}</td>
-                                    <td [ngClass]="{'alerta':(buscarEnAlmacenDirecto(barniz_selected.barniz._id) - Necesario(barniz_selected.cantidad)) < 0}">{{Absolute(buscarEnAlmacenDirecto(barniz_selected.barniz._id) - Necesario(barniz_selected.cantidad)) | number}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="column">
-                        <span class="title titulo-absoluto">Pegamento</span>
-                        <div class="field formulario-pegamento">
-                            <div class="control">
-                                <label for="" class="label">Pegamentos aprobados</label>
-                                <div class="select">
-                                    <div class="select">
-                                        <select (change)="CalcularPega($event.target)">
-                                            <option value="#">Seleccione pega</option>
-                                            <option value="{{i}}" *ngFor="let pega of producto.post_impresion.pegamento;index as i">{{pega.pega.nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <table class="table is-full-width" *ngIf="pega_selected">
-                            <thead>
-                                <tr>
-                                    <th>Necesario:</th>
-                                    <th>En almacen:</th>
-                                    <th>Restante:</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{Necesario(pega_selected.cantidad) | number}}</td>
-                                    <td>{{buscarEnAlmacenDirecto(pega_selected.pega._id) | number}}</td>
-                                    <td [ngClass]="{'alerta':(buscarEnAlmacenDirecto(pega_selected.pega._id) - Necesario(pega_selected.cantidad)) < 0}">{{Absolute(buscarEnAlmacenDirecto(pega_selected.pega._id) - Necesario(pega_selected.cantidad)) | number}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 4" style="color: black;">
-                <div class="columns" *ngIf="producto">
-                    <div class="column">
-                        <strong class="gilroy">Cajas corrugadas</strong>
-                        <input type="text" class="input" value="{{producto.post_impresion.caja.nombre}}" disabled>
-                        {{producto.post_impresion.caja.cabida[0]}}Und / Caja. <strong class="gilroy">Total:</strong> {{calcularCajas(producto.post_impresion.caja.cabida[0]) | number}} caja(s) <br>
-                        <strong class="gilroy">Cinta de embalaje:</strong> <br>
-                        {{CalcularMetros(producto.post_impresion.caja.nombre) * calcularCajas(producto.post_impresion.caja.cabida[0]) | number}} mts. <strong class="gilroy">Total:</strong> {{(CalcularMetros(producto.post_impresion.caja.nombre) * calcularCajas(producto.post_impresion.caja.cabida[0])) / 100}}  rollos.
-                    </div>
-                    <div class="column">
-                        <strong class="gilroy">Pads</strong>
-                        <div class="columns">
-                            <div class="column">
-                                (2) Nº 11 <br>
-                                <strong class="gilroy">Total:</strong> 250
-                            </div>
-                            <div class="column">
-                                (4) Nº 9 <br>
-                                <strong class="gilroy">Total:</strong> 1000
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </span>
-            <span class="content" *ngIf="i === 5">
-
-            <div class="columns" *ngIf="producto">
-                <div class="column">
-                <span class="subtitles">Aprobadas</span> <br>
-                    <div class="idea titulo" *ngFor="let maquina of producto.impresion.impresoras;index as x">
-                        <div class="columns">
-                            <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
-                                {{ maquina.nombre }}
-                            </div>
-                            <div class="column maquina fases-type" [ngClass]="{'no-hide':selectedIdea === maquina}" *ngFor="let fase of maquina.fases;index as y" (click)="DropMaquina(x,y, maquina)">
-                                {{ fase.nombre }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.troqueladora;index as x">
-                        <div class="columns">
-                            <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
-                                {{ maquina.nombre }}
-                            </div>
-                            <div class="column maquina fases-type" [ngClass]="{'no-hide':selectedIdea === maquina}" *ngFor="let fase of maquina.fases;index as y" (click)="DropMaquina(x,y, maquina)">
-                                {{ fase.nombre }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.guillotina;index as x">
-                        <div class="columns">
-                            <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
-                                {{ maquina.nombre }}
-                            </div>
-                            <div class="column maquina fases-type" [ngClass]="{'no-hide':selectedIdea === maquina}" *ngFor="let fase of maquina.fases;index as y" (click)="DropMaquina(x,y, maquina)">
-                                {{ fase.nombre }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.pegadora;index as x">
-                        <div class="columns">
-                            <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
-                                {{ maquina.nombre }}
-                            </div>
-                            <div class="column maquina fases-type" [ngClass]="{'no-hide':selectedIdea === maquina}" *ngFor="let fase of maquina.fases;index as y" (click)="DropMaquina(x,y, maquina)">
-                                {{ fase.nombre }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.otros;index as x">
-                        <div class="columns">
-                            <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
-                                {{ maquina.nombre }}
-                            </div>
-                            <div class="column maquina fases-type" [ngClass]="{'no-hide':selectedIdea === maquina}" *ngFor="let fase of maquina.fases;index as y" (click)="DropMaquina(x,y, maquina)">
-                                {{ fase.nombre }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <span class="subtitles">A utilizar</span> <br>
-
-                    <div class="idea" *ngFor="let maquina of maquinasDestino;index as x">
-                        <div class="titulo_" ><span class="color-page" [style.background-color]="colores[x]"></span>{{maquina.fases[0].nombre}} ({{ maquina.nombre }})<span class="delete_icon" (click)="deleteFromUsar(x)"><i class="fas fa-trash-alt red"></i></span></div>
-                    </div>
-
-                </div>
+          </div>
+        </span>
+        <span class="content" *ngIf="i === 1">
+          <div class="field">
+            <div class="control" *ngIf="producto">
+              <label class="label">Sustrato</label>
+              <div class="select">
+                <select [(ngModel)]="OP.sustrato.sustrato" (change)="BuscarEnAlmacen($event.target)">
+                  <option value="{{ sustrato._id }}" *ngFor="let sustrato of producto.materia_prima.sustrato">
+                    {{ sustrato.nombre }} ({{ sustrato.serie }}) {{ sustrato.origen }} {{ sustrato.gramaje }}g
+                    {{ sustrato.calibre }}pt
+                  </option>
+                </select>
+              </div>
             </div>
-                  <hr>
-            </span>
-            <span style="overflow-x: scroll; display: block;">
-                <span class="content" *ngIf="i === 6">
-                    <div class="calendar">
-                        <div class="calendar-day day-info" style="min-width: 110px; max-width:110px;"></div>
-                        <div *ngFor="let day of generateDates(); let i = index" class="calendar-day day-info" [ngClass]="{'gray-tenue': i % 2 == 0, 'no-laboral': formatearFecha_(generateDates()[i-1]) === 'No laboral'}" style="min-width: 110px; max-width:110px;">
-                          {{ formatearFecha(generateDates()[i-1]) }}
+          </div>
+          <table class="table is-full-width">
+            <thead>
+              <tr>
+                <th>Necesario:</th>
+                <th>En almacen:</th>
+                <th>Restante:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ OP.hojas + OP.demasia | number }}</td>
+                <td>{{ almacenado | number }}</td>
+                <td [ngClass]="{ alerta: almacenado - (OP.hojas + OP.demasia) < 0 }">
+                  {{ Absolute(almacenado - (OP.hojas + OP.demasia)) | number }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </span>
+        <span class="content" *ngIf="i === 2">
+          <table class="table is-fullwidth" *ngIf="producto">
+            <ng-container *ngFor="let colores of producto.pre_impresion.pelicula; index as i">
+              <tr>
+                <th class="is-selected">{{ colores.color }}</th>
+              </tr>
+              <td>
+                <div class="field is-grouped">
+                  <div class="control">
+                    <div class="select">
+                      <select (change)="onTintaChange(colores.color, $event)">
+                        <option value="#">Seleccionar Tinta</option>
+                        <option
+                          *ngFor="let tinta of producto.pre_impresion.pelicula[i].tintas"
+                          value="{{ i }}_{{ tinta.tinta._id }}_{{ tinta.cantidad }}"
+                          [disabled]="isDisabled(tinta)"
+                        >
+                          {{ tinta.tinta.nombre }} {{ tinta.tinta.serie }} - Necesario:
+                          {{ Necesario(tinta.cantidad) | number }}kg - En almacen:
+                          {{ buscarEnAlmacenDirecto(tinta.tinta._id) | number }}kg
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div
+                    class="control"
+                    *ngIf="
+                      selectedTintas[colores.color] &&
+                      !isDisabled({ tinta: { tinta: { _id: selectedTintas[colores.color] } } })
+                    "
+                  >
+                    <button class="button" style="background-color: transparent; border: none; color: #48c78e">
+                      <span class="icon"><i class="fas fa-check"></i></span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+          <hr />
+        </span>
+        <span class="content" *ngIf="i === 3">
+          <div class="columns" *ngIf="producto">
+            <div class="column">
+              <span class="barniz">
+                <div class="field">
+                  <div class="control">
+                    <label for="" class="label">Barnices aprobados</label>
+                    <div class="select">
+                      <select (change)="CalcularBarniz($event.target)">
+                        <option value="#">Seleccione Barniz</option>
+                        <option value="{{ i }}" *ngFor="let barniz of producto.materia_prima.barnices; index as i">
+                          {{ barniz.barniz.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </span>
+              <table class="table is-full-width" *ngIf="barniz_selected">
+                <thead>
+                  <tr>
+                    <th>Necesario:</th>
+                    <th>En almacen:</th>
+                    <th>Restante:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ Necesario(barniz_selected.cantidad) | number }}</td>
+                    <td>{{ buscarEnAlmacenDirecto(barniz_selected.barniz._id) | number }}</td>
+                    <td
+                      [ngClass]="{
+                        alerta:
+                          buscarEnAlmacenDirecto(barniz_selected.barniz._id) - Necesario(barniz_selected.cantidad) < 0
+                      }"
+                    >
+                      {{
+                        Absolute(
+                          buscarEnAlmacenDirecto(barniz_selected.barniz._id) - Necesario(barniz_selected.cantidad)
+                        ) | number
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="column">
+              <span class="title titulo-absoluto">Pegamento</span>
+              <div class="field formulario-pegamento">
+                <div class="control">
+                  <label for="" class="label">Pegamentos aprobados</label>
+                  <div class="select">
+                    <div class="select">
+                      <select (change)="CalcularPega($event.target)">
+                        <option value="#">Seleccione pega</option>
+                        <option value="{{ i }}" *ngFor="let pega of producto.post_impresion.pegamento; index as i">
+                          {{ pega.pega.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <table class="table is-full-width" *ngIf="pega_selected">
+                <thead>
+                  <tr>
+                    <th>Necesario:</th>
+                    <th>En almacen:</th>
+                    <th>Restante:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ Necesario(pega_selected.cantidad) | number }}</td>
+                    <td>{{ buscarEnAlmacenDirecto(pega_selected.pega._id) | number }}</td>
+                    <td
+                      [ngClass]="{
+                        alerta: buscarEnAlmacenDirecto(pega_selected.pega._id) - Necesario(pega_selected.cantidad) < 0
+                      }"
+                    >
+                      {{
+                        Absolute(buscarEnAlmacenDirecto(pega_selected.pega._id) - Necesario(pega_selected.cantidad))
+                          | number
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </span>
+        <span class="content" *ngIf="i === 4" style="color: black">
+          <div class="columns" *ngIf="producto">
+            <div class="column">
+              <strong class="gilroy">Cajas corrugadas</strong>
+              <input type="text" class="input" value="{{ producto.post_impresion.caja.nombre }}" disabled />
+              {{ producto.post_impresion.caja.cabida[0] }}Und / Caja. <strong class="gilroy">Total:</strong>
+              {{ calcularCajas(producto.post_impresion.caja.cabida[0]) | number }} caja(s) <br />
+              <strong class="gilroy">Cinta de embalaje:</strong> <br />
+              {{
+                CalcularMetros(producto.post_impresion.caja.nombre) *
+                  calcularCajas(producto.post_impresion.caja.cabida[0]) | number
+              }}
+              mts. <strong class="gilroy">Total:</strong>
+              {{
+                (CalcularMetros(producto.post_impresion.caja.nombre) *
+                  calcularCajas(producto.post_impresion.caja.cabida[0])) /
+                  100
+              }}
+              rollos.
+            </div>
+            <div class="column">
+              <strong class="gilroy">Pads</strong>
+              <div class="columns">
+                <div class="column">
+                  (2) Nº 11 <br />
+                  <strong class="gilroy">Total:</strong> 250
+                </div>
+                <div class="column">
+                  (4) Nº 9 <br />
+                  <strong class="gilroy">Total:</strong> 1000
+                </div>
+              </div>
+            </div>
+          </div>
+        </span>
+        <span class="content" *ngIf="i === 5">
+          <div class="columns" *ngIf="producto">
+            <div class="column">
+              <span class="subtitles">Aprobadas</span> <br />
+              <div class="idea titulo" *ngFor="let maquina of producto.impresion.impresoras; index as x">
+                <div class="columns">
+                  <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
+                    {{ maquina.nombre }}
+                  </div>
+                  <div
+                    class="column maquina fases-type"
+                    [ngClass]="{ 'no-hide': selectedIdea === maquina }"
+                    *ngFor="let fase of maquina.fases; index as y"
+                    (click)="DropMaquina(x, y, maquina)"
+                  >
+                    {{ fase.nombre }}
+                  </div>
+                </div>
+              </div>
+              <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.troqueladora; index as x">
+                <div class="columns">
+                  <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
+                    {{ maquina.nombre }}
+                  </div>
+                  <div
+                    class="column maquina fases-type"
+                    [ngClass]="{ 'no-hide': selectedIdea === maquina }"
+                    *ngFor="let fase of maquina.fases; index as y"
+                    (click)="DropMaquina(x, y, maquina)"
+                  >
+                    {{ fase.nombre }}
+                  </div>
+                </div>
+              </div>
+              <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.guillotina; index as x">
+                <div class="columns">
+                  <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
+                    {{ maquina.nombre }}
+                  </div>
+                  <div
+                    class="column maquina fases-type"
+                    [ngClass]="{ 'no-hide': selectedIdea === maquina }"
+                    *ngFor="let fase of maquina.fases; index as y"
+                    (click)="DropMaquina(x, y, maquina)"
+                  >
+                    {{ fase.nombre }}
+                  </div>
+                </div>
+              </div>
+              <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.pegadora; index as x">
+                <div class="columns">
+                  <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
+                    {{ maquina.nombre }}
+                  </div>
+                  <div
+                    class="column maquina fases-type"
+                    [ngClass]="{ 'no-hide': selectedIdea === maquina }"
+                    *ngFor="let fase of maquina.fases; index as y"
+                    (click)="DropMaquina(x, y, maquina)"
+                  >
+                    {{ fase.nombre }}
+                  </div>
+                </div>
+              </div>
+              <div class="idea titulo" *ngFor="let maquina of producto.post_impresion.otros; index as x">
+                <div class="columns">
+                  <div class="column is-4 maquina maquina-name" (click)="selectIdea(maquina)">
+                    {{ maquina.nombre }}
+                  </div>
+                  <div
+                    class="column maquina fases-type"
+                    [ngClass]="{ 'no-hide': selectedIdea === maquina }"
+                    *ngFor="let fase of maquina.fases; index as y"
+                    (click)="DropMaquina(x, y, maquina)"
+                  >
+                    {{ fase.nombre }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <span class="subtitles">A utilizar</span> <br />
+
+              <div class="idea" *ngFor="let maquina of maquinasDestino; index as x">
+                <div class="titulo_">
+                  <span class="color-page" [style.background-color]="colores[x]"></span
+                  >{{ maquina.fases[0].nombre }} ({{ maquina.nombre }})<span
+                    class="delete_icon"
+                    (click)="deleteFromUsar(x)"
+                    ><i class="fas fa-trash-alt red"></i
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+        </span>
+        <span style="overflow-x: scroll; display: block">
+          <span class="content" *ngIf="i === 6">
+            <div class="calendar">
+              <div class="calendar-day day-info" style="min-width: 110px; max-width: 110px"></div>
+              <div
+                *ngFor="let day of generateDates(); let i = index"
+                class="calendar-day day-info"
+                [ngClass]="{
+                  'gray-tenue': i % 2 == 0,
+                  'no-laboral': formatearFecha_(generateDates()[i - 1]) === 'No laboral'
+                }"
+                style="min-width: 110px; max-width: 110px"
+              >
+                {{ formatearFecha(generateDates()[i - 1]) }}
+              </div>
+            </div>
+            <ng-container *ngFor="let maquina of maquinasDestino; index as x">
+              <div class="calendar" *ngFor="let fase of maquina.fases; index as i">
+                <div
+                  class="calendar-color"
+                  mwlResizable
+                  [enableGhostResize]="true"
+                  (resizeStart)="onResizeStart($event)"
+                  (resizeEnd)="onResizeEnd($event, x, i)"
+                  [ngStyle]="medidas[x].fases[i]"
+                  cdkDrag
+                  cdkDragLockAxis="x"
+                  [cdkDragDisabled]="dragDisabled"
+                  (cdkDragStarted)="onDragStarted($event)"
+                  (cdkDragEnded)="onDragEnd($event, x, i)"
+                  [style.background-color]="colores[x]"
+                >
+                  <div class="fase" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+                  <div *ngFor="let reloj of [].constructor(ExtraerMedida(medidas[x].fases[i].width)); index as n">
+                    <span
+                      style="
+                        position: absolute;
+                        display: block;
+                        width: 105px;
+                        text-align: center;
+                        top: -5px;
+                        max-height: 30px;
+                        min-height: 30px;
+                      "
+                      [ngStyle]="{ 'left.px': n * 110 }"
+                    >
+                      <div class="config" [ngClass]="{ show: medidas[x].fases[i].date[n] }">
+                        <div class="field is-grouped">
+                          <div class="control">
+                            <label for="" class="label">Inicio</label>
+                            <input
+                              type="time"
+                              class="input is-small"
+                              min="07:00:00"
+                              [value]="medidas[x].fases[i].inicio[n]"
+                              #inicio
+                            />
+                          </div>
+                          <div class="control">
+                            <label for="" class="label">Fin</label>
+                            <input
+                              type="time"
+                              class="input is-small"
+                              min="07:00:00"
+                              [value]="medidas[x].fases[i].fin[n]"
+                              #fin
+                            />
+                          </div>
+                          <div class="control">
+                            <label class="label"> </label>
+                            <button
+                              class="button is-small"
+                              style="
+                                background-color: transparent;
+                                border: none;
+                                color: #48c78e;
+                                font-family: 'Gilroy';
+                                margin-top: -35px;
+                                font-size: large;
+                              "
+                              (click)="ShowToolTip(x, i, n, inicio.value, fin.value)"
+                            >
+                              <span class="icon">
+                                <i class="fas fa-check"></i>
+                              </span>
+                            </button>
+                            <br />
+                            <button
+                              class="button is-small"
+                              style="
+                                background-color: transparent;
+                                border: none;
+                                color: #3e8ed0;
+                                font-family: 'Gilroy';
+                                margin-top: -30px;
+                                font-size: large;
+                              "
+                              (click)="returnData(x, i, n)"
+                            >
+                              <span class="icon">
+                                <i class="fas fa-undo"></i>
+                              </span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    <ng-container *ngFor="let maquina of maquinasDestino;index as x">
-                        <div class="calendar" *ngFor="let fase of maquina.fases;index as i">
-                            <div class="calendar-color" mwlResizable
-                            [enableGhostResize]="true"
-                            (resizeStart)="onResizeStart($event)"
-                            (resizeEnd)="onResizeEnd($event,x,i)" 
-                            [ngStyle]="medidas[x].fases[i]"
-                            cdkDrag
-                            cdkDragLockAxis="x"
-                            [cdkDragDisabled]="dragDisabled"
-                            (cdkDragStarted)="onDragStarted($event)"
-                            (cdkDragEnded)="onDragEnd($event,x,i)"
-                            [style.background-color]="colores[x]">
-                                <div class="fase" mwlResizeHandle [resizeEdges]="{right: true}"></div>
-                                <div *ngFor="let reloj of [].constructor(ExtraerMedida(medidas[x].fases[i].width));index as n">
-                                    <span style="position: absolute;display: block; width: 105px;text-align: center;top: -5px;max-height: 30px;min-height: 30px;" [ngStyle]="{ 'left.px': n * 110 }">
-                                        <div class="config" [ngClass]="{'show':medidas[x].fases[i].date[n]}">
-                                            <div class="field is-grouped">
-                                                <div class="control">
-                                                    <label for="" class="label">Inicio</label>
-                                                    <input type="time" class="input is-small" min="07:00:00" [value]="medidas[x].fases[i].inicio[n]" #inicio>
-                                                </div>
-                                                <div class="control">
-                                                    <label for="" class="label">Fin</label>
-                                                    <input type="time" class="input is-small" min="07:00:00" [value]="medidas[x].fases[i].fin[n]" #fin>
-                                                </div>
-                                                <div class="control">
-                                                    <label class="label"> </label>
-                                                    <button class="button is-small" style="background-color: transparent;border: none;color: #48c78e;font-family: 'Gilroy'; margin-top: -35px;font-size: large;" (click)="ShowToolTip(x, i, n, inicio.value, fin.value)">
-                                                        <span class="icon">
-                                                            <i class="fas fa-check"></i>
-                                                        </span>
-                                                    </button> <br>
-                                                    <button class="button is-small" style="background-color: transparent;border: none;color: #3e8ed0;font-family: 'Gilroy'; margin-top: -30px;font-size: large;" (click)="returnData(x, i, n)">
-                                                        <span class="icon">
-                                                            <i class="fas fa-undo"></i>
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span style="margin-top:-20px; cursor:pointer" (click)="ShowToolTip(x, i, n)">
-                                            
-                                            <span style="position: relative; top: 15px;" *ngIf="NoCaeFeriado(CalcularPosicion(x,i,n))">
-                                                {{medidas[x].fases[i].inicio[n]}} - {{medidas[x].fases[i].fin[n]}}
-                                            </span>
-                                            <span style="position: relative; top: 15px;" *ngIf="!NoCaeFeriado(CalcularPosicion(x,i,n))">
-                                                <i class="fas fa-ban"></i>
-                                            </span>
-                                        </span> <br>
-                                        <!-- <i class="fas fa-clock" ></i> -->
-                                    </span>
-                                </div>
-    
-                            </div>
-                            <div class="day-info fase-name" style="border-top: solid 0.5px rgb(208, 208, 208);">
-                                <span class="Nombre_Fase">
-                                    {{fase.nombre}} <br>
-                                </span>
-                            <span class="maquina mostrada" style="font-size: xx-small;">
-                                {{maquina.nombre}} <br>
-                                {{medidas[x].fases[i].fecha | date:'dd/MM/yyyy'}} - {{medidas[x].fases[i].final | date:'dd/MM/yyyy'}}
-                            </span>
-                            </div>
-                            <div *ngFor="let day of generateDates(); let i = index" class="calendar-day day-info" [ngClass]="{'gray-tenue': i % 2 == 0, 'no-laboral':!NoCaeFeriado(i)}" style="min-width: 110px; max-width:110px;max-height: 30px;min-height: 30px;">
-                                
-                            </div>
-                        </div>
-                    </ng-container>
-                    <!-- <ng-container *ngFor="let maquina of maquinasDestino;index as x">
+                      <span style="margin-top: -20px; cursor: pointer" (click)="ShowToolTip(x, i, n)">
+                        <span style="position: relative; top: 15px" *ngIf="NoCaeFeriado(CalcularPosicion(x, i, n))">
+                          {{ medidas[x].fases[i].inicio[n] }} - {{ medidas[x].fases[i].fin[n] }}
+                        </span>
+                        <span style="position: relative; top: 15px" *ngIf="!NoCaeFeriado(CalcularPosicion(x, i, n))">
+                          <i class="fas fa-ban"></i>
+                        </span>
+                      </span>
+                      <br />
+                      <!-- <i class="fas fa-clock" ></i> -->
+                    </span>
+                  </div>
+                </div>
+                <div class="day-info fase-name" style="border-top: solid 0.5px rgb(208, 208, 208)">
+                  <span class="Nombre_Fase"> {{ fase.nombre }} <br /> </span>
+                  <span class="maquina mostrada" style="font-size: xx-small">
+                    {{ maquina.nombre }} <br />
+                    {{ medidas[x].fases[i].fecha | date: 'dd/MM/yyyy' }} -
+                    {{ medidas[x].fases[i].final | date: 'dd/MM/yyyy' }}
+                  </span>
+                </div>
+                <div
+                  *ngFor="let day of generateDates(); let i = index"
+                  class="calendar-day day-info"
+                  [ngClass]="{ 'gray-tenue': i % 2 == 0, 'no-laboral': !NoCaeFeriado(i) }"
+                  style="min-width: 110px; max-width: 110px; max-height: 30px; min-height: 30px"
+                ></div>
+              </div>
+            </ng-container>
+            <!-- <ng-container *ngFor="let maquina of maquinasDestino;index as x">
                         <ng-container *ngFor="let fase of maquina.fases;index as y">
                             <ng-container *ngIf="!fase.borrado">
                                 <span class="subtitles">{{fase.nombre}}</span>
@@ -402,77 +547,84 @@
                                 <ng-container *ngIf="!fase.borrado">
                                     <div class="process" [style.background-color]="getColor(y)">
                                         <div class="hours">3 horas</div> <!-- Agregar esta línea -->
-                                        <!-- {{fase.nombre}}
+            <!-- {{fase.nombre}}
                                     </div>
                                 </ng-container>
                             </ng-container>
                         </ng-container>
                     </div> -->
-                    
-                    <hr>
-                    <button class="button is-success" (click)="GuardarTrabajo()">
-                        <span class="icon"><i class="fas fa-save"></i></span>
-                        <span>Guardar</span>
-                    </button>
-                </span>
-                <span class="content" *ngIf="i === 7">
-                    <b>Cantidad a  despachar:</b> {{OP.cantidad | number: '2.0-00'}}
-                    <form [formGroup]="despachoForm">
-                        <div formArrayName="despachos">
-                          <div *ngFor="let despacho of despachos.controls; let idx = index" [formGroupName]="idx">
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <label class="label">Fecha</label>
-                                    <input type="date" class="input" formControlName="fecha" />
-                                </div>
-                                <div class="control">
-                                    <label class="label">Cantidad</label>
-                                    <input type="number" class="input" formControlName="cantidad" (input)="validarCantidad()" />
-                                </div>
-                                <div class="control">
-                                    <label for="" class="label">OC</label>
-                                    <div class="select">
-                                        <select formControlName="oc">
-                                            <option value="{{oc.orden}}" *ngFor="let oc of oc.BuscarPorProducto(producto._id)">{{oc.orden}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control">
-                                    <label class="label">Lugar</label>
-                                    <input type="text" class="input" formControlName="lugar" />
-                                </div>
-                                <div class="control">
-                                    <label for="" class="label"> </label>
-                                    <button type="button" class="button is-danger" (click)="eliminarDespacho(idx)" *ngIf="despachos.length > 1">
-                                      Eliminar
-                                    </button>
-                                </div>
-                                <div class="control" *ngIf="idx === despachos.controls.length - 1">
-                                    <label for="" class="label"> </label>
-                                    <button class="button is-info" (click)="agregarDespacho()" [disabled]="error">
-                                        <span class="icon">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
-                            <br>
-                          </div>
-                        </div>
-<!--                       
+
+            <hr />
+            <button class="button is-success" (click)="GuardarTrabajo()">
+              <span class="icon"><i class="fas fa-save"></i></span>
+              <span>Guardar</span>
+            </button>
+          </span>
+          <span class="content" *ngIf="i === 7">
+            <b>Cantidad a despachar:</b> {{ OP.cantidad | number: '2.0-00' }}
+            <form [formGroup]="despachoForm">
+              <div formArrayName="despachos">
+                <div *ngFor="let despacho of despachos.controls; let idx = index" [formGroupName]="idx">
+                  <div class="field is-grouped">
+                    <div class="control">
+                      <label class="label">Fecha</label>
+                      <input type="date" class="input" formControlName="fecha" />
+                    </div>
+                    <div class="control">
+                      <label class="label">Cantidad</label>
+                      <input type="number" class="input" formControlName="cantidad" (input)="validarCantidad()" />
+                    </div>
+                    <div class="control">
+                      <label for="" class="label">OC</label>
+                      <div class="select">
+                        <select formControlName="oc">
+                          <option value="{{ oc.orden }}" *ngFor="let oc of oc.BuscarPorProducto(producto._id)">
+                            {{ oc.orden }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="control">
+                      <label class="label">Lugar</label>
+                      <input type="text" class="input" formControlName="lugar" />
+                    </div>
+                    <div class="control">
+                      <label for="" class="label"> </label>
+                      <button
+                        type="button"
+                        class="button is-danger"
+                        (click)="eliminarDespacho(idx)"
+                        *ngIf="despachos.length > 1"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    <div class="control" *ngIf="idx === despachos.controls.length - 1">
+                      <label for="" class="label"> </label>
+                      <button class="button is-info" (click)="agregarDespacho()" [disabled]="error">
+                        <span class="icon">
+                          <i class="fa-solid fa-plus"></i>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                  <br />
+                </div>
+              </div>
+              <!--                       
                         <button type="button" class="button is-success" (click)="agregarDespacho()" [disabled]="despachos.length >= 3">
                           Agregar despacho
                         </button> -->
-                      
-                        <div *ngIf="error" style="color: red">
-                          {{ error }}
-                        </div>
-                      </form>
-                </span>
-            </span>
-        </div>
+
+              <div *ngIf="error" style="color: red">
+                {{ error }}
+              </div>
+            </form>
+          </span>
+        </span>
       </div>
     </div>
-    <button class="button is-info back" (click)="previous()"><i class="fas fa-chevron-left"></i></button>
-    <button class="button is-info front" (click)="next()"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <button class="button is-info back" (click)="previous()"><i class="fas fa-chevron-left"></i></button>
+  <button class="button is-info front" (click)="next()"><i class="fas fa-chevron-right"></i></button>
 </div>

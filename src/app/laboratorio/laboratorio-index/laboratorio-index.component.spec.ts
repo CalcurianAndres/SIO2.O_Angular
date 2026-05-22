@@ -8,7 +8,7 @@ describe('LaboratorioIndexComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LaboratorioIndexComponent]
+      declarations: [LaboratorioIndexComponent],
     });
     fixture = TestBed.createComponent(LaboratorioIndexComponent);
     component = fixture.componentInstance;

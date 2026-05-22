@@ -1,93 +1,108 @@
-<div class="modal" [ngClass]="{'is-active':otro}">
-    <div class="modal-background"></div>
-    <div class="modal-card longer" *ngIf="otro">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-               Material Nombre
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+<div class="modal" [ngClass]="{ 'is-active': otro }">
+  <div class="modal-background"></div>
+  <div class="modal-card longer" *ngIf="otro">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Material Nombre</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+    </div>
+    <div class="modal-card-body">
+      <span class="subtitles"> Análisis cualitativo </span>
+      <br />
+      <div class="columns">
+        <table class="table fullwidth" *ngIf="Materiales">
+          <thead>
+            <tr *ngIf="Materiales[0].material.especificacion2">
+              <th>Apariencia</th>
+              <td>{{ Materiales[0].material.especificacion2.especificacion.apariencia }}</td>
+              <th>
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  [checked]="analisis.apariencia"
+                  [(ngModel)]="analisis.apariencia"
+                />
+                CUMPLE
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <span class="subtitles"> Análisis cuantitativo </span>
+      <table class="table is-fullwidth" *ngIf="Materiales">
+        <thead>
+          <tr>
+            <th rowspan="2" align="center">
+              <span class="centered">
+                pH
+                <ng-container *ngIf="analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_M"
+                  ><i class="fas fa-sort-up" style="color: #f03a5f"></i
+                ></ng-container>
+                <ng-container *ngIf="analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_m"
+                  ><i class="fas fa-sort-down" style="color: #f03a5f"></i
+                ></ng-container>
+                <ng-container
+                  *ngIf="
+                    analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_m &&
+                    analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_M
+                  "
+                  ><i class="fas fa-check" style="color: #48c78e"></i
+                ></ng-container>
+              </span>
+            </th>
+            <th align="center">Especificación</th>
+            <th align="center">Resultado</th>
+          </tr>
+          <tr *ngIf="Materiales[0].material.especificacion2">
+            <td align="center">
+              {{ Materiales[0].material.especificacion2.especificacion.ph_m }}-{{
+                Materiales[0].material.especificacion2.especificacion.ph_M
+              }}
+            </td>
+            <td align="center">
+              <input type="text" class="input" [(ngModel)]="analisis.ph" />
+            </td>
+          </tr>
+        </thead>
+      </table>
+      <span class="subtitles"> Pruebas o ensayos adicionales </span>
+      <table class="table is-fullwidth" *ngIf="Materiales">
+        <thead>
+          <tr *ngIf="Materiales[0].material.especificacion2">
+            <th rowspan="2" align="center">
+              <span class="centered">
+                {{ getThirdKeyValue().key }}
+              </span>
+            </th>
+            <th align="center">Especificación</th>
+            <th align="center">Resultado</th>
+          </tr>
+          <tr *ngIf="Materiales[0].material.especificacion2">
+            <td align="center">{{ getThirdKeyValue().value }}</td>
+            <td align="center">
+              <input type="text" class="input" [(ngModel)]="analisis.otro" />
+            </td>
+          </tr>
+        </thead>
+      </table>
+
+      <div class="field">
+        <label class="label">Observación</label>
+        <div class="control">
+          <textarea class="textarea" id="" cols="30" rows="3" [(ngModel)]="analisis.resultado.observacion"></textarea>
         </div>
-        <div class="modal-card-body">
-            <span class="subtitles">
-                Análisis cualitativo
-            </span>
-            <br>
-            <div class="columns">
-                <table class="table fullwidth" *ngIf="Materiales">
-                    <thead>
-                        <tr *ngIf="Materiales[0].material.especificacion2">
-                            <th>Apariencia</th>
-                            <td>{{Materiales[0].material.especificacion2.especificacion.apariencia}}</td>
-                            <th><input type="checkbox" name="" id="" [checked]="analisis.apariencia" [(ngModel)]="analisis.apariencia"> CUMPLE</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <span class="subtitles">
-                Análisis cuantitativo
-            </span>
-            <table class="table is-fullwidth" *ngIf="Materiales">
-                <thead>
-                    <tr>
-                        <th rowspan="2" align="center">
-                            <span class="centered">
-                                pH
-                                <ng-container *ngIf="analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_M"><i class="fas fa-sort-up" style="color: #f03a5f;"></i></ng-container>
-                                <ng-container *ngIf="analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_m"><i class="fas fa-sort-down" style="color: #f03a5f;"></i></ng-container>
-                                <ng-container *ngIf="analisis.ph > Materiales[0].material.especificacion2.especificacion.ph_m && analisis.ph < Materiales[0].material.especificacion2.especificacion.ph_M"><i class="fas fa-check" style="color: #48c78e;"></i></ng-container>
-                            </span>
-                        </th>
-                        <th align="center">Especificación</th>
-                        <th align="center">Resultado</th>
-                    </tr>
-                    <tr *ngIf="Materiales[0].material.especificacion2">
-                        <td align="center">{{Materiales[0].material.especificacion2.especificacion.ph_m}}-{{Materiales[0].material.especificacion2.especificacion.ph_M}}</td>
-                        <td align="center">
-                            <input type="text" class="input" [(ngModel)]="analisis.ph">
-                        </td>
-                    </tr>
-                </thead>
-            </table>
-            <span class="subtitles">
-                Pruebas o ensayos adicionales
-            </span>
-            <table class="table is-fullwidth" *ngIf="Materiales">
-                <thead>
-                    <tr *ngIf="Materiales[0].material.especificacion2">
-                        <th rowspan="2" align="center">
-                            <span class="centered">
-                                {{ getThirdKeyValue().key }}
-                            </span>
-                        </th>
-                        <th align="center">Especificación</th>
-                        <th align="center">Resultado</th>
-                    </tr>
-                    <tr *ngIf="Materiales[0].material.especificacion2">
-                        <td align="center">{{ getThirdKeyValue().value }}</td>
-                        <td align="center">
-                            <input type="text" class="input" [(ngModel)]="analisis.otro">
-                        </td>
-                    </tr>
-                </thead>
-            </table>
+      </div>
 
-            <div class="field">
-                <label class="label">Observación</label>
-                <div class="control">
-                    <textarea class="textarea" id="" cols="30" rows="3" [(ngModel)]="analisis.resultado.observacion"></textarea>
-                </div>
-            </div>
-
-            <br>
-            <br>
-            <div class="columns is-mobile is-flex is-justify-content-flex-end">
-                <div class="column">
-                    <button class="button is-info" (click)="guardar()">
-                        <span class="icon"><i class="fas fa-save"></i></span>
-                        <span>Guardar progreso</span>
-                    </button>
-                </div>
-                <!-- <div class="column">
+      <br />
+      <br />
+      <div class="columns is-mobile is-flex is-justify-content-flex-end">
+        <div class="column">
+          <button class="button is-info" (click)="guardar()">
+            <span class="icon"><i class="fas fa-save"></i></span>
+            <span>Guardar progreso</span>
+          </button>
+        </div>
+        <!-- <div class="column">
                     <table class="table is-fullwidth">
                         <tr>
                             <th>Resultado</th>
@@ -110,40 +125,52 @@
                         </tr>
                     </table>
                 </div> -->
-            </div>
-        </div>
+      </div>
     </div>
-    <div class="modal-card added animate__animated animate__fadeInUp longer">
-        <div class="modal-card-body bg" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;" *ngIf="!analisis.resultado.resultado">
-                <div class="control">
-                    <button class="button is-success" (click)="guardar('APROBADO')">
-                        <span class="icon"><i class="fa-solid fa-check"></i></span>
-                        <span>Aprobado</span>
-                    </button>
-                </div>
-                <div class="control">
-                    <button class="button is-danger" (click)="guardar('RECHAZADO')">
-                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
-                        <span>Rechazado</span>
-                    </button>
-                </div>
-            </div> <br>
-    
-            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;" *ngIf="analisis.resultado.resultado">
-                <div class="control">
-                    <button class="button is-success">
-                        <span class="icon"><i class="fa-solid fa-check"></i></span>
-                        <span>Validar</span>
-                    </button>
-                </div>
-                <div class="control">
-                    <button class="button is-danger">
-                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
-                        <span>Re analizar</span>
-                    </button>
-                </div>
-            </div>
+  </div>
+  <div class="modal-card added animate__animated animate__fadeInUp longer">
+    <div
+      class="modal-card-body bg"
+      style="display: flex; justify-content: center; align-items: center; flex-direction: column"
+    >
+      <div
+        class="field is-grouped"
+        style="display: flex; justify-content: center; gap: 1rem"
+        *ngIf="!analisis.resultado.resultado"
+      >
+        <div class="control">
+          <button class="button is-success" (click)="guardar('APROBADO')">
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+            <span>Aprobado</span>
+          </button>
         </div>
+        <div class="control">
+          <button class="button is-danger" (click)="guardar('RECHAZADO')">
+            <span class="icon"><i class="fa-solid fa-ban"></i></span>
+            <span>Rechazado</span>
+          </button>
+        </div>
+      </div>
+      <br />
+
+      <div
+        class="field is-grouped"
+        style="display: flex; justify-content: center; gap: 1rem"
+        *ngIf="analisis.resultado.resultado"
+      >
+        <div class="control">
+          <button class="button is-success">
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+            <span>Validar</span>
+          </button>
+        </div>
+        <div class="control">
+          <button class="button is-danger">
+            <span class="icon"><i class="fa-solid fa-ban"></i></span>
+            <span>Re analizar</span>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

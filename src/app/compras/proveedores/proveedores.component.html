@@ -1,80 +1,72 @@
-<app-nuevo-proveedor [nuevo]="nuevo" [editar]="editar" [api]="api" [cargando]="cargando"
-    [proveedor]="proveedor_selected" (onCloseModal)="cerrar()" (onCloseModal_)="cerrar_()">
-
+<app-nuevo-proveedor
+  [nuevo]="nuevo"
+  [editar]="editar"
+  [api]="api"
+  [cargando]="cargando"
+  [proveedor]="proveedor_selected"
+  (onCloseModal)="cerrar()"
+  (onCloseModal_)="cerrar_()"
+>
 </app-nuevo-proveedor>
 
 <app-detalles-proveedores [proveedor]="proveedor_selected" [detalle]="detalle" (onCloseModal)="detalle = false">
 </app-detalles-proveedores>
 
-
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                    <h1 class="title blancas">
-                        Proveedores
-                    </h1>
-                    <h2 class="subtitle description blancas">
-                        Descripción
-                    </h2>
-                </div>
-            </div>
-            <br>
-            <ng-container *ngIf="filas() === 0">
-
-                <div class="columns">
-                    <div class="column">
-                        <div class="card animate__animated animate__fadeInUp">
-                            <div class="card-content blue" (click)="nuevo = true">
-                                <span class="agregar">
-                                    <i class="fas fa-plus-circle"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column"></div>
-                    <div class="column"></div>
-                    <div class="column"></div>
-                    <div class="column"></div>
-                </div>
-
-            </ng-container>
-            <ng-container *ngFor="let fila of [].constructor(filas());index as fila_i">
-                <div class="columns">
-                    <div class="column" *ngFor="let tarjeta of [].constructor(5);index as i">
-                        <ng-container *ngIf="(5*fila_i)+i == 0">
-                            <div class="card animate__animated animate__fadeInUp">
-                                <div class="card-content blue" (click)="nuevo = true">
-                                    <span class="agregar">
-                                        <i class="fas fa-plus-circle"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="api.proveedores[(5*fila_i)+i-1]">
-                            <div class="card animate__animated animate__fadeInUp">
-                                <div class="card-header">
-                                    <div class="card-header-title titulos is-centered">
-                                        <p class=" subtitle">
-                                            {{api.proveedores[(5*fila_i)+i-1].nombre}}
-                                        </p>
-                                    </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <a class="card-footer-item"><i class="fas fa-info-circle blue_"
-                                            (click)="VerProveedor((5*fila_i)+i-1)"></i></a>
-                                    <a class="card-footer-item"><i class="far fa-edit green"
-                                            (click)="EditarProveedor((5*fila_i)+i-1)"></i></a>
-                                    <a class="card-footer-item"><i class="fas fa-trash-alt red"
-                                            (click)="borrarFabricante(api.proveedores[(5*fila_i)+i-1]._id)"></i></a>
-                                </footer>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </ng-container>
+<app-page-layout>
+  <app-section-header title="Proveedores" description="Gestión de proveedores y materiales" icon="fa-shopping-cart" color="green"></app-section-header>
+  <br />
+  <ng-container *ngIf="filas() === 0">
+    <div class="columns">
+      <div class="column">
+        <div class="card animate__animated animate__fadeInUp">
+          <div class="card-content blue" (click)="nuevo = true">
+            <span class="agregar">
+              <i class="fas fa-plus-circle"></i>
+            </span>
+          </div>
         </div>
+      </div>
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
     </div>
-</div>
+  </ng-container>
+  <ng-container *ngFor="let fila of [].constructor(filas()); index as fila_i">
+    <div class="columns">
+      <div class="column" *ngFor="let tarjeta of [].constructor(5); index as i">
+        <ng-container *ngIf="5 * fila_i + i == 0">
+          <div class="card animate__animated animate__fadeInUp">
+            <div class="card-content blue" (click)="nuevo = true">
+              <span class="agregar">
+                <i class="fas fa-plus-circle"></i>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="api.proveedores[5 * fila_i + i - 1]">
+          <div class="card animate__animated animate__fadeInUp">
+            <div class="card-header">
+              <div class="card-header-title titulos is-centered">
+                <p class="subtitle">
+                  {{ api.proveedores[5 * fila_i + i - 1].nombre }}
+                </p>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item"
+                ><i class="fas fa-info-circle blue_" (click)="VerProveedor(5 * fila_i + i - 1)"></i
+              ></a>
+              <a class="card-footer-item"
+                ><i class="far fa-edit green" (click)="EditarProveedor(5 * fila_i + i - 1)"></i
+              ></a>
+              <a class="card-footer-item"
+                ><i class="fas fa-trash-alt red" (click)="borrarFabricante(api.proveedores[5 * fila_i + i - 1]._id)"></i
+              ></a>
+            </footer>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</app-page-layout>

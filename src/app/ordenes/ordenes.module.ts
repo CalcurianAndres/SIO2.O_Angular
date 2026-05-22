@@ -23,8 +23,6 @@ import { SolicitudesComponent } from './produccion/solicitudes/solicitudes.compo
 import { SolicitudesProfileComponent } from './produccion/solicitudes-profile/solicitudes-profile.component';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   declarations: [
     CompraComponent,
@@ -40,7 +38,7 @@ import { SharedModule } from '../shared/shared.module';
     AsignacionesComponent,
     DevolucionesProfileComponent,
     SolicitudesComponent,
-    SolicitudesProfileComponent
+    SolicitudesProfileComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +50,7 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     ResizableModule,
     AlmacenModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class OrdenesModule { }
+export class OrdenesModule {}

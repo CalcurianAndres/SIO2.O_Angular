@@ -1,271 +1,264 @@
-<app-new-convertidora
-[nueva]="convertidora"
-(onCloseModal)="convertidora = false">
-</app-new-convertidora>
+<app-new-convertidora [nueva]="convertidora" (onCloseModal)="convertidora = false"> </app-new-convertidora>
 
-<app-new-bobina
-[nueva]="bobina"
-(onCloseModal)="bobina = false">
+<app-new-bobina [nueva]="bobina" (onCloseModal)="bobina = false"> </app-new-bobina>
 
-</app-new-bobina>
+<app-page-layout>
+  <app-section-header
+    title="Bobinas"
+    description="Gestión de bobinas y convertidoras"
+    icon="fa-warehouse"
+    color="orange"
+  ></app-section-header>
+  <br />
 
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                  <h1 class="title blancas">
-                   Almacén de bobinas
-                  </h1>
-                  <h2 class="subtitle description blancas">
-                    Descripción
-                  </h2>
-                  <div class="iconos">
-                    <i class="fas fa-box-open"></i>
-                  </div>
-                </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-info" (click)="convertidora = true">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Convertidora</span>
+      </button>
+    </div>
+    <div class="control">
+      <button class="button is-info" (click)="bobina = true">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Conversión</span>
+      </button>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="columns">
+    <div class="column">
+      <div class="card h-310">
+        <div class="card-content">
+          <span class="title"> Conversiones </span>
+          <hr />
+          <table class="table is-fullwidth is-striped fixed-header-table">
+            <thead>
+              <tr>
+                <th>Estado</th>
+                <th>Lote</th>
+                <th>Material</th>
+                <th>Cantidad (und)</th>
+                <th>Peso (t)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bobina of api.conversiones; index as i">
+                <td>
+                  <span class="tag is-success">{{ bobina.status }}</span>
+                </td>
+                <td>{{ bobina.lote }}</td>
+                <td>
+                  {{ bobina.material.nombre }} ({{ bobina.ancho }}x{{ bobina.largo }}) {{ bobina.material.gramaje }}g/m²
+                  - {{ bobina.material.calibre }}pt
+                </td>
+                <td>{{ bobina.cantidad | number: '2.2-2' }}</td>
+                <td>{{ bobina.peso | number: '2.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="card tags">
+        <div class="card-content ty orange">
+          <div class="columns">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>1</h1>
+              </span>
             </div>
-            <br>
-
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button is-info" (click)="convertidora = true">
-                        <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                        <span>Convertidora</span>
-                    </button>
-                </div>
-                <div class="control">
-                    <button class="button is-info" (click)="bobina = true">
-                        <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                        <span>Conversión</span>
-                    </button>
-                  </div>
-                </div>
-                
-                <br>
-                
-                <div class="columns">
-                  <div class="column">
-                    <div class="card h-310">
-                      <div class="card-content">
-                        <span class="title">
-                          Conversiones
-                        </span>
-                        <hr>
-                        <table class="table is-fullwidth is-striped fixed-header-table">
-                          <thead>
-                            <tr>
-                              <th>Estado</th>
-                              <th>Lote</th>
-                              <th>Material</th>
-                              <th>Cantidad (und)</th>
-                              <th>Peso (t)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let bobina of api.conversiones; index as i">
-                              <td>
-                                <span class="tag is-success">{{bobina.status}}</span>
-                              </td>
-                              <td>{{bobina.lote}}</td>
-                              <td>{{bobina.material.nombre}} ({{bobina.ancho}}x{{bobina.largo}}) {{bobina.material.gramaje}}g/m² - {{bobina.material.calibre}}pt</td>
-                              <td>{{bobina.cantidad | number:'2.2-2'}}</td>
-                              <td>{{bobina.peso | number:'2.2-2'}}</td>
-                            </tr>
-                          </tbody>
-                        </table>  
-                      </div>
-                    </div>
-              </div>
-              <div class="column is-4">
-                    <div class="card tags">
-                        <div class="card-content ty orange">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>1</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Análisis</span> <br>
-                                    <span class="gruesa">Mes</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        Mayo
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                              <defs>
-                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                              </defs>
-                              <g class="moving-waves">
-                                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                              </g>
-                            </svg>
-                          </div>
-                    </div>
-                    <div class="card mt-5 tags">
-                        <div class="card-content ty green__">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>1</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Análisis</span> <br>
-                                    <span class="gruesa">Año</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        2025
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                              <defs>
-                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                              </defs>
-                              <g class="moving-waves">
-                                  <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                              </g>
-                            </svg>
-                          </div>
-                    </div>
-                    <div class="card mt-5 tags">
-                        <div class="card-content ty blue___">
-                            <div class="columns info_">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>2</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Dia(s)</span> <br>
-                                    <!-- <span class="gruesa">Dia(s)</span> -->
-                                </div>
-                                <div class="column">
-                                    <span class="low">
-                                        Rendimiento
-                                    </span><br>
-                                    <span class="lowl">
-                                       de conversión
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="position_">
-                                <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                                  <defs>
-                                    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                                  </defs>
-                                  <g class="moving-waves">
-                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                  </g>
-                                </svg>
-                              </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="column is-2">
+              <span class="fina">Análisis</span> <br />
+              <span class="gruesa">Mes</span>
             </div>
-
-
-            <br>
-
-            <ng-container *ngFor="let convertidora of api.convertidora;index as i">
-                <div class="card animate__animated animate__fadeInUp">
-                    <div class="card-header dark">
-                        <p class="card-header-title">
-                            {{convertidora.nombre}} 
-                            </p>
-                        <button class="card-header-icon" aria-label="more options" [ngClass]="{'clicked':clicked[i]}" (click)="showInfo(i)">
-                            <span class="icon">
-                              <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </button>
-                    </div>
-                        <div class="card-content info" [ngClass]="{'hidden': !clicked[i], 'show': clicked[i]}">
-                            <div class="table-wrapper">
-                              <table class="table is-fullwidth is-striped fixed-header-table">
-                                <thead>
-                                  <tr>
-                                    <th>#</th>
-                                    <th>Lote</th>
-                                    <th>Peso (t)</th>
-                                    <th>Ancho</th>
-                                    <th>Material</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr *ngFor="let bobina of api.bobinaPorConvertidora(convertidora._id); index as i">
-                                    <td>{{bobina.codigo}}</td>
-                                    <td>{{bobina.lote}}</td>
-                                    <td>{{bobina.neto}}</td>
-                                    <td>{{bobina.ancho}}</td>
-                                    <td>{{bobina.material.nombre}}</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                        </div>
-                </div>
-                <br><br>
-            </ng-container>
-            
-
-           
-          <div class="card">
-            <div class="card-content">
-              <span class="title">Estadísticas</span>
-              <div class="columns">
-                <div class="column" *ngFor="let convertidora of api.convertidora;index as i">
-                  <div class="card">
-                    <div class="card-content">
-                      <div class="subtitles">
-                        {{convertidora.nombre}}
-                      </div>
-                      <table class="table is-fullwidth is-striped">
-                        <thead>
-                          <tr>
-                            <th>Tipo</th>
-                            <th>Convertidas (und)</th>
-                            <th>Peso convertido (t)</th>
-                            <th>% rendimiento</th>
-                            <th>Conversiones</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="column">
+              <span class="Detalle"> Mayo </span>
             </div>
           </div>
-        
         </div>
+        <div class="position__">
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 40"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+          >
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="moving-waves">
+              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="card mt-5 tags">
+        <div class="card-content ty green__">
+          <div class="columns">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>1</h1>
+              </span>
+            </div>
+            <div class="column is-2">
+              <span class="fina">Análisis</span> <br />
+              <span class="gruesa">Año</span>
+            </div>
+            <div class="column">
+              <span class="Detalle"> 2025 </span>
+            </div>
+          </div>
+        </div>
+        <div class="position__">
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 40"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+          >
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="moving-waves">
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="card mt-5 tags">
+        <div class="card-content ty blue___">
+          <div class="columns info_">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>2</h1>
+              </span>
+            </div>
+            <div class="column is-2">
+              <span class="fina">Dia(s)</span> <br />
+              <!-- <span class="gruesa">Dia(s)</span> -->
+            </div>
+            <div class="column">
+              <span class="low"> Rendimiento </span><br />
+              <span class="lowl"> de conversión </span>
+            </div>
+          </div>
+          <div class="position_">
+            <svg
+              class="waves"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 24 150 40"
+              preserveAspectRatio="none"
+              shape-rendering="auto"
+            >
+              <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+              </defs>
+              <g class="moving-waves">
+                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+
+  <br />
+
+  <ng-container *ngFor="let convertidora of api.convertidora; index as i">
+    <div class="card animate__animated animate__fadeInUp">
+      <div class="card-header dark">
+        <p class="card-header-title">
+          {{ convertidora.nombre }}
+        </p>
+        <button
+          class="card-header-icon"
+          aria-label="more options"
+          [ngClass]="{ clicked: clicked[i] }"
+          (click)="showInfo(i)"
+        >
+          <span class="icon">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="card-content info" [ngClass]="{ hidden: !clicked[i], show: clicked[i] }">
+        <div class="table-wrapper">
+          <table class="table is-fullwidth is-striped fixed-header-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Lote</th>
+                <th>Peso (t)</th>
+                <th>Ancho</th>
+                <th>Material</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bobina of api.bobinaPorConvertidora(convertidora._id); index as i">
+                <td>{{ bobina.codigo }}</td>
+                <td>{{ bobina.lote }}</td>
+                <td>{{ bobina.neto }}</td>
+                <td>{{ bobina.ancho }}</td>
+                <td>{{ bobina.material.nombre }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+  </ng-container>
+
+  <div class="card">
+    <div class="card-content">
+      <span class="title">Estadísticas</span>
+      <div class="columns">
+        <div class="column" *ngFor="let convertidora of api.convertidora; index as i">
+          <div class="card">
+            <div class="card-content">
+              <div class="subtitles">
+                {{ convertidora.nombre }}
+              </div>
+              <table class="table is-fullwidth is-striped">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Convertidas (und)</th>
+                    <th>Peso convertido (t)</th>
+                    <th>% rendimiento</th>
+                    <th>Conversiones</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

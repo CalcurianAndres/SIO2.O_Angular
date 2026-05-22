@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaboratorioRoutingModule } from './laboratorio-routing.module';
@@ -21,8 +22,6 @@ import { TicketsRComponent } from './defectos/tickets-r/tickets-r.component';
 import { TicketsAComponent } from './defectos/tickets-a/tickets-a.component';
 import { EtiquetasComponent } from './etiquetas/etiquetas.component';
 import { CertificadoComponent } from './certificado/certificado.component';
-
-
 
 @NgModule({
   declarations: [
@@ -50,7 +49,8 @@ import { CertificadoComponent } from './certificado/certificado.component';
     NavbarModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    SharedModule,
+  ],
 })
-export class LaboratorioModule { }
+export class LaboratorioModule {}

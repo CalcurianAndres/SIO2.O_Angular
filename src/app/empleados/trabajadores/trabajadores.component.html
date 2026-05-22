@@ -1,73 +1,62 @@
 <app-nuevo-trabajador
-[nuevo_trabajador]="nuevo_trabajador"
-[trabajador]="trabajador"
-[referencias]="referencias"
-[carga]="carga"
-[emergencias]="emergencias"
-[cursos_realizados]="cursos_realizados"
-[softwares]="softwares"
-(onCloseModal)="nuevo_trabajador = false;">
+  [nuevo_trabajador]="nuevo_trabajador"
+  [trabajador]="trabajador"
+  [referencias]="referencias"
+  [carga]="carga"
+  [emergencias]="emergencias"
+  [cursos_realizados]="cursos_realizados"
+  [softwares]="softwares"
+  (onCloseModal)="nuevo_trabajador = false"
+>
 </app-nuevo-trabajador>
 
 <app-informacion-empleado
-[informacion]="informacion"
-[_informacion]="_informacion_"
-(onCloseModal)="informacion = false;"
+  [informacion]="informacion"
+  [_informacion]="_informacion_"
+  (onCloseModal)="informacion = false"
 >
 </app-informacion-empleado>
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                  <h1 class="title blancas">
-                    Trabajadores
-                  </h1>
-                  <h2 class="subtitle description blancas">
-                    Descripción
-                  </h2>
-                </div>
-                <div class="iconos">
-                    <i class="fas fa-users"></i>
-                </div>
+<app-page-layout>
+  <app-section-header title="Trabajadores" description="Registro de empleados activos" icon="fa-users" color="teal"></app-section-header>
+  <br />
+  <button class="button is-info" (click)="nuevo_trabajador = true">
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Empleado</span></button
+  >  <br />
+  <br />
+  <div class="Departamentos">
+    <div class="card dep" *ngFor="let cargos of trabajadores.trabajador">
+      <div class="card_designed">
+        <span class="color" [style.background-color]="cargos.contratacion.departamento.color">
+          <div class="columns">
+            <div class="column is-4">
+              <figure class="image is-75x75 profile_pic">
+                <img
+                  class="is-rounded"
+                  src="https://192.168.0.22/api/imagen/empleado/{{ cargos.datos_personales.foto }}"
+                />
+              </figure>
             </div>
-            <br>
-            <button class="button is-info" (click)="nuevo_trabajador = true;">
-                <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                <span>Empleado</span>
-            </button> 
-            <br> <br>
-            <div class="Departamentos">
-                <div class="card dep" *ngFor="let cargos of trabajadores.trabajador">
-                    <div class="card_designed">
-                        <span class="color" [style.background-color]="cargos.contratacion.departamento.color">
-                            <div class="columns">
-                                <div class="column is-4">
-                                    <figure class="image is-75x75 profile_pic">
-                                        <img class="is-rounded"  src="https://192.168.0.22/api/imagen/empleado/{{cargos.datos_personales.foto}}"/>
-                                    </figure>
-                                </div>
-                                <div class="column">
-                                    <span style="font-family: 'Gilroy';">
-                                        {{cargos.datos_personales.nombres}} <br>
-                                        {{cargos.datos_personales.apellidos}}
-                                    </span>
-                                </div>
-                            </div>
-                        </span>
-                        <span class="info">
-                            {{cargos.contratacion.cargo.nombre}} de  <br>
-                            {{cargos.contratacion.de.nombre}}
-                        </span>
-                    </div>
-                <footer class="card-footer">
-                    <a class="card-footer-item"><i class="fas fa-info-circle blue_" (click)="informacion = true;_informacion_ = cargos;"></i></a>
-                    <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
-                    <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="eliminarTrabajador(cargos)"></i></a>
-                </footer>
-                </div>
+            <div class="column">
+              <span style="font-family: 'Gilroy'">
+                {{ cargos.datos_personales.nombres }} <br />
+                {{ cargos.datos_personales.apellidos }}
+              </span>
             </div>
-        </div>
+          </div>
+        </span>
+        <span class="info">
+          {{ cargos.contratacion.cargo.nombre }} de <br />
+          {{ cargos.contratacion.de.nombre }}
+        </span>
+      </div>
+      <footer class="card-footer">
+        <a class="card-footer-item"
+          ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
+        ></a>
+        <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
+        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="eliminarTrabajador(cargos)"></i></a>
+      </footer>
     </div>
-</div>
+  </div>
+</app-page-layout>

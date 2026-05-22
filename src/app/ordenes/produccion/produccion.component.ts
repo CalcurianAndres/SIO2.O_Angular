@@ -9,32 +9,28 @@ import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-
 // Import pdfmake-wrapper and the fonts to use
 import { PdfMakeWrapper, Txt, Table, Cell, Img, QR } from 'pdfmake-wrapper';
-import pdfFonts from "../../../assets/fonts/custom";
+import pdfFonts from '../../../assets/fonts/custom';
 import { DevolucionesService } from 'src/app/services/devoluciones.service';
 import { SolicitudesService } from 'src/app/services/solicitudes.service';
 // import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
 
 // If any issue using previous fonts import. you can try this:
 
-
-
 @Component({
   selector: 'app-produccion',
   standalone: false,
   templateUrl: './produccion.component.html',
-  styleUrls: ['./produccion.component.scss']
+  styleUrls: ['./produccion.component.scss'],
 })
 export class ProduccionComponent implements OnInit, OnChanges {
-
   public nueva = false;
   public parametro_busqueda = '';
   public resultados: any = [];
   public productos_selected: any = [];
-  public desde = ''
-  public hasta = ''
+  public desde = '';
+  public hasta = '';
 
   public anoActual: any;
 
@@ -44,7 +40,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
   public nueva_gestion: boolean = false;
 
   public devolucion: boolean = false;
-  public op: any
+  public op: any;
   public informacion = false;
 
   current: number[] = [0];
@@ -54,19 +50,19 @@ export class ProduccionComponent implements OnInit, OnChanges {
   showPaletteList: boolean = false;
 
   palete_selected: any = [];
-  team_selected: any = []
-  totales: any = []
-  horas: any = []
-  paletas: any = []
+  team_selected: any = [];
+  totales: any = [];
+  horas: any = [];
+  paletas: any = [];
 
-  fase_selected = 0
+  fase_selected = 0;
 
   // Inicializa un array de booleanos para controlar la visibilidad por cada fase y gestión
   visibilityFlags: boolean[][] = [];
   loading = true;
 
   public comentarios = false;
-  public unique_id = ''
+  public unique_id = '';
 
   public asignacionesYDevoluciones: any;
 
@@ -74,32 +70,28 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
   public Impresion_presed = false;
 
-
-  public tagsNumer = 746
+  public tagsNumer = 746;
 
   public locked = true;
 
-  public correccion = ''
+  public correccion = '';
 
-  public Despacho = false
+  public Despacho = false;
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   editarImpresion() {
-    this.locked = !this.locked
+    this.locked = !this.locked;
   }
 
-  op_seleccionada: any = ''
+  op_seleccionada: any = '';
   despachos_por_confirmar: any = {
     observacion: '',
     fecha: '',
-    despachos: []
-  }
-
+    despachos: [],
+  };
 
   add_orden_al_despacho() {
-
     let data = {
       op: this.op_seleccionada._id,
       numero_op: this.op_seleccionada.numero_op,
@@ -108,22 +100,19 @@ export class ProduccionComponent implements OnInit, OnChanges {
       cantidad: this.op_seleccionada.cantidad,
       cliente: this.op_seleccionada.cliente,
       almacenes: '',
-      parcial: false
-
-    }
-    console.log(data.producto)
-    this.despachos_por_confirmar.despachos.push(data)
-    this.op_seleccionada = ''
-
+      parcial: false,
+    };
+    console.log(data.producto);
+    this.despachos_por_confirmar.despachos.push(data);
+    this.op_seleccionada = '';
   }
 
   //ETIQUETAS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  public etiqueta_generada_por_imprimir: any
+  public etiqueta_generada_por_imprimir: any;
 
   generarImpresion(indexEtiqueta, indexFase) {
-    let gestion = this.api.GestionesDeFase(this.orden_selected, indexFase)[indexEtiqueta]
-
+    let gestion = this.api.GestionesDeFase(this.orden_selected, indexFase)[indexEtiqueta];
 
     let data = {
       gestion: gestion._id,
@@ -131,18 +120,17 @@ export class ProduccionComponent implements OnInit, OnChanges {
       op_completa: gestion.orden,
       observacion: 'Impresion SIO',
       cantidad: gestion.productos,
-      op: gestion.orden._id
-    }
+      op: gestion.orden._id,
+    };
 
-
-    this.selectedPo = data.op_completa.oc.orden
+    this.selectedPo = data.op_completa.oc.orden;
     this.generarEtiqueta();
 
     this.etiqueta_generada_por_imprimir = data;
   }
 
   ImprimirEtiquetaYMandarAProductoTerminado() {
-    this.api.etiquetarProducto(this.etiqueta_generada_por_imprimir)
+    this.api.etiquetarProducto(this.etiqueta_generada_por_imprimir);
   }
 
   pdfUrl: string | null = null;
@@ -151,7 +139,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
   printQuantity: number = 1;
 
   private debounceTimer: any;
-
 
   ngOnChanges() {
     if (this.gestiones) {
@@ -186,7 +173,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
       this.pdfUrl = baseUrl + '#toolbar=0&navpanes=0&scrollbar=0';
 
       console.log('🌐 URL modificada creada:', this.pdfUrl);
-
     } catch (error) {
       console.error('❌ Error en generarEtiqueta:', error);
     }
@@ -206,7 +192,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
   anio: number = this.fecha_.getFullYear();
 
   fechaFormateada: string = `${this.dia}/${this.mes}/${this.anio}`;
-  fechaDiaMes: string = `${this.mes}/${this.anio}`
+  fechaDiaMes: string = `${this.mes}/${this.anio}`;
 
   async buildPdf(): Promise<Blob> {
     console.log('🧱 buildPdf START');
@@ -216,14 +202,14 @@ export class ProduccionComponent implements OnInit, OnChanges {
         normal: 'Gilroy-Light.otf',
         bold: 'Gilroy-ExtraBold.otf',
         italics: 'Gilroy-ExtraBold.otf',
-        bolditalics: 'Gilroy-ExtraBold.otf'
+        bolditalics: 'Gilroy-ExtraBold.otf',
       },
       Roboto: {
         normal: 'Roboto-Light.ttf',
         bold: 'Roboto-Bold.ttf',
         italics: 'Roboto-Italic.ttf',
-        bolditalics: 'Roboto-Italic.ttf'
-      }
+        bolditalics: 'Roboto-Italic.ttf',
+      },
     });
 
     PdfMakeWrapper.useFont('Gilroy');
@@ -239,183 +225,138 @@ export class ProduccionComponent implements OnInit, OnChanges {
       doc.add(
         new Table([
           [
+            new Cell(await new Img('../../../assets/poli_cintillo_negro.png').width(250).build()).end,
             new Cell(
-              await new Img('../../../assets/poli_cintillo_negro.png').width(250).build()
+              new QR(`http://poligraficaindustrial.com/premio-theobaldo-de-nigris/`).fit(130).alignment('center').end,
             ).end,
-            new Cell(new QR(`http://poligraficaindustrial.com/premio-theobaldo-de-nigris/`).fit(130).alignment('center').end).end,
             new Cell(
               new Table([
-                [
-                  new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(18).end,
-                ],
-                [
-                  new Txt(`2023000`).alignment('center').margin([0, -18]).bold().fontSize(60).end,
-                ]
-              ]).alignment('center').end
-            ).fillColor('#000000').color('#FFFFFF').end,
-          ]
-        ]).widths(['40%', '27%', '33%']).layout('noBorders').end
-      )
-      doc.add(
-        '\n'
-      )
+                [new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(18).end],
+                [new Txt(`2023000`).alignment('center').margin([0, -18]).bold().fontSize(60).end],
+              ]).alignment('center').end,
+            )
+              .fillColor('#000000')
+              .color('#FFFFFF').end,
+          ],
+        ])
+          .widths(['40%', '27%', '33%'])
+          .layout('noBorders').end,
+      );
+      doc.add('\n');
       doc.add(
         new Table([
           [
             new Cell(
               new Table([
-                [
-                  new Txt('PRODUCTO:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`${this.orden_selected.producto[0].identificacion.producto}`).fontSize(28).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('PRODUCTO:').fontSize(10).end],
+                [new Txt(`${this.orden_selected.producto[0].identificacion.producto}`).fontSize(28).end],
+              ]).layout('noBorders').end,
             ).end,
-          ]
-        ]).widths(['100%']).end
-      )
-      doc.add(
-        '\n'
-      )
+          ],
+        ]).widths(['100%']).end,
+      );
+      doc.add('\n');
       doc.add(
         new Table([
           [
             new Cell(
               new Table([
-                [
-                  new Txt('CLIENTE:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`${this.orden_selected.producto[0].identificacion.cliente.nombre}`).fontSize(28).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('CLIENTE:').fontSize(10).end],
+                [new Txt(`${this.orden_selected.producto[0].identificacion.cliente.nombre}`).fontSize(28).end],
+              ]).layout('noBorders').end,
             ).end,
             new Cell(
               new Table([
-                [
-                  new Txt('ORDEN DE COMPRA N°:').fontSize(10).end,
-                ],
-                [
-                  new Txt(this.selectedPo).fontSize(28).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('ORDEN DE COMPRA N°:').fontSize(10).end],
+                [new Txt(this.selectedPo).fontSize(28).end],
+              ]).layout('noBorders').end,
             ).end,
-          ]
-        ]).widths(['70%', '30%']).end
-      )
-      doc.add(
-        '\n'
-      )
+          ],
+        ]).widths(['70%', '30%']).end,
+      );
+      doc.add('\n');
       doc.add(
         new Table([
           [
             new Cell(
               new Table([
-                [
-                  new Txt('SUSTRATO:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`Poligrafica Industrial`).fontSize(28).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('SUSTRATO:').fontSize(10).end],
+                [new Txt(`Poligrafica Industrial`).fontSize(28).end],
+              ]).layout('noBorders').end,
             ).end,
             new Cell(
               new Table([
-                [
-                  new Txt('CÓDIGO DE PRODUCTO:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`${this.orden_selected.producto[0].identificacion.codigo_cliente}`).fontSize(28).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('CÓDIGO DE PRODUCTO:').fontSize(10).end],
+                [new Txt(`${this.orden_selected.producto[0].identificacion.codigo_cliente}`).fontSize(28).end],
+              ]).layout('noBorders').end,
             ).end,
-          ]
-        ]).widths(['70%', '30%']).end
-      )
-      doc.add(
-        '\n'
-      )
+          ],
+        ]).widths(['70%', '30%']).end,
+      );
+      doc.add('\n');
       doc.add(
         new Table([
           [
             new Cell(
               new Table([
+                [new Txt('COD. ESPECIFICACIÓN:').fontSize(10).end],
                 [
-                  new Txt('COD. ESPECIFICACIÓN:').fontSize(10).end,
+                  new Txt(
+                    `E-${this.orden_selected.producto[0].identificacion.cliente.codigo}-${this.orden_selected.producto[0].identificacion.codigo}-${this.orden_selected.producto[0].identificacion.version}`,
+                  ).fontSize(20).end,
                 ],
-                [
-                  new Txt(`E-${this.orden_selected.producto[0].identificacion.cliente.codigo}-${this.orden_selected.producto[0].identificacion.codigo}-${this.orden_selected.producto[0].identificacion.version}`).fontSize(20).end,
-                ]
-              ]).layout('noBorders').end
+              ]).layout('noBorders').end,
             ).end,
             new Cell(
               new Table([
-                [
-                  new Txt('FECHA DE FABRICACIÓN:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`${this.fechaDiaMes}`).fontSize(25).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('FECHA DE FABRICACIÓN:').fontSize(10).end],
+                [new Txt(`${this.fechaDiaMes}`).fontSize(25).end],
+              ]).layout('noBorders').end,
             ).end,
             new Cell(
               new Table([
-                [
-                  new Txt('FECHA DE ETIQ:').fontSize(10).end,
-                ],
-                [
-                  new Txt(`${this.fechaFormateada}`).fontSize(25).end,
-                ]
-              ]).layout('noBorders').end
+                [new Txt('FECHA DE ETIQ:').fontSize(10).end],
+                [new Txt(`${this.fechaFormateada}`).fontSize(25).end],
+              ]).layout('noBorders').end,
             ).end,
-          ]
-        ]).widths(['25%', '21%', '19%']).end
-      )
+          ],
+        ]).widths(['25%', '21%', '19%']).end,
+      );
       doc.add(
         new Table([
           [
-            new Cell(
-              new Txt(' ').end
-            ).fillColor('#000000').color('#FFFFFF').end,
+            new Cell(new Txt(' ').end).fillColor('#000000').color('#FFFFFF').end,
             new Cell(
               new Table([
-                [
-                  new Txt(`00.000`).bold().alignment('center').fontSize(65).end,
-                ],
-                [
-                  new Txt('unidades').bold().alignment('center').fontSize(18).margin([0, -14]).end,
-                ]
-              ]).width("100%").end
-            ).fillColor('#000000').color('#FFFFFF').end,
-            new Cell(
-              new Txt(' ').end
-            ).fillColor('#000000').color('#FFFFFF').end,
-          ]
-        ]).margin([565, -65]).end
-      )
+                [new Txt(`00.000`).bold().alignment('center').fontSize(65).end],
+                [new Txt('unidades').bold().alignment('center').fontSize(18).margin([0, -14]).end],
+              ]).width('100%').end,
+            )
+              .fillColor('#000000')
+              .color('#FFFFFF').end,
+            new Cell(new Txt(' ').end).fillColor('#000000').color('#FFFFFF').end,
+          ],
+        ]).margin([565, -65]).end,
+      );
 
       doc.add(
         new Table([
           [
             new Cell(
               new Txt(`\n\n\nSe recomienda el uso de este producto dentro de un lapso no mayor a 6 meses.
-                             Para mas información lea detenidamente nuestra "Política de devoluciones o reclamos (DDE-005)"`).fontSize(12).end,
-
-            ).alignment('center').end
-          ]
-        ]).layout('noBorders').widths(['65%']).end
-      )
+                             Para mas información lea detenidamente nuestra "Política de devoluciones o reclamos (DDE-005)"`).fontSize(
+                12,
+              ).end,
+            ).alignment('center').end,
+          ],
+        ])
+          .layout('noBorders')
+          .widths(['65%']).end,
+      );
 
       doc.add(
-        new Table([
-          [
-            new Cell(
-              new Txt(`FPR-018`).fontSize(15).margin([755, 0]).end,
-            ).end
-          ]
-        ]).layout('noBorders').end
-      )
+        new Table([[new Cell(new Txt(`FPR-018`).fontSize(15).margin([755, 0]).end).end]]).layout('noBorders').end,
+      );
 
       console.log('🧾 Contenido agregado');
 
@@ -434,7 +375,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
           resolve(blob);
         });
       });
-
     } catch (error) {
       console.error('❌ Error en buildPdf:', error);
       throw error;
@@ -458,15 +398,13 @@ export class ProduccionComponent implements OnInit, OnChanges {
   // Datos simulados (reemplazar con tu servicio)
   purchaseOrders = [
     { id: 'PO-001', name: 'Orden #001' },
-    { id: 'PO-002', name: 'Orden #002' }
+    { id: 'PO-002', name: 'Orden #002' },
   ];
 
   subOrders = [
     { id: 'SUB-A', name: 'Sub Orden A', poId: 'PO-001' },
-    { id: 'SUB-B', name: 'Sub Orden B', poId: 'PO-001' }
+    { id: 'SUB-B', name: 'Sub Orden B', poId: 'PO-001' },
   ];
-
-
 
   // Llama a esta función cada vez que cambien los datos del formulario (ej. (change)="actualizarVistaPrevia()")
 
@@ -498,7 +436,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
   //     console.error('Error al generar el PDF:', error);
   //   }
   // }
-
 
   // async generarEtiqueta() {
   //   const pdf = new PdfMakeWrapper();
@@ -679,7 +616,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
   // }
 
   // private ejecutarImpresion(cantidad: number) {
-  //   // Aquí va la lógica real para enviar a la impresora (ej. enviar petición al backend, 
+  //   // Aquí va la lógica real para enviar a la impresora (ej. enviar petición al backend,
   //   // o abrir una ventana de impresión controlada si es a través del navegador).
   //   const payload = {
   //     orden: this.selectedPo,
@@ -689,7 +626,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
   //   console.log('Payload a imprimir:', payload);
 
   // FIN ETIQUETAS:::::::::::::.
-
 
   // Aquí vas guardando los ngModel
   orden_solicitud: any = {
@@ -708,8 +644,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
     for (let i = 0; i < this.op.tinta.length; i++) {
       this.orden_solicitud.tintas.push({
         id: this.op.tinta[i].tinta._id,
-        cantidad: 0
-      })
+        cantidad: 0,
+      });
     }
   }
 
@@ -725,14 +661,16 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
       // Filtrar devoluciones por .status === "Confirmado" y ordenarlas por fecha
       let devoluciones = await this.devolucionesService.devoluciones; // Obtén tus devoluciones de alguna manera
-      devoluciones = devoluciones.filter((devolucion: any) => devolucion.op._id === op._id && devolucion.status === "Confirmado");
+      devoluciones = devoluciones.filter(
+        (devolucion: any) => devolucion.op._id === op._id && devolucion.status === 'Confirmado',
+      );
 
       // Ordenar las devoluciones por createdAt
       devoluciones.sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
       let solicitudes = await this.solicitudesServices.solicitudes;
-      solicitudes = solicitudes.filter((solicitud: any) =>
-        solicitud.op && solicitud.op._id === op._id && solicitud.status === 'Por Asignar'
+      solicitudes = solicitudes.filter(
+        (solicitud: any) => solicitud.op && solicitud.op._id === op._id && solicitud.status === 'Por Asignar',
       );
 
       // Combina ambas listas (asignaciones y devoluciones)
@@ -743,12 +681,10 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
       // Almacenar la lista combinada de asignaciones y devoluciones ordenada
       this.asignacionesYDevoluciones = combinados;
-
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error('Error al obtener los datos:', error);
     }
   }
-
 
   descargarOrden = async (orden) => {
     // Configuring custom fonts
@@ -757,14 +693,14 @@ export class ProduccionComponent implements OnInit, OnChanges {
         normal: 'Gilroy-Light.otf',
         bold: 'Gilroy-ExtraBold.otf',
         italics: 'Gilroy-ExtraBold.otf',
-        bolditalics: 'Gilroy-ExtraBold.otf'
+        bolditalics: 'Gilroy-ExtraBold.otf',
       },
       Roboto: {
         normal: 'Roboto-Light.ttf',
         bold: 'Roboto-Bold.ttf',
         italics: 'Roboto-Italic.ttf',
-        bolditalics: 'Roboto-Italic.ttf'
-      }
+        bolditalics: 'Roboto-Italic.ttf',
+      },
     });
 
     PdfMakeWrapper.useFont('Gilroy');
@@ -773,46 +709,41 @@ export class ProduccionComponent implements OnInit, OnChanges {
     let steps: any = [];
 
     const formatter = new Intl.DateTimeFormat('es-ES', {
-
       day: '2-digit',
 
       month: '2-digit',
 
-      year: 'numeric'
-
+      year: 'numeric',
     });
 
-
     for (let i = 0; i < orden.fases.length; i++) {
-      steps.push(
-        {
-          title: orden.fases[i].maquina.nombre,
-          subtitle: orden.fases[i].nombre,
-          date: formatter.format(new Date(orden.fases[i].fases[0].fecha))
-        }
-      )
+      steps.push({
+        title: orden.fases[i].maquina.nombre,
+        subtitle: orden.fases[i].nombre,
+        date: formatter.format(new Date(orden.fases[i].fases[0].fecha)),
+      });
     }
 
     const stepsCount = steps.length;
-    const columnWidth = 514 / steps.length;               // ancho fijo de cada columna
+    const columnWidth = 514 / steps.length; // ancho fijo de cada columna
     const tableWidth = stepsCount * columnWidth;
-    const circleRadius = 10;               // radio del círculo
-    const circleCenterY = 20;              // posición vertical en el canvas
+    const circleRadius = 10; // radio del círculo
+    const circleCenterY = 20; // posición vertical en el canvas
 
     // Fila superior: textos (título y subtítulo) centrados en cada celda
-    const topRow = steps.map(step => ({
+    const topRow = steps.map((step) => ({
       text: `${step.title}\n${step.subtitle}`,
       alignment: 'center',
       fontSize: 8,
-      margin: [0, 3, 0, 0]
+      margin: [0, 3, 0, 0],
     }));
 
     // Fila inferior: fechas centradas en cada celda
-    const bottomRow = steps.map(step => ({
+    const bottomRow = steps.map((step) => ({
       text: step.date,
       alignment: 'center',
       fontSize: 6,
-      margin: [0, 3, 0, 0]
+      margin: [0, 3, 0, 0],
     }));
 
     // Fila central: un canvas que abarca todas las columnas
@@ -830,19 +761,19 @@ export class ProduccionComponent implements OnInit, OnChanges {
         lineColor: '#c5c5c5',
         lineWidth: 2,
         r1: circleRadius,
-        r2: circleRadius
+        r2: circleRadius,
       });
       // Si no es el último, dibujar la línea de conexión al siguiente círculo
       if (i < stepsCount - 1) {
         const nextCenterX = (i + 1) * columnWidth + columnWidth / 2;
         canvasItems.push({
           type: 'line',
-          x1: centerX + circleRadius,    // borde derecho del círculo actual
+          x1: centerX + circleRadius, // borde derecho del círculo actual
           y1: circleCenterY,
           x2: nextCenterX - circleRadius, // borde izquierdo del siguiente círculo
           y2: circleCenterY,
           lineWidth: 5,
-          lineColor: '#c5c5c5'
+          lineColor: '#c5c5c5',
         });
       }
     }
@@ -854,11 +785,10 @@ export class ProduccionComponent implements OnInit, OnChanges {
         canvas: canvasItems,
         width: tableWidth,
         height: 60,
-        colSpan: stepsCount
+        colSpan: stepsCount,
       },
-      ...Array(stepsCount - 1).fill({})
+      ...Array(stepsCount - 1).fill({}),
     ];
-
 
     const pdf = new PdfMakeWrapper();
 
@@ -867,10 +797,17 @@ export class ProduccionComponent implements OnInit, OnChanges {
     pdf.add(
       new Table([
         [
-          new Cell(await new Img('../../assets/poli_cintillo.png').width(60).margin([0, 5, 0, -10]).build()).alignment('center').rowSpan(4).end,
-          new Cell(new Txt(`
+          new Cell(await new Img('../../assets/poli_cintillo.png').width(60).margin([0, 5, 0, -10]).build())
+            .alignment('center')
+            .rowSpan(4).end,
+          new Cell(
+            new Txt(`
                 ORDEN DE PRODUCCIÓN
-                `).bold().end).alignment('center').fontSize(11).rowSpan(4).end,
+                `).bold().end,
+          )
+            .alignment('center')
+            .fontSize(11)
+            .rowSpan(4).end,
           new Cell(new Txt('Código: FPR-008').end).fillColor('#dedede').fontSize(5).alignment('center').end,
         ],
         [
@@ -881,7 +818,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
         [
           new Cell(new Txt('').end).end,
           new Cell(new Txt('').end).end,
-          new Cell(new Txt('Fecha de Revision: 12/03/2025').end).fillColor('#dedede').fontSize(5).alignment('center').end,
+          new Cell(new Txt('Fecha de Revision: 12/03/2025').end).fillColor('#dedede').fontSize(5).alignment('center')
+            .end,
         ],
         [
           new Cell(new Txt('').end).end,
@@ -895,19 +833,21 @@ export class ProduccionComponent implements OnInit, OnChanges {
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
         })
-        .widths(['25%', '50%', '25%']).end
-    )
+        .widths(['25%', '50%', '25%']).end,
+    );
 
-    pdf.add(
-      new Txt(' ').fontSize(10).end
-    )
+    pdf.add(new Txt(' ').fontSize(10).end);
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt('INFORMACIÓN DEL PRODUCTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('rgb(165, 172, 178)').end,
+          new Cell(new Txt('INFORMACIÓN DEL PRODUCTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('rgb(165, 172, 178)').end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('rgb(165, 172, 178)').end
+          new Cell(new Txt('ORDEN DE PRODUCCIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('rgb(165, 172, 178)').end,
         ],
         [
           new Cell(new Txt('NOMBRE:').fontSize(5.7).end).border([true, false, true, false]).end,
@@ -915,14 +855,18 @@ export class ProduccionComponent implements OnInit, OnChanges {
           new Cell(
             new Txt([
               { text: 'N', fontSize: 5.7 },
-              { text: 'º', font: 'Roboto', fontSize: 5.7 }
-            ]).end
-          ).border([true, false, true, false]).end
+              { text: 'º', font: 'Roboto', fontSize: 5.7 },
+            ]).end,
+          ).border([true, false, true, false]).end,
         ],
         [
-          new Cell(new Txt(orden.producto[0].identificacion.producto).fontSize(11).end).margin([0, -3, 0, -3]).border([true, false, true, true]).end,
+          new Cell(new Txt(orden.producto[0].identificacion.producto).fontSize(11).end)
+            .margin([0, -3, 0, -3])
+            .border([true, false, true, true]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt(orden.numero_op).alignment('center').fontSize(22).bold().end).margin([0, -15, 0, -3]).border([true, false, true, true]).end
+          new Cell(new Txt(orden.numero_op).alignment('center').fontSize(22).bold().end)
+            .margin([0, -15, 0, -3])
+            .border([true, false, true, true]).end,
         ],
       ])
         .layout({
@@ -930,8 +874,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => 'rgb(85, 85, 85)',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['69%', '1%', '30%']).end
-    )
+        })
+        .widths(['69%', '1%', '30%']).end,
+    );
 
     let emision = formatter.format(new Date(orden.createdAt));
     pdf.add(
@@ -940,13 +885,21 @@ export class ProduccionComponent implements OnInit, OnChanges {
           new Cell(new Txt('CÓDIGO DE ESPECIFICACIÓN:').fontSize(5.7).end).border([true, false, true, false]).end,
           new Cell(new Txt('CÓDIGO DE PRODUCTO CLIENTE:').fontSize(5.7).end).border([true, false, true, false]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('FECHA DE EMISIÓN').fontSize(5.7).end).border([true, false, true, false]).end
+          new Cell(new Txt('FECHA DE EMISIÓN').fontSize(5.7).end).border([true, false, true, false]).end,
         ],
         [
-          new Cell(new Txt(`E-${orden.producto[0].identificacion.cliente.codigo}-${orden.producto[0].identificacion.codigo}-${orden.producto[0].identificacion.version}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(orden.producto[0].identificacion.codigo_cliente).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(
+            new Txt(
+              `E-${orden.producto[0].identificacion.cliente.codigo}-${orden.producto[0].identificacion.codigo}-${orden.producto[0].identificacion.version}`,
+            ).fontSize(11).end,
+          )
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(orden.producto[0].identificacion.codigo_cliente).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt(`${emision}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end
+          new Cell(new Txt(`${emision}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
       ])
         .layout({
@@ -954,25 +907,23 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['30%', '38.5%', '1%', '30.6%']).end
-    )
+        })
+        .widths(['30%', '38.5%', '1%', '30.6%']).end,
+    );
     pdf.add(
-      new Table([
-        [
-          new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end
-        ]
-      ]).widths(['100%']).end
-
-    )
+      new Table([[new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end]]).widths(['100%'])
+        .end,
+    );
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt('INFORMACIÓN DEL CLIENTE').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
-        ]
-      ])
-        .widths(['100%']).end
-    )
+          new Cell(new Txt('INFORMACIÓN DEL CLIENTE').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
+        ],
+      ]).widths(['100%']).end,
+    );
 
     let fecha_oc = formatter.format(new Date(orden.solicitud));
 
@@ -985,15 +936,17 @@ export class ProduccionComponent implements OnInit, OnChanges {
               { text: 'N', fontSize: 5.7 },
               { text: 'º', font: 'Roboto', fontSize: 5.7 },
               { text: ' ORDEN DE COMPRA', fontSize: 5.7 },
-
-            ]).end
+            ]).end,
           ).border([true, false, true, false]).end,
-          new Cell(new Txt('FECHA DE OC:').fontSize(5.7).end).border([true, false, true, false]).end
+          new Cell(new Txt('FECHA DE OC:').fontSize(5.7).end).border([true, false, true, false]).end,
         ],
         [
-          new Cell(new Txt(orden.producto[0].identificacion.cliente.nombre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(orden.oc.orden).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(fecha_oc).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end
+          new Cell(new Txt(orden.producto[0].identificacion.cliente.nombre).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(orden.oc.orden).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
+          new Cell(new Txt(fecha_oc).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
       ])
         .layout({
@@ -1001,31 +954,30 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['50%', '25%', '25%']).end
-    )
+        })
+        .widths(['50%', '25%', '25%']).end,
+    );
+
+    pdf.add(
+      new Table([[new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end]]).widths(['100%'])
+        .end,
+    );
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end
-        ]
-      ]).widths(['100%']).end
-
-    )
-
-    pdf.add(
-      new Table([
-        [
-          new Cell(new Txt('CANTIDADES Y ENTREGAS').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
-        ]
-      ]).widths(['100%']).end
-    )
+          new Cell(new Txt('CANTIDADES Y ENTREGAS').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
+        ],
+      ]).widths(['100%']).end,
+    );
     pdf.add(
       new Table([
         [
           new Cell(new Txt('CANTIDAD SOLICITADA:').fontSize(5.7).end).border([true, false, true, false]).end,
           new Cell(new Txt('FECHA SOLICITADA:').fontSize(5.7).end).border([true, false, true, false]).end,
-          new Cell(new Txt('LUGAR DE ENTREGA:').fontSize(5.7).end).border([true, false, true, false]).end
+          new Cell(new Txt('LUGAR DE ENTREGA:').fontSize(5.7).end).border([true, false, true, false]).end,
         ],
       ])
         .layout({
@@ -1033,15 +985,15 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['30%', '30%', '40%']).end
-    )
-
+        })
+        .widths(['30%', '30%', '40%']).end,
+    );
 
     // Filtramos los pedidos que correspondan al producto de la orden
-    const pedidosFiltrados = orden.oc.pedido.filter(pedido => pedido.producto === orden.producto[0]._id);
+    const pedidosFiltrados = orden.oc.pedido.filter((pedido) => pedido.producto === orden.producto[0]._id);
 
     // Iteramos sobre los pedidos filtrados para formatear la fecha y la cantidad
-    pedidosFiltrados.forEach(pedido => {
+    pedidosFiltrados.forEach((pedido) => {
       // Formateamos la fecha
       pedido.solicitud = formatter.format(new Date(pedido.solicitud));
       // Formateamos la cantidad: separador de miles '.' y decimales ','
@@ -1050,7 +1002,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
     });
 
     //   // Creamos las filas de la tabla con los datos formateados
-    //   const filasTabla:ICell = 
+    //   const filasTabla:ICell =
     //     new Cell(new Stack([pedidosFiltrados.cantidadFormateada]).fontSize(11).end)
     //       .margin([0, -3, 0, 0])
     //       .border([true, false, true, true])
@@ -1066,21 +1018,27 @@ export class ProduccionComponent implements OnInit, OnChanges {
     //       .end
     // ;
 
-
     let total = pedidosFiltrados.reduce((acumulador, pedido) => acumulador + Number(pedido.cantidad), 0);
-    total = Number(total).toLocaleString('es-ES')
+    total = Number(total).toLocaleString('es-ES');
 
-    let celdas: any = []
+    let celdas: any = [];
     for (let i = 0; i < pedidosFiltrados.length; i++) {
       let l = pedidosFiltrados.length - 1;
 
-      celdas.push(
-        [
-          new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [true, false, true, false] : [true, false, true, true]).fillColor(i % 2 === 0 ? 'rgb(242, 242, 242)' : '#FFFFFF').end,
-          new Cell(new Txt(pedidosFiltrados[i].solicitud).fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [false, false, true, false] : [false, false, true, true]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-          new Cell(new Txt('Planta San Joaquin').fontSize(11).end).margin([0, 0, 0, 0]).border(i != l ? [true, false, true, false] : [true, false, true, true]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-        ]
-      )
+      celdas.push([
+        new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end)
+          .margin([0, 0, 0, 0])
+          .border(i != l ? [true, false, true, false] : [true, false, true, true])
+          .fillColor(i % 2 === 0 ? 'rgb(242, 242, 242)' : '#FFFFFF').end,
+        new Cell(new Txt(pedidosFiltrados[i].solicitud).fontSize(11).end)
+          .margin([0, 0, 0, 0])
+          .border(i != l ? [false, false, true, false] : [false, false, true, true])
+          .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+        new Cell(new Txt('Planta San Joaquin').fontSize(11).end)
+          .margin([0, 0, 0, 0])
+          .border(i != l ? [true, false, true, false] : [true, false, true, true])
+          .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+      ]);
     }
     pdf.add(
       new Table(celdas)
@@ -1090,9 +1048,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
         })
-        .widths(['30%', '30%', '40%'])
-        .end
-    )
+        .widths(['30%', '30%', '40%']).end,
+    );
 
     // Agregamos la tabla al PDF
     // pdf.add(
@@ -1110,39 +1067,36 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
     pdf.add(
       new Table([
-        [
-          new Cell(new Txt('TOTAL:').fontSize(5.7).end).border([true, false, true, false]).end,
-        ],
-        [
-          new Cell(new Txt(total).bold().fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-        ]
+        [new Cell(new Txt('TOTAL:').fontSize(5.7).end).border([true, false, true, false]).end],
+        [new Cell(new Txt(total).bold().fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end],
       ])
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['28.9%']).end
-    )
+        })
+        .widths(['28.9%']).end,
+    );
+
+    pdf.add(
+      new Table([[new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end]]).widths(['100%'])
+        .end,
+    );
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end
-        ]
-      ]).widths(['100%']).end
+          new Cell(
+            new Txt('SUSTRATO / MONTAJE / IMPRESIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end,
+          )
+            .border([false])
+            .fillColor('#a5acb2').end,
+        ],
+      ]).widths(['100%']).end,
+    );
 
-    )
-
-    pdf.add(
-      new Table([
-        [
-          new Cell(new Txt('SUSTRATO / MONTAJE / IMPRESIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
-        ]
-      ]).widths(['100%']).end
-    )
-
-    console.log(orden.sustrato.sustrato.nombre)
+    console.log(orden.sustrato.sustrato.nombre);
 
     pdf.add(
       new Table([
@@ -1153,16 +1107,22 @@ export class ProduccionComponent implements OnInit, OnChanges {
               { text: 'GRAMAJE(g/m', fontSize: 5.7 },
               { text: '²', font: 'Roboto', fontSize: 5.7 },
               { text: ')', fontSize: 5.7 },
-            ]).end
+            ]).end,
           ).border([true, false, true, false]).end,
           new Cell(new Txt('CALIBRE(µm):').fontSize(5.7).end).border([true, false, true, false]).end,
-          new Cell(new Txt('TAMAÑO DEL PLIEGO (cm):').fontSize(5.7).end).border([true, false, true, false]).end
+          new Cell(new Txt('TAMAÑO DEL PLIEGO (cm):').fontSize(5.7).end).border([true, false, true, false]).end,
         ],
         [
-          new Cell(new Txt(orden.sustrato.sustrato.nombre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(orden.sustrato.sustrato.gramaje).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(orden.sustrato.sustrato.calibre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('73 x 103').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end
+          new Cell(new Txt(orden.sustrato.sustrato.nombre).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(orden.sustrato.sustrato.gramaje).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(orden.sustrato.sustrato.calibre).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt('73 x 103').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
       ])
         .layout({
@@ -1170,21 +1130,19 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['55%', '15%', '15%', '15%']).end
-    )
-
+        })
+        .widths(['55%', '15%', '15%', '15%']).end,
+    );
 
     let asignadas = orden.hojas + orden.demasia;
-    let demasia_percent: any = orden.demasia * 100 / asignadas
+    let demasia_percent: any = (orden.demasia * 100) / asignadas;
 
-    asignadas = Number(asignadas).toLocaleString('es-ES')
-    let demasia = Number(orden.demasia).toFixed(2)
-    demasia = Number(demasia).toLocaleString('es-ES')
-    let pa_imprimir = Number(orden.hojas).toLocaleString('es-ES')
+    asignadas = Number(asignadas).toLocaleString('es-ES');
+    let demasia = Number(orden.demasia).toFixed(2);
+    demasia = Number(demasia).toLocaleString('es-ES');
+    let pa_imprimir = Number(orden.hojas).toLocaleString('es-ES');
 
-    demasia_percent = Number(demasia_percent.toFixed(2)).toLocaleString('es-ES')
-
-
+    demasia_percent = Number(demasia_percent.toFixed(2)).toLocaleString('es-ES');
 
     pdf.add(
       new Table([
@@ -1196,7 +1154,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
               { text: 'N', fontSize: 5.7 },
               { text: 'º', font: 'Roboto', fontSize: 5.7 },
               { text: ' EJEMPLARES', fontSize: 5.7 },
-            ]).end
+            ]).end,
           ).border([true, false, true, false]).end,
           new Cell(new Txt('HOJAS A ASIGNAR:').fontSize(5.7).end).border([true, false, true, false]).end,
           new Cell(new Txt('HOJAS DE DEMASÍA:').fontSize(5.7).end).border([true, false, true, false]).end,
@@ -1205,10 +1163,14 @@ export class ProduccionComponent implements OnInit, OnChanges {
         [
           new Cell(new Txt('72 x 102').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
           new Cell(new Txt('102').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(orden.ejemplares).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(orden.ejemplares).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
           new Cell(new Txt(asignadas).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${demasia}(${demasia_percent}%)`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(pa_imprimir).bold().fontSize(14).end).margin([0, -6, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${demasia}(${demasia_percent}%)`).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(pa_imprimir).bold().fontSize(14).end).margin([0, -6, 0, 0]).border([true, false, true, true])
+            .end,
         ],
       ])
         .layout({
@@ -1216,25 +1178,24 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['16.8%', '16%', '16%', '20%', '15.7%', '15.6%']).end
-    )
+        })
+        .widths(['16.8%', '16%', '16%', '20%', '15.7%', '15.6%']).end,
+    );
+
+    pdf.add(
+      new Table([[new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end]]).widths(['100%'])
+        .end,
+    );
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt(' ').fontSize(1).end).border([false, false, false, false]).end
-        ]
-      ]).widths(['100%']).end
-
-    )
-
-    pdf.add(
-      new Table([
-        [
-          new Cell(new Txt('COLORES / TINTAS / BARNIZ').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
-        ]
-      ]).widths(['100%']).end
-    )
+          new Cell(new Txt('COLORES / TINTAS / BARNIZ').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
+        ],
+      ]).widths(['100%']).end,
+    );
 
     pdf.add(
       new Table([
@@ -1251,33 +1212,47 @@ export class ProduccionComponent implements OnInit, OnChanges {
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['3%', '22%', '20%', '45%', '10%']).end
-    )
+        })
+        .widths(['3%', '22%', '20%', '45%', '10%']).end,
+    );
 
-    let data: any = []
+    let data: any = [];
 
     for (let i = 0; i < orden.producto[0].impresion.secuencia[0].length; i++) {
-
-      console.log(orden.tinta[i].tinta)
+      console.log(orden.tinta[i].tinta);
 
       data.push({
         seq: i + 1,
         color: orden.producto[0].impresion.secuencia[0][i],
         tinta: `${orden.tinta[i].tinta.nombre} (${orden.tinta[i].tinta.fabricante.alias})`,
-        cantidad: Number(orden.tinta[i].cantidad).toLocaleString('es-ES')
-      })
+        cantidad: Number(orden.tinta[i].cantidad).toLocaleString('es-ES'),
+      });
     }
-
 
     for (let i = 0; i < data.length; i++) {
       pdf.add(
         new Table([
           [
-            new Cell(new Txt(data[i].seq).fontSize(11).end).margin([0, 0, 0, 0]).border([true, false, false, false]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-            new Cell(new Txt(data[i].color).fontSize(11).end).margin([0, 0, 0, 0]).border([false, false, true, false]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-            new Cell(new Txt(data.peliculas).fontSize(11).end).margin([0, 0, 0, 0]).border([true, false, true, false]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-            new Cell(new Txt(data[i].tinta).fontSize(11).end).margin([0, 0, 0, 0]).border([true, false, true, false]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
-            new Cell(new Txt(data[i].cantidad).fontSize(11).end).margin([0, 0, 0, 0]).border([true, false, true, false]).fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+            new Cell(new Txt(data[i].seq).fontSize(11).end)
+              .margin([0, 0, 0, 0])
+              .border([true, false, false, false])
+              .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+            new Cell(new Txt(data[i].color).fontSize(11).end)
+              .margin([0, 0, 0, 0])
+              .border([false, false, true, false])
+              .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+            new Cell(new Txt(data.peliculas).fontSize(11).end)
+              .margin([0, 0, 0, 0])
+              .border([true, false, true, false])
+              .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+            new Cell(new Txt(data[i].tinta).fontSize(11).end)
+              .margin([0, 0, 0, 0])
+              .border([true, false, true, false])
+              .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
+            new Cell(new Txt(data[i].cantidad).fontSize(11).end)
+              .margin([0, 0, 0, 0])
+              .border([true, false, true, false])
+              .fillColor(i % 2 === 0 ? '#F2F2F2' : '#FFFFFF').end,
           ],
         ])
           .layout({
@@ -1285,64 +1260,70 @@ export class ProduccionComponent implements OnInit, OnChanges {
             vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
             hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
             vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          }).widths(['3%', '22%', '20%', '45%', '10%']).end
-      )
+          })
+          .widths(['3%', '22%', '20%', '45%', '10%']).end,
+      );
     }
 
     pdf.add(
-      new Table([
-        [
-          new Cell(new Txt(' ').fontSize(1).end).border([false, true, false, false]).end
-        ]
-      ])
+      new Table([[new Cell(new Txt(' ').fontSize(1).end).border([false, true, false, false]).end]])
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['100%']).end
-
-    )
+        })
+        .widths(['100%']).end,
+    );
     pdf.add(
       new Table([
         [
           new Cell(
             new Table([
               [
-                new Cell(new Txt('BARNICES / PEGAMENTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
+                new Cell(new Txt('BARNICES / PEGAMENTO').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+                  .border([false])
+                  .fillColor('#a5acb2').end,
               ],
-            ]).widths(['100%']).end
+            ]).widths(['100%']).end,
           ).end,
           new Cell(
             new Table([
               [
-                new Cell(new Txt('EMBALAJE').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
+                new Cell(new Txt('EMBALAJE').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+                  .border([false])
+                  .fillColor('#a5acb2').end,
               ],
-            ]).widths(['100%']).end
-          ).end
+            ]).widths(['100%']).end,
+          ).end,
         ],
         [
           new Cell(
             new Table([
               [
-                new Cell(new Txt('BARNIZ ACUOSO / UV / ESPECIAL:').fontSize(5.7).end).border([true, false, true, false]).end,
+                new Cell(new Txt('BARNIZ ACUOSO / UV / ESPECIAL:').fontSize(5.7).end).border([true, false, true, false])
+                  .end,
               ],
               [
-                new Cell(new Txt(orden.barniz.barniz.nombre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+                new Cell(new Txt(orden.barniz.barniz.nombre).fontSize(11).end)
+                  .margin([0, -3, 0, 0])
+                  .border([true, false, true, true]).end,
               ],
+              [new Cell(new Txt('PEGAMENTO:').fontSize(5.7).end).border([true, false, true, false]).end],
               [
-                new Cell(new Txt('PEGAMENTO:').fontSize(5.7).end).border([true, false, true, false]).end,
+                new Cell(new Txt(orden.pega.pega.nombre).fontSize(11).end)
+                  .margin([0, -3, 0, 0])
+                  .border([true, false, true, true]).end,
               ],
-              [
-                new Cell(new Txt(orden.pega.pega.nombre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-              ]
-            ]).margin([0, -4])
+            ])
+              .margin([0, -4])
               .layout({
                 hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
                 vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
                 hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
                 vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-              }).widths(['100%']).end
+              })
+              .widths(['100%']).end,
           ).end,
           new Cell(
             new Table([
@@ -1358,11 +1339,15 @@ export class ProduccionComponent implements OnInit, OnChanges {
                     { text: 'Caja N', fontSize: 11 },
                     { text: 'º', font: 'Roboto', fontSize: 11 },
                     { text: ' 11', fontSize: 11 },
-                  ]).end
-                ).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+                  ]).end,
+                )
+                  .margin([0, -3, 0, 0])
+                  .border([true, false, true, true]).end,
                 new Cell(new Txt('154').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-                new Cell(new Txt('136.000').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-                new Cell(new Txt('1.560,25').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+                new Cell(new Txt('136.000').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+                  .end,
+                new Cell(new Txt('1.560,25').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+                  .end,
               ],
             ])
               .layout({
@@ -1370,47 +1355,44 @@ export class ProduccionComponent implements OnInit, OnChanges {
                 vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
                 hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
                 vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-              }).widths(['25%', '25%', '25%', '25%']).end
-          ).margin([0, -4]).border([false]).end
-        ]
-      ]).layout('noBorders')
-        .widths(['50%', '50%']).end
-    )
+              })
+              .widths(['25%', '25%', '25%', '25%']).end,
+          )
+            .margin([0, -4])
+            .border([false]).end,
+        ],
+      ])
+        .layout('noBorders')
+        .widths(['50%', '50%']).end,
+    );
 
     pdf.add(
-      new Table([
-        [
-          new Cell(new Txt(' ').fontSize(3).end).border([false, false, false, false]).end
-        ]
-      ])
+      new Table([[new Cell(new Txt(' ').fontSize(3).end).border([false, false, false, false]).end]])
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['100%']).end
-
-    )
+        })
+        .widths(['100%']).end,
+    );
 
     pdf.add(
       new Table([
         [
-          new Cell(new Txt('PLANIFICACIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
-        ]
-      ]).widths(['100%']).end
-    )
-
+          new Cell(new Txt('PLANIFICACIÓN').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
+        ],
+      ]).widths(['100%']).end,
+    );
 
     // Se arma la tabla con 3 filas: superior, canvas y fechas.
     // Se define un layout personalizado sin padding para evitar desajustes.
     pdf.add({
       table: {
         widths: Array(stepsCount).fill(columnWidth),
-        body: [
-          topRow,
-          canvasRow,
-          bottomRow
-        ]
+        body: [topRow, canvasRow, bottomRow],
       },
       layout: {
         hLineWidth: () => 0,
@@ -1418,33 +1400,31 @@ export class ProduccionComponent implements OnInit, OnChanges {
         paddingLeft: () => 0,
         paddingRight: () => 0,
         paddingTop: () => 0,
-        paddingBottom: () => 0
-      }
+        paddingBottom: () => 0,
+      },
     });
 
-
     pdf.add(
-      new Table([
-        [
-          new Cell(new Txt(' ').fontSize(3).end).border([false, false, false, false]).end
-        ]
-      ])
+      new Table([[new Cell(new Txt(' ').fontSize(3).end).border([false, false, false, false]).end]])
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['100%']).end
-
-    )
+        })
+        .widths(['100%']).end,
+    );
 
     pdf.add(
       new Table([
         [
-
-          new Cell(new Txt('OBSERVACIONES').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
+          new Cell(new Txt('OBSERVACIONES').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
           new Cell(new Txt(' ').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).end,
-          new Cell(new Txt('ELABORADO POR').alignment('center').bold().fontSize(9).color('#FFFFFF').end).border([false]).fillColor('#a5acb2').end,
+          new Cell(new Txt('ELABORADO POR').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+            .border([false])
+            .fillColor('#a5acb2').end,
         ],
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,
@@ -1454,7 +1434,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
-          new Cell(new Txt('Andrés Calcurian:').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, false]).end,
+          new Cell(new Txt('Andrés Calcurian:').fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, false]).end,
         ],
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,
@@ -1475,15 +1457,16 @@ export class ProduccionComponent implements OnInit, OnChanges {
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, true]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
           new Cell(new Txt('18/03/2025').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-        ]
+        ],
       ])
         .layout({
           hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
           hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
           vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-        }).widths(['69%', '1%', '30%']).end
-    )
+        })
+        .widths(['69%', '1%', '30%']).end,
+    );
 
     // pdf.add(
     //   new Table([
@@ -1516,38 +1499,30 @@ export class ProduccionComponent implements OnInit, OnChanges {
     //   ]).widths(['26.5%','26.5%','1.3%','45.7%']).end
     // )
 
-
-
     pdf.create().download();
-  }
-
-
-
-
-
-
+  };
 
   // Función para alternar la visibilidad
   toggleVisibility(index_fase: number, index_gestion: number) {
     this.visibilityFlags[index_fase][index_gestion] = !this.visibilityFlags[index_fase][index_gestion];
   }
 
-  constructor(public api: OproduccionService,
+  constructor(
+    public api: OproduccionService,
     public clientes: ClientesService,
     public productos: ProductosService,
     public devolucionesService: DevolucionesService,
     public solicitudesServices: SolicitudesService,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
-    public oc: OcompraService
+    public oc: OcompraService,
   ) {
     this.anoActual = new Date().getFullYear();
   }
 
-
   subOrdenes() {
     // 1. Corrección del .find(): debe ser una función flecha
-    const orden_actual = this.oc.orden.find(o => o.orden === this.selectedPo);
+    const orden_actual = this.oc.orden.find((o) => o.orden === this.selectedPo);
 
     // 2. Validación de seguridad: ¿Existe la orden y el índice?
     if (orden_actual && orden_actual.pedido && orden_actual.pedido[this.orden_selected_index]) {
@@ -1561,30 +1536,30 @@ export class ProduccionComponent implements OnInit, OnChanges {
     return [];
   }
 
-  orden_selected_index = 0
+  orden_selected_index = 0;
   ordenesdeCompra(producto) {
-    console.log(this.oc.orden)
+    console.log(this.oc.orden);
     return this.oc.orden
-      .filter(o => o.pedido && o.pedido.some(p => p.producto?._id === producto))
-      .map(o => {
+      .filter((o) => o.pedido && o.pedido.some((p) => p.producto?._id === producto))
+      .map((o) => {
         // Agregamos una propiedad temporal con el índice para usarla en el HTML
-        const index = o.pedido.findIndex(p => p.producto?._id === producto);
+        const index = o.pedido.findIndex((p) => p.producto?._id === producto);
         this.orden_selected_index = index;
         return { ...o, indiceEncontrado: index };
       });
   }
 
   buscarSiExisteDefecto(defectos: any, index: any) {
-    let defecto = defectos.find(x => x.paleta === index);
+    let defecto = defectos.find((x) => x.paleta === index);
     if (defecto) {
       return {
         existe: true,
-        defectos: defecto.defectos
-      }
+        defectos: defecto.defectos,
+      };
     } else {
       return {
         existe: false,
-      }
+      };
     }
   }
 
@@ -1602,7 +1577,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
     const minutosFormateados = minutos < 10 ? '0' + minutos : minutos.toString();
 
     // Retorna la hora en formato de 12 horas
-    return `${hora12}:${minutosFormateados} ${sufijo}`
+    return `${hora12}:${minutosFormateados} ${sufijo}`;
   }
 
   cerrar_nueva_gestion() {
@@ -1613,16 +1588,15 @@ export class ProduccionComponent implements OnInit, OnChanges {
     this.nueva_gestion = false;
   }
 
-
   togglePaletteList(index_fase, gestion): void {
-    this.palete_selected[index_fase][gestion] = !this.palete_selected[index_fase][gestion]
-    this.showPaletteList = !this.showPaletteList
+    this.palete_selected[index_fase][gestion] = !this.palete_selected[index_fase][gestion];
+    this.showPaletteList = !this.showPaletteList;
   }
 
   Gestiones(orden: any) {
-    this.gestiones = true
+    this.gestiones = true;
     this.orden_selected = JSON.parse(JSON.stringify(orden));
-    this.progress()
+    this.progress();
   }
 
   showTeam(i, j) {
@@ -1642,7 +1616,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
           hojas: 0,
           horas: 0,
           paletas: 0,
-          tickets: 0
+          tickets: 0,
         };
       }
 
@@ -1650,7 +1624,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
         hojas: 0,
         horas: 0,
         paletas: 0,
-        tickets: 0
+        tickets: 0,
       };
 
       this.visibilityFlags[i] = [];
@@ -1718,45 +1692,33 @@ export class ProduccionComponent implements OnInit, OnChanges {
     }
   }
 
-
   filtrarResultados(valor: any) {
-    this.resultados = this.api.orden.filter(item =>
-      item.numero_op.includes(valor.value)
-    );
+    this.resultados = this.api.orden.filter((item) => item.numero_op.includes(valor.value));
   }
 
   filtrarResultadosOC(valor: any) {
-    this.resultados = this.api.orden.filter(item =>
-      item.oc.orden.includes(valor.value)
-    );
+    this.resultados = this.api.orden.filter((item) => item.oc.orden.includes(valor.value));
   }
 
   filtrarResultadosCliente(valor: any) {
-    this.resultados = this.api.orden.filter(item =>
-      item.cliente._id.includes(valor.value)
-    );
+    this.resultados = this.api.orden.filter((item) => item.cliente._id.includes(valor.value));
   }
 
   filtrarResultadosProducto(valor: any) {
-    this.resultados = this.api.orden.filter(item =>
-      item.producto[0]._id.includes(valor.value)
-    );
+    this.resultados = this.api.orden.filter((item) => item.producto[0]._id.includes(valor.value));
   }
 
   BuscarPorFecha() {
     const desde_ = new Date(this.desde);
     const hasta_ = new Date(this.hasta);
 
-    this.resultados = this.api.orden.filter(item => {
+    this.resultados = this.api.orden.filter((item) => {
       const fechaItem = new Date(item.createdAt);
       return fechaItem >= desde_ && fechaItem <= hasta_;
     });
   }
 
-
   BuscarProductos(event: any) {
     this.productos_selected = this.productos.buscarPorClientes(event.value);
   }
-
-
 }

@@ -1,1227 +1,1186 @@
 <!-- ESPECIFICACIÓN DE SUSTRATO -->
-<div class="modal" [ngClass]="{'is-active':NUEVO_SUSTRATO || Edicion_sustrato}">
-    <div class="modal-background"></div>
-    <div class="modal-card animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Grupo
-            </p>
-            <button class="delete red_cross" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column is-3">
-                    <div class="field">
-                        <label class="label">Material</label>
-                        <div class="control">
-                            <div class="select"> 
-                                <select name="" id="" [(ngModel)]="Material_selected">
-                                    <option value="#">Selecciona un material</option>
-                                    <option value="{{i}}" *ngFor="let material of Materiales;index as i">{{material.nombre}} {{material.gramaje}}g Calibre: {{material.calibre}} ({{material.origen}}) - Serie: {{material.serie}}</option>  
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <table class="table is-fullwidth is-striped" *ngIf="Edicion_sustrato || Material_selected != '#'">
-                <tbody>
-                    <tr>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th>Gramaje (g/m²)</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nominal:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.nom">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Calibre
-                        </th>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">   </div>
-                                <div class="column">Mínimo</div>
-                                <div class="column">Nominal</div>
-                                <div class="column">Máximo</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns" *ngIf="!Edicion_sustrato">
-                                <div class="column">(mm)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.max"></div>
-                            </div>
-                            <div class="columns" *ngIf="Edicion_sustrato">
-                                <div class="column">(mm)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.max"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td>
-                            <div class="columns" *ngIf="!Edicion_sustrato">
-                                <div class="column">(pt)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.max"></div>
-                            </div>
-                            <div class="columns" *ngIf="Edicion_sustrato">
-                                <div class="column">(pt)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.max"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td>
-                            <div class="columns" *ngIf="!Edicion_sustrato">
-                                <div class="column">(μm)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.max"></div>
-                            </div>
-                            <div class="columns" *ngIf="Edicion_sustrato">
-                                <div class="column">(μm)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.max"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cobb 60" (g/m²)</th>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">   </div>
-                                <div class="column">Mínimo</div>
-                                <div class="column">Nominal</div>
-                                <div class="column">Máximo</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns" *ngIf="!Edicion_sustrato">
-                                <div class="column">(TOP)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.max"></div>
-                            </div>
-                            <div class="columns" *ngIf="Edicion_sustrato">
-                                <div class="column">(TOP)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.max"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td>
-                            <div class="columns" *ngIf="!Edicion_sustrato">
-                                <div class="column">(BACK)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.max"></div>
-                            </div>
-                            <div class="columns" *ngIf="Edicion_sustrato">
-                                <div class="column">(BACK)</div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.min"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.nom"></div>
-                                <div class="column"><input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.max"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Curling (s)	
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column"  *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.min">
-                                        </div>
-                                        <div class="column"  *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.curling.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nominal:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.nom">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.curling.nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.curling.max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Grado de blancura (%)
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nominal:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.nom">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion_sustrato">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
-            <button class="button is-success" (click)="guardar_sustrato()" *ngIf="!Edicion_sustrato">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Guardar</span>
-            </button>
-            <button class="button is-success" (click)="Editar_()" *ngIf="Edicion_sustrato">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Editar</span>
-            </button>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': NUEVO_SUSTRATO || Edicion_sustrato }">
+  <div class="modal-background"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Grupo</p>
+      <button class="delete red_cross" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="columns" *ngIf="!Edicion_sustrato">
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Material</label>
+            <div class="control">
+              <div class="select">
+                <select name="" id="" [(ngModel)]="Material_selected">
+                  <option value="#">Selecciona un material</option>
+                  <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
+                    {{ material.nombre }} {{ material.gramaje }}g Calibre: {{ material.calibre }} ({{
+                      material.origen
+                    }}) - Serie: {{ material.serie }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <table class="table is-fullwidth is-striped" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <tbody>
+          <tr>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Gramaje (g/m²)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.nom" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Calibre</th>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">   </div>
+                <div class="column">Mínimo</div>
+                <div class="column">Nominal</div>
+                <div class="column">Máximo</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns" *ngIf="!Edicion_sustrato">
+                <div class="column">(mm)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.max" />
+                </div>
+              </div>
+              <div class="columns" *ngIf="Edicion_sustrato">
+                <div class="column">(mm)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.max" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>
+              <div class="columns" *ngIf="!Edicion_sustrato">
+                <div class="column">(pt)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.max" />
+                </div>
+              </div>
+              <div class="columns" *ngIf="Edicion_sustrato">
+                <div class="column">(pt)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.max" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>
+              <div class="columns" *ngIf="!Edicion_sustrato">
+                <div class="column">(μm)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.max" />
+                </div>
+              </div>
+              <div class="columns" *ngIf="Edicion_sustrato">
+                <div class="column">(μm)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.max" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Cobb 60" (g/m²)</th>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">   </div>
+                <div class="column">Mínimo</div>
+                <div class="column">Nominal</div>
+                <div class="column">Máximo</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns" *ngIf="!Edicion_sustrato">
+                <div class="column">(TOP)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.max" />
+                </div>
+              </div>
+              <div class="columns" *ngIf="Edicion_sustrato">
+                <div class="column">(TOP)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.max" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>
+              <div class="columns" *ngIf="!Edicion_sustrato">
+                <div class="column">(BACK)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.max" />
+                </div>
+              </div>
+              <div class="columns" *ngIf="Edicion_sustrato">
+                <div class="column">(BACK)</div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.min" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.nom" />
+                </div>
+                <div class="column">
+                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.max" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Curling (s)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.nom" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Grado de blancura (%)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.nom" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion_sustrato">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <button class="button is-success" (click)="guardar_sustrato()" *ngIf="!Edicion_sustrato">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Guardar</span>
+      </button>
+      <button class="button is-success" (click)="Editar_()" *ngIf="Edicion_sustrato">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Editar</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ESPECIFICACIÓN DE TINTA -->
-<div class="modal" [ngClass]="{'is-active':NUEVA_ESPECIFICACION || Edicion}">
-    <div class="modal-background"></div>
-    <div class="modal-card animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Grupo
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="columns" *ngIf="!Edicion">
-                <div class="column is-3">
-                    <div class="field">
-                        <label for="" class="label">Material</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="" id="" [(ngModel)]="Material_selected">
-                                    <option value="#">Selecciona un material</option>
-                                    <option value="{{i}}" *ngFor="let material of Materiales;index as i">{{material.nombre}} ({{material.fabricante.alias}}) - Serie: {{material.serie}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
-                <tbody>
-                    <tr>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th>Viscosidad</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Min:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="" value="" class="input is-small" [(ngModel)]="Editable.viscosidad.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Max:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="viscosidadMax" class="input is-small" [(ngModel)]="Editable.viscosidad.max">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-5">
-                                    <div class="columns">
-                                        <div class="column">
-                                            und / cond:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.con">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="text" name="ViscocidadCon" class="input is-small" [(ngModel)]="Editable.viscosidad.con">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Rígidez</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Min:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="RigidezMIn" class="input is-small" [(ngModel)]="Editable.rigidez.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Max:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="RigidezMax" class="input is-small" [(ngModel)]="Editable.rigidez.max">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-5">
-                                    <div class="columns">
-                                        <div class="column">
-                                            und / cond:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.con">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                           <input type="text" name="RigidezCOn" class="input is-small" [(ngModel)]="Editable.rigidez.con">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Inko o Tack</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Min:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="TAckMIn" class="input is-small" [(ngModel)]="Editable.tack.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Max:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" name="TackMAx" class="input is-small" [(ngModel)]="Editable.tack.max">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-5">
-                                    <div class="columns">
-                                        <div class="column">
-                                            und / cond:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.con">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="text" name="TackCon" class="input is-small" [(ngModel)]="Editable.tack.con">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Dispersión o Finura</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Min:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.finura.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Max:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.finura.max">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-5">
-                                    <div class="columns">
-                                        <div class="column">
-                                            und / cond:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.con">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="Editable.finura.con">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Secado en capas finas</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Min:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.min">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.secado.min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-3">
-                                    <div class="columns">
-                                        <div class="column is-3">
-                                            Max:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.max">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="number" class="input is-small" [(ngModel)]="Editable.secado.max">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column is-5">
-                                    <div class="columns">
-                                        <div class="column">
-                                            und / cond:
-                                        </div>
-                                        <div class="column" *ngIf="!Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.con">
-                                        </div>
-                                        <div class="column" *ngIf="Edicion">
-                                            <input type="text" class="input is-small" [(ngModel)]="Editable.secado.con">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
-            <button class="button is-success" (click)="guardar()" *ngIf="!Editable">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Guardar</span>
-            </button>
-            <button class="button is-success" *ngIf="Editable" (click)="Editar_()">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                 <span>Editar</span>
-            </button>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': NUEVA_ESPECIFICACION || Edicion }">
+  <div class="modal-background"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Grupo</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="columns" *ngIf="!Edicion">
+        <div class="column is-3">
+          <div class="field">
+            <label for="" class="label">Material</label>
+            <div class="control">
+              <div class="select">
+                <select name="" id="" [(ngModel)]="Material_selected">
+                  <option value="#">Selecciona un material</option>
+                  <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
+                    {{ material.nombre }} ({{ material.fabricante.alias }}) - Serie: {{ material.serie }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
+        <tbody>
+          <tr>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Viscosidad</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Min:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input
+                        type="number"
+                        name=""
+                        value=""
+                        class="input is-small"
+                        [(ngModel)]="Editable.viscosidad.min"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Max:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input
+                        type="number"
+                        name="viscosidadMax"
+                        class="input is-small"
+                        [(ngModel)]="Editable.viscosidad.max"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <div class="columns">
+                    <div class="column">und / cond:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.con" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input
+                        type="text"
+                        name="ViscocidadCon"
+                        class="input is-small"
+                        [(ngModel)]="Editable.viscosidad.con"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Rígidez</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Min:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input
+                        type="number"
+                        name="RigidezMIn"
+                        class="input is-small"
+                        [(ngModel)]="Editable.rigidez.min"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Max:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input
+                        type="number"
+                        name="RigidezMax"
+                        class="input is-small"
+                        [(ngModel)]="Editable.rigidez.max"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <div class="columns">
+                    <div class="column">und / cond:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.con" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="text" name="RigidezCOn" class="input is-small" [(ngModel)]="Editable.rigidez.con" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Inko o Tack</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Min:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" name="TAckMIn" class="input is-small" [(ngModel)]="Editable.tack.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Max:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" name="TackMAx" class="input is-small" [(ngModel)]="Editable.tack.max" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <div class="columns">
+                    <div class="column">und / cond:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.con" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="text" name="TackCon" class="input is-small" [(ngModel)]="Editable.tack.con" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Dispersión o Finura</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Min:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.finura.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Max:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.finura.max" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <div class="columns">
+                    <div class="column">und / cond:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.con" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="Editable.finura.con" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Secado en capas finas</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Min:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.min" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.secado.min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-3">
+                  <div class="columns">
+                    <div class="column is-3">Max:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.max" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="number" class="input is-small" [(ngModel)]="Editable.secado.max" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-5">
+                  <div class="columns">
+                    <div class="column">und / cond:</div>
+                    <div class="column" *ngIf="!Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.con" />
+                    </div>
+                    <div class="column" *ngIf="Edicion">
+                      <input type="text" class="input is-small" [(ngModel)]="Editable.secado.con" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <button class="button is-success" (click)="guardar()" *ngIf="!Editable">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Guardar</span>
+      </button>
+      <button class="button is-success" *ngIf="Editable" (click)="Editar_()">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Editar</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ESPECIFICACION DE CAJAS -->
-<div class="modal" [ngClass]="{'is-active':NUEVA_CAJA || Edicion_cajas}">
-    <div class="modal-background"></div>
-    <div class="modal-card animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Grupo
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="columns" *ngIf="!Edicion && !Edicion_cajas">
-                <div class="column is-3">
-                    <div class="field">
-                        <label for="" class="label">Material</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="" id="" [(ngModel)]="Material_selected">
-                                    <option value="#">Selecciona un material</option>
-                                    <option value="{{i}}" *ngFor="let material of Materiales;index as i">{{material.nombre}} ({{material.fabricante.alias}}) - Serie: {{material.serie}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion_cajas">
-                <tbody>
-                    <tbody>
-                        <tr>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th>Longitud interna (cm)</th>
-                        </tr>
-                        <tr>
-                        </tr>
-                        <tr>
-                            <td>Largo:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ancho:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Alto:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Longitud externa (cm)</th>
-                        </tr>
-                        <tr>
-                        </tr>
-                        <tr>
-                            <td>Largo:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ancho:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Alto:</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nominal:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column" *ngIf="!Edicion_sustrato">
-                                                <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Espesor (mm)</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="columns">
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Mínimo:
-                                            </div>
-                                            <div class="column">
-                                                <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Nóminal:
-                                            </div>
-                                            <div class="column">
-                                                <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns">
-                                            <div class="column">
-                                                Máximo:
-                                            </div>
-                                            <div class="column">
-                                                <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-            </table>
-            <button class="button is-success" (click)="GuardarOtro()">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Guardar</span>
-            </button>
-            <hr>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': NUEVA_CAJA || Edicion_cajas }">
+  <div class="modal-background"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Grupo</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="columns" *ngIf="!Edicion && !Edicion_cajas">
+        <div class="column is-3">
+          <div class="field">
+            <label for="" class="label">Material</label>
+            <div class="control">
+              <div class="select">
+                <select name="" id="" [(ngModel)]="Material_selected">
+                  <option value="#">Selecciona un material</option>
+                  <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
+                    {{ material.nombre }} ({{ material.fabricante.alias }}) - Serie: {{ material.serie }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion_cajas">
+        <tbody></tbody>
+        <tbody>
+          <tr>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Longitud interna (cm)</th>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>Largo:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ancho:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Alto:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Longitud externa (cm)</th>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>Largo:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ancho:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Alto:</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nominal:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column" *ngIf="!Edicion_sustrato">
+                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Espesor (mm)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nóminal:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-success" (click)="GuardarOtro()">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Guardar</span>
+      </button>
+      <hr />
+    </div>
+  </div>
 </div>
 
 <!-- ESPECIFICACION DE PADS -->
-<div class="modal" [ngClass]="{'is-active':NUEVO_PADS}">
-    <div class="modal-background"></div>
-    <div class="modal-card animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Grupo
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column is-3">
-                    <div class="field">
-                        <label for="" class="label">Material</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="" id="" [(ngModel)]="Material_selected">
-                                    <option value="#">Selecciona un material</option>
-                                    <option value="{{i}}" *ngFor="let material of Materiales;index as i">{{material.nombre}} ({{material.fabricante.alias}}) - Serie: {{material.serie}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
-                <tbody>
-                    <tr>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th>Largo (cm)</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.largo_min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nóminal:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.largo_nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.largo_max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Ancho (cm)</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_min" >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nóminal:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_nom" >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_max" >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Distancia signado (cm)</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.signado_min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nóminal:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.signado_nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.signado_max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Espesor (mm)</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Mínimo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Nóminal:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            Máximo:
-                                        </div>
-                                        <div class="column">
-                                            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button class="button is-success" (click)="GuardarOtro()">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Guardar</span>
-            </button>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': NUEVO_PADS }">
+  <div class="modal-background"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Grupo</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="columns" *ngIf="!Edicion_sustrato">
+        <div class="column is-3">
+          <div class="field">
+            <label for="" class="label">Material</label>
+            <div class="control">
+              <div class="select">
+                <select name="" id="" [(ngModel)]="Material_selected">
+                  <option value="#">Selecciona un material</option>
+                  <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
+                    {{ material.nombre }} ({{ material.fabricante.alias }}) - Serie: {{ material.serie }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
+        <tbody>
+          <tr>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Largo (cm)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nóminal:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Ancho (cm)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nóminal:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Distancia signado (cm)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nóminal:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Espesor (mm)</th>
+          </tr>
+          <tr>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Mínimo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Nóminal:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="columns">
+                    <div class="column">Máximo:</div>
+                    <div class="column">
+                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-success" (click)="GuardarOtro()">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Guardar</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- OTRAS ESPECIFICACIONES -->
-<div class="modal" [ngClass]="{'is-active':NUEVO_OTROS || EDITAR_OTROS}">
-    <div class="modal-background"></div>
-    <div class="modal-card animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Grupo
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="columns" *ngIf="!Edicion_sustrato && !EDITAR_OTROS">
-                <div class="column is-3">
-                    <div class="field">
-                        <label class="label">Material</label>
-                        <div class="control">
-                            <div class="select"> 
-                                <select name="" id="" [(ngModel)]="Material_selected">
-                                    <option value="#">Selecciona un material</option>
-                                    <option value="{{i}}" *ngFor="let material of Materiales;index as i">{{material.nombre}} - Serie: {{material.serie}}</option>  
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || EDITAR_OTROS">
-                <tbody>
-                    <tr>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-                            Variable cualitativa 
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Apariencia:</th>
-                        <td>
-                            <div class="field">
-                                <label  clas="label">Especificación</label>
-                                <div class="control">
-                                    <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.apariencia">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-                            Variable cuantitativa 
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>pH:</th>
-                        <td>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="field">
-                                        <label  clas="label">Mínimo</label>
-                                        <div class="control">
-                                            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_m">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="field">
-                                        <label  clas="label">Máximo</label>
-                                        <div class="control">
-                                            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_M">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">
-                            Otra variable
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            <div class="field">
-                                <label  clas="label">Evaluación</label>
-                                <div class="control">
-                                    <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey">
-                                </div>
-                            </div>
-                        </th>
-                        <td>
-                            <div class="field">
-                                <label  clas="label">Especificación</label>
-                                <div class="control">
-                                    <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey_Value">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button class="button is-success" (click)="GuardarOtro()">
-                <span class="icon"><i class="fas fa-save"></i></span>
-                <span>Guardar</span>
-            </button>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': NUEVO_OTROS || EDITAR_OTROS }">
+  <div class="modal-background"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Grupo</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="columns" *ngIf="!Edicion_sustrato && !EDITAR_OTROS">
+        <div class="column is-3">
+          <div class="field">
+            <label class="label">Material</label>
+            <div class="control">
+              <div class="select">
+                <select name="" id="" [(ngModel)]="Material_selected">
+                  <option value="#">Selecciona un material</option>
+                  <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
+                    {{ material.nombre }} - Serie: {{ material.serie }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || EDITAR_OTROS">
+        <tbody>
+          <tr></tr>
+          <tr>
+            <th colspan="2">Variable cualitativa</th>
+          </tr>
+          <tr>
+            <th>Apariencia:</th>
+            <td>
+              <div class="field">
+                <label clas="label">Especificación</label>
+                <div class="control">
+                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.apariencia" />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2">Variable cuantitativa</th>
+          </tr>
+          <tr>
+            <th>pH:</th>
+            <td>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label clas="label">Mínimo</label>
+                    <div class="control">
+                      <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_m" />
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label clas="label">Máximo</label>
+                    <div class="control">
+                      <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_M" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2">Otra variable</th>
+          </tr>
+          <tr>
+            <th>
+              <div class="field">
+                <label clas="label">Evaluación</label>
+                <div class="control">
+                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey" />
+                </div>
+              </div>
+            </th>
+            <td>
+              <div class="field">
+                <label clas="label">Especificación</label>
+                <div class="control">
+                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey_Value" />
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-success" (click)="GuardarOtro()">
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>Guardar</span>
+      </button>
+    </div>
+  </div>
 </div>

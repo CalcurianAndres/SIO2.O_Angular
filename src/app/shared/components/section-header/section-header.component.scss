@@ -1,38 +1,138 @@
-.title_ {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 20px;
+.section-header {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
-.title_.red {
-    background: linear-gradient(135deg, rgb(213, 35, 77), rgba(192, 26, 63));
+.accent-bar {
+  width: 6px;
+  flex-shrink: 0;
 }
 
-.title_.green {
-    background: linear-gradient(135deg, rgb(76, 175, 80), rgb(56, 231, 147));
+.header-body {
+  flex: 1;
+  padding: 20px 28px;
 }
 
-.title_.purple {
-    background: linear-gradient(135deg, rgb(92, 44, 73), rgba(156, 82, 126));
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.title_.blue {
-    background: linear-gradient(135deg, rgb(38, 52, 61), rgb(55, 75, 90));
+.header-icon {
+  font-size: 1.35rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.04);
 }
 
-.card-content {
-    position: relative;
-    z-index: 1;
+.header-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-.iconos {
-    position: absolute;
-    right: 45px;
-    top: -15px;
+.header-subtitle {
+  margin: 6px 0 0 44px;
+  font-size: 0.88rem;
+  color: #94a3b8;
+  font-weight: 400;
 }
 
-.iconos i {
-    font-size: 130px;
-    transform: rotate(30deg);
-    color: rgba(255, 255, 255, 0.50);
+/* ── Color themes ── */
+
+/* Red */
+.section-header.red .accent-bar {
+  background: linear-gradient(180deg, #e74c3c, #c0392b);
+}
+.section-header.red .header-icon,
+.section-header.red .header-title {
+  color: #c0392b;
+}
+.section-header.red .header-icon {
+  background: rgba(192, 57, 43, 0.1);
+}
+
+/* Green */
+.section-header.green .accent-bar {
+  background: linear-gradient(180deg, #2ecc71, #27ae60);
+}
+.section-header.green .header-icon,
+.section-header.green .header-title {
+  color: #27ae60;
+}
+.section-header.green .header-icon {
+  background: rgba(39, 174, 96, 0.1);
+}
+
+/* Purple */
+.section-header.purple .accent-bar {
+  background: linear-gradient(180deg, #9b59b6, #8e44ad);
+}
+.section-header.purple .header-icon,
+.section-header.purple .header-title {
+  color: #8e44ad;
+}
+.section-header.purple .header-icon {
+  background: rgba(142, 68, 173, 0.1);
+}
+
+/* Blue */
+.section-header.blue .accent-bar {
+  background: linear-gradient(180deg, #3498db, #2980b9);
+}
+.section-header.blue .header-icon,
+.section-header.blue .header-title {
+  color: #2980b9;
+}
+.section-header.blue .header-icon {
+  background: rgba(41, 128, 185, 0.1);
+}
+
+/* Orange */
+.section-header.orange .accent-bar {
+  background: linear-gradient(180deg, #f39c12, #e67e22);
+}
+.section-header.orange .header-icon,
+.section-header.orange .header-title {
+  color: #e67e22;
+}
+.section-header.orange .header-icon {
+  background: rgba(230, 126, 34, 0.1);
+}
+
+/* Teal */
+.section-header.teal .accent-bar {
+  background: linear-gradient(180deg, #1abc9c, #16a085);
+}
+.section-header.teal .header-icon,
+.section-header.teal .header-title {
+  color: #16a085;
+}
+.section-header.teal .header-icon {
+  background: rgba(22, 160, 133, 0.1);
+}
+
+/* Navy */
+.section-header.navy .accent-bar {
+  background: linear-gradient(180deg, #2c3e50, #34495e);
+}
+.section-header.navy .header-icon,
+.section-header.navy .header-title {
+  color: #2c3e50;
+}
+.section-header.navy .header-icon {
+  background: rgba(44, 62, 80, 0.1);
 }

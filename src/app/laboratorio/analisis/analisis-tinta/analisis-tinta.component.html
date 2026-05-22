@@ -1,99 +1,110 @@
-<div class="modal" [ngClass]="{'is-active':Tinta}">
-    <div class="modal-background"></div>
-    <div class="modal-card long" style="height: 650px;">
-        <div class="modal-card-head" *ngIf="Tinta">
-            <p class="modal-card-title fuente">
-                <ng-container *ngIf="Materiales[0]; else sinMaterial">
-                    {{Materiales[0].material.nombre}} {{Materiales[0].material.fabricante.alias}} /
-                    {{Materiales[0].material.serie}}
-                </ng-container>
+<div class="modal" [ngClass]="{ 'is-active': Tinta }">
+  <div class="modal-background"></div>
+  <div class="modal-card long" style="height: 650px">
+    <div class="modal-card-head" *ngIf="Tinta">
+      <p class="modal-card-title fuente">
+        <ng-container *ngIf="Materiales[0]; else sinMaterial">
+          {{ Materiales[0].material.nombre }} {{ Materiales[0].material.fabricante.alias }} /
+          {{ Materiales[0].material.serie }}
+        </ng-container>
 
-                <ng-template #sinMaterial>
-                    <ng-container *ngIf="Materiales">
-                        Preparación {{Materiales?.nombre}}
-                    </ng-container>
-                </ng-template>
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrarSencillo()"></button>
+        <ng-template #sinMaterial>
+          <ng-container *ngIf="Materiales"> Preparación {{ Materiales?.nombre }} </ng-container>
+        </ng-template>
+      </p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrarSencillo()"></button>
+    </div>
+    <div class="modal-card-body">
+      <ng-container *ngIf="Analisis.resultado.resultado">
+        <span
+          class="cintillo"
+          [ngClass]="{
+            aprobado: Analisis.resultado.resultado === 'APROBADO',
+            rechazado: Analisis.resultado.resultado != 'APROBADO'
+          }"
+        >
+          {{ Analisis.resultado.resultado }} / {{ Analisis.resultado.guardado.usuario }} -
+          {{ Analisis.resultado.guardado.fecha }}
+        </span>
+        <br /><br />
+      </ng-container>
+      <br />
+      <span class="subtitles"> Tipo de análisis </span>
+      <br />
+      <div class="field">
+        <div class="control">
+          <label for="" class="label">Analisis:</label>
+          <div class="select">
+            <select (change)="tipoAnalisis($event.target)" [(ngModel)]="Analisis.resultado.pendiente">
+              <option value="false">Completo</option>
+              <option value="true">Parcial</option>
+            </select>
+          </div>
         </div>
-        <div class="modal-card-body">
-            <ng-container *ngIf="Analisis.resultado.resultado">
-                <span class="cintillo"
-                    [ngClass]="{'aprobado':Analisis.resultado.resultado === 'APROBADO', 'rechazado': Analisis.resultado.resultado != 'APROBADO'}">
-                    {{ Analisis.resultado.resultado }} / {{ Analisis.resultado.guardado.usuario }} - {{
-                    Analisis.resultado.guardado.fecha }}
-                </span>
-                <br><br>
-            </ng-container> <br>
-            <span class="subtitles">
-                Tipo de análisis
-            </span>
-            <br>
-            <div class="field">
-                <div class="control">
-                    <label for="" class="label">Analisis:</label>
-                    <div class="select">
-                        <select (change)="tipoAnalisis($event.target)" [(ngModel)]="Analisis.resultado.pendiente">
-                            <option value="false">Completo</option>
-                            <option value="true">Parcial</option>
-                        </select>
-                    </div>
-                </div>
+      </div>
+
+      <br /><br />
+
+      <span class="subtitles"> Análisis cualitativo (Draw Down) </span>
+      <table class="table is-fullwidth">
+        <tr>
+          <th style="text-align: center">Tono</th>
+          <th style="text-align: center">Transparecias <br />/opacidad</th>
+          <th style="text-align: center">Viscosidad</th>
+          <th style="text-align: center">
+            Secado capa fina <br />
+            (1-3 horas)
+          </th>
+          <th style="text-align: center">
+            Secado capa gruesa <br />
+            (24 horas)
+          </th>
+          <th style="text-align: center">Brillo</th>
+        </tr>
+        <tr>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.tono" /> Cumple
+          </td>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.opacidad" /> Cumple
+          </td>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.viscosidad" /> Cumple
+          </td>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.secadoCapaFina" /> Cumple
+          </td>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.secadoCapaGruesa" /> Cumple
+          </td>
+          <td style="text-align: center">
+            <input type="checkbox" class="checkbox" [(ngModel)]="Analisis.cualitativo.brillo" /> Cumple
+          </td>
+        </tr>
+      </table>
+      <hr />
+      <span class="subtitles"> Análisis cuantitativo (Roll Down) </span>
+      <table class="table is-fullwidth">
+        <tr>
+          <th>Realizado Sobre:</th>
+          <!-- <th>tipo</th> -->
+          <th>Estándar</th>
+          <th>Sustrato proveedor:</th>
+        </tr>
+        <tr>
+          <!-- <td><input type="checkbox" class="checkbox" (click)="Carton($event)" [(ngModel)]="Analisis.cuantitativo.carton"> Cartón <br></td> -->
+          <td>
+            <div class="select">
+              <select (change)="Carton($event)" [(ngModel)]="Analisis.cuantitativo.carton">
+                <option value="">Seleccione un sustrato</option>
+                <option value="{{ material._id }}" *ngFor="let material of materiales.buscarSoloSustrato()">
+                  {{ material.nombre }} {{ material.gramaje }}g {{ material.calibre }}pt ({{
+                    material.fabricante.alias
+                  }})
+                </option>
+              </select>
             </div>
-
-            <br><br>
-
-            <span class="subtitles">
-                Análisis cualitativo (Draw Down)
-            </span>
-            <table class="table is-fullwidth">
-                <tr>
-                    <th style="text-align: center;">Tono</th>
-                    <th style="text-align: center;">Transparecias <br>/opacidad</th>
-                    <th style="text-align: center;">Viscosidad</th>
-                    <th style="text-align: center;">Secado capa fina <br> (1-3 horas)</th>
-                    <th style="text-align: center;">Secado capa gruesa <br> (24 horas)</th>
-                    <th style="text-align: center;">Brillo</th>
-                </tr>
-                <tr>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.tono"> Cumple</td>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.opacidad"> Cumple</td>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.viscosidad"> Cumple</td>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.secadoCapaFina"> Cumple</td>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.secadoCapaGruesa"> Cumple</td>
-                    <td style="text-align: center;"><input type="checkbox" class="checkbox"
-                            [(ngModel)]="Analisis.cualitativo.brillo"> Cumple</td>
-                </tr>
-            </table>
-            <hr>
-            <span class="subtitles">
-                Análisis cuantitativo (Roll Down)
-            </span>
-            <table class="table is-fullwidth">
-                <tr>
-                    <th>Realizado Sobre:</th>
-                    <!-- <th>tipo</th> -->
-                    <th>Estándar</th>
-                    <th>Sustrato proveedor:</th>
-                </tr>
-                <tr>
-                    <!-- <td><input type="checkbox" class="checkbox" (click)="Carton($event)" [(ngModel)]="Analisis.cuantitativo.carton"> Cartón <br></td> -->
-                    <td>
-                        <div class="select">
-                            <select (change)="Carton($event)" [(ngModel)]="Analisis.cuantitativo.carton">
-                                <option value="">Seleccione un sustrato</option>
-                                <option value="{{material._id}}"
-                                    *ngFor="let material of materiales.buscarSoloSustrato()">{{material.nombre}}
-                                    {{material.gramaje}}g {{material.calibre}}pt ({{material.fabricante.alias}})
-                                </option>
-                            </select>
-                        </div>
-                        <!-- <div class="field is-grouped">
+            <!-- <div class="field is-grouped">
                             <div class="control">
                                 <input type="text" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.gramaje">
                             </div>
@@ -101,42 +112,45 @@
                                 <input type="text" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.calibre">
                             </div>
                         </div> -->
-                    </td>
-                    <td rowspan="2">
-                        <div class="field">
-                            <div class="control">
-                                <label for="" class="label">Nº Lote</label>
-                                <input type="text" class="input" [(ngModel)]="Analisis.resultado.estandar">
-                            </div>
-                        </div>
-                    </td>
-                    <td rowspan="2">
-                        <fieldset (change)="muestreo($event.target)">
-                            <input type="radio" name="muestra" value="Papel"
-                                [(ngModel)]="Analisis.cuantitativo.muestra"> Papel <br>
-                            <input type="radio" name="muestra" value="Caton"
-                                [(ngModel)]="Analisis.cuantitativo.muestra"> Cartón <br>
-                            <input type="radio" name="muestra" value="Metalizado"
-                                [(ngModel)]="Analisis.cuantitativo.muestra"> Metalizado <br>
-                            <input type="radio" name="muestra" value="N/A"
-                                [(ngModel)]="Analisis.cuantitativo.muestra"> No aplica
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <!-- <td><input type="checkbox" class="checkbox" (click)="Papel($event)" [(ngModel)]="Analisis.cuantitativo.papel"> Papel <br></td> -->
-                    <td>
-                        <div class="select">
-                            <select (change)="Papel($event)" [(ngModel)]="Analisis.cuantitativo.papel">
-                                <option [ngValue]="''" disabled>Seleccione un sustrato</option>
-                                <option *ngFor="let material of materiales.buscarSoloSustrato()"
-                                    [ngValue]="material._id">
-                                    {{material.nombre}} {{material.gramaje}}g {{material.calibre}}pt
-                                    ({{material.fabricante.alias}})
-                                </option>
-                            </select>
-                        </div>
-                        <!-- <div class="field is-grouped">
+          </td>
+          <td rowspan="2">
+            <div class="field">
+              <div class="control">
+                <label for="" class="label">Nº Lote</label>
+                <input type="text" class="input" [(ngModel)]="Analisis.resultado.estandar" />
+              </div>
+            </div>
+          </td>
+          <td rowspan="2">
+            <fieldset (change)="muestreo($event.target)">
+              <input type="radio" name="muestra" value="Papel" [(ngModel)]="Analisis.cuantitativo.muestra" /> Papel
+              <br />
+              <input type="radio" name="muestra" value="Caton" [(ngModel)]="Analisis.cuantitativo.muestra" /> Cartón
+              <br />
+              <input
+                type="radio"
+                name="muestra"
+                value="Metalizado"
+                [(ngModel)]="Analisis.cuantitativo.muestra"
+              /> Metalizado <br />
+              <input type="radio" name="muestra" value="N/A" [(ngModel)]="Analisis.cuantitativo.muestra" /> No aplica
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <!-- <td><input type="checkbox" class="checkbox" (click)="Papel($event)" [(ngModel)]="Analisis.cuantitativo.papel"> Papel <br></td> -->
+          <td>
+            <div class="select">
+              <select (change)="Papel($event)" [(ngModel)]="Analisis.cuantitativo.papel">
+                <option [ngValue]="''" disabled>Seleccione un sustrato</option>
+                <option *ngFor="let material of materiales.buscarSoloSustrato()" [ngValue]="material._id">
+                  {{ material.nombre }} {{ material.gramaje }}g {{ material.calibre }}pt ({{
+                    material.fabricante.alias
+                  }})
+                </option>
+              </select>
+            </div>
+            <!-- <div class="field is-grouped">
                             <div class="control">
                                 <input type="text" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.papel">
                             </div>
@@ -144,11 +158,11 @@
                                 <input type="text" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.papel">
                             </div>
                         </div> -->
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <!-- <tr>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        <!-- <tr>
                     <td>
                         <input type="checkbox" class="checkbox" (click)="Carton($event)" [(ngModel)]="Analisis.cuantitativo.carton"> Cartón <br>
                         <input type="checkbox" class="checkbox" (click)="Papel($event)" [(ngModel)]="Analisis.cuantitativo.papel"> Papel <br>
@@ -185,881 +199,881 @@
                         </fieldset>
                     </td>
                 </tr> -->
-            </table>
+      </table>
 
-            <div class="subtitles">
-                Coordenadas de color
-            </div>
+      <div class="subtitles">Coordenadas de color</div>
 
-            <!-- {{Analisis.cuantitativo.carton}} -->
+      <!-- {{Analisis.cuantitativo.carton}} -->
 
-            <div class="tabs">
-                <ul>
-                    <li *ngIf="Analisis.cuantitativo.carton != ''" [ngClass]="{'is-active':selecccion == 1}"
-                        (click)="selaccionar(1)"><a>Cartón</a></li>
-                    <li *ngIf="Analisis.cuantitativo.papel != ''" [ngClass]="{'is-active':selecccion == 2}"
-                        (click)="selaccionar(2)"><a>Papel</a></li>
-                    <li *ngIf="Analisis.cuantitativo.muestra != '' && Analisis.cuantitativo.muestra != 'Metalizado' && Analisis.cuantitativo.muestra != 'N/A'"
-                        [ngClass]="{'is-active':selecccion == 3}" (click)="selaccionar(3)"><a>Muestra</a></li>
-                </ul>
-            </div>
-            <ng-container [ngSwitch]="selecccion">
-                <ng-container *ngIf="selecccion == 1">
-                    <span class="subtitles">
-                        Descarga #1
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.l"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.a"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.b"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C1')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.l"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.a"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.b"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <span class="subtitles">
-                        Descarga #2
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C2')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <span class="subtitles">
-                        Descarga #3
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C3')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </ng-container>
-                <ng-container *ngIf="selecccion == 2">
-                    <span class="subtitles">
-                        Descarga #1
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.l"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.a"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.b"
-                                            (change)="move()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C1')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.l"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.a"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.b"
-                                            (change)="move2()">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <span class="subtitles">
-                        Descarga #2
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C2')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <span class="subtitles">
-                        Descarga #3
-                    </span>
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>Estándar</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label"> </label>
-                                    <div class="control">
-                                        <button class="button is-white" (click)="comparar('C3')">
-                                            <span class="icon">
-                                                <img src="../../../../assets/colour.png" alt="Icono personalizado"
-                                                    style="width: 1.5rem; height: 1.5rem;">
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Muestra</th>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.l">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.a">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.b">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆L*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.ll">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆a*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.aa">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆b*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.bb">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="field">
-                                    <label for="" class="label">∆E*</label>
-                                    <div class="control">
-                                        <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.e">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </ng-container>
-            </ng-container>
-            <ng-container *ngIf="selecccion == 3">
-                <span class="subtitles">
-                    Descarga #1
-                </span>
-                <table class="table is-fullwidth">
-                    <tr>
-                        <th>Estándar</th>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">L*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.l"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">a*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.a"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">b*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.b"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-                <span class="subtitles">
-                    Descarga #2
-                </span>
-                <table class="table is-fullwidth">
-                    <tr>
-                        <th>Estándar</th>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">L*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.l"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">a*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.a"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">b*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.b"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-                <span class="subtitles">
-                    Descarga #3
-                </span>
-                <table class="table is-fullwidth">
-                    <tr>
-                        <th>Estándar</th>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">L*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.l"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">a*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.a"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="field">
-                                <label for="" class="label">b*</label>
-                                <div class="control">
-                                    <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.b"
-                                        (change)="move()">
-                                </div>
-                            </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-            </ng-container>
-            <br>
-            <span class="is-flex is-justify-content-flex-end">
-
-                <ng-container *ngIf="selecccion == 1">
-                    <button class="button is-info is-flex is-justify-content-flex-end" (click)="ShowRollDown(0)"
-                        *ngIf="isAnalisisCartonFilled()">
-                        <span>Roll Downs</span>
+      <div class="tabs">
+        <ul>
+          <li
+            *ngIf="Analisis.cuantitativo.carton != ''"
+            [ngClass]="{ 'is-active': selecccion == 1 }"
+            (click)="selaccionar(1)"
+          >
+            <a>Cartón</a>
+          </li>
+          <li
+            *ngIf="Analisis.cuantitativo.papel != ''"
+            [ngClass]="{ 'is-active': selecccion == 2 }"
+            (click)="selaccionar(2)"
+          >
+            <a>Papel</a>
+          </li>
+          <li
+            *ngIf="
+              Analisis.cuantitativo.muestra != '' &&
+              Analisis.cuantitativo.muestra != 'Metalizado' &&
+              Analisis.cuantitativo.muestra != 'N/A'
+            "
+            [ngClass]="{ 'is-active': selecccion == 3 }"
+            (click)="selaccionar(3)"
+          >
+            <a>Muestra</a>
+          </li>
+        </ul>
+      </div>
+      <ng-container [ngSwitch]="selecccion">
+        <ng-container *ngIf="selecccion == 1">
+          <span class="subtitles"> Descarga #1 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.l" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.a" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.b" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C1')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
                     </button>
-                </ng-container>
-                <ng-container *ngIf="selecccion == 2">
-                    <button class="button is-info is-flex is-justify-content-flex-end" (click)="ShowRollDown(1)"
-                        *ngIf="isAnalisisPapelFilled()">
-                        <span>Roll Downs</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.l" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.a" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.b" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <span class="subtitles"> Descarga #2 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.b" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C2')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
                     </button>
-                </ng-container>
-            </span>
-            <hr>
-            <div class="field is-grouped">
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.b" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <span class="subtitles"> Descarga #3 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.b" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C3')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.b" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </ng-container>
+        <ng-container *ngIf="selecccion == 2">
+          <span class="subtitles"> Descarga #1 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.l" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.a" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.b" (change)="move()" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C1')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.l" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.a" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.b" (change)="move2()" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <span class="subtitles"> Descarga #2 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.b" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C2')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.b" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <span class="subtitles"> Descarga #3 </span>
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Estándar</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.b" />
+                  </div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="field">
+                  <label for="" class="label"> </label>
+                  <div class="control">
+                    <button class="button is-white" (click)="comparar('C3')">
+                      <span class="icon">
+                        <img
+                          src="../../../../assets/colour.png"
+                          alt="Icono personalizado"
+                          style="width: 1.5rem; height: 1.5rem"
+                        />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>Muestra</th>
+              <td>
+                <div class="field">
+                  <label for="" class="label">L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.l" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.a" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.b" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆L*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.ll" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆a*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.aa" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆b*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.bb" />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="field">
+                  <label for="" class="label">∆E*</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.e" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="selecccion == 3">
+        <span class="subtitles"> Descarga #1 </span>
+        <table class="table is-fullwidth">
+          <tr>
+            <th>Estándar</th>
+            <td>
+              <div class="field">
+                <label for="" class="label">L*</label>
                 <div class="control">
-                    <div class="file is-info has-name">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="resume" accept="image/*"
-                                (change)="subirImagen($event)">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="file-label">
-                                    Draw Down
-                                </span>
-                            </span>
-                        </label>
-                    </div>
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.l" (change)="move()" />
                 </div>
-                <ng-container *ngIf="Analisis.img != 'no-image'">
-                    <div class="control">
-                        <button class="button" style="color:#3e8ed0;background-color: transparent; border: none;"
-                            (click)="MostrarImagen()">
-                            <span class="icon"><i class="fa-solid fa-circle-info"></i></span>
-                        </button>
-                    </div>
-                    <div class="control">
-                        <button class="button" style="color: #f14668; background-color: transparent; border: none;"
-                            (click)="Analisis.img = 'no-image'">
-                            <span class="icon"><i class="fas fa-trash-alt"></i></span>
-                        </button>
-                    </div>
-                </ng-container>
-            </div>
-            <br>
-            <div class="field">
-                <label for="" class="label">Observación</label>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">a*</label>
                 <div class="control">
-                    <textarea class="textarea" placeholder="Observación"
-                        [(ngModel)]="Analisis.resultado.observacion"></textarea>
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.a" (change)="move()" />
                 </div>
-            </div>
-            <div class="columns is-mobile is-flex is-justify-content-flex-end">
-                <div class="column is-narrow">
-                    <div *ngIf="!Preparacion">
-                        <button class="button is-info" (click)="guardar()">
-                            <span class="icon"><i class="fas fa-save"></i></span>
-                            <span>Guardar progreso</span>
-                        </button>
-                    </div>
-                    <div *ngIf="Preparacion">
-                        <button class="button is-info" (click)="guardarPreparacion()">
-                            <span class="icon"><i class="fas fa-save"></i></span>
-                            <span>Guardar progreso</span>
-                        </button>
-                    </div>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">b*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.b" (change)="move()" />
                 </div>
-            </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <span class="subtitles"> Descarga #2 </span>
+        <table class="table is-fullwidth">
+          <tr>
+            <th>Estándar</th>
+            <td>
+              <div class="field">
+                <label for="" class="label">L*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.l" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">a*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.a" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">b*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.b" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <span class="subtitles"> Descarga #3 </span>
+        <table class="table is-fullwidth">
+          <tr>
+            <th>Estándar</th>
+            <td>
+              <div class="field">
+                <label for="" class="label">L*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.l" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">a*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.a" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="field">
+                <label for="" class="label">b*</label>
+                <div class="control">
+                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.b" (change)="move()" />
+                </div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </ng-container>
+      <br />
+      <span class="is-flex is-justify-content-flex-end">
+        <ng-container *ngIf="selecccion == 1">
+          <button
+            class="button is-info is-flex is-justify-content-flex-end"
+            (click)="ShowRollDown(0)"
+            *ngIf="isAnalisisCartonFilled()"
+          >
+            <span>Roll Downs</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="selecccion == 2">
+          <button
+            class="button is-info is-flex is-justify-content-flex-end"
+            (click)="ShowRollDown(1)"
+            *ngIf="isAnalisisPapelFilled()"
+          >
+            <span>Roll Downs</span>
+          </button>
+        </ng-container>
+      </span>
+      <hr />
+      <div class="field is-grouped">
+        <div class="control">
+          <div class="file is-info has-name">
+            <label class="file-label">
+              <input class="file-input" type="file" name="resume" accept="image/*" (change)="subirImagen($event)" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label"> Draw Down </span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <ng-container *ngIf="Analisis.img != 'no-image'">
+          <div class="control">
+            <button
+              class="button"
+              style="color: #3e8ed0; background-color: transparent; border: none"
+              (click)="MostrarImagen()"
+            >
+              <span class="icon"><i class="fa-solid fa-circle-info"></i></span>
+            </button>
+          </div>
+          <div class="control">
+            <button
+              class="button"
+              style="color: #f14668; background-color: transparent; border: none"
+              (click)="Analisis.img = 'no-image'"
+            >
+              <span class="icon"><i class="fas fa-trash-alt"></i></span>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+      <br />
+      <div class="field">
+        <label for="" class="label">Observación</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Observación" [(ngModel)]="Analisis.resultado.observacion"></textarea>
+        </div>
+      </div>
+      <div class="columns is-mobile is-flex is-justify-content-flex-end">
+        <div class="column is-narrow">
+          <div *ngIf="!Preparacion">
+            <button class="button is-info" (click)="guardar()">
+              <span class="icon"><i class="fas fa-save"></i></span>
+              <span>Guardar progreso</span>
+            </button>
+          </div>
+          <div *ngIf="Preparacion">
+            <button class="button is-info" (click)="guardarPreparacion()">
+              <span class="icon"><i class="fas fa-save"></i></span>
+              <span>Guardar progreso</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
-            <!-- <div class="columns">
+      <!-- <div class="columns">
                     <div class="column">
                         <table class="table is-fullwidth">
                             <tr>
@@ -1088,95 +1102,97 @@
                         </table>
                     </div>
                 </div> -->
-        </div>
     </div>
-    <div class="modal-card added animate__animated animate__fadeInUp long"
-        *ngIf="Analisis.resultado.pendiente != undefined">
-        <div class="modal-card-body bg"
-            style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;"
-                *ngIf="!Analisis.resultado.resultado">
-                <div class="control">
-                    <!-- <button class="button is-success" (click)="guardar('APROBADO')"> -->
-                    <button class="button is-success" (click)="enviarAValidacion('APROBADO')">
-                        <span class="icon"><i class="fa-solid fa-check"></i></span>
-                        <span>Aprobado</span>
-                    </button>
-                </div>
-                <div class="control">
-                    <button class="button is-danger" (click)="enviarAValidacion('RECHAZADO')">
-                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
-                        <span>Rechazado</span>
-                    </button>
-                </div>
-            </div> <br>
-
-            <div class="field is-grouped" style="display: flex; justify-content: center; gap: 1rem;"
-                *ngIf="Analisis.resultado.resultado">
-                <div class="control">
-                    <button class="button is-success" (click)="AnalisisCompletado(false)">
-                        <span class="icon"><i class="fa-solid fa-check"></i></span>
-                        <span>Validar</span>
-                    </button>
-                </div>
-                <div class="control">
-                    <button class="button is-danger">
-                        <span class="icon"><i class="fa-solid fa-ban"></i></span>
-                        <span>Re analizar</span>
-                    </button>
-                </div>
-            </div>
+  </div>
+  <div
+    class="modal-card added animate__animated animate__fadeInUp long"
+    *ngIf="Analisis.resultado.pendiente != undefined"
+  >
+    <div
+      class="modal-card-body bg"
+      style="display: flex; justify-content: center; align-items: center; flex-direction: column"
+    >
+      <div
+        class="field is-grouped"
+        style="display: flex; justify-content: center; gap: 1rem"
+        *ngIf="!Analisis.resultado.resultado"
+      >
+        <div class="control">
+          <!-- <button class="button is-success" (click)="guardar('APROBADO')"> -->
+          <button class="button is-success" (click)="enviarAValidacion('APROBADO')">
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+            <span>Aprobado</span>
+          </button>
         </div>
-    </div>
+        <div class="control">
+          <button class="button is-danger" (click)="enviarAValidacion('RECHAZADO')">
+            <span class="icon"><i class="fa-solid fa-ban"></i></span>
+            <span>Rechazado</span>
+          </button>
+        </div>
+      </div>
+      <br />
 
+      <div
+        class="field is-grouped"
+        style="display: flex; justify-content: center; gap: 1rem"
+        *ngIf="Analisis.resultado.resultado"
+      >
+        <div class="control">
+          <button class="button is-success" (click)="AnalisisCompletado(false)">
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+            <span>Validar</span>
+          </button>
+        </div>
+        <div class="control">
+          <button class="button is-danger">
+            <span class="icon"><i class="fa-solid fa-ban"></i></span>
+            <span>Re analizar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="modal" [ngClass]="{'is-active':RollDownModal}">
-    <div class="modal-background"></div>
-    <div class="columns long_">
-        <button class="delete red_cross cerrar" aria-label="close" (click)="RollDownModal = false"></button>
-        <div class="column">
-            <div class="card">
-                <div class="modal-card-head">
-                    <p class="modal-card-title fuente">
-                        Estándar
-                    </p>
-                </div>
-                <div class="card-content">
-                    <div class="roll" [style]="RollDown.descarga_1.estandar"></div>
-                    <div class="roll" [style]="RollDown.descarga_2.estandar"></div>
-                    <div class="roll" [style]="RollDown.descarga_3.estandar"></div>
-                </div>
-            </div>
+<div class="modal" [ngClass]="{ 'is-active': RollDownModal }">
+  <div class="modal-background"></div>
+  <div class="columns long_">
+    <button class="delete red_cross cerrar" aria-label="close" (click)="RollDownModal = false"></button>
+    <div class="column">
+      <div class="card">
+        <div class="modal-card-head">
+          <p class="modal-card-title fuente">Estándar</p>
         </div>
-        <div class="column">
-            <div class="card">
-                <div class="modal-card-head">
-                    <p class="modal-card-title fuente">
-                        Muestra
-                    </p>
-                </div>
-                <div class="card-content">
-                    <div class="roll" id="muestra1" [style]="RollDown.descarga_1.muestra"></div>
-                    <div class="roll" id="muestra2" [style]="RollDown.descarga_2.muestra"></div>
-                    <div class="roll" id="muestra3" [style]="RollDown.descarga_3.muestra"></div>
-                </div>
-            </div>
+        <div class="card-content">
+          <div class="roll" [style]="RollDown.descarga_1.estandar"></div>
+          <div class="roll" [style]="RollDown.descarga_2.estandar"></div>
+          <div class="roll" [style]="RollDown.descarga_3.estandar"></div>
         </div>
+      </div>
     </div>
+    <div class="column">
+      <div class="card">
+        <div class="modal-card-head">
+          <p class="modal-card-title fuente">Muestra</p>
+        </div>
+        <div class="card-content">
+          <div class="roll" id="muestra1" [style]="RollDown.descarga_1.muestra"></div>
+          <div class="roll" id="muestra2" [style]="RollDown.descarga_2.muestra"></div>
+          <div class="roll" id="muestra3" [style]="RollDown.descarga_3.muestra"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="modal" [ngClass]="{'is-active':compare}">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-        <button class="delete red_cross cerrar" aria-label="close" (click)="compare = false"></button>
-        <div class="muestreo">
-            <div class="estandar" [style]="estandar">
-                Estándar
-            </div>
-            <div class="muestra" [style]="muestra">
-                Muestra
-            </div>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': compare }">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <button class="delete red_cross cerrar" aria-label="close" (click)="compare = false"></button>
+    <div class="muestreo">
+      <div class="estandar" [style]="estandar">Estándar</div>
+      <div class="muestra" [style]="muestra">Muestra</div>
     </div>
+  </div>
 </div>

@@ -5,18 +5,8 @@ import { PageLayoutComponent } from './page-layout/page-layout.component';
 import { AppModalComponent } from './app-modal/app-modal.component';
 
 @NgModule({
-  declarations: [
-    SectionHeaderComponent,
-    PageLayoutComponent,
-    AppModalComponent
-  ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    SectionHeaderComponent,
-    PageLayoutComponent,
-    AppModalComponent
-  ]
+  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent],
+  imports: [CommonModule],
+  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent],
 })
-export class SharedComponentsModule { }
+export class SharedComponentsModule {}

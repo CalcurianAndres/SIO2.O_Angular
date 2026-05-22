@@ -10,11 +10,11 @@ import { SolicitudesService } from 'src/app/services/solicitudes.service';
 
 @Component({
   selector: 'app-analisis',
-  standalone: false, templateUrl: './analisis.component.html',
-  styleUrls: ['./analisis.component.scss']
+  standalone: false,
+  templateUrl: './analisis.component.html',
+  styleUrls: ['./analisis.component.scss'],
 })
 export class AnalisisComponent {
-
   public Tinta: boolean = false;
   public Sustrato: boolean = false;
   public Caja: boolean = false;
@@ -37,21 +37,19 @@ export class AnalisisComponent {
 
   mostrarSeccionBuscar: boolean = false;
 
-
   showMaterial() {
-    console.log(this.recepcion_)
-    console.log(this.informacion[0])
+    console.log(this.recepcion_);
+    console.log(this.informacion[0]);
   }
 
-
-  tipo_de_busqueda: any = ''
-  grupo_selected = ''
-  material_selected = ''
-  lote_selected = ''
-  desde = ''
-  hasta = ''
+  tipo_de_busqueda: any = '';
+  grupo_selected = '';
+  material_selected = '';
+  lote_selected = '';
+  desde = '';
+  hasta = '';
   loading: boolean = false;
-  sin_analizar = true
+  sin_analizar = true;
 
   public Analisis: any = {
     img: 'no-image',
@@ -61,31 +59,31 @@ export class AnalisisComponent {
       viscosidad: false,
       secadoCapaFina: false,
       secadoCapaGruesa: false,
-      brillo: false
+      brillo: false,
     },
     cuantitativo: {
       papel: '',
       carton: '',
       gramaje: '',
       calibre: '',
-      muestra: ''
+      muestra: '',
     },
     sustrato_muestra: '',
     carton: {
       estandar_1: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_2: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_3: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       muestra_1: {
         l: '',
@@ -94,7 +92,7 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
+        e: '',
       },
       muestra_2: {
         l: '',
@@ -103,7 +101,7 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
+        e: '',
       },
       muestra_3: {
         l: '',
@@ -112,24 +110,24 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
-      }
+        e: '',
+      },
     },
     papel: {
       estandar_1: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_2: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_3: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       muestra_1: {
         l: '',
@@ -138,7 +136,7 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
+        e: '',
       },
       muestra_2: {
         l: '',
@@ -147,7 +145,7 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
+        e: '',
       },
       muestra_3: {
         l: '',
@@ -156,24 +154,24 @@ export class AnalisisComponent {
         ll: '',
         aa: '',
         bb: '',
-        e: ''
-      }
+        e: '',
+      },
     },
     muestra: {
       estandar_1: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_2: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
       estandar_3: {
         l: '',
         a: '',
-        b: ''
+        b: '',
       },
     },
     resultado: {
@@ -182,14 +180,14 @@ export class AnalisisComponent {
       observacion: '',
       guardado: {
         usuario: '',
-        fecha: ''
+        fecha: '',
       },
       validado: {
         usuario: '',
-        fecha: ''
-      }
-    }
-  }
+        fecha: '',
+      },
+    },
+  };
 
   public analisisSustrato: AnalisisSustrato2 = {
     numero_muestras: 0,
@@ -203,7 +201,7 @@ export class AnalisisComponent {
       desviacion: 0,
       max: 0,
       min: 0,
-      decimales: 0
+      decimales: 0,
     },
     cobb: {
       top: {
@@ -212,7 +210,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       back: {
         cobb: [],
@@ -220,8 +218,8 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
-      }
+        decimales: 0,
+      },
     },
     calibre: {
       mm: {
@@ -230,7 +228,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       um: {
         um: [],
@@ -238,7 +236,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       pt: {
         pt: [],
@@ -246,8 +244,8 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
-      }
+        decimales: 0,
+      },
     },
     curling_blancura: {
       curling: {
@@ -256,7 +254,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       blancura: {
         blancura: [],
@@ -264,8 +262,8 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
-      }
+        decimales: 0,
+      },
     },
     dimensiones: {
       Escuadra: {
@@ -274,7 +272,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       contraEscuadra: {
         contraEscuadra: [],
@@ -282,7 +280,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       Pinza: {
         pinza: [],
@@ -290,7 +288,7 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       contraPinza: {
         contraPinza: [],
@@ -298,8 +296,8 @@ export class AnalisisComponent {
         min: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
-      }
+        decimales: 0,
+      },
     },
     resultado: {
       estandar: '',
@@ -308,14 +306,14 @@ export class AnalisisComponent {
       pendiente: undefined,
       guardado: {
         usuario: '',
-        fecha: ''
+        fecha: '',
       },
       validado: {
         usuario: '',
-        fecha: ''
-      }
-    }
-  }
+        fecha: '',
+      },
+    },
+  };
 
   public AnalisisCajas: any = {
     longitud_interna: {
@@ -325,7 +323,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       ancho: {
         ancho: [],
@@ -333,7 +331,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       alto: {
         alto: [],
@@ -341,7 +339,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
     },
     longitud_externa: {
@@ -351,7 +349,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       ancho: {
         ancho: [],
@@ -359,7 +357,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
       alto: {
         alto: [],
@@ -367,7 +365,7 @@ export class AnalisisComponent {
         max: 0,
         promedio: 0,
         desviacion: 0,
-        decimales: 0
+        decimales: 0,
       },
     },
     espesor: {
@@ -376,22 +374,22 @@ export class AnalisisComponent {
       max: 0,
       promedio: 0,
       desviacion: 0,
-      decimales: 0
+      decimales: 0,
     },
     resultado: {
       observacion: '',
       resultado: '',
       guardado: {
         usuario: '',
-        fecha: ''
+        fecha: '',
       },
       validado: {
         usuario: '',
-        fecha: ''
-      }
+        fecha: '',
+      },
     },
-    muestras: 0
-  }
+    muestras: 0,
+  };
 
   public analisisPads: any = {
     muestras: 0,
@@ -401,7 +399,7 @@ export class AnalisisComponent {
       max: 0,
       promedio: 0,
       desviacion: 0,
-      decimales: 0
+      decimales: 0,
     },
     ancho: {
       ancho: [],
@@ -409,7 +407,7 @@ export class AnalisisComponent {
       max: 0,
       promedio: 0,
       desviacion: 0,
-      decimales: 0
+      decimales: 0,
     },
     signado: {
       signado: [],
@@ -417,7 +415,7 @@ export class AnalisisComponent {
       max: 0,
       promedio: 0,
       desviacion: 0,
-      decimales: 0
+      decimales: 0,
     },
     espesor: {
       espesor: [],
@@ -425,21 +423,21 @@ export class AnalisisComponent {
       max: 0,
       promedio: 0,
       desviacion: 0,
-      decimales: 0
+      decimales: 0,
     },
     resultado: {
       observacion: '',
       resultado: '',
       guardado: {
         usuario: '',
-        fecha: ''
+        fecha: '',
       },
       validado: {
         usuario: '',
-        fecha: ''
-      }
+        fecha: '',
+      },
     },
-  }
+  };
 
   public AnalisisOtro: any = {
     apariencia: false,
@@ -450,45 +448,61 @@ export class AnalisisComponent {
       resultado: '',
       guardado: {
         usuario: '',
-        fecha: ''
+        fecha: '',
       },
       validado: {
         usuario: '',
-        fecha: ''
-      }
-    }
-  }
+        fecha: '',
+      },
+    },
+  };
 
-  public Materiales: any = []
+  public Materiales: any = [];
   public mesActual = '';
   public yearActual;
 
-  constructor(public recepciones: RecepcionService,
+  constructor(
+    public recepciones: RecepcionService,
     public analisis: AnalisisService,
     public grupos: GruposService,
     public materiales: MaterialesService,
-    public solicitudes: SolicitudesService) {
-
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    public solicitudes: SolicitudesService,
+  ) {
+    const meses = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
+    ];
     const fechaActual = new Date();
     this.mesActual = meses[fechaActual.getMonth()];
     this.yearActual = new Date().getFullYear();
   }
 
   PreparacionesTinta() {
-    return this.solicitudes.solicitudes.filter(s => s.tag === 'Preparacion' && (s.status === 'Por Asignar' || s.status === 'Por Etiquetar'))
+    return this.solicitudes.solicitudes.filter(
+      (s) => s.tag === 'Preparacion' && (s.status === 'Por Asignar' || s.status === 'Por Etiquetar'),
+    );
   }
 
   CalcularPeso(materiales) {
     let cantidad = materiales.reduce((total, material) => total + Number(material.neto), 0);
-    return cantidad.toFixed(2)
+    return cantidad.toFixed(2);
   }
 
   public sustrato_char: any;
 
   MostrarDesdeBusqueda(e) {
     this.Busqueda = false;
-    this.Analizar(e[0], e[1], e[2], e[3])
+    this.Analizar(e[0], e[1], e[2], e[3]);
   }
 
   // SustratoChar(){
@@ -525,16 +539,15 @@ export class AnalisisComponent {
 
   // setInterval(changeText, 5000); // Cambia el texto cada 5 segundos
 
-
   reset() {
     if (this.tipo_de_busqueda != 'grupo') {
-      this.grupo_selected = ''
-      this.material_selected = ''
+      this.grupo_selected = '';
+      this.material_selected = '';
     } else if (this.tipo_de_busqueda != 'lote') {
-      this.lote_selected = ''
+      this.lote_selected = '';
     } else if (this.tipo_de_busqueda != 'fecha') {
-      this.desde = ''
-      this.hasta = ''
+      this.desde = '';
+      this.hasta = '';
     }
   }
 
@@ -543,38 +556,40 @@ export class AnalisisComponent {
     return n.toLocaleString('es-ES');
   }
 
-
   verificarSiSerealizoAnalisis(material) {
     if (material[0].analisis) {
-      if (material[0].material.grupo.nombre === 'Tintas' || material[0].material.grupo.nombre === 'Barniz s/impresión') {
+      if (
+        material[0].material.grupo.nombre === 'Tintas' ||
+        material[0].material.grupo.nombre === 'Barniz s/impresión'
+      ) {
         if (this.analisis.buscarAnalisisPorID(material[0].analisis).resultado.validado.usuario != '') {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       } else if (material[0].material.grupo.nombre === 'Cajas Corrugadas') {
         if (this.analisis.buscarAnalisisCajasPorID(material[0].analisis).resultado.validado.usuario != '') {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       } else if (material[0].material.grupo.nombre === 'Soportes de Embalaje') {
         if (this.analisis.buscarAnalisisPadsPorID(material[0].analisis).resultado.validado.usuario != '') {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       } else if (material[0].material.grupo.trato === true) {
         if (this.analisis.buscarAnalisisSustratoPorID(material[0].analisis).resultado.validado.usuario != '') {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       } else {
         if (this.analisis.buscarAnalisisOtrosPorID(material[0].analisis).resultado.validado.usuario != '') {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       }
     } else {
@@ -582,50 +597,46 @@ export class AnalisisComponent {
     }
   }
 
-
-
-
   public Preparacion = false;
   AnalizarPreparacion(preparacion) {
     this.Tinta = true;
     this.Recepcion_selected = preparacion;
     this.Preparacion = true;
     this.Material_selected = preparacion.material;
-    console.log(this.Material_selected)
+    console.log(this.Material_selected);
     // this.index_material = index_material;
     if (this.analisis.buscarAnalisisPorID(preparacion.analisis)) {
-      this.Analisis = this.analisis.buscarAnalisisPorID(preparacion.analisis)
+      this.Analisis = this.analisis.buscarAnalisisPorID(preparacion.analisis);
     }
   }
 
-
   Analizar(recepcion: any, material: any, index_recepcion: number, index_material: number) {
-
-
-
     if (material[0].material.grupo.trato === true) {
-      console.log(material[0].material.grupo)
+      console.log(material[0].material.grupo);
       this.Sustrato = true;
       this.Recepcion_selected = recepcion;
       this.Material_selected = material;
       this.index_material = index_material;
       if (this.analisis.buscarAnalisisSustratoPorID(material[0].analisis)) {
-        this.analisisSustrato = this.analisis.buscarAnalisisSustratoPorID(material[0].analisis)
+        this.analisisSustrato = this.analisis.buscarAnalisisSustratoPorID(material[0].analisis);
         if (!this.analisisSustrato.resultado.resultado) {
-          this.analisisSustrato.resultado.pendiente = undefined
+          this.analisisSustrato.resultado.pendiente = undefined;
         }
       }
-      return
-    } else if (material[0].material.grupo.nombre === 'Tintas' || material[0].material.grupo.nombre === 'Barniz s/impresión') {
+      return;
+    } else if (
+      material[0].material.grupo.nombre === 'Tintas' ||
+      material[0].material.grupo.nombre === 'Barniz s/impresión'
+    ) {
       this.Tinta = true;
       this.Recepcion_selected = recepcion;
       this.Material_selected = material;
       this.index_material = index_material;
 
       if (this.analisis.buscarAnalisisPorID(material[0].analisis)) {
-        this.Analisis = this.analisis.buscarAnalisisPorID(material[0].analisis)
+        this.Analisis = this.analisis.buscarAnalisisPorID(material[0].analisis);
         if (!this.Analisis.resultado.resultado) {
-          this.Analisis.resultado.pendiente = undefined
+          this.Analisis.resultado.pendiente = undefined;
         }
       }
     } else if (material[0].material.grupo.nombre === 'Cajas Corrugadas') {
@@ -634,8 +645,8 @@ export class AnalisisComponent {
       this.Material_selected = material;
       this.index_material = index_material;
       if (this.analisis.buscarAnalisisCajasPorID(material[0].analisis)) {
-        this.AnalisisCajas = this.analisis.buscarAnalisisCajasPorID(material[0].analisis)
-        console.log(this.AnalisisCajas)
+        this.AnalisisCajas = this.analisis.buscarAnalisisCajasPorID(material[0].analisis);
+        console.log(this.AnalisisCajas);
       }
     } else if (material[0].material.grupo.nombre === 'Soportes de Embalaje') {
       this.pads = true;
@@ -643,9 +654,8 @@ export class AnalisisComponent {
       this.Material_selected = material;
       this.index_material = index_material;
       if (this.analisis.buscarAnalisisPadsPorID(material[0].analisis)) {
-        this.analisisPads = this.analisis.buscarAnalisisPadsPorID(material[0].analisis)
+        this.analisisPads = this.analisis.buscarAnalisisPadsPorID(material[0].analisis);
       }
-
     } else if (material[0].material.grupo.trato === true) {
       this.Sustrato = true;
       this.Recepcion_selected = recepcion;
@@ -653,7 +663,7 @@ export class AnalisisComponent {
       this.index_material = index_material;
 
       if (this.analisis.buscarAnalisisSustratoPorID(material[0].analisis)) {
-        this.analisisSustrato = this.analisis.buscarAnalisisSustratoPorID(material[0].analisis)
+        this.analisisSustrato = this.analisis.buscarAnalisisSustratoPorID(material[0].analisis);
       }
     } else {
       this.otro = true;
@@ -661,12 +671,9 @@ export class AnalisisComponent {
       this.Material_selected = material;
       this.index_material = index_material;
       if (this.analisis.buscarAnalisisOtrosPorID(material[0].analisis)) {
-        this.AnalisisOtro = this.analisis.buscarAnalisisOtrosPorID(material[0].analisis)
+        this.AnalisisOtro = this.analisis.buscarAnalisisOtrosPorID(material[0].analisis);
       }
     }
-
-
-
   }
 
   Cerrar_() {
@@ -686,7 +693,7 @@ export class AnalisisComponent {
         showConfirmButton: false,
         timerProgressBar: true,
         toast: true,
-        position: 'top-end'
+        position: 'top-end',
       });
     }, 1000);
   }
@@ -703,7 +710,7 @@ export class AnalisisComponent {
         showConfirmButton: false,
         timerProgressBar: true,
         toast: true,
-        position: 'top-end'
+        position: 'top-end',
       });
     }, 1000);
   }
@@ -718,7 +725,7 @@ export class AnalisisComponent {
         showConfirmButton: false,
         timerProgressBar: true,
         toast: true,
-        position: 'top-end'
+        position: 'top-end',
       });
     }, 1000);
   }
@@ -732,11 +739,14 @@ export class AnalisisComponent {
     this.loading = true;
 
     if (this.grupo_selected) {
-      this.Materiales = this.recepciones.filtrarMaterialesPorGrupoYAnalisis(this.grupo_selected, this.material_selected)
+      this.Materiales = this.recepciones.filtrarMaterialesPorGrupoYAnalisis(
+        this.grupo_selected,
+        this.material_selected,
+      );
     }
 
     if (this.lote_selected) {
-      this.Materiales = this.recepciones.filtrarMaterialesPorLoteYAnalisis(this.lote_selected)
+      this.Materiales = this.recepciones.filtrarMaterialesPorLoteYAnalisis(this.lote_selected);
     }
 
     if (this.desde && this.hasta) {
@@ -748,24 +758,21 @@ export class AnalisisComponent {
           toast: true,
           timerProgressBar: true,
           timer: 5000,
-          position: 'top-end'
-        })
+          position: 'top-end',
+        });
         this.loading = false;
       } else {
         const desde = Date.parse(this.desde);
         const hasta = Date.parse(this.hasta);
 
-
-        this.Materiales = this.recepciones.filtrarMaterialesporFecha(desde, hasta)
-        console.log(this.Materiales)
-
+        this.Materiales = this.recepciones.filtrarMaterialesporFecha(desde, hasta);
+        console.log(this.Materiales);
       }
     }
 
     setTimeout(() => {
       this.loading = false;
     }, 1000);
-
   }
 
   cancelar() {
@@ -774,9 +781,6 @@ export class AnalisisComponent {
 
   MostrarBusquedad() {
     this.Busqueda = true;
-    console.log(this.Materiales)
+    console.log(this.Materiales);
   }
-
-
-
 }

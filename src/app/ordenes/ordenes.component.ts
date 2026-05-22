@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-ordenes',
   standalone: false,
   templateUrl: './ordenes.component.html',
-  styleUrls: ['./ordenes.component.scss']
+  styleUrls: ['./ordenes.component.scss'],
 })
-export class OrdenesComponent {
-
-}
+export class OrdenesComponent {}

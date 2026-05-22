@@ -1,17 +1,16 @@
-.long{
-    width: 80%;
+.long {
+  width: 80%;
 }
 
-
-.dimenciones{
-    display: block;
-    position: absolute;
-    right: 30px;
-    top: 150px;
-    height: 300px;
-    background-color: rgba(30, 139, 195, .5);
-    z-index: 99999;
-    //  border-left: 2px dashed black;
+.dimenciones {
+  display: block;
+  position: absolute;
+  right: 30px;
+  top: 150px;
+  height: 300px;
+  background-color: rgba(30, 139, 195, 0.5);
+  z-index: 99999;
+  //  border-left: 2px dashed black;
 }
 
 .dimenciones::before {
@@ -21,13 +20,7 @@
   left: 0;
   width: 2px;
   height: 100%;
-  background: repeating-linear-gradient(
-    to bottom,
-    black,
-    black 2px,
-    transparent 4px,
-    transparent 8px
-  );
+  background: repeating-linear-gradient(to bottom, black, black 2px, transparent 4px, transparent 8px);
 }
 
 /* Texto arriba centrado */

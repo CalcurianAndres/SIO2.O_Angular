@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-compras',
   standalone: false,
   templateUrl: './compras.component.html',
-  styleUrls: ['./compras.component.scss']
+  styleUrls: ['./compras.component.scss'],
 })
-export class ComprasComponent {
-
-}
+export class ComprasComponent {}

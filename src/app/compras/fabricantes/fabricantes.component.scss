@@ -1,68 +1,63 @@
-.title_ {
-    background: #2cb8b2;
-    background: linear-gradient(90deg, rgba(44, 184, 178, 1) 0%, rgba(43, 237, 229, 1) 100%);
-}
-
 .subtitle {
-    text-align: center;
+  text-align: center;
 }
 
 .contenido {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .blue {
-    background: rgb(0, 56, 255);
-    background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, rgba(117, 180, 255, 1) 100%);
-    color: white;
-    font-size: 70px;
-    text-align: center;
-    height: 150px;
+  background: rgb(0, 56, 255);
+  background: linear-gradient(90deg, rgba(0, 56, 255, 1) 0%, rgba(117, 180, 255, 1) 100%);
+  color: white;
+  font-size: 70px;
+  text-align: center;
+  height: 150px;
 }
 
 .description {
-    text-align: left;
+  text-align: left;
 }
 
 .titulos {
-    height: 110px;
+  height: 110px;
 }
 
 .icon {
-    padding: 20px;
+  padding: 20px;
 }
 
 .agregar {
-    display: block;
+  display: block;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .imagen_ {
-    height: 110px;
+  height: 110px;
 }
 
 .icon-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    grid-gap: 10px;
-    justify-items: center;
-    align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 10px;
+  justify-items: center;
+  align-items: center;
 }
 
 .icon-container i {
-    width: 100px;
-    height: 100px;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f2f2f2;
-    border-radius: 10px;
+  width: 100px;
+  height: 100px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  border-radius: 10px;
 }
 
 .card.card-header.subtite {
-    align-content: center;
-    align-items: center;
-    text-align: center;
+  align-content: center;
+  align-items: center;
+  text-align: center;
 }

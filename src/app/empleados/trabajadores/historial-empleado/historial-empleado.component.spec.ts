@@ -8,7 +8,7 @@ describe('HistorialEmpleadoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HistorialEmpleadoComponent]
+      declarations: [HistorialEmpleadoComponent],
     });
     fixture = TestBed.createComponent(HistorialEmpleadoComponent);
     component = fixture.componentInstance;

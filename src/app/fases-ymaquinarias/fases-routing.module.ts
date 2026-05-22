@@ -9,45 +9,41 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { PreparacionTintasComponent } from './preparacion-tintas/preparacion-tintas.component';
 import { ProductosComponent } from './productos/productos.component';
 
-const routes: Routes =[
+const routes: Routes = [
   {
-    path:'',
-    component:FasesYMaquinariasComponent,
-    children:[
+    path: '',
+    component: FasesYMaquinariasComponent,
+    children: [
       {
-        path:'',
-        component:MainComponent
+        path: '',
+        component: MainComponent,
       },
       {
-        path:'fases',
-        component:FasesComponent
+        path: 'fases',
+        component: FasesComponent,
       },
       {
-        path:'maquinas',
-        component:MaquinasComponent
+        path: 'maquinas',
+        component: MaquinasComponent,
       },
       {
-        path:'productos',
-        component:ProductosComponent
+        path: 'productos',
+        component: ProductosComponent,
       },
       {
-        path:'categoria',
-        component:CategoriasComponent
+        path: 'categoria',
+        component: CategoriasComponent,
       },
       {
-        path:'tintas',
-        component:PreparacionTintasComponent
-      }
-    ]
-}]
-
-
+        path: 'tintas',
+        component: PreparacionTintasComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class FasesRoutingModule { }
+export class FasesRoutingModule {}

@@ -8,7 +8,7 @@ describe('SubAreasComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SubAreasComponent]
+      declarations: [SubAreasComponent],
     });
     fixture = TestBed.createComponent(SubAreasComponent);
     component = fixture.componentInstance;

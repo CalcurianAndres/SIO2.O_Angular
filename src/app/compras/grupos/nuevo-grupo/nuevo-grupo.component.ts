@@ -3,105 +3,99 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-grupo',
-  standalone: false,templateUrl: './nuevo-grupo.component.html',
-  styleUrls: ['./nuevo-grupo.component.scss']
+  standalone: false,
+  templateUrl: './nuevo-grupo.component.html',
+  styleUrls: ['./nuevo-grupo.component.scss'],
 })
-export class NuevoGrupoComponent implements OnInit{
-  @Input() api:any;
-  @Input() nuevo:any;
-  @Input() editar:any;
-  @Input() data:any;
-  @Input() cargando!:boolean;
+export class NuevoGrupoComponent implements OnInit {
+  @Input() api: any;
+  @Input() nuevo: any;
+  @Input() editar: any;
+  @Input() data: any;
+  @Input() cargando!: boolean;
   @Input() trato;
   @Input() otro;
   @Output() onCloseModal = new EventEmitter();
   @Output() onCloseModal_ = new EventEmitter();
   @Output() onLoading = new EventEmitter();
 
-  nombre = "";
-  parcial = "false";
-  icono = "";
+  nombre = '';
+  parcial = 'false';
+  icono = '';
 
-  public iconos_gallery = false
-  public iconos_gallery_ = false
+  public iconos_gallery = false;
+  public iconos_gallery_ = false;
 
   ngOnInit(): void {
-    var phrases = [
-      'Casi termina...',
-    ];
-  
+    var phrases = ['Casi termina...'];
+
     // Function to change the random phrase
     function changeRandomPhrase() {
       var randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
       document.getElementById('random-phrases')!.textContent = randomPhrase;
     }
-  
+
     // Call the function every 1 second
     setInterval(changeRandomPhrase, 2000);
   }
 
-  public nuevoGrupo = async()=>{
-    this.onCloseModal.emit()
+  public nuevoGrupo = async () => {
+    this.onCloseModal.emit();
     let data = {
-      nombre:this.nombre,
-      parcial:this.parcial,
-      icono:this.icono,
-      trato:this.trato,
-      otro:this.otro
-    }
-    await this.api.GuardarGrupo(data)
+      nombre: this.nombre,
+      parcial: this.parcial,
+      icono: this.icono,
+      trato: this.trato,
+      otro: this.otro,
+    };
+    await this.api.GuardarGrupo(data);
 
-    this.nombre = "";
+    this.nombre = '';
     this.parcial = 'false';
-    this.icono = "";
+    this.icono = '';
     this.trato = false;
+  };
 
+  verTrato(e: any) {
+    this.trato = e.checked;
   }
 
-  verTrato(e:any){
-    this.trato = e.checked
+  verOtro(e: any) {
+    this.otro = e.checked;
   }
 
-  verOtro(e:any){
-    this.otro = e.checked
-  }
-
-  cerrar(){
-    this.nombre = "";
+  cerrar() {
+    this.nombre = '';
     this.parcial = 'false';
-    this.icono = "";
+    this.icono = '';
 
-    this.onCloseModal.emit()
-
+    this.onCloseModal.emit();
   }
 
-  cerrar_(){
-    this.nombre = "";
+  cerrar_() {
+    this.nombre = '';
     this.parcial = 'false';
-    this.icono = "";
+    this.icono = '';
 
-    this.onCloseModal_.emit()
-
+    this.onCloseModal_.emit();
   }
 
-  EditarGrupo(){
+  EditarGrupo() {
     this.data.otro = this.otro;
     this.data.trato = this.trato;
-    this.api.EditarGrupo(this.data)
-    this.onCloseModal.emit()
+    this.api.EditarGrupo(this.data);
+    this.onCloseModal.emit();
   }
 
-
-  selectIcon(clase){
-    this.icono = clase
+  selectIcon(clase) {
+    this.icono = clase;
     this.nuevo = true;
     this.iconos_gallery = false;
   }
 
-  selectIcon_(clase){
-    this.data.icono = clase
+  selectIcon_(clase) {
+    this.data.icono = clase;
     this.editar = true;
     this.iconos_gallery_ = false;
   }
-
 }

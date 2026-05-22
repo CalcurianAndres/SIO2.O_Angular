@@ -4,61 +4,55 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-categorias',
-  standalone: false,templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.scss']
+  standalone: false,
+  templateUrl: './categorias.component.html',
+  styleUrls: ['./categorias.component.scss'],
 })
 export class CategoriasComponent {
-
-  constructor(public api:CategoriasService){
-
-  }
+  constructor(public api: CategoriasService) {}
 
   public data = {
-    nombre:''
-  }
-  public nueva:boolean = false;
-  public editar:boolean = false;
+    nombre: '',
+  };
+  public nueva: boolean = false;
+  public editar: boolean = false;
 
-  nuevaCategoria(){
+  nuevaCategoria() {
     this.nueva = true;
   }
 
-
-  cerrar(){
+  cerrar() {
     this.nueva = false;
     this.editar = false;
     this.data = {
-      nombre:''
-    }
+      nombre: '',
+    };
     setTimeout(() => {
       Swal.fire({
-        icon:this.api.mensaje.icon,
-        text:this.api.mensaje.mensaje,
-        timer:1500,
-        timerProgressBar:true,
-        toast:true,
-        position:'top-end',
-        showConfirmButton:false
-      })
+        icon: this.api.mensaje.icon,
+        text: this.api.mensaje.mensaje,
+        timer: 1500,
+        timerProgressBar: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+      });
     }, 1000);
   }
 
-  filas(){
-    return Math.ceil(this.api.categorias.length / 3)
+  filas() {
+    return Math.ceil(this.api.categorias.length / 3);
   }
 
-  verInfo(categoria){
+  verInfo(categoria) {}
 
-  }
-
-  editarInfo(categoria){
+  editarInfo(categoria) {
     this.editar = true;
-    this.data = categoria
+    this.data = categoria;
   }
 
-  eliminarCategori(categoria){
-    this.api.EliminarCategoria(categoria._id)
-    this.cerrar()
+  eliminarCategori(categoria) {
+    this.api.EliminarCategoria(categoria._id);
+    this.cerrar();
   }
-
 }

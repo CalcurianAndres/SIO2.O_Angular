@@ -16,32 +16,30 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: LaboratorioIndexComponent
+        component: LaboratorioIndexComponent,
       },
       {
         path: 'especificacion',
-        component: EspecificacionesComponent
+        component: EspecificacionesComponent,
       },
       {
         path: 'analisis',
-        component: AnalisisComponent
+        component: AnalisisComponent,
       },
       {
         path: 'defectos',
-        component: DefectosComponent
+        component: DefectosComponent,
       },
       {
         path: 'certificado',
-        component: CertificadoComponent
-      }
-    ]
-  }]
+        component: CertificadoComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class LaboratorioRoutingModule { }
+export class LaboratorioRoutingModule {}

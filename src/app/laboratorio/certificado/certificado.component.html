@@ -1,536 +1,640 @@
 <!-- Modal de Muestreo -->
-<div class="modal" [ngClass]="{'is-active': showModal}">
-    <div class="modal-background" (click)="showModal = false"></div>
-    <div class="modal-card" style="width: 99%;">
+<div class="modal" [ngClass]="{ 'is-active': showModal }">
+  <div class="modal-background" (click)="showModal = false"></div>
+  <div class="modal-card" style="width: 99%">
+    <header class="modal-card-head">
+      <p class="modal-card-title has-text-white">
+        <i class="fas fa-microscope mr-2"></i> OP: 2026001 - Cajita Feliz Genérica
+      </p>
+      <button class="delete" aria-label="close" (click)="showModal = false"></button>
+    </header>
 
-        <header class="modal-card-head">
-            <p class="modal-card-title has-text-white">
-                <i class="fas fa-microscope mr-2"></i> OP: 2026001 - Cajita Feliz Genérica
-            </p>
-            <button class="delete" aria-label="close" (click)="showModal = false"></button>
-        </header>
-
-        <section class="modal-card-body">
-            <div class="iso-dashboard">
-                <!-- Cabecera y Controles Iniciales -->
-                <div class="iso-panel">
-                    <div class="panel-header">
-                        <div class="brand">
-                            <i class="config-icon">📊</i>
-                            <div>
-                                <h2>Muestreo de producto terminado</h2>
-                            </div>
-                        </div>
-
-                        <button class="button is-info is-light" (click)="downloadPdf()" *ngIf="samplingPlan">
-                            <span>📄 Descargar Certificado</span>
-                        </button>
-                    </div>
-
-                    <div class="panel-controls">
-                        <!-- 1. Tamaño del Lote -->
-                        <div class="ctrl-group">
-                            <label>Tamaño del Lote</label>
-                            <input type="number" [(ngModel)]="lotSize" (input)="calculate()"
-                                placeholder="Cantidad total...">
-                        </div>
-
-                        <!-- 2. Nivel de Inspección -->
-                        <div class="ctrl-group">
-                            <label>Nivel Inspección</label>
-                            <select [(ngModel)]="selectedLevel" (change)="calculate()">
-                                <optgroup label="Generales">
-                                    <option value="I">Nivel I</option>
-                                    <option value="II">Nivel II</option>
-                                    <option value="III">Nivel III</option>
-                                </optgroup>
-                                <optgroup label="Especiales">
-                                    <option value="S1">S-1</option>
-                                    <option value="S2">S-2</option>
-                                    <option value="S3">S-3</option>
-                                    <option value="S4">S-4</option>
-                                </optgroup>
-                            </select>
-                        </div>
-
-                        <!-- 3. Severidad del Plan -->
-                        <div class="ctrl-group">
-                            <label>Severidad del Plan</label>
-                            <select [(ngModel)]="selectedSeverity" (change)="calculate()">
-                                <option value="normal">Normal (2-A)</option>
-                                <option value="rigurosa">Rigurosa (2-B)</option>
-                                <option value="reducida">Reducida (2-C)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+    <section class="modal-card-body">
+      <div class="iso-dashboard">
+        <!-- Cabecera y Controles Iniciales -->
+        <div class="iso-panel">
+          <div class="panel-header">
+            <div class="brand">
+              <i class="config-icon">📊</i>
+              <div>
+                <h2>Muestreo de producto terminado</h2>
+              </div>
             </div>
-            <br>
 
-            <!-- SECCIÓN DE MUESTREO Y CARGA FISICA -->
-            <div class="sampling-section animate__animated animate__fadeIn" *ngIf="samplingPlan">
-
-                <div class="level mb-2">
-                    <div class="level-left">
-                        <h3 class="title is-5 has-text-link">
-                            <i class="fas fa-clipboard-check mr-2"></i>Muestreo
-                        </h3>
-                    </div>
-                    <div class="level-right">
-                        <span class="tag is-info is-medium is-light">
-                            <b>n = {{ samplingPlan.sampleSize }}</b>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="progress-wrapper mb-5" style="position: relative;">
-                    <div class="is-flex is-justify-content-space-between is-size-7 mb-1">
-                        <span>Progreso: {{ currentProgress }} de {{ samplingPlan.sampleSize }}</span>
-                        <span class="has-text-weight-bold">
-                            {{ (currentProgress / samplingPlan.sampleSize * 100).toFixed(0) }}%
-                        </span>
-                    </div>
-                    <progress class="progress is-link custom-progress" [value]="currentProgress"
-                        [max]="samplingPlan.sampleSize" style="height: 12px; border-radius: 20px;">
-                    </progress>
-                </div>
-
-                <!-- CONTROL DE COLORES  -->
-                <div class="box p-4 border-light shadow-sm mb-5 has-background-white">
-                    <h4 class="title is-6 has-text-link mb-3">
-                        <i class="fas fa-palette mr-2"></i>Inspección visual de color (Estandar de color)
-                    </h4>
-
-                    <!-- Grid Dinámico de Colores -->
-                    <div class="columns is-multiline is-variable is-2">
-                        <div class="column is-4" *ngFor="let color of inkAnalysisList; let i = index">
-                            <div class="p-3 border-light shadow-sm"
-                                style="border-radius: 6px; background-color: #fafafa; border-left: 5px solid #4a4a4a;">
-
-                                <!-- Encabezado del Color -->
-                                <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
-                                    <span class="has-text-weight-bold is-size-7" style="letter-spacing: 0.5px;">
-                                        {{ color.name }}
-                                    </span>
-                                    <span class="tag is-small has-text-weight-bold"
-                                        [ngClass]="color.visualInspection ? 'is-success is-light' : 'is-danger is-light'">
-                                        {{ color.visualInspection ? 'CONFORME' : 'NO CONFORME' }}
-                                    </span>
-                                </div>
-
-                                <!-- Control de Inspección Visual -->
-                                <div class="field mb-0">
-                                    <label class="label is-size-7 mb-1 has-text-grey">Inspección Visual</label>
-                                    <div class="control">
-                                        <div class="select is-small is-fullwidth"
-                                            [ngClass]="color.visualInspection ? 'is-success' : 'is-danger'">
-                                            <select [(ngModel)]="color.visualInspection"
-                                                (change)="onColorStatusChange(i)">
-                                                <option [ngValue]="true">Cumple</option>
-                                                <option [ngValue]="false">No Cumple</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- Panel de Carga Dinámico (Limpio, sin defectos) -->
-                <div class="columns is-multiline">
-
-                    <!-- COLUMNA IZQUIERDA: BLOQUE DIMENSIONAL -->
-                    <div class="column is-12 is-6-desktop">
-                        <div class="box p-4 has-background-white-bis border-light shadow-sm" style="height: 100%;">
-                            <h4 class="title is-6 has-text-link mb-3">
-                                <i class="fas fa-ruler-combined mr-2"></i>1. Evaluación de Estándares de Calidad
-                            </h4>
-
-                            <div class="columns is-variable is-1 mb-2">
-                                <div class="column is-3">
-                                    <label class="label is-size-7">Muestra Eval.</label>
-                                    <input class="input is-small is-link has-text-weight-bold" type="number"
-                                        [(ngModel)]="burstQty">
-                                </div>
-                                <div class="column">
-                                    <label class="label is-size-7">Alto (540±1 cm)</label>
-                                    <div class="field has-addons">
-                                        <p class="control is-expanded"><input class="input is-small" type="number"
-                                                [(ngModel)]="tempAlto" [disabled]="flags.altoNA"></p>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.altoNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.altoNA = !flags.altoNA">N/A</button></p>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <label class="label is-size-7">Largo (894±1 cm)</label>
-                                    <div class="field has-addons">
-                                        <p class="control is-expanded"><input class="input is-small" type="number"
-                                                [(ngModel)]="tempLargo" [disabled]="flags.largoNA"></p>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.largoNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.largoNA = !flags.largoNA">N/A</button></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns is-variable is-1 mb-3">
-                                <div class="column">
-                                    <label class="label is-size-7">Ancho (cm)</label>
-                                    <div class="field has-addons">
-                                        <p class="control is-expanded"><input class="input is-small" type="number"
-                                                [(ngModel)]="tempAncho" [disabled]="flags.anchoNA"></p>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.anchoNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.anchoNA = !flags.anchoNA">N/A</button></p>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <label class="label is-size-7">Barniz (15±1 cm)</label>
-                                    <div class="field has-addons">
-                                        <p class="control is-expanded"><input class="input is-small" type="number"
-                                                [(ngModel)]="tempBarniz" [disabled]="flags.barnizNA"></p>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.barnizNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.barnizNA = !flags.barnizNA">N/A</button></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns is-variable is-1 is-align-items-flex-end mb-3">
-                                <div class="column">
-                                    <label class="label is-size-7">Cód. Barra</label>
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <div class="select is-small is-fullwidth">
-                                                <select [(ngModel)]="tempCodBarras" [disabled]="flags.codBarrasNA">
-                                                    <option [ngValue]="true">Cumple</option>
-                                                    <option [ngValue]="false">No Cumple</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.codBarrasNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.codBarrasNA = !flags.codBarrasNA">N/A</button></p>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <label class="label is-size-7">Imagen/Texto</label>
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <div class="select is-small is-fullwidth">
-                                                <select [(ngModel)]="tempImgTexto" [disabled]="flags.imgTextoNA">
-                                                    <option [ngValue]="true">Cumple</option>
-                                                    <option [ngValue]="false">No Cumple</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.imgTextoNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.imgTextoNA = !flags.imgTextoNA">N/A</button></p>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <label class="label is-size-7">Troquel/Corte</label>
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <div class="select is-small is-fullwidth">
-                                                <select [(ngModel)]="tempCorte" [disabled]="flags.corteNA">
-                                                    <option [ngValue]="true">Cumple</option>
-                                                    <option [ngValue]="false">No Cumple</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <p class="control"><button class="button is-small"
-                                                [ngClass]="flags.corteNA ? 'is-warning' : 'is-light'"
-                                                (click)="flags.corteNA = !flags.corteNA">N/A</button></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button class="button is-link is-small is-fullwidth" (click)="addSampleBurst()"
-                                [disabled]="!burstQty || burstQty <= 0">
-                                <i class="fas fa-plus mr-2"></i> Registrar Medición de Muestra
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- COLUMNA DERECHA: BLOQUE DE DEFECTOS -->
-                    <div class="column is-12 is-6-desktop">
-                        <div class="box p-4 has-background-white border-light shadow-sm" style="height: 100%;">
-                            <h4 class="title is-6 has-text-danger mb-3">
-                                <i class="fas fa-exclamation-circle mr-2"></i>2. Registro de Defectos
-                            </h4>
-
-                            <div class="field mb-2">
-                                <label class="label is-size-7">Seleccionar Defecto Especificado</label>
-                                <div class="select is-small is-fullwidth is-danger">
-                                    <select [(ngModel)]="selectedDefect">
-                                        <option [ngValue]="null">-- Seleccione el hallazgo detectado --</option>
-                                        <optgroup label="Defectos Críticos">
-                                            <option *ngFor="let d of defectos.criticos.defectos"
-                                                [ngValue]="{tipo: 'criticos', nombre: d}">⚠️ {{ d }}</option>
-                                        </optgroup>
-                                        <optgroup label="Defectos Mayores">
-                                            <option *ngFor="let d of defectos.mayores.defectos"
-                                                [ngValue]="{tipo: 'mayores', nombre: d}">🔸 {{ d }}</option>
-                                        </optgroup>
-                                        <optgroup label="Defectos Menores">
-                                            <option *ngFor="let d of defectos.menores.defectos"
-                                                [ngValue]="{tipo: 'menores', nombre: d}">🔹 {{ d }}</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="columns is-variable is-1 mb-2">
-                                <div class="column is-4">
-                                    <label class="label is-size-7">Cant. Defectuosa</label>
-                                    <input class="input is-small is-danger has-text-weight-bold" type="number"
-                                        [(ngModel)]="defectQty">
-                                </div>
-                                <div class="column is-8">
-                                    <label class="label is-size-7">Observaciones / Detalles del Defecto</label>
-                                    <input class="input is-small" type="text"
-                                        placeholder="Ej: El producto se encuentra roto"
-                                        [(ngModel)]="tempShortDescription">
-                                </div>
-                            </div>
-
-                            <button class="button is-danger is-small is-fullwidth mb-3" (click)="addDefect()"
-                                [disabled]="!defectQty || !selectedDefect">
-                                <i class="fas fa-bug mr-2"></i> Reportar Defecto Encontrado
-                            </button>
-
-                            <!-- Banners de Contadores Inferiores Integrados en la Caja -->
-                            <div class="columns is-mobile has-text-centered g-1 mt-2">
-                                <div class="column p-1">
-                                    <div class="notification p-2"
-                                        [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'has-background-white-bis'">
-                                        <p class="is-size-7 mb-0">Crit.</p>
-                                        <p class="title is-6 mb-0">{{stats.criticos}}/{{limits.criticos.re}}</p>
-                                    </div>
-                                </div>
-                                <div class="column p-1">
-                                    <div class="notification p-2"
-                                        [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'has-background-white-bis'">
-                                        <p class="is-size-7 mb-0">May.</p>
-                                        <p class="title is-6 mb-0">{{stats.mayores}}/{{limits.mayores.re}}</p>
-                                    </div>
-                                </div>
-                                <div class="column p-1">
-                                    <div class="notification p-2"
-                                        [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'has-background-white-bis'">
-                                        <p class="is-size-7 mb-0">Men.</p>
-                                        <p class="title is-6 mb-0">{{stats.menores}}/{{limits.menores.re}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- SECCIÓN DE TABLAS: DOS TABLAS INDEPENDIENTES ABAJO -->
-                <div class="columns mt-4">
-
-                    <!-- HISTORIAL DE DIMENSIONES -->
-                    <div class="column is-12 is-7-desktop">
-                        <h5 class="title is-6 has-text-grey"><i class="fas fa-history mr-2"></i>Historial de Mediciones
-                            Físicas</h5>
-                        <div class="table-container shadow-sm border-light"
-                            style="border-radius: 6px; max-height: 300px; overflow-y: auto;">
-                            <table class="table is-fullwidth is-striped is-narrow is-size-7">
-                                <thead class="has-background-link-dark">
-                                    <tr>
-                                        <th class="has-text-white has-text-centered">Cant.</th>
-                                        <th class="has-text-white has-text-centered">Alto</th>
-                                        <th class="has-text-white has-text-centered">Largo</th>
-                                        <th class="has-text-white has-text-centered">Ancho</th>
-                                        <th class="has-text-white has-text-centered">Barniz</th>
-                                        <th class="has-text-white has-text-centered">Cód.B</th>
-                                        <th class="has-text-white has-text-centered">Img/Txt</th>
-                                        <th class="has-text-white has-text-centered">Troquel</th>
-                                        <th class="has-text-white has-text-centered">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let b of burstHistory; let i = index">
-                                        <td class="has-text-weight-bold has-text-centered">{{ b.qty }}</td>
-                                        <td class="has-text-centered">{{ b.alto }}</td>
-                                        <td class="has-text-centered">{{ b.largo }}</td>
-                                        <td class="has-text-centered">{{ b.ancho }}</td>
-                                        <td class="has-text-centered">{{ b.barniz }}</td>
-                                        <td class="has-text-centered"><span class="tag is-xsmall"
-                                                [ngClass]="b.vCod === 'C' ? 'is-success' : (b.vCod === 'NC' ? 'is-danger' : 'is-warning')">{{
-                                                b.vCod }}</span></td>
-                                        <td class="has-text-centered"><span class="tag is-xsmall"
-                                                [ngClass]="b.vImg === 'C' ? 'is-success' : (b.vImg === 'NC' ? 'is-danger' : 'is-warning')">{{
-                                                b.vImg }}</span></td>
-                                        <td class="has-text-centered"><span class="tag is-xsmall"
-                                                [ngClass]="b.vCor === 'C' ? 'is-success' : (b.vCor === 'NC' ? 'is-danger' : 'is-warning')">{{
-                                                b.vCor }}</span></td>
-                                        <td class="has-text-centered">
-                                            <button class="button is-danger is-small is-light p-1"
-                                                (click)="removeBurst(i)"><i class="fas fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="burstHistory.length === 0">
-                                        <td colspan="9" class="has-text-centered has-text-grey-light py-4">No hay
-                                            mediciones registradas en este lote.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- HISTORIAL DE DEFECTOS -->
-                    <div class="column is-12 is-5-desktop">
-                        <h5 class="title is-6 has-text-grey"><i class="fas fa-bug mr-2"></i>Registro de Defectos en
-                            Muestra</h5>
-                        <div class="table-container shadow-sm border-light"
-                            style="border-radius: 6px; max-height: 300px; overflow-y: auto;">
-                            <table class="table is-fullwidth is-striped is-narrow is-size-7">
-                                <thead class="has-background-danger-dark">
-                                    <tr>
-                                        <th class="has-text-white has-text-centered">Cant</th>
-                                        <th class="has-text-white">Defecto Detectado</th>
-                                        <th class="has-text-white has-text-centered">Criticidad</th>
-                                        <th class="has-text-white has-text-centered">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let d of defectHistory; let i = index">
-                                        <td class="has-text-centered has-text-weight-bold has-text-danger">{{ d.qty }}
-                                        </td>
-                                        <td>
-                                            <strong>{{ d.defecto }}</strong>
-                                            <div class="is-size-7 has-text-grey">{{ d.descripcion }}</div>
-                                        </td>
-                                        <td class="has-text-centered">
-                                            <span class="tag is-small is-uppercase"
-                                                [ngClass]="{'is-danger': d.tipo==='criticos', 'is-warning': d.tipo==='mayores', 'is-info': d.tipo==='menores'}">
-                                                {{ d.tipo }}
-                                            </span>
-                                        </td>
-                                        <td class="has-text-centered">
-                                            <button class="button is-danger is-small is-light p-1"
-                                                (click)="removeDefect(i)"><i class="fas fa-trash-alt"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="defectHistory.length === 0">
-                                        <td colspan="4" class="has-text-centered has-text-grey-light py-4">Sin novedades
-                                            de defectos físicos reportados.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        <footer class="modal-card-foot is-justify-content-flex-end">
-            <button class="button is-success" (click)="showModal = false"
-                [disabled]="currentProgress < samplingPlan?.sampleSize">
-                Finalizar y Guardar
+            <button class="button is-info is-light" (click)="downloadPdf()" *ngIf="samplingPlan">
+              <span>📄 Descargar Certificado</span>
             </button>
-            <button class="button" (click)="showModal = false">Cerrar</button>
-        </footer>
-    </div>
-</div>
+          </div>
 
-<div class="container_ mt-5 ">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                    <h1 class="title blancas">
-                        Certificados de calidad
-                    </h1>
-                    <h2 class="subtitle blancas">
-                        Descripción
-                    </h2>
-                </div>
+          <div class="panel-controls">
+            <!-- 1. Tamaño del Lote -->
+            <div class="ctrl-group">
+              <label>Tamaño del Lote</label>
+              <input type="number" [(ngModel)]="lotSize" (input)="calculate()" placeholder="Cantidad total..." />
             </div>
-            <br>
-            <div class="orders-container" style="padding: 1rem;">
-                <div class="box"
-                    style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; padding: 0;">
 
-                    <table class="table is-fullwidth is-hoverable" style="margin-bottom: 0;">
-                        <thead>
-                            <tr style="background-color: #f7fafc;">
-                                <th
-                                    style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%;">
-                                    Número de OP</th>
-                                <th
-                                    style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase;">
-                                    Producto</th>
-                                <th class="has-text-centered"
-                                    style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%;">
-                                    Cantidad</th>
-                                <th class="has-text-right"
-                                    style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 20%;">
-                                    Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Iteramos directamente sobre una lista plana de OPs individuales -->
-                            <tr *ngFor="let op of [
-                    { opNumero: '2026001', nombre: 'Cajita Feliz Genérica', cantidad: 1, fecha: '2026-04-30T14:12:00' },
-                    { opNumero: '2026002', nombre: 'Cajita Feliz Genérica', cantidad: 5, fecha: '2026-04-30T16:12:00' }
-                ]; let i = index" (click)="showModal = true" class="is-clickable" title="Click para iniciar muestreo"
-                                style="transition: background-color 0.2s ease;">
-
-                                <!-- 1. Número de Orden y Fecha -->
-                                <td style="padding: 1.25rem; vertical-align: middle;">
-                                    <div style="display: flex; flex-direction: column;">
-                                        <span style="font-weight: 700; color: #1a202c; font-size: 1.05rem;">{{
-                                            op.opNumero }}</span>
-                                        <span style="font-size: 0.75rem; color: #a0aec0; margin-top: 0.25rem;">
-                                            {{ op.fecha | date:'dd/MM/yyyy HH:mm' }}
-                                        </span>
-                                    </div>
-                                </td>
-
-                                <!-- 2. Producto -->
-                                <td style="padding: 1.25rem; vertical-align: middle;">
-                                    <span style="font-weight: 600; color: #2d3748; font-size: 1rem;">
-                                        {{ op.nombre }}
-                                    </span>
-                                </td>
-
-                                <!-- 3. Cantidad Individual -->
-                                <td class="has-text-centered" style="padding: 1.25rem; vertical-align: middle;">
-                                    <span class="tag is-normal"
-                                        style="font-size: 1.1rem; font-weight: 700; background-color: #edf2f7; color: #2d3748; padding: 0.5rem 0.75rem; border-radius: 6px;">
-                                        {{ op.cantidad | number }}
-                                    </span>
-                                </td>
-
-                                <!-- 4. Acción Directa -->
-                                <td class="has-text-right" style="padding: 1.25rem; vertical-align: middle;">
-                                    <button class="button is-link is-light"
-                                        style="font-weight: 600; border-radius: 8px;">
-                                        <span class="icon is-small">
-                                            <svg style="width:14px; height:14px" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                                            </svg>
-                                        </span>
-                                        <span>Iniciar Muestreo</span>
-                                    </button>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
+            <!-- 2. Nivel de Inspección -->
+            <div class="ctrl-group">
+              <label>Nivel Inspección</label>
+              <select [(ngModel)]="selectedLevel" (change)="calculate()">
+                <optgroup label="Generales">
+                  <option value="I">Nivel I</option>
+                  <option value="II">Nivel II</option>
+                  <option value="III">Nivel III</option>
+                </optgroup>
+                <optgroup label="Especiales">
+                  <option value="S1">S-1</option>
+                  <option value="S2">S-2</option>
+                  <option value="S3">S-3</option>
+                  <option value="S4">S-4</option>
+                </optgroup>
+              </select>
             </div>
+
+            <!-- 3. Severidad del Plan -->
+            <div class="ctrl-group">
+              <label>Severidad del Plan</label>
+              <select [(ngModel)]="selectedSeverity" (change)="calculate()">
+                <option value="normal">Normal (2-A)</option>
+                <option value="rigurosa">Rigurosa (2-B)</option>
+                <option value="reducida">Reducida (2-C)</option>
+              </select>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+      <br />
+
+      <!-- SECCIÓN DE MUESTREO Y CARGA FISICA -->
+      <div class="sampling-section animate__animated animate__fadeIn" *ngIf="samplingPlan">
+        <div class="level mb-2">
+          <div class="level-left">
+            <h3 class="title is-5 has-text-link"><i class="fas fa-clipboard-check mr-2"></i>Muestreo</h3>
+          </div>
+          <div class="level-right">
+            <span class="tag is-info is-medium is-light">
+              <b>n = {{ samplingPlan.sampleSize }}</b>
+            </span>
+          </div>
+        </div>
+
+        <div class="progress-wrapper mb-5" style="position: relative">
+          <div class="is-flex is-justify-content-space-between is-size-7 mb-1">
+            <span>Progreso: {{ currentProgress }} de {{ samplingPlan.sampleSize }}</span>
+            <span class="has-text-weight-bold">
+              {{ ((currentProgress / samplingPlan.sampleSize) * 100).toFixed(0) }}%
+            </span>
+          </div>
+          <progress
+            class="progress is-link custom-progress"
+            [value]="currentProgress"
+            [max]="samplingPlan.sampleSize"
+            style="height: 12px; border-radius: 20px"
+          ></progress>
+        </div>
+
+        <!-- CONTROL DE COLORES  -->
+        <div class="box p-4 border-light shadow-sm mb-5 has-background-white">
+          <h4 class="title is-6 has-text-link mb-3">
+            <i class="fas fa-palette mr-2"></i>Inspección visual de color (Estandar de color)
+          </h4>
+
+          <!-- Grid Dinámico de Colores -->
+          <div class="columns is-multiline is-variable is-2">
+            <div class="column is-4" *ngFor="let color of inkAnalysisList; let i = index">
+              <div
+                class="p-3 border-light shadow-sm"
+                style="border-radius: 6px; background-color: #fafafa; border-left: 5px solid #4a4a4a"
+              >
+                <!-- Encabezado del Color -->
+                <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
+                  <span class="has-text-weight-bold is-size-7" style="letter-spacing: 0.5px">
+                    {{ color.name }}
+                  </span>
+                  <span
+                    class="tag is-small has-text-weight-bold"
+                    [ngClass]="color.visualInspection ? 'is-success is-light' : 'is-danger is-light'"
+                  >
+                    {{ color.visualInspection ? 'CONFORME' : 'NO CONFORME' }}
+                  </span>
+                </div>
+
+                <!-- Control de Inspección Visual -->
+                <div class="field mb-0">
+                  <label class="label is-size-7 mb-1 has-text-grey">Inspección Visual</label>
+                  <div class="control">
+                    <div
+                      class="select is-small is-fullwidth"
+                      [ngClass]="color.visualInspection ? 'is-success' : 'is-danger'"
+                    >
+                      <select [(ngModel)]="color.visualInspection" (change)="onColorStatusChange(i)">
+                        <option [ngValue]="true">Cumple</option>
+                        <option [ngValue]="false">No Cumple</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Panel de Carga Dinámico (Limpio, sin defectos) -->
+        <div class="columns is-multiline">
+          <!-- COLUMNA IZQUIERDA: BLOQUE DIMENSIONAL -->
+          <div class="column is-12 is-6-desktop">
+            <div class="box p-4 has-background-white-bis border-light shadow-sm" style="height: 100%">
+              <h4 class="title is-6 has-text-link mb-3">
+                <i class="fas fa-ruler-combined mr-2"></i>1. Evaluación de Estándares de Calidad
+              </h4>
+
+              <div class="columns is-variable is-1 mb-2">
+                <div class="column is-3">
+                  <label class="label is-size-7">Muestra Eval.</label>
+                  <input class="input is-small is-link has-text-weight-bold" type="number" [(ngModel)]="burstQty" />
+                </div>
+                <div class="column">
+                  <label class="label is-size-7">Alto (540±1 cm)</label>
+                  <div class="field has-addons">
+                    <p class="control is-expanded">
+                      <input class="input is-small" type="number" [(ngModel)]="tempAlto" [disabled]="flags.altoNA" />
+                    </p>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.altoNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.altoNA = !flags.altoNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+                <div class="column">
+                  <label class="label is-size-7">Largo (894±1 cm)</label>
+                  <div class="field has-addons">
+                    <p class="control is-expanded">
+                      <input class="input is-small" type="number" [(ngModel)]="tempLargo" [disabled]="flags.largoNA" />
+                    </p>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.largoNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.largoNA = !flags.largoNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="columns is-variable is-1 mb-3">
+                <div class="column">
+                  <label class="label is-size-7">Ancho (cm)</label>
+                  <div class="field has-addons">
+                    <p class="control is-expanded">
+                      <input class="input is-small" type="number" [(ngModel)]="tempAncho" [disabled]="flags.anchoNA" />
+                    </p>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.anchoNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.anchoNA = !flags.anchoNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+                <div class="column">
+                  <label class="label is-size-7">Barniz (15±1 cm)</label>
+                  <div class="field has-addons">
+                    <p class="control is-expanded">
+                      <input
+                        class="input is-small"
+                        type="number"
+                        [(ngModel)]="tempBarniz"
+                        [disabled]="flags.barnizNA"
+                      />
+                    </p>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.barnizNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.barnizNA = !flags.barnizNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="columns is-variable is-1 is-align-items-flex-end mb-3">
+                <div class="column">
+                  <label class="label is-size-7">Cód. Barra</label>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-small is-fullwidth">
+                        <select [(ngModel)]="tempCodBarras" [disabled]="flags.codBarrasNA">
+                          <option [ngValue]="true">Cumple</option>
+                          <option [ngValue]="false">No Cumple</option>
+                        </select>
+                      </div>
+                    </div>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.codBarrasNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.codBarrasNA = !flags.codBarrasNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+                <div class="column">
+                  <label class="label is-size-7">Imagen/Texto</label>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-small is-fullwidth">
+                        <select [(ngModel)]="tempImgTexto" [disabled]="flags.imgTextoNA">
+                          <option [ngValue]="true">Cumple</option>
+                          <option [ngValue]="false">No Cumple</option>
+                        </select>
+                      </div>
+                    </div>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.imgTextoNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.imgTextoNA = !flags.imgTextoNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+                <div class="column">
+                  <label class="label is-size-7">Troquel/Corte</label>
+                  <div class="field has-addons">
+                    <div class="control is-expanded">
+                      <div class="select is-small is-fullwidth">
+                        <select [(ngModel)]="tempCorte" [disabled]="flags.corteNA">
+                          <option [ngValue]="true">Cumple</option>
+                          <option [ngValue]="false">No Cumple</option>
+                        </select>
+                      </div>
+                    </div>
+                    <p class="control">
+                      <button
+                        class="button is-small"
+                        [ngClass]="flags.corteNA ? 'is-warning' : 'is-light'"
+                        (click)="flags.corteNA = !flags.corteNA"
+                      >
+                        N/A
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="button is-link is-small is-fullwidth"
+                (click)="addSampleBurst()"
+                [disabled]="!burstQty || burstQty <= 0"
+              >
+                <i class="fas fa-plus mr-2"></i> Registrar Medición de Muestra
+              </button>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: BLOQUE DE DEFECTOS -->
+          <div class="column is-12 is-6-desktop">
+            <div class="box p-4 has-background-white border-light shadow-sm" style="height: 100%">
+              <h4 class="title is-6 has-text-danger mb-3">
+                <i class="fas fa-exclamation-circle mr-2"></i>2. Registro de Defectos
+              </h4>
+
+              <div class="field mb-2">
+                <label class="label is-size-7">Seleccionar Defecto Especificado</label>
+                <div class="select is-small is-fullwidth is-danger">
+                  <select [(ngModel)]="selectedDefect">
+                    <option [ngValue]="null">-- Seleccione el hallazgo detectado --</option>
+                    <optgroup label="Defectos Críticos">
+                      <option *ngFor="let d of defectos.criticos.defectos" [ngValue]="{ tipo: 'criticos', nombre: d }">
+                        ⚠️ {{ d }}
+                      </option>
+                    </optgroup>
+                    <optgroup label="Defectos Mayores">
+                      <option *ngFor="let d of defectos.mayores.defectos" [ngValue]="{ tipo: 'mayores', nombre: d }">
+                        🔸 {{ d }}
+                      </option>
+                    </optgroup>
+                    <optgroup label="Defectos Menores">
+                      <option *ngFor="let d of defectos.menores.defectos" [ngValue]="{ tipo: 'menores', nombre: d }">
+                        🔹 {{ d }}
+                      </option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="columns is-variable is-1 mb-2">
+                <div class="column is-4">
+                  <label class="label is-size-7">Cant. Defectuosa</label>
+                  <input class="input is-small is-danger has-text-weight-bold" type="number" [(ngModel)]="defectQty" />
+                </div>
+                <div class="column is-8">
+                  <label class="label is-size-7">Observaciones / Detalles del Defecto</label>
+                  <input
+                    class="input is-small"
+                    type="text"
+                    placeholder="Ej: El producto se encuentra roto"
+                    [(ngModel)]="tempShortDescription"
+                  />
+                </div>
+              </div>
+
+              <button
+                class="button is-danger is-small is-fullwidth mb-3"
+                (click)="addDefect()"
+                [disabled]="!defectQty || !selectedDefect"
+              >
+                <i class="fas fa-bug mr-2"></i> Reportar Defecto Encontrado
+              </button>
+
+              <!-- Banners de Contadores Inferiores Integrados en la Caja -->
+              <div class="columns is-mobile has-text-centered g-1 mt-2">
+                <div class="column p-1">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'has-background-white-bis'"
+                  >
+                    <p class="is-size-7 mb-0">Crit.</p>
+                    <p class="title is-6 mb-0">{{ stats.criticos }}/{{ limits.criticos.re }}</p>
+                  </div>
+                </div>
+                <div class="column p-1">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'has-background-white-bis'"
+                  >
+                    <p class="is-size-7 mb-0">May.</p>
+                    <p class="title is-6 mb-0">{{ stats.mayores }}/{{ limits.mayores.re }}</p>
+                  </div>
+                </div>
+                <div class="column p-1">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'has-background-white-bis'"
+                  >
+                    <p class="is-size-7 mb-0">Men.</p>
+                    <p class="title is-6 mb-0">{{ stats.menores }}/{{ limits.menores.re }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN DE TABLAS: DOS TABLAS INDEPENDIENTES ABAJO -->
+        <div class="columns mt-4">
+          <!-- HISTORIAL DE DIMENSIONES -->
+          <div class="column is-12 is-7-desktop">
+            <h5 class="title is-6 has-text-grey"><i class="fas fa-history mr-2"></i>Historial de Mediciones Físicas</h5>
+            <div
+              class="table-container shadow-sm border-light"
+              style="border-radius: 6px; max-height: 300px; overflow-y: auto"
+            >
+              <table class="table is-fullwidth is-striped is-narrow is-size-7">
+                <thead class="has-background-link-dark">
+                  <tr>
+                    <th class="has-text-white has-text-centered">Cant.</th>
+                    <th class="has-text-white has-text-centered">Alto</th>
+                    <th class="has-text-white has-text-centered">Largo</th>
+                    <th class="has-text-white has-text-centered">Ancho</th>
+                    <th class="has-text-white has-text-centered">Barniz</th>
+                    <th class="has-text-white has-text-centered">Cód.B</th>
+                    <th class="has-text-white has-text-centered">Img/Txt</th>
+                    <th class="has-text-white has-text-centered">Troquel</th>
+                    <th class="has-text-white has-text-centered">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let b of burstHistory; let i = index">
+                    <td class="has-text-weight-bold has-text-centered">{{ b.qty }}</td>
+                    <td class="has-text-centered">{{ b.alto }}</td>
+                    <td class="has-text-centered">{{ b.largo }}</td>
+                    <td class="has-text-centered">{{ b.ancho }}</td>
+                    <td class="has-text-centered">{{ b.barniz }}</td>
+                    <td class="has-text-centered">
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vCod === 'C' ? 'is-success' : b.vCod === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vCod }}</span
+                      >
+                    </td>
+                    <td class="has-text-centered">
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vImg === 'C' ? 'is-success' : b.vImg === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vImg }}</span
+                      >
+                    </td>
+                    <td class="has-text-centered">
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vCor === 'C' ? 'is-success' : b.vCor === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vCor }}</span
+                      >
+                    </td>
+                    <td class="has-text-centered">
+                      <button class="button is-danger is-small is-light p-1" (click)="removeBurst(i)">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="burstHistory.length === 0">
+                    <td colspan="9" class="has-text-centered has-text-grey-light py-4">
+                      No hay mediciones registradas en este lote.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- HISTORIAL DE DEFECTOS -->
+          <div class="column is-12 is-5-desktop">
+            <h5 class="title is-6 has-text-grey"><i class="fas fa-bug mr-2"></i>Registro de Defectos en Muestra</h5>
+            <div
+              class="table-container shadow-sm border-light"
+              style="border-radius: 6px; max-height: 300px; overflow-y: auto"
+            >
+              <table class="table is-fullwidth is-striped is-narrow is-size-7">
+                <thead class="has-background-danger-dark">
+                  <tr>
+                    <th class="has-text-white has-text-centered">Cant</th>
+                    <th class="has-text-white">Defecto Detectado</th>
+                    <th class="has-text-white has-text-centered">Criticidad</th>
+                    <th class="has-text-white has-text-centered">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let d of defectHistory; let i = index">
+                    <td class="has-text-centered has-text-weight-bold has-text-danger">{{ d.qty }}</td>
+                    <td>
+                      <strong>{{ d.defecto }}</strong>
+                      <div class="is-size-7 has-text-grey">{{ d.descripcion }}</div>
+                    </td>
+                    <td class="has-text-centered">
+                      <span
+                        class="tag is-small is-uppercase"
+                        [ngClass]="{
+                          'is-danger': d.tipo === 'criticos',
+                          'is-warning': d.tipo === 'mayores',
+                          'is-info': d.tipo === 'menores'
+                        }"
+                      >
+                        {{ d.tipo }}
+                      </span>
+                    </td>
+                    <td class="has-text-centered">
+                      <button class="button is-danger is-small is-light p-1" (click)="removeDefect(i)">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="defectHistory.length === 0">
+                    <td colspan="4" class="has-text-centered has-text-grey-light py-4">
+                      Sin novedades de defectos físicos reportados.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot is-justify-content-flex-end">
+      <button
+        class="button is-success"
+        (click)="showModal = false"
+        [disabled]="currentProgress < samplingPlan?.sampleSize"
+      >
+        Finalizar y Guardar
+      </button>
+      <button class="button" (click)="showModal = false">Cerrar</button>
+    </footer>
+  </div>
 </div>
+
+<app-page-layout>
+  <app-section-header title="Certificados de calidad" description="Generación de certificados de análisis" icon="fa-flask" color="red"></app-section-header>
+  <br />
+  <div class="orders-container" style="padding: 1rem">
+    <div
+      class="box"
+      style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); overflow: hidden; padding: 0"
+    >
+      <table class="table is-fullwidth is-hoverable" style="margin-bottom: 0">
+        <thead>
+          <tr style="background-color: #f7fafc">
+            <th
+              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%"
+            >
+              Número de OP
+            </th>
+            <th style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase">
+              Producto
+            </th>
+            <th
+              class="has-text-centered"
+              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%"
+            >
+              Cantidad
+            </th>
+            <th
+              class="has-text-right"
+              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 20%"
+            >
+              Acción
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Iteramos directamente sobre una lista plana de OPs individuales -->
+          <tr
+            *ngFor="
+              let op of [
+                { opNumero: '2026001', nombre: 'Cajita Feliz Genérica', cantidad: 1, fecha: '2026-04-30T14:12:00' },
+                { opNumero: '2026002', nombre: 'Cajita Feliz Genérica', cantidad: 5, fecha: '2026-04-30T16:12:00' }
+              ];
+              let i = index
+            "
+            (click)="showModal = true"
+            class="is-clickable"
+            title="Click para iniciar muestreo"
+            style="transition: background-color 0.2s ease"
+          >
+            <!-- 1. Número de Orden y Fecha -->
+            <td style="padding: 1.25rem; vertical-align: middle">
+              <div style="display: flex; flex-direction: column">
+                <span style="font-weight: 700; color: #1a202c; font-size: 1.05rem">{{ op.opNumero }}</span>
+                <span style="font-size: 0.75rem; color: #a0aec0; margin-top: 0.25rem">
+                  {{ op.fecha | date: 'dd/MM/yyyy HH:mm' }}
+                </span>
+              </div>
+            </td>
+
+            <!-- 2. Producto -->
+            <td style="padding: 1.25rem; vertical-align: middle">
+              <span style="font-weight: 600; color: #2d3748; font-size: 1rem">
+                {{ op.nombre }}
+              </span>
+            </td>
+
+            <!-- 3. Cantidad Individual -->
+            <td class="has-text-centered" style="padding: 1.25rem; vertical-align: middle">
+              <span
+                class="tag is-normal"
+                style="
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  background-color: #edf2f7;
+                  color: #2d3748;
+                  padding: 0.5rem 0.75rem;
+                  border-radius: 6px;
+                "
+              >
+                {{ op.cantidad | number }}
+              </span>
+            </td>
+
+            <!-- 4. Acción Directa -->
+            <td class="has-text-right" style="padding: 1.25rem; vertical-align: middle">
+              <button class="button is-link is-light" style="font-weight: 600; border-radius: 8px">
+                <span class="icon is-small">
+                  <svg
+                    style="width: 14px; height: 14px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </span>
+                <span>Iniciar Muestreo</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page-layout>

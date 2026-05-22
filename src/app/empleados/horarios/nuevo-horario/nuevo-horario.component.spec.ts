@@ -8,7 +8,7 @@ describe('NuevoHorarioComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NuevoHorarioComponent]
+      declarations: [NuevoHorarioComponent],
     });
     fixture = TestBed.createComponent(NuevoHorarioComponent);
     component = fixture.componentInstance;

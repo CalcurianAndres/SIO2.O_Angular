@@ -1,116 +1,125 @@
-<div class="modal" [ngClass]="{'is-active':registro_}">
+<div class="modal" [ngClass]="{ 'is-active': registro_ }">
   <div class="modal-background"></div>
-  <div class="modal-card" style="width: 90%;">
+  <div class="modal-card" style="width: 90%">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">
-          Registro
-      </p>
+      <p class="modal-card-title fuente">Registro</p>
       <button class="delete red_cross" aria-label="close" (click)="registro_ = false; Inventario = true"></button>
-  </div>
-  <div class="modal-card-body">
-    <table class="table is-fullwidth is-striped">
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Usuario</th>
-          <th>Lote</th>
-          <th>Código</th>
-          <th>Entrada</th>
-          <th>Salida</th>
-          <th>Final</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let registro of registro">
-          <td>{{registro.fecha}}</td>
-          <td>{{registro.usuario}}</td>
-          <td>{{registro.producto.lote}}</td>
-          <td>{{registro.producto.codigo}}</td>
-          <td>{{registro.entrada}}</td>
-          <td>{{registro.salida}} {{registro.producto.unidad}}</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    </div>
+    <div class="modal-card-body">
+      <table class="table is-fullwidth is-striped">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Lote</th>
+            <th>Código</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Final</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let registro of registro">
+            <td>{{ registro.fecha }}</td>
+            <td>{{ registro.usuario }}</td>
+            <td>{{ registro.producto.lote }}</td>
+            <td>{{ registro.producto.codigo }}</td>
+            <td>{{ registro.entrada }}</td>
+            <td>{{ registro.salida }} {{ registro.producto.unidad }}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<div class="modal" [ngClass]="{'is-active':Inventario}">
-    <div class="modal-background"></div>
-    <div class="modal-card long animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Inventario
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-          <div *ngFor="let material_ of agrupadoMateriales;index as n">
-            <div class="card">
-              <div class="card-header dark">
-                <div class="card-header-title">
-                  <span class="icon" style="color: rgb(83, 167, 224); cursor: pointer;" (click)="buscarRegistro(material_)"><i class="fas fa-info-circle"></i></span> {{material_.nombre}} - Total: {{ totalizarPorNombre(material_) }} {{ material_.materialesPorId[0].unidad }}(s)
-                  <span class="angle_icon_span" (click)="showInfo__(n)" [ngClass]="{'clicked':clicked__[n]}"><i class="fas fa-angle-down"></i></span>
-                </div>
-              </div>
-              <div class="card-content" [ngClass]="{'hidden': !clicked__[n], 'show': clicked__[n]}">
-                <div *ngFor="let material of material_.materialesPorId;index as i">
-                    <div class="card">
-                        <div class="card-header dark">
-                            <div class="card-header-title">
-                                {{ material.nombre }} ({{material.marca}}): {{ material.netoTotal }} {{ material.unidad }}(s)
-                                <span class="angle_icon_span" (click)="showInfo_(i)" [ngClass]="{'clicked':clicked_[i]}"><i class="fas fa-angle-down"></i></span>
-                            </div>
-                        </div>
-                        <div class="card-content" [ngClass]="{'hidden': !clicked_[i], 'show': clicked_[i]}">
-                            <table class="table is-fullwidth">
-                                <thead>
-                                  <tr>
-                                    <th>Lote</th>
-                                    <th>Total ({{ material.unidad }})</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                    <ng-container *ngFor="let lote of (material.lotes | keyvalue);index as index">
-                                        <tr>
-                                          <th>{{ lote.key }}</th>
-                                          <td>{{totalizar(lote.value)}}</td>
-                                          <span class="angle_icon_span" (click)="showInfo(index)" [ngClass]="{'clicked':clicked[index]}"><i class="fas fa-angle-down"></i></span>
-                                        </tr>
-    
-                                        <tr>
-                                          <td colspan="2" [ngClass]="{'hidden': !clicked[index], 'show': clicked[index]}">
-                                            <table class="table is-fullwidth">
-                                              <thead>
-                                                <tr>
-                                                  <th>Código</th>
-                                                  <th>Presentación</th>
-                                                  <th>Neto ({{ material.unidad }})</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let mat of (lote.value)">
-                                                  <td>{{ mat.codigo }}</td>
-                                                  <td>{{ mat.presentacion }}</td>
-                                                  <td>{{ mat.neto }}</td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </td>
-                                        </tr>
-                                    </ng-container>
-                                  <br><br>
-                                </tbody>
-                              </table>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-              </div>
+<div class="modal" [ngClass]="{ 'is-active': Inventario }">
+  <div class="modal-background"></div>
+  <div class="modal-card long animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Inventario</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
+    </div>
+    <div class="modal-card-body">
+      <div *ngFor="let material_ of agrupadoMateriales; index as n">
+        <div class="card">
+          <div class="card-header dark">
+            <div class="card-header-title">
+              <span class="icon" style="color: rgb(83, 167, 224); cursor: pointer" (click)="buscarRegistro(material_)"
+                ><i class="fas fa-info-circle"></i
+              ></span>
+              {{ material_.nombre }} - Total: {{ totalizarPorNombre(material_) }}
+              {{ material_.materialesPorId[0].unidad }}(s)
+              <span class="angle_icon_span" (click)="showInfo__(n)" [ngClass]="{ clicked: clicked__[n] }"
+                ><i class="fas fa-angle-down"></i
+              ></span>
             </div>
-            <br>
+          </div>
+          <div class="card-content" [ngClass]="{ hidden: !clicked__[n], show: clicked__[n] }">
+            <div *ngFor="let material of material_.materialesPorId; index as i">
+              <div class="card">
+                <div class="card-header dark">
+                  <div class="card-header-title">
+                    {{ material.nombre }} ({{ material.marca }}): {{ material.netoTotal }} {{ material.unidad }}(s)
+                    <span class="angle_icon_span" (click)="showInfo_(i)" [ngClass]="{ clicked: clicked_[i] }"
+                      ><i class="fas fa-angle-down"></i
+                    ></span>
+                  </div>
+                </div>
+                <div class="card-content" [ngClass]="{ hidden: !clicked_[i], show: clicked_[i] }">
+                  <table class="table is-fullwidth">
+                    <thead>
+                      <tr>
+                        <th>Lote</th>
+                        <th>Total ({{ material.unidad }})</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let lote of material.lotes | keyvalue; index as index">
+                        <tr>
+                          <th>{{ lote.key }}</th>
+                          <td>{{ totalizar(lote.value) }}</td>
+                          <span
+                            class="angle_icon_span"
+                            (click)="showInfo(index)"
+                            [ngClass]="{ clicked: clicked[index] }"
+                            ><i class="fas fa-angle-down"></i
+                          ></span>
+                        </tr>
+
+                        <tr>
+                          <td colspan="2" [ngClass]="{ hidden: !clicked[index], show: clicked[index] }">
+                            <table class="table is-fullwidth">
+                              <thead>
+                                <tr>
+                                  <th>Código</th>
+                                  <th>Presentación</th>
+                                  <th>Neto ({{ material.unidad }})</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let mat of lote.value">
+                                  <td>{{ mat.codigo }}</td>
+                                  <td>{{ mat.presentacion }}</td>
+                                  <td>{{ mat.neto }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <br /><br />
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br />
+            </div>
           </div>
         </div>
+        <br />
+      </div>
     </div>
+  </div>
 </div>

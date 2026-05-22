@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-modal',
   standalone: false,
   templateUrl: './app-modal.component.html',
-  styleUrls: ['./app-modal.component.scss']
+  styleUrls: ['./app-modal.component.scss'],
 })
 export class AppModalComponent {
   @Input() visible = false;

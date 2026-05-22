@@ -1,5 +1,4 @@
-<app-nueva-recepcion [nueva]="nueva" (onCloseModal)="nueva = false">
-</app-nueva-recepcion>
+<app-nueva-recepcion [nueva]="nueva" (onCloseModal)="nueva = false"> </app-nueva-recepcion>
 
 <app-detalles-recepcion [detalle]="detalle" [lista]="Material_selected" [n]="n_word" (onCloseModal)="detalle = false">
 </app-detalles-recepcion>
@@ -8,211 +7,224 @@
 </app-edicion-recepcion>
 
 <app-comentarios [comentarios]="comentarios" [recepcion_id]="recepcion_id" (onCloseModal)="comentarios = false">
-
 </app-comentarios>
 
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                    <h1 class="title blancas">
-                        Recepción de materiales
-                    </h1>
-                    <h2 class="subtitle description blancas">
-                        Descripción
-                    </h2>
-                </div>
-            </div>
-            <br>
-            <button class="button is-info" (click)="NuevaRecepcion()">
-                <span class="icon">
-                    <i class="fas fa-plus-circle"></i>
-                </span>
-                <span>Recepción</span>
-            </button>
-            <br><br>
-            <ng-container *ngIf="api.recepciones && api.recepciones.length < 1">
-                <div class="columns is-centered">
-                    <div class="column is-half">
-                        <div class="custom-card">
-                            <p class="message">No hay nuevas recepciones</p>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="api.recepciones && api.recepciones.length > 0">
-                <ng-container *ngFor="let recepcion of api.recepciones;index as index">
-                    <ng-container
-                        *ngIf="recepcion.status === 'Por notificar' || recepcion.status === 'Notificado' || recepcion.status === 'En observacion'">
-                        <div class="card animate__animated animate__fadeInUp">
-                            <div class="card-header dark">
-                                <p class="card-header-title">
-                                    <strong class="fuente">Documento Nº: </strong>{{recepcion.documento}} <ng-container
-                                        *ngIf="recepcion.proveedor">- {{recepcion.proveedor.nombre}} -</ng-container> 
-                                    <span class="tag is-danger"
-                                        *ngIf='recepcion.status === "Por notificar"'>{{recepcion.status}}</span> 
-                                    <span class='tag is-info'
-                                        *ngIf='recepcion.status === "Notificado"'>{{recepcion.status}}</span> 
-                                      <span class='tag is-warning'
-                                        *ngIf='recepcion.status === "En observacion"'>{{recepcion.status}}</span> 
-                                    <i class="fas fa-bell shake_button" (click)="notificar(recepcion._id)"
-                                        *ngIf=' recepcion.status === "Por notificar"'></i>
-                                    <i class="fas fa-check blue_" (click)="checkar(recepcion._id)"
-                                        *ngIf='recepcion.status == "Notificado"'></i>
-                                    <i class="fas fa-download" *ngIf='recepcion.status === "En observacion"'
-                                        (click)="DescargarFormato(recepcion)" style="cursor: pointer;"></i>
-                                </p>
-                                <button class="card-header-icon" aria-label="more options"
-                                    [ngClass]="{'clicked':clicked[index]}" (click)="showInfo(index)">
-                                    <span class="icon">
-                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="card-content info"
-                                [ngClass]="{'hidden': !clicked[index], 'show': clicked[index]}">
-                                <table class="table is-fullwidth is-striped" *ngIf="clicked[index]">
-                                    <thead>
-                                        <tr>
-                                            <th>Análisis</th>
-                                            <th>OC</th>
-                                            <th>Lote</th>
-                                            <th>Material</th>
-                                            <th>Detalles</th>
-                                            <th>Acciones</th>
-                                            <th>Acción</th>
-                                            <th>Identificación</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let materiales of recepcion.materiales;index as i">
-                                            <td>
-                                                <ng-container *ngIf="recepcion.resultados">
-                                                    <ng-container *ngIf="recepcion.resultados[i] === 'Rechazado'">
-                                                        <span class="tag is-danger">Rechazado</span> 
-                                                    </ng-container>
-                                                    <ng-container *ngIf="recepcion.resultados[i] === 'Aprobado'">
-                                                        <span class="tag is-success">Aprobado</span>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="recepcion.resultados[i] === 'Revisión'">
-                                                        <span class="tag is-warning">Revisión</span>
-                                                    </ng-container>
-                                                </ng-container>
-                                                <ng-container
-                                                    *ngIf="!recepcion.resultados[i] || recepcion.resultados[i] === 'Por analizar'">
-                                                    <span class="tag is-info">Por analizar</span>
-                                                </ng-container>
-                                                <ng-container *ngIf="buscarUltimoReclamoPorRecepcion(recepcion._id,i)">
-                                                     <i class="fas fa-download red" style="cursor: pointer;"
-                                                        (click)="ProductoNoConforme(recepcion,materiales,buscarUltimoReclamoPorRecepcion(recepcion._id,i))"></i>
-                                                </ng-container>
-                                            </td>
-                                            <td>
-                                                <ng-container *ngIf="materiales[0].oc">
-                                                    {{materiales[0].oc.numero}}
-                                                </ng-container>
-                                            </td>
-                                            <td>{{materiales[0].lote}}</td>
-                                            <td>
-                                                <div class="circle_"></div>
-                                                {{materiales[0].material.nombre}}
-                                                ({{materiales[0].material.fabricante.alias}})
-                                                <ng-container *ngIf="materiales[0].material.gramaje">
-                                                    {{materiales[0].material.gramaje}}g
-                                                    {{materiales[0].material.calibre}}pt
-                                                    <ng-container *ngIf="materiales[0].largo">
-                                                        {{materiales[0].largo}} x {{materiales[0].ancho}}
-                                                    </ng-container>
-                                                    <ng-container *ngIf="!materiales[0].largo">
-                                                        Ancho: {{materiales[0].ancho}}
-                                                    </ng-container>
-                                                </ng-container>
-                                            </td>
-                                            <td>
-                                                <p>
-                                                    {{sumarNetos(materiales)}}{{materiales[0].unidad}}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <i class="fas fa-info-circle blue_"
-                                                    (click)="EdicionDeMaterial(index,i)"></i>
-                                                     <i class="fas fa-edit green" (click)="publicMaterial(index,i)"></i>
-                                                     <i class="fas fa-comment" style="cursor: pointer;"
-                                                    (click)="comentarios = true; recepcionID(recepcion._id, i)"></i>
-                                            </td>
-                                            <td>
-                                                <button class="button is-small"
-                                                    style="background-color: transparent; border: none;color: #f14668;"
-                                                    (click)="noConforme(recepcion, i)">
-                                                    <span class="icon">
-                                                        <i class="fas fa-ban"></i>
-                                                    </span>
-                                                </button>
-                                                <ng-container *ngIf="materiales[0].unidad === 't'">
-                                                    <button class="button is-info is-small"
-                                                        (click)="almacenar = true; informacion_bobinas(materiales, recepcion)">
-                                                        <span class="icon"><i class="fas fa-plus"></i></span>
-                                                        <span>Bobinas</span>
-                                                    </button>
-                                                </ng-container>
-                                                <button class="button is-success is-small"
-                                                    (click)="EnviarAlmacen(index, i)"
-                                                    *ngIf="materiales[0].material.grupo.otro || poseeAnalisis(materiales[0].lote)">
-                                                    <span class="icon"><i class="fas fa-check"></i></span>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button class="button is-success is-small"
-                                                    (click)="DescargarIdentificacionProductoPDF(recepcion, materiales)">
-                                                    <span class="icon">
-                                                        <i class="fa-solid fa-download"></i>
-                                                    </span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <br><br>
-                    </ng-container>
-                </ng-container>
-            </ng-container>
-            <br>
+<app-page-layout>
+  <app-section-header
+    title="Recepción"
+    description="Control de entrada de materiales"
+    icon="fa-warehouse"
+    color="orange"
+  ></app-section-header>
+  <br />
+  <button class="button is-info" (click)="NuevaRecepcion()">
+    <span class="icon">
+      <i class="fas fa-plus-circle"></i>
+    </span>
+    <span>Recepción</span>
+  </button>
+  <br /><br />
+  <ng-container *ngIf="api.recepciones && api.recepciones.length < 1">
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <div class="custom-card">
+          <p class="message">No hay nuevas recepciones</p>
         </div>
+      </div>
     </div>
-</div>
-
-
-<div class="modal" [ngClass]="{'is-active':almacenar}">
-    <div class="modal-background"></div>
-    <div class="modal-card long animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Enviar bobinas a almacén
+  </ng-container>
+  <ng-container *ngIf="api.recepciones && api.recepciones.length > 0">
+    <ng-container *ngFor="let recepcion of api.recepciones; index as index">
+      <ng-container
+        *ngIf="
+          recepcion.status === 'Por notificar' ||
+          recepcion.status === 'Notificado' ||
+          recepcion.status === 'En observacion'
+        "
+      >
+        <div class="card animate__animated animate__fadeInUp">
+          <div class="card-header dark">
+            <p class="card-header-title">
+              <strong class="fuente">Documento Nº: </strong>{{ recepcion.documento }}
+              <ng-container *ngIf="recepcion.proveedor">- {{ recepcion.proveedor.nombre }} -</ng-container> 
+              <span class="tag is-danger" *ngIf="recepcion.status === 'Por notificar'">{{ recepcion.status }}</span
+              >  <span class="tag is-info" *ngIf="recepcion.status === 'Notificado'">{{ recepcion.status }}</span
+              >   
+              <span class="tag is-warning" *ngIf="recepcion.status === 'En observacion'">{{ recepcion.status }}</span
+              > 
+              <i
+                class="fas fa-bell shake_button"
+                (click)="notificar(recepcion._id)"
+                *ngIf="recepcion.status === 'Por notificar'"
+              ></i>
+              <i
+                class="fas fa-check blue_"
+                (click)="checkar(recepcion._id)"
+                *ngIf="recepcion.status == 'Notificado'"
+              ></i>
+              <i
+                class="fas fa-download"
+                *ngIf="recepcion.status === 'En observacion'"
+                (click)="DescargarFormato(recepcion)"
+                style="cursor: pointer"
+              ></i>
             </p>
-            <button class="delete red_cross" aria-label="close" (click)="almacenar = false"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="field is-grouped">
-                <div class="control">
-                    <label for="" class="label">Convertidora</label>
-                    <div class="select">
-                        <select [(ngModel)]="convertidora">
-                            <option value="{{convertidora._id}}" *ngFor="let convertidora of bobinas.convertidora">
-                                {{convertidora.nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control">
-                    <label for="" class="label">⠀</label>
-                    <button class="button is-success" (click)="guardar_Bobinas()" [disabled]="!convertidora">
-                        <span>Guardar</span>
+            <button
+              class="card-header-icon"
+              aria-label="more options"
+              [ngClass]="{ clicked: clicked[index] }"
+              (click)="showInfo(index)"
+            >
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="card-content info" [ngClass]="{ hidden: !clicked[index], show: clicked[index] }">
+            <table class="table is-fullwidth is-striped" *ngIf="clicked[index]">
+              <thead>
+                <tr>
+                  <th>Análisis</th>
+                  <th>OC</th>
+                  <th>Lote</th>
+                  <th>Material</th>
+                  <th>Detalles</th>
+                  <th>Acciones</th>
+                  <th>Acción</th>
+                  <th>Identificación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let materiales of recepcion.materiales; index as i">
+                  <td>
+                    <ng-container *ngIf="recepcion.resultados">
+                      <ng-container *ngIf="recepcion.resultados[i] === 'Rechazado'">
+                        <span class="tag is-danger">Rechazado</span> 
+                      </ng-container>
+                      <ng-container *ngIf="recepcion.resultados[i] === 'Aprobado'">
+                        <span class="tag is-success">Aprobado</span>
+                      </ng-container>
+                      <ng-container *ngIf="recepcion.resultados[i] === 'Revisión'">
+                        <span class="tag is-warning">Revisión</span>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!recepcion.resultados[i] || recepcion.resultados[i] === 'Por analizar'">
+                      <span class="tag is-info">Por analizar</span>
+                    </ng-container>
+                    <ng-container *ngIf="buscarUltimoReclamoPorRecepcion(recepcion._id, i)">
+                       <i
+                        class="fas fa-download red"
+                        style="cursor: pointer"
+                        (click)="
+                          ProductoNoConforme(recepcion, materiales, buscarUltimoReclamoPorRecepcion(recepcion._id, i))
+                        "
+                      ></i>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="materiales[0].oc">
+                      {{ materiales[0].oc.numero }}
+                    </ng-container>
+                  </td>
+                  <td>{{ materiales[0].lote }}</td>
+                  <td>
+                    <div class="circle_"></div>
+                    {{ materiales[0].material.nombre }}
+                    ({{ materiales[0].material.fabricante.alias }})
+                    <ng-container *ngIf="materiales[0].material.gramaje">
+                      {{ materiales[0].material.gramaje }}g {{ materiales[0].material.calibre }}pt
+                      <ng-container *ngIf="materiales[0].largo">
+                        {{ materiales[0].largo }} x {{ materiales[0].ancho }}
+                      </ng-container>
+                      <ng-container *ngIf="!materiales[0].largo"> Ancho: {{ materiales[0].ancho }} </ng-container>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <p>{{ sumarNetos(materiales) }}{{ materiales[0].unidad }}</p>
+                  </td>
+                  <td>
+                    <i class="fas fa-info-circle blue_" (click)="EdicionDeMaterial(index, i)"></i>
+                         <i class="fas fa-edit green" (click)="publicMaterial(index, i)"></i>      <i
+                      class="fas fa-comment"
+                      style="cursor: pointer"
+                      (click)="comentarios = true; recepcionID(recepcion._id, i)"
+                    ></i>
+                  </td>
+                  <td>
+                    <button
+                      class="button is-small"
+                      style="background-color: transparent; border: none; color: #f14668"
+                      (click)="noConforme(recepcion, i)"
+                    >
+                      <span class="icon">
+                        <i class="fas fa-ban"></i>
+                      </span>
                     </button>
-                </div>
-            </div>
+                    <ng-container *ngIf="materiales[0].unidad === 't'">
+                      <button
+                        class="button is-info is-small"
+                        (click)="almacenar = true; informacion_bobinas(materiales, recepcion)"
+                      >
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Bobinas</span>
+                      </button>
+                    </ng-container>
+                    <button
+                      class="button is-success is-small"
+                      (click)="EnviarAlmacen(index, i)"
+                      *ngIf="materiales[0].material.grupo.otro || poseeAnalisis(materiales[0].lote)"
+                    >
+                      <span class="icon"><i class="fas fa-check"></i></span>
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="button is-success is-small"
+                      (click)="DescargarIdentificacionProductoPDF(recepcion, materiales)"
+                    >
+                      <span class="icon">
+                        <i class="fa-solid fa-download"></i>
+                      </span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+        <br /><br />
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <br />
+</app-page-layout>
+
+<div class="modal" [ngClass]="{ 'is-active': almacenar }">
+  <div class="modal-background"></div>
+  <div class="modal-card long animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Enviar bobinas a almacén</p>
+      <button class="delete red_cross" aria-label="close" (click)="almacenar = false"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="field is-grouped">
+        <div class="control">
+          <label for="" class="label">Convertidora</label>
+          <div class="select">
+            <select [(ngModel)]="convertidora">
+              <option value="{{ convertidora._id }}" *ngFor="let convertidora of bobinas.convertidora">
+                {{ convertidora.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <label for="" class="label">⠀</label>
+          <button class="button is-success" (click)="guardar_Bobinas()" [disabled]="!convertidora">
+            <span>Guardar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

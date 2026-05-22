@@ -8,7 +8,7 @@ describe('PreparacionTintasComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PreparacionTintasComponent]
+      declarations: [PreparacionTintasComponent],
     });
     fixture = TestBed.createComponent(PreparacionTintasComponent);
     component = fixture.componentInstance;

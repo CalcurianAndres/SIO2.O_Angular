@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +22,6 @@ import { LoginModule } from './login/login.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from './Dashboard/dashboard.module';
 
-
 import { LOCALE_ID, isDevMode } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
@@ -31,12 +30,8 @@ import { RecibosComponent } from './shared/recibos/recibos.component';
 
 registerLocaleData(localeEs);
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    OrdenesComponent,
-  ],
+  declarations: [AppComponent, OrdenesComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -55,10 +50,10 @@ registerLocaleData(localeEs);
       enabled: true,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-ES' }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

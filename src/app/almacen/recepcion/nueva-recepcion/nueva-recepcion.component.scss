@@ -18,27 +18,27 @@
   /* Add any other desired styles for the notification badge */
 }
 
-  .long{
-    width: 50%;
-  }
-
-  .blue_{
-    cursor: pointer;
-  }
-  .red{
-    cursor: pointer;
-  }
-
-  .modal .modal-card .bg{
-    background-color:rgb(38, 52, 61);
-    color: white;
+.long {
+  width: 50%;
 }
 
-table tr td{
+.blue_ {
+  cursor: pointer;
+}
+.red {
+  cursor: pointer;
+}
+
+.modal .modal-card .bg {
   background-color: rgb(38, 52, 61);
   color: white;
 }
-table tr th{
+
+table tr td {
+  background-color: rgb(38, 52, 61);
+  color: white;
+}
+table tr th {
   background-color: rgb(38, 52, 61);
   color: white;
 }
@@ -47,20 +47,20 @@ table tr th{
   text-align: right;
 }
 
-.informacion{
+.informacion {
   font-family: 'Gilroy';
   font-size: larger;
 }
 
-.short{
+.short {
   width: 100px;
 }
 
-.lupa{
- font-size: x-large; 
+.lupa {
+  font-size: x-large;
 }
 
-.no-style{
+.no-style {
   background-color: white;
   border: none;
   box-shadow: none;

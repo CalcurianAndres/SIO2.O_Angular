@@ -1,583 +1,575 @@
-<app-nueva-orden [nueva]="nueva" [orden]="orden" (onCloseModal)="nueva = false">
-
-</app-nueva-orden>
+<app-nueva-orden [nueva]="nueva" [orden]="orden" (onCloseModal)="nueva = false"> </app-nueva-orden>
 
 <!-- MODAL PARA CREAR UN NUEVO SUB ORDEN:::::::::::::::: -->
-<div class="modal" [ngClass]="{'is-active':new_sub}">
-    <div class="modal-background"></div>
-    <div class="modal-card long animate__animated animate__fadeInUp longer" style="width: 70%;">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Nueva derivación de {{producto_padre}}
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="new_sub = false"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="box">
-                <h4 class="title is-5">Derivaciones de la Orden</h4>
-
-                <div class="columns is-multiline">
-
-                    <div class="column is-3">
-                        <div class="field">
-                            <label class="label">Número</label>
-                            <div class="control has-icons-left">
-                                <input class="input" type="text" placeholder="00123" [(ngModel)]="derivacion_nueva.nro">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-hashtag"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-2">
-                        <div class="field">
-                            <label class="label">Cantidad</label>
-                            <div class="control has-icons-left">
-                                <input class="input" [ngClass]="{'is-danger': derivacion_nueva.cantidad > maximo_oc}"
-                                    type="number" placeholder="0" [(ngModel)]="derivacion_nueva.cantidad">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-boxes"></i>
-                                </span>
-                            </div>
-                            <p class="help is-danger" *ngIf="derivacion_nueva.cantidad > maximo_oc">
-                                El máximo permitido es {{formatNumberWithDotSeparator(maximo_oc)}} unidades.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="column is-3">
-                        <div class="field">
-                            <label class="label">F. Solic.</label>
-                            <div class="control has-icons-left">
-                                <input class="input" type="date" [(ngModel)]="derivacion_nueva.solicitud">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-4">
-                        <div class="field">
-                            <label class="label">Entrega</label>
-                            <div class="control has-icons-left">
-                                <div class="select is-fullwidth">
-                                    <select [(ngModel)]="derivacion_nueva.entrega">
-                                        <option selected disabled>Seleccionar almacen</option>
-                                        <option value="{{almacen.nombre}}" *ngFor="let almacen of almacenes_selected">
-                                            {{almacen.nombre}}</option>
-                                    </select>
-                                </div>
-                                <div class="icon is-small is-left">
-                                    <i class="fas fa-truck"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                        <button class="button is-success" (click)="GuardarNuevaDerivacion()"
-                            [disabled]="!derivacion_nueva.nro || !derivacion_nueva.cantidad || !derivacion_nueva.solicitud || !derivacion_nueva.entrega || derivacion_nueva.cantidad > maximo_oc">
-                            Guardar Derivación
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': new_sub }">
+  <div class="modal-background"></div>
+  <div class="modal-card long animate__animated animate__fadeInUp longer" style="width: 70%">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Nueva derivación de {{ producto_padre }}</p>
+      <button class="delete red_cross" aria-label="close" (click)="new_sub = false"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="box">
+        <h4 class="title is-5">Derivaciones de la Orden</h4>
+
+        <div class="columns is-multiline">
+          <div class="column is-3">
+            <div class="field">
+              <label class="label">Número</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="00123" [(ngModel)]="derivacion_nueva.nro" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-hashtag"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-2">
+            <div class="field">
+              <label class="label">Cantidad</label>
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  [ngClass]="{ 'is-danger': derivacion_nueva.cantidad > maximo_oc }"
+                  type="number"
+                  placeholder="0"
+                  [(ngModel)]="derivacion_nueva.cantidad"
+                />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-boxes"></i>
+                </span>
+              </div>
+              <p class="help is-danger" *ngIf="derivacion_nueva.cantidad > maximo_oc">
+                El máximo permitido es {{ formatNumberWithDotSeparator(maximo_oc) }} unidades.
+              </p>
+            </div>
+          </div>
+
+          <div class="column is-3">
+            <div class="field">
+              <label class="label">F. Solic.</label>
+              <div class="control has-icons-left">
+                <input class="input" type="date" [(ngModel)]="derivacion_nueva.solicitud" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Entrega</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="derivacion_nueva.entrega">
+                    <option selected disabled>Seleccionar almacen</option>
+                    <option value="{{ almacen.nombre }}" *ngFor="let almacen of almacenes_selected">
+                      {{ almacen.nombre }}
+                    </option>
+                  </select>
+                </div>
+                <div class="icon is-small is-left">
+                  <i class="fas fa-truck"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-grouped is-grouped-right">
+          <div class="control">
+            <button
+              class="button is-success"
+              (click)="GuardarNuevaDerivacion()"
+              [disabled]="
+                !derivacion_nueva.nro ||
+                !derivacion_nueva.cantidad ||
+                !derivacion_nueva.solicitud ||
+                !derivacion_nueva.entrega ||
+                derivacion_nueva.cantidad > maximo_oc
+              "
+            >
+              Guardar Derivación
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                    <h1 class="title blancas">
-                        Ordenes de compra
-                    </h1>
-                    <h2 class="subtitle description blancas">
-                        Descripción
-                    </h2>
-                </div>
-                <div class="iconos">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column is-1">
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button class="button is-info boton" (click)="nueva = true;">
-                                <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                                <span>Orden</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                  
-                <div class="column">
-                    <div class="Filter" [ngClass]="{'active':filtrado}">
-                        <div class="home">
-                            <button class="button button-hidde gray" (click)="buscarporFecha()"
-                                [ngClass]="{'selected':fecha}">
-                                <span class="icon">
-                                    <i class="fas fa-home"></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="icon-filter">
-                            <button class="button button-hidde gray" (click)="mostrarFiltros()">
-                                <span class="icon">
-                                    <i class="fas fa-filter"></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="filters">
-                            <div class="field is-grouped">
-                                <div class="control">
-                                    <button class="button button-hidde gray" (click)="RealizarBusquedaFecha()"
-                                        [ngClass]="{'selected':DesdeHasta && !cliente}">
-                                        <span class="icon">
-                                            <i class="fas fa-calendar-day"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <div class="control">
-                                    <button class="button button-hidde gray">
-                                        <span class="icon">
-                                            <i class="fas fa-users" (click)="buscarporCliente()"
-                                                [ngClass]="{'selected':cliente}"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <div class="control">
-                                    <button class="button button-hidde gray">
-                                        <span class="icon">
-                                            <i class="fas fa-lock"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <div class="control">
-                                    <button class="button button-hidde gray" (click)="BusquedaPorNumero()"
-                                        [ngClass]="{'selected':OC_NUMBER}">
-                                        <span class="icon">
-                                            <i class="fas fa-hashtag"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <i class="fas fa-grip-lines-vertical grip" (click)="mostrarFiltros()"
-                            style="cursor: pointer;"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="search" [ngClass]="{'active':DesdeHasta}">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label class="label tags_closer">Desde</label>
-                        <input type="date" class="input" #desde>
-                    </div>
-                    <div class="control">
-                        <label class="label tags_closer">Hasta</label>
-                        <input type="date" class="input" #hasta>
-                    </div>
-                    <div class="control" *ngIf="!cliente">
-                        <label for="" class="label tags_closer"> </label>
-                        <button class="button is-success" (click)="buscarPorFecha(desde.value, hasta.value)">
-                            <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        </button>
-                    </div>
-                    <div class="control" *ngIf="cliente">
-                        <label for="" class="label tags_closer"> </label>
-                        <button class="button is-success" (click)="buscarPorFecha_cliente(desde.value, hasta.value)">
-                            <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="search_" [ngClass]="{'active_':OC_NUMBER}">
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label class="label">Numero OC</label>
-                        <input type="text" class="input" placeholder="Desde" [(ngModel)]="searchTerm"
-                            (input)="search()">
-                    </div>
-                    <div class="control">
-                        <label for="" class="label"> </label>
-                        <button class="button is-success">
-                            <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column">
-                    <div class="card">
-                        <div class="card-content">
-                            <span class="title" *ngIf="fecha">Home</span>
-                            <span class="title" *ngIf="DesdeHasta && !cliente">Por fecha:</span>
-                            <span class="title" *ngIf="cliente">Por clientes:</span>
-                            <span class="title" *ngIf="OC_NUMBER">Por Nro de Orden:</span>
-                            <br> <br>
-                            <ng-container *ngIf="fecha">
-                                <ng-container *ngFor="let ordenes of api.orden; index as i">
-                                    <div class="card animate__animated animate__fadeInUp mb-4">
-                                        <div class="card-header dark is-clickable" (click)="show_info_(i)">
-                                            <div class="card-header-title">
-                                                <div class="point mr-2" [ngClass]="semaforo[i % semaforo.length]"></div>
-                                                <strong class="">OC: {{ordenes.orden}}</strong>
-                                                <span class="ml-2">-
-                                                    {{ordenes.cliente.nombre}}</span>
-                                            </div>
-                                            <button class="card-header-icon">
-                                                <span class="icon">
-                                                    <i class="fas fa-chevron-up"
-                                                        [ngClass]="{'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i]}"></i>
-                                                </span>
-                                            </button>
-                                        </div>
-
-                                        <div class="card-content p-0" *ngIf="ORDEN[i]">
-                                            <table class="table is-fullwidth is-hoverable m-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Producto</th>
-                                                        <th>Cantidad</th>
-                                                        <th>F. Solic.</th>
-                                                        <th>Entrega</th>
-                                                        <th>OP</th>
-                                                        <th class="has-text-centered">Derivaciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <ng-container
-                                                        *ngFor="let producto of ordenes.pedido; let idxProd = index">
-                                                        <tr>
-                                                            <td><span
-                                                                    class="has-text-weight-bold">{{producto.producto.identificacion.producto}}</span>
-                                                            </td>
-                                                            <td><span>{{formatNumberWithDotSeparator(producto.cantidad)}}</span>
-                                                            </td>
-                                                            <td>{{producto.solicitud | date:'dd/MM/yyyy'}}
-                                                            </td>
-                                                            <td>{{producto.entrega || 'N/A'}}</td>
-                                                            <td><span class="is-family-code">{{producto.op
-                                                                    ||
-                                                                    '---'}}</span></td>
-                                                            <td class="has-text-centered">
-                                                                <div class="buttons is-centered">
-                                                                    <button class="button is-small is-rounded"
-                                                                        [ngClass]="producto.derivadas?.length > 0 ? 'is-success' : 'is-light'"
-                                                                        (click)="toggleDerivadas(i, idxProd)">
-                                                                        <span class="icon is-small"><i
-                                                                                class="fas fa-layer-group"></i></span>
-                                                                        <span>{{ producto.derivadas?.length
-                                                                            || 0
-                                                                            }}</span>
-                                                                    </button>
-                                                                    <button class="button is-small is-info btn-circle"
-                                                                        (click)="nueva_derivacion(producto, ordenes.cliente, i ,idxProd)">
-                                                                        <span class="icon is-small">
-                                                                            <i class="fas fa-plus"></i>
-                                                                        </span>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr *ngIf="isDerivadaVisible(i, idxProd)"
-                                                            class="has-background-white-ter animate__animated animate__fadeIn">
-                                                            <td colspan="6" class="p-4">
-                                                                <div class="box is-shadowless"
-                                                                    style="border: 1px dashed #ccc;">
-                                                                    <p
-                                                                        class="is-size-7 has-text-weight-bold mb-2 has-text-grey">
-                                                                        ÓRDENES DERIVADAS DE ESTE PRODUCTO:
-                                                                    </p>
-                                                                    <table class="table is-fullwidth">
-                                                                        <thead *ngIf="producto.derivadas?.length">
-                                                                            <tr>
-                                                                                <th>Número</th>
-                                                                                <th>Cantidad</th>
-                                                                                <th>F. Solic.</th>
-                                                                                <th>Entrega</th>
-                                                                                <th>OP</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr *ngFor="let sub of producto.derivadas">
-                                                                                <td><i
-                                                                                        class="fas fa-level-up-alt fa-rotate-90 mr-2 has-text-grey-light"></i>
-                                                                                    <span>{{
-                                                                                        sub.nro }}</span>
-                                                                                </td>
-                                                                                <td>{{
-                                                                                    formatNumberWithDotSeparator(sub.cantidad)
-                                                                                    }}</td>
-                                                                                <td>
-                                                                                    11/03/2026
-                                                                                </td>
-                                                                                <td>
-                                                                                    Caracas
-                                                                                </td>
-                                                                                <td>
-                                                                                    <span>
-                                                                                        {{ sub.facturado ?
-                                                                                        sub.facturado
-                                                                                        :
-                                                                                        '---' }}
-                                                                                    </span>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                        <tr *ngIf="!producto.derivadas?.length">
-                                                                            <td colspan="3"
-                                                                                class="has-text-centered is-size-7 has-text-grey">
-                                                                                No hay derivaciones para
-                                                                                este ítem.</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </ng-container>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="Busqueda">
-                                <div class="custom-card" *ngIf="!filtrados || filtrados.length == 0">
-                                    <p class="message">No hay resultados de busqueda</p>
-                                </div>
-                                <ng-container *ngFor="let ordenes of filtrados;index as i">
-                                    <div class="card animate__animated animate__fadeInUp">
-                                        <div class="card-header dark">
-                                            <div class="card-header-title">
-                                                <div class="point" [ngClass]="semaforo[i % semaforo.length]"></div>
-                                                  <strong style="font-family: 'Gilroy';">OC:
-                                                    {{ordenes.orden}} </strong>
-                                                - {{ordenes.cliente.nombre}}
-                                            </div>
-                                            <i class="fas fa-chevron-up" style="cursor: pointer;"
-                                                (click)="show_info_(i)"
-                                                [ngClass]="{'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i]}"></i>
-                                        </div>
-                                        <div class="card-content orden_Info" [ngClass]="{'active': ORDEN[i]}">
-                                            <table class="table is-fullwidth is-striped tabla"
-                                                [ngClass]="{'active_': ORDEN[i]}">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Producto</th>
-                                                        <th>Cantidad</th>
-                                                        <th>F. Solic.</th>
-                                                        <th>OP</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let producto of ordenes.pedido">
-                                                        <td>{{producto.producto.identificacion.producto}}
-                                                        </td>
-                                                        <td>{{formatNumberWithDotSeparator(producto.cantidad)}}
-                                                        </td>
-                                                        <td>{{producto.solicitud | date:'dd/mm/yyyy'}}</td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <br>
-                                </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="cliente">
-                                <ng-container *ngFor="let clientes of PorClientes;index as i">
-                                    <span class="clientesName" style="cursor: pointer;"
-                                        (click)="show_info(i)">{{clientes[0]}} 
-                                        <i class="fas fa-chevron-up"
-                                            [ngClass]="{'rotate-down': Info_clientes[i], 'rotate-up': !Info_clientes[i]}"></i>
-                                    </span>
-
-                                    <div class="orden_Info" [ngClass]="{'active': Info_clientes[i]}"
-                                        style="background-color: transparent;">
-                                        <ng-container *ngFor="let orden of clientes[1];index as y"
-                                            style="background-color: transparent;">
-                                            <div class="card animate__animated animate__fadeInUp"
-                                                [ngClass]="{'active': Info_clientes[y]}">
-                                                <div class="card-header dark">
-                                                    <p class="card-header-title">
-                                                        <strong style="font-family: 'Gilroy';">OC:
-                                                            {{orden.orden}} </strong>
-                                                        <span class="fechas">
-                                                            <b>Fecha:</b> {{orden.fecha |
-                                                            date:'dd/mm/yyyy'}} -
-                                                            <b>Recepción:</b> {{orden.recepcion |
-                                                            date:'dd/mm/yyyy'}}
-                                                        </span>
-                                                    </p>
-                                                    <i class="fas fa-chevron-up" style="cursor: pointer;"
-                                                        (click)="show_info_(y)"
-                                                        [ngClass]="{'rotate-down': ORDEN[y], 'rotate-up': !ORDEN[y]}"></i>
-                                                </div>
-                                                <div class="card-content orden_Info" [ngClass]="{'active': ORDEN[y]}">
-                                                    <table class="table is-fullwidth is-striped tabla"
-                                                        [ngClass]="{'active_': ORDEN[y]}">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Producto</th>
-                                                                <th>Cantidad</th>
-                                                                <th>F. Solic.</th>
-                                                                <th>OP</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let producto of orden.pedido">
-                                                                <td>{{producto.producto.identificacion.producto}}
-                                                                </td>
-                                                                <td>{{formatNumberWithDotSeparator(producto.cantidad)}}
-                                                                </td>
-                                                                <td>{{producto.solicitud |
-                                                                    date:'dd/mm/yyyy'}}</td>
-                                                                <td></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <br>
-                                        </ng-container>
-                                    </div>
-                                </ng-container>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-4">
-                    <div class="card tags">
-                        <div class="card-content ty orange">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>16</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">Mes</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        {{mesActual}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
-                                preserveAspectRatio="none" shape-rendering="auto">
-                                <defs>
-                                    <path id="gentle-wave"
-                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                                </defs>
-                                <g class="moving-waves">
-                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                </g>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card tags">
-                        <div class="card-content ty green__">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>58</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">Año</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        {{yearActual}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
-                                preserveAspectRatio="none" shape-rendering="auto">
-                                <defs>
-                                    <path id="gentle-wave"
-                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                                </defs>
-                                <g class="moving-waves">
-                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                </g>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card tags">
-                        <div class="card-content ty blue___">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>16</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-3">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">cerradas</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        Septiembre
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
-                                preserveAspectRatio="none" shape-rendering="auto">
-                                <defs>
-                                    <path id="gentle-wave"
-                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                                </defs>
-                                <g class="moving-waves">
-                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                </g>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<app-page-layout>
+  <app-section-header
+    title="Ordenes de compra"
+    description="Gestión de órdenes de compra a clientes"
+    icon="fa-file-invoice-dollar"
+    color="blue"
+    color="green"
+  ></app-section-header>
+  <br />
+  <div class="columns">
+    <div class="column is-1">
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-info boton" (click)="nueva = true">
+            <span class="icon"><i class="fas fa-plus-circle"></i></span>
+            <span>Orden</span>
+          </button>
         </div>
+      </div>
     </div>
-</div>
+      
+    <div class="column">
+      <div class="Filter" [ngClass]="{ active: filtrado }">
+        <div class="home">
+          <button class="button button-hidde gray" (click)="buscarporFecha()" [ngClass]="{ selected: fecha }">
+            <span class="icon">
+              <i class="fas fa-home"></i>
+            </span>
+          </button>
+        </div>
+        <div class="icon-filter">
+          <button class="button button-hidde gray" (click)="mostrarFiltros()">
+            <span class="icon">
+              <i class="fas fa-filter"></i>
+            </span>
+          </button>
+        </div>
+        <div class="filters">
+          <div class="field is-grouped">
+            <div class="control">
+              <button
+                class="button button-hidde gray"
+                (click)="RealizarBusquedaFecha()"
+                [ngClass]="{ selected: DesdeHasta && !cliente }"
+              >
+                <span class="icon">
+                  <i class="fas fa-calendar-day"></i>
+                </span>
+              </button>
+            </div>
+            <div class="control">
+              <button class="button button-hidde gray">
+                <span class="icon">
+                  <i class="fas fa-users" (click)="buscarporCliente()" [ngClass]="{ selected: cliente }"></i>
+                </span>
+              </button>
+            </div>
+            <div class="control">
+              <button class="button button-hidde gray">
+                <span class="icon">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </button>
+            </div>
+            <div class="control">
+              <button
+                class="button button-hidde gray"
+                (click)="BusquedaPorNumero()"
+                [ngClass]="{ selected: OC_NUMBER }"
+              >
+                <span class="icon">
+                  <i class="fas fa-hashtag"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <i class="fas fa-grip-lines-vertical grip" (click)="mostrarFiltros()" style="cursor: pointer"></i>
+      </div>
+    </div>
+  </div>
+  <div class="search" [ngClass]="{ active: DesdeHasta }">
+    <div class="field is-grouped">
+      <div class="control">
+        <label class="label tags_closer">Desde</label>
+        <input type="date" class="input" #desde />
+      </div>
+      <div class="control">
+        <label class="label tags_closer">Hasta</label>
+        <input type="date" class="input" #hasta />
+      </div>
+      <div class="control" *ngIf="!cliente">
+        <label for="" class="label tags_closer"> </label>
+        <button class="button is-success" (click)="buscarPorFecha(desde.value, hasta.value)">
+          <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </button>
+      </div>
+      <div class="control" *ngIf="cliente">
+        <label for="" class="label tags_closer"> </label>
+        <button class="button is-success" (click)="buscarPorFecha_cliente(desde.value, hasta.value)">
+          <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="search_" [ngClass]="{ active_: OC_NUMBER }">
+    <div class="field is-grouped">
+      <div class="control">
+        <label class="label">Numero OC</label>
+        <input type="text" class="input" placeholder="Desde" [(ngModel)]="searchTerm" (input)="search()" />
+      </div>
+      <div class="control">
+        <label for="" class="label"> </label>
+        <button class="button is-success">
+          <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="columns">
+    <div class="column">
+      <div class="card">
+        <div class="card-content">
+          <span class="title" *ngIf="fecha">Home</span>
+          <span class="title" *ngIf="DesdeHasta && !cliente">Por fecha:</span>
+          <span class="title" *ngIf="cliente">Por clientes:</span>
+          <span class="title" *ngIf="OC_NUMBER">Por Nro de Orden:</span>
+          <br />
+          <br />
+          <ng-container *ngIf="fecha">
+            <ng-container *ngFor="let ordenes of api.orden; index as i">
+              <div class="card animate__animated animate__fadeInUp mb-4">
+                <div class="card-header dark is-clickable" (click)="show_info_(i)">
+                  <div class="card-header-title">
+                    <div class="point mr-2" [ngClass]="semaforo[i % semaforo.length]"></div>
+                    <strong class="">OC: {{ ordenes.orden }}</strong>
+                    <span class="ml-2">- {{ ordenes.cliente.nombre }}</span>
+                  </div>
+                  <button class="card-header-icon">
+                    <span class="icon">
+                      <i class="fas fa-chevron-up" [ngClass]="{ 'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i] }"></i>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="card-content p-0" *ngIf="ORDEN[i]">
+                  <table class="table is-fullwidth is-hoverable m-0">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>F. Solic.</th>
+                        <th>Entrega</th>
+                        <th>OP</th>
+                        <th class="has-text-centered">Derivaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let producto of ordenes.pedido; let idxProd = index">
+                        <tr>
+                          <td>
+                            <span class="has-text-weight-bold">{{ producto.producto.identificacion.producto }}</span>
+                          </td>
+                          <td>
+                            <span>{{ formatNumberWithDotSeparator(producto.cantidad) }}</span>
+                          </td>
+                          <td>{{ producto.solicitud | date: 'dd/MM/yyyy' }}</td>
+                          <td>{{ producto.entrega || 'N/A' }}</td>
+                          <td>
+                            <span class="is-family-code">{{ producto.op || '---' }}</span>
+                          </td>
+                          <td class="has-text-centered">
+                            <div class="buttons is-centered">
+                              <button
+                                class="button is-small is-rounded"
+                                [ngClass]="producto.derivadas?.length > 0 ? 'is-success' : 'is-light'"
+                                (click)="toggleDerivadas(i, idxProd)"
+                              >
+                                <span class="icon is-small"><i class="fas fa-layer-group"></i></span>
+                                <span>{{ producto.derivadas?.length || 0 }}</span>
+                              </button>
+                              <button
+                                class="button is-small is-info btn-circle"
+                                (click)="nueva_derivacion(producto, ordenes.cliente, i, idxProd)"
+                              >
+                                <span class="icon is-small">
+                                  <i class="fas fa-plus"></i>
+                                </span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr
+                          *ngIf="isDerivadaVisible(i, idxProd)"
+                          class="has-background-white-ter animate__animated animate__fadeIn"
+                        >
+                          <td colspan="6" class="p-4">
+                            <div class="box is-shadowless" style="border: 1px dashed #ccc">
+                              <p class="is-size-7 has-text-weight-bold mb-2 has-text-grey">
+                                ÓRDENES DERIVADAS DE ESTE PRODUCTO:
+                              </p>
+                              <table class="table is-fullwidth">
+                                <thead *ngIf="producto.derivadas?.length">
+                                  <tr>
+                                    <th>Número</th>
+                                    <th>Cantidad</th>
+                                    <th>F. Solic.</th>
+                                    <th>Entrega</th>
+                                    <th>OP</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let sub of producto.derivadas">
+                                    <td>
+                                      <i class="fas fa-level-up-alt fa-rotate-90 mr-2 has-text-grey-light"></i>
+                                      <span>{{ sub.nro }}</span>
+                                    </td>
+                                    <td>{{ formatNumberWithDotSeparator(sub.cantidad) }}</td>
+                                    <td>11/03/2026</td>
+                                    <td>Caracas</td>
+                                    <td>
+                                      <span>
+                                        {{ sub.facturado ? sub.facturado : '---' }}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                                <tr *ngIf="!producto.derivadas?.length">
+                                  <td colspan="3" class="has-text-centered is-size-7 has-text-grey">
+                                    No hay derivaciones para este ítem.
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="Busqueda">
+            <div class="custom-card" *ngIf="!filtrados || filtrados.length == 0">
+              <p class="message">No hay resultados de busqueda</p>
+            </div>
+            <ng-container *ngFor="let ordenes of filtrados; index as i">
+              <div class="card animate__animated animate__fadeInUp">
+                <div class="card-header dark">
+                  <div class="card-header-title">
+                    <div class="point" [ngClass]="semaforo[i % semaforo.length]"></div>
+                      <strong style="font-family: 'Gilroy'">OC: {{ ordenes.orden }} </strong> -
+                    {{ ordenes.cliente.nombre }}
+                  </div>
+                  <i
+                    class="fas fa-chevron-up"
+                    style="cursor: pointer"
+                    (click)="show_info_(i)"
+                    [ngClass]="{ 'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i] }"
+                  ></i>
+                </div>
+                <div class="card-content orden_Info" [ngClass]="{ active: ORDEN[i] }">
+                  <table class="table is-fullwidth is-striped tabla" [ngClass]="{ active_: ORDEN[i] }">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>F. Solic.</th>
+                        <th>OP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let producto of ordenes.pedido">
+                        <td>{{ producto.producto.identificacion.producto }}</td>
+                        <td>{{ formatNumberWithDotSeparator(producto.cantidad) }}</td>
+                        <td>{{ producto.solicitud | date: 'dd/mm/yyyy' }}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br />
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="cliente">
+            <ng-container *ngFor="let clientes of PorClientes; index as i">
+              <span class="clientesName" style="cursor: pointer" (click)="show_info(i)"
+                >{{ clientes[0] }} 
+                <i
+                  class="fas fa-chevron-up"
+                  [ngClass]="{ 'rotate-down': Info_clientes[i], 'rotate-up': !Info_clientes[i] }"
+                ></i>
+              </span>
+
+              <div class="orden_Info" [ngClass]="{ active: Info_clientes[i] }" style="background-color: transparent">
+                <ng-container *ngFor="let orden of clientes[1]; index as y" style="background-color: transparent">
+                  <div class="card animate__animated animate__fadeInUp" [ngClass]="{ active: Info_clientes[y] }">
+                    <div class="card-header dark">
+                      <p class="card-header-title">
+                        <strong style="font-family: 'Gilroy'">OC: {{ orden.orden }} </strong>
+                        <span class="fechas">
+                          <b>Fecha:</b> {{ orden.fecha | date: 'dd/mm/yyyy' }} - <b>Recepción:</b>
+                          {{ orden.recepcion | date: 'dd/mm/yyyy' }}
+                        </span>
+                      </p>
+                      <i
+                        class="fas fa-chevron-up"
+                        style="cursor: pointer"
+                        (click)="show_info_(y)"
+                        [ngClass]="{ 'rotate-down': ORDEN[y], 'rotate-up': !ORDEN[y] }"
+                      ></i>
+                    </div>
+                    <div class="card-content orden_Info" [ngClass]="{ active: ORDEN[y] }">
+                      <table class="table is-fullwidth is-striped tabla" [ngClass]="{ active_: ORDEN[y] }">
+                        <thead>
+                          <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>F. Solic.</th>
+                            <th>OP</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let producto of orden.pedido">
+                            <td>{{ producto.producto.identificacion.producto }}</td>
+                            <td>{{ formatNumberWithDotSeparator(producto.cantidad) }}</td>
+                            <td>{{ producto.solicitud | date: 'dd/mm/yyyy' }}</td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <br />
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="card tags">
+        <div class="card-content ty orange">
+          <div class="columns">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>16</h1>
+              </span>
+            </div>
+            <div class="column is-2">
+              <span class="fina">Órdenes</span> <br />
+              <span class="gruesa">Mes</span>
+            </div>
+            <div class="column">
+              <span class="Detalle">
+                {{ mesActual }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="position__">
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 40"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+          >
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="moving-waves">
+              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="card tags">
+        <div class="card-content ty green__">
+          <div class="columns">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>58</h1>
+              </span>
+            </div>
+            <div class="column is-2">
+              <span class="fina">Órdenes</span> <br />
+              <span class="gruesa">Año</span>
+            </div>
+            <div class="column">
+              <span class="Detalle">
+                {{ yearActual }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="position__">
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 40"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+          >
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="moving-waves">
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="card tags">
+        <div class="card-content ty blue___">
+          <div class="columns">
+            <div class="column is-2">
+              <span class="number_">
+                <h1>16</h1>
+              </span>
+            </div>
+            <div class="column is-3">
+              <span class="fina">Órdenes</span> <br />
+              <span class="gruesa">cerradas</span>
+            </div>
+            <div class="column">
+              <span class="Detalle"> Septiembre </span>
+            </div>
+          </div>
+        </div>
+        <div class="position__">
+          <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 40"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+          >
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="moving-waves">
+              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
+              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
+              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
+              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

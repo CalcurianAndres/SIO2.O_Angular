@@ -1,12 +1,12 @@
-<div class="modal" [ngClass]="{'is-active': visible}">
-    <div class="modal-background" (click)="close()"></div>
-    <div class="modal-card animate__animated animate__fadeInUp" [ngClass]="longClass">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">{{ title }}</p>
-            <button class="delete red_cross" (click)="close()"></button>
-        </div>
-        <div class="modal-card-body">
-            <ng-content></ng-content>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': visible }">
+  <div class="modal-background" (click)="close()"></div>
+  <div class="modal-card animate__animated animate__fadeInUp" [ngClass]="longClass">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">{{ title }}</p>
+      <button class="delete red_cross" (click)="close()"></button>
     </div>
+    <div class="modal-card-body">
+      <ng-content></ng-content>
+    </div>
+  </div>
 </div>

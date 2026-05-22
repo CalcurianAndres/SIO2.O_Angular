@@ -3,18 +3,14 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
-
-
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    UsuariosComponent
-  ],
+  declarations: [DashboardComponent, UsuariosComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -22,7 +18,8 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
-  ]
+    HttpClientModule,
+    SharedModule,
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

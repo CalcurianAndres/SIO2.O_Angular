@@ -1,149 +1,154 @@
-<div class="modal" [ngClass]="{'is-active':nueva}">
-    <div class="modal-background"></div>
-    <div class="modal-card long animate__animated animate__fadeInUp longer">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Nueva orden de compra
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="box is-shadowless" style="background: transparent;">
-                <h4 class="title is-5 fuente" style="color: #1A1B35;">Datos de la Orden</h4>
-
-                <div class="columns is-multiline">
-                    <div class="column is-12">
-                        <div class="field">
-                            <label class="label">Cliente</label>
-                            <div class="control has-icons-left">
-                                <div class="select is-fullwidth">
-                                    <select [(ngModel)]="orden.cliente" (change)="Reset($event.target)">
-                                        <option value="" disabled selected>Seleccione un cliente</option>
-                                        <option [value]="cliente._id" *ngFor="let cliente of clientes.clientes">
-                                            {{cliente.nombre}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="icon is-small is-left">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.cliente">
-                        <div class="field">
-                            <label class="label">Nº Orden</label>
-                            <div class="control has-icons-left">
-                                <input type="text" class="input" placeholder="Ej: OC-1234" [(ngModel)]="orden.orden">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-hashtag"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.orden">
-                        <div class="field">
-                            <label class="label">Fecha de OC</label>
-                            <div class="control has-icons-left">
-                                <input type="date" class="input" [(ngModel)]="orden.fecha"
-                                    [max]="today | date:'yyyy-MM-dd'">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.fecha">
-                        <div class="field">
-                            <label class="label">Fecha de recepción</label>
-                            <div class="control has-icons-left">
-                                <input type="date" class="input" [(ngModel)]="orden.recepcion"
-                                    [max]="today | date:'yyyy-MM-dd'">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-file-download"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="field is-grouped" *ngIf="orden.recepcion">
-                <div class="control">
-                    <label class="label">Producto</label>
-                    <div class="select">
-                        <select (change)="SeleccionarProducto($event.target)" [(ngModel)]="producto_selected_">
-                            <option value="{{i}}"
-                                *ngFor="let producto of producto.FiltrarPorCliente(orden.cliente);index as i">
-                                {{producto.identificacion.producto}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control" *ngIf="producto_selected_">
-                    <label class="label">Cantidad</label>
-                    <input type="text" class="input" [(ngModel)]="cantidad_selected" (input)="formatear($event.target)">
-                </div>
-                <div class="control" *ngIf="cantidad_selected">
-                    <label for="" class="label">Fecha Solicitada</label>
-                    <input type="date" name="" id="" class="input" [(ngModel)]="fecha_selected"
-                        min="{{today | date:'yyyy-MM-dd'}}">
-                </div>
-            </div>
-            <div class="field is-grouped">
-                <div class="control" *ngIf="fecha_selected">
-                    <label for="" class="label">Entrega</label>
-                    <div class="select">
-                        <select [(ngModel)]="entrega">
-                            <option value="{{almacen.nombre}}"
-                                *ngFor="let almacen of clientes.buscarAlmacenesPorCliente(orden.cliente)">
-                                {{almacen.nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control" *ngIf="entrega">
-                    <label class="label"> </label>
-                    <button class="button info" (click)="addProducto()">
-                        <span class="icon"><i class="fas fa-plus"></i></span>
-                    </button>
-                </div>
-            </div>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': nueva }">
+  <div class="modal-background"></div>
+  <div class="modal-card long animate__animated animate__fadeInUp longer">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Nueva orden de compra</p>
+      <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
     </div>
-    <div class="modal-card animate__animated animate__fadeInUp longer" *ngIf="orden.pedido.length > 0">
-        <div class="modal-card-body bg">
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Solicitado</th>
-                        <th>Lug. entrega</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let producto of orden.pedido;index as i">
-                        <td>{{producto.nombre}}</td>
-                        <td>{{formatNumberWithDotSeparator(producto.cantidad)}}</td>
-                        <td>{{producto.solicitud}}</td>
-                        <td>{{producto.entrega}}</td>
-                        <td>
-                            <button class="button button-hidde_" (click)="orden.pedido.splice(i,1)">
-                                <span class="icon">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button class="button is-success" (click)="Guardar()">
-                <span class="icon"><i class="fa-solid fa-floppy-disk"></i></span>
-                <span>Guardar</span>
-            </button>
+    <div class="modal-card-body">
+      <div class="box is-shadowless" style="background: transparent">
+        <h4 class="title is-5 fuente" style="color: #1a1b35">Datos de la Orden</h4>
+
+        <div class="columns is-multiline">
+          <div class="column is-12">
+            <div class="field">
+              <label class="label">Cliente</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="orden.cliente" (change)="Reset($event.target)">
+                    <option value="" disabled selected>Seleccione un cliente</option>
+                    <option [value]="cliente._id" *ngFor="let cliente of clientes.clientes">
+                      {{ cliente.nombre }}
+                    </option>
+                  </select>
+                </div>
+                <div class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.cliente">
+            <div class="field">
+              <label class="label">Nº Orden</label>
+              <div class="control has-icons-left">
+                <input type="text" class="input" placeholder="Ej: OC-1234" [(ngModel)]="orden.orden" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-hashtag"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.orden">
+            <div class="field">
+              <label class="label">Fecha de OC</label>
+              <div class="control has-icons-left">
+                <input type="date" class="input" [(ngModel)]="orden.fecha" [max]="today | date: 'yyyy-MM-dd'" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-4 animate__animated animate__fadeIn" *ngIf="orden.fecha">
+            <div class="field">
+              <label class="label">Fecha de recepción</label>
+              <div class="control has-icons-left">
+                <input type="date" class="input" [(ngModel)]="orden.recepcion" [max]="today | date: 'yyyy-MM-dd'" />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-file-download"></i>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <hr />
+      <div class="field is-grouped" *ngIf="orden.recepcion">
+        <div class="control">
+          <label class="label">Producto</label>
+          <div class="select">
+            <select (change)="SeleccionarProducto($event.target)" [(ngModel)]="producto_selected_">
+              <option value="{{ i }}" *ngFor="let producto of producto.FiltrarPorCliente(orden.cliente); index as i">
+                {{ producto.identificacion.producto }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control" *ngIf="producto_selected_">
+          <label class="label">Cantidad</label>
+          <input type="text" class="input" [(ngModel)]="cantidad_selected" (input)="formatear($event.target)" />
+        </div>
+        <div class="control" *ngIf="cantidad_selected">
+          <label for="" class="label">Fecha Solicitada</label>
+          <input
+            type="date"
+            name=""
+            id=""
+            class="input"
+            [(ngModel)]="fecha_selected"
+            min="{{ today | date: 'yyyy-MM-dd' }}"
+          />
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control" *ngIf="fecha_selected">
+          <label for="" class="label">Entrega</label>
+          <div class="select">
+            <select [(ngModel)]="entrega">
+              <option
+                value="{{ almacen.nombre }}"
+                *ngFor="let almacen of clientes.buscarAlmacenesPorCliente(orden.cliente)"
+              >
+                {{ almacen.nombre }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control" *ngIf="entrega">
+          <label class="label"> </label>
+          <button class="button info" (click)="addProducto()">
+            <span class="icon"><i class="fas fa-plus"></i></span>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="modal-card animate__animated animate__fadeInUp longer" *ngIf="orden.pedido.length > 0">
+    <div class="modal-card-body bg">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Solicitado</th>
+            <th>Lug. entrega</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of orden.pedido; index as i">
+            <td>{{ producto.nombre }}</td>
+            <td>{{ formatNumberWithDotSeparator(producto.cantidad) }}</td>
+            <td>{{ producto.solicitud }}</td>
+            <td>{{ producto.entrega }}</td>
+            <td>
+              <button class="button button-hidde_" (click)="orden.pedido.splice(i, 1)">
+                <span class="icon">
+                  <i class="fa-solid fa-trash-can"></i>
+                </span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-success" (click)="Guardar()">
+        <span class="icon"><i class="fa-solid fa-floppy-disk"></i></span>
+        <span>Guardar</span>
+      </button>
+    </div>
+  </div>
 </div>

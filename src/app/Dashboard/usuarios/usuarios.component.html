@@ -1,90 +1,89 @@
-<div class="container_ mt-5">
-    <div class="card">
-        <div class="card-content darker">
-            <div class="card mt-5 title_">
-                <!-- <span class="red-bar"></span> -->
-                <div class="card-content">
-                  <h1 class="title blancas">
-                    Usuarios
-                  </h1>
-                  <h2 class="subtitle description blancas">
-                    Descripción
-                  </h2>
-                </div>
-                <div class="iconos">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-content">
-                    <span class="title">
-                        Crear usuario 
-                    </span>
-                    <hr>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <label for="" class="label">Correo</label>
-                            <div class="select">
-                                <select [(ngModel)]="index_trabajador">
-                                    <option value="{{i}}" *ngFor="let correos of trabajadores.trabajador;index as i">{{correos.datos_personales.email}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control" *ngIf="index_trabajador">
-                            <label for="" class="label">Nombres</label>
-                            <input type="text" class="input" value="{{trabajadores.trabajador[index_trabajador].datos_personales.nombres}}" disabled>
-                        </div>
-                        <div class="control" *ngIf="index_trabajador">
-                            <label for="" class="label">Rol</label>
-                            <div class="select">
-                                <select [(ngModel)]="Role">
-                                    <option value="user">Usuario</option>
-                                    <option value="admin">Administrador</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control" *ngIf="index_trabajador">
-                            <label for="" class="label"> </label>
-                            <button class="button" style="border: none; background-color: transparent;color:#3e8ed0" (click)="crearUsuario()">
-                                <span><i class="fas fa-plus"></i></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-content">
-                    <span class="title">Usuarios</span>
-                    <hr>
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Rol</th>
-                                <th>Gestión</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let usuario of usuarios;index as i">
-                                <td>{{usuario.Nombre}} {{usuario.Apellido}}</td>
-                                <td>{{usuario.Correo}}</td>
-                                <td>
-                                    <div class="select is-small">
-                                        <select value="{{usuario.Role}}" (change)="cambiarRol($event.target, usuario)">
-                                            <option value="admin">Administrador</option>
-                                            <option value="user">Usuario</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td><i class="fas fa-trash-alt" style="color: #f03a5f;cursor: pointer;" (click)="eliminarUsuario(usuario,i)"></i>   <i class="fas fa-key" style="color: #3e8ed0;cursor: pointer;" (click)="resetPassword(usuario)"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<app-page-layout>
+  <app-section-header title="Usuarios" description="Administración de usuarios del sistema" icon="fa-chart-bar" color="navy"></app-section-header>
+  <br />
+  <div class="card">
+    <div class="card-content">
+      <span class="title"> Crear usuario </span>
+      <hr />
+      <div class="field is-grouped">
+        <div class="control">
+          <label for="" class="label">Correo</label>
+          <div class="select">
+            <select [(ngModel)]="index_trabajador">
+              <option value="{{ i }}" *ngFor="let correos of trabajadores.trabajador; index as i">
+                {{ correos.datos_personales.email }}
+              </option>
+            </select>
+          </div>
         </div>
+        <div class="control" *ngIf="index_trabajador">
+          <label for="" class="label">Nombres</label>
+          <input
+            type="text"
+            class="input"
+            value="{{ trabajadores.trabajador[index_trabajador].datos_personales.nombres }}"
+            disabled
+          />
+        </div>
+        <div class="control" *ngIf="index_trabajador">
+          <label for="" class="label">Rol</label>
+          <div class="select">
+            <select [(ngModel)]="Role">
+              <option value="user">Usuario</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+        </div>
+        <div class="control" *ngIf="index_trabajador">
+          <label for="" class="label"> </label>
+          <button
+            class="button"
+            style="border: none; background-color: transparent; color: #3e8ed0"
+            (click)="crearUsuario()"
+          >
+            <span><i class="fas fa-plus"></i></span>
+          </button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  <br />
+  <div class="card">
+    <div class="card-content">
+      <span class="title">Usuarios</span>
+      <hr />
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Gestión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios; index as i">
+            <td>{{ usuario.Nombre }} {{ usuario.Apellido }}</td>
+            <td>{{ usuario.Correo }}</td>
+            <td>
+              <div class="select is-small">
+                <select value="{{ usuario.Role }}" (change)="cambiarRol($event.target, usuario)">
+                  <option value="admin">Administrador</option>
+                  <option value="user">Usuario</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <i
+                class="fas fa-trash-alt"
+                style="color: #f03a5f; cursor: pointer"
+                (click)="eliminarUsuario(usuario, i)"
+              ></i
+              >   <i class="fas fa-key" style="color: #3e8ed0; cursor: pointer" (click)="resetPassword(usuario)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page-layout>

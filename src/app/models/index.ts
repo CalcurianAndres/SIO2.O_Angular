@@ -16,5 +16,5 @@ export {
   Barniz,
   Pegamento,
   Producto_,
-  Producto
+  Producto,
 } from '../compras/models/modelos-compra';

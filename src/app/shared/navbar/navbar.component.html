@@ -1,188 +1,211 @@
 <app-solicitud-material [Solicitud_Material]="Solicitud_Material" (onCloseModal)="Solicitud_Material = false">
 </app-solicitud-material>
 
-<app-cambio-contrasena [reset]="pass" (OnCloseModal)="cerrar()">
-</app-cambio-contrasena>
+<app-cambio-contrasena [reset]="pass" (OnCloseModal)="cerrar()"> </app-cambio-contrasena>
 
-<app-asignacion [asignacion]="asignacion" (onCloseModal)="asignacion = false">
+<app-asignacion [asignacion]="asignacion" (onCloseModal)="asignacion = false"> </app-asignacion>
 
-</app-asignacion>
+<app-etiquetas [Etiquetas]="Etiquetas" (onCloseModal)="Etiquetas = false"> </app-etiquetas>
 
-<app-etiquetas [Etiquetas]="Etiquetas" (onCloseModal)="Etiquetas = false">
+<app-notifications [visible]="panel" (onCloseModal)="panel = false"> </app-notifications>
 
-</app-etiquetas>
+<div
+  class="menu__"
+  id="menu"
+  [class.collapsed]="isCollapsed"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+>
+  <div class="logo-container">
+    <img src="../../../assets/LOGO-SIO.png" width="100" height="20" id="logo_menu" />
+    <button class="pin-btn" (click)="togglePin($event)" [class.pinned]="isPinned" title="Fijar menú">
+      <i class="fas fa-thumbtack"></i>
+    </button>
+  </div>
 
-<app-notifications [visible]="panel" (onCloseModal)="panel = false">
-</app-notifications>
+  <hr class="menu-divider" />
 
-<div class="menu__" id='menu'
-     [class.collapsed]="isCollapsed"
-     (mouseenter)="onMouseEnter()"
-     (mouseleave)="onMouseLeave()">
-    <div class="logo-container">
-        <img src="../../../assets/LOGO-SIO.png" width="100" height="20" id="logo_menu">
-        <button class="pin-btn" (click)="togglePin($event)" [class.pinned]="isPinned" title="Fijar menú">
-            <i class="fas fa-thumbtack"></i>
-        </button>
+  <aside class="menu">
+    <ul class="menu-list-wrapper" [class.is-expanded]="menuAbierto === 'compras' || router.url.includes('/compras')">
+      <li>
+        <a
+          class="parent-link"
+          (click)="showCompras()"
+          [ngClass]="{ 'is-active': router.url.includes('/compras') }"
+          title="Compras"
+        >
+          <i class="fas fa-shopping-cart"></i>
+          <span class="nav-label">Compras</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/compras/grupos" routerLinkActive="sub-active">Grupos</a></li>
+          <li><a routerLink="/compras/fabricantes" routerLinkActive="sub-active">Fabricantes</a></li>
+          <li><a routerLink="/compras/proveedores" routerLinkActive="sub-active">Proveedores</a></li>
+          <li><a routerLink="/compras/ordenes" routerLinkActive="sub-active">Ordenes</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul
+      class="menu-list-wrapper"
+      [class.is-expanded]="
+        (menuAbierto === 'ventas' || router.url.includes('/ventas')) && !router.url.includes('/ventas/produccion')
+      "
+    >
+      <li>
+        <a
+          class="parent-link"
+          (click)="showVentas()"
+          [ngClass]="{ 'is-active': router.url.includes('/ventas') && !router.url.includes('/ventas/produccion') }"
+          title="Ventas"
+        >
+          <i class="fas fa-chart-line"></i>
+          <span class="nav-label">Ventas</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/ventas/compra" routerLinkActive="sub-active">Órdenes de compra</a></li>
+          <li><a routerLink="/ventas/clientes" routerLinkActive="sub-active">Clientes</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul class="menu-list-wrapper" [class.is-expanded]="menuAbierto === 'inventario' || router.url.includes('/almacen')">
+      <li>
+        <a
+          class="parent-link"
+          (click)="showInventario()"
+          [ngClass]="{ 'is-active': router.url.includes('/almacen') }"
+          title="Inventario"
+        >
+          <i class="fas fa-warehouse"></i>
+          <span class="nav-label">Inventario</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/almacen/inventario" routerLinkActive="sub-active">Inventario</a></li>
+          <li><a routerLink="/almacen/recepcion" routerLinkActive="sub-active">Recepción</a></li>
+          <li><a routerLink="/almacen/bobinas" routerLinkActive="sub-active">Bobinas</a></li>
+          <li><a routerLink="/almacen/producto-terminado" routerLinkActive="sub-active">Producto terminado</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul
+      class="menu-list-wrapper"
+      [class.is-expanded]="menuAbierto === 'laboratorio' || router.url.includes('/laboratorio')"
+    >
+      <li>
+        <a
+          class="parent-link"
+          (click)="ShowLaboratorio()"
+          [ngClass]="{ 'is-active': router.url.includes('/laboratorio') }"
+          title="Laboratorio"
+        >
+          <i class="fas fa-flask"></i>
+          <span class="nav-label">Laboratorio</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/laboratorio/especificacion" routerLinkActive="sub-active">Especificación</a></li>
+          <li><a routerLink="/laboratorio/analisis" routerLinkActive="sub-active">Análisis</a></li>
+          <li><a routerLink="/laboratorio/defectos" routerLinkActive="sub-active">Defectos</a></li>
+          <li><a routerLink="/laboratorio/certificado" routerLinkActive="sub-active">Certificados</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul
+      class="menu-list-wrapper"
+      [class.is-expanded]="
+        menuAbierto === 'produccion' || router.url.includes('/maquinas') || router.url.includes('/ventas/produccion')
+      "
+    >
+      <li>
+        <a
+          class="parent-link"
+          (click)="showProduccion()"
+          [ngClass]="{ 'is-active': router.url.includes('/maquinas') || router.url.includes('/ventas/produccion') }"
+          title="Producción"
+        >
+          <i class="fas fa-industry"></i>
+          <span class="nav-label">Producción</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/ventas/produccion" routerLinkActive="sub-active">Órdenes</a></li>
+          <li><a routerLink="/maquinas/fases" routerLinkActive="sub-active">Fases</a></li>
+          <li><a routerLink="/maquinas/maquinas" routerLinkActive="sub-active">Máquinas</a></li>
+          <li><a routerLink="/maquinas/categoria" routerLinkActive="sub-active">Categoría</a></li>
+          <li><a routerLink="/maquinas/productos" routerLinkActive="sub-active">Productos</a></li>
+          <li><a routerLink="/maquinas/tintas" routerLinkActive="sub-active">Tintas</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul class="menu-list-wrapper" [class.is-expanded]="menuAbierto === 'empresa' || router.url.includes('/empresa')">
+      <li>
+        <a
+          class="parent-link"
+          (click)="showEmpresa()"
+          [ngClass]="{ 'is-active': router.url.includes('/empresa') }"
+          title="Empresa"
+        >
+          <i class="fas fa-building"></i>
+          <span class="nav-label">Empresa</span>
+          <i class="fas fa-chevron-down arrow"></i>
+        </a>
+        <ul class="submenu">
+          <li><a routerLink="/empresa/departamentos" routerLinkActive="sub-active">Departamentos</a></li>
+          <li><a routerLink="/empresa/cargos" routerLinkActive="sub-active">Cargos</a></li>
+          <li><a routerLink="/empresa/empleados" routerLinkActive="sub-active">Empleados</a></li>
+          <li><a routerLink="/empresa/horarios" routerLinkActive="sub-active">Horarios</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <span class="iconos-footer">
+    <button class="action-btn" (click)="panel = !panel" title="Notificaciones">
+      <i class="fas fa-bell"></i>
+      <span class="badge red-glow" *ngIf="notification.notificaciones.length > 0">{{
+        notification.notificaciones.length
+      }}</span>
+    </button>
+    <button class="action-btn" (click)="notification.nuevaNotificacion()" title="Notificaciones">
+      <i class="fas fa-undo-alt"></i>
+    </button>
+    <button class="action-btn" (click)="Solicitud_Material = true" title="Solicitar material">
+      <i class="fas fa-shopping-cart"></i>
+    </button>
+    <button class="action-btn" (click)="abrirAsignacion()" title="Asignaciones">
+      <i class="fas fa-paper-plane"></i>
+      <span class="badge red-glow" *ngIf="showAsignaciones() > 0">{{ showAsignaciones() }}</span>
+    </button>
+    <button class="action-btn" (click)="Etiquetas = true" title="Etiquetas"><i class="fas fa-tags"></i></button>
+  </span>
+
+  <div class="user-area">
+    <div class="user-profile-trigger" (click)="toggleProfileMenu($event)" title="Menú de usuario">
+      <div class="avatar-wrapper">
+        <i class="fas fa-user-circle"></i>
+        <span class="status-dot"></span>
+      </div>
+      <div class="user-text">
+        <span class="full-name">{{ usuario.Nombre }} {{ usuario.Apellido }}</span>
+        <span class="user-role">Administrador</span>
+      </div>
+      <i class="fas fa-cog settings-icon"></i>
     </div>
 
-    <hr class="menu-divider">
-
-    <aside class="menu">
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="menuAbierto === 'compras' || router.url.includes('/compras')">
-            <li>
-                <a class="parent-link" (click)="showCompras()"
-                    [ngClass]="{'is-active': router.url.includes('/compras')}"
-                    title="Compras">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="nav-label">Compras</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/compras/grupos" routerLinkActive="sub-active">Grupos</a></li>
-                    <li><a routerLink="/compras/fabricantes" routerLinkActive="sub-active">Fabricantes</a></li>
-                    <li><a routerLink="/compras/proveedores" routerLinkActive="sub-active">Proveedores</a></li>
-                    <li><a routerLink="/compras/ordenes" routerLinkActive="sub-active">Ordenes</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="(menuAbierto === 'ventas' || router.url.includes('/ventas')) && !router.url.includes('/ventas/produccion')">
-            <li>
-                <a class="parent-link" (click)="showVentas()"
-                    [ngClass]="{'is-active': (router.url.includes('/ventas') && !router.url.includes('/ventas/produccion'))}"
-                    title="Ventas">
-                    <i class="fas fa-chart-line"></i>
-                    <span class="nav-label">Ventas</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/ventas/compra" routerLinkActive="sub-active">Órdenes de compra</a></li>
-                    <li><a routerLink="/ventas/clientes" routerLinkActive="sub-active">Clientes</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="menuAbierto === 'inventario' || router.url.includes('/almacen')">
-            <li>
-                <a class="parent-link" (click)="showInventario()"
-                    [ngClass]="{'is-active': router.url.includes('/almacen')}"
-                    title="Inventario">
-                    <i class="fas fa-warehouse"></i>
-                    <span class="nav-label">Inventario</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/almacen/inventario" routerLinkActive="sub-active">Inventario</a></li>
-                    <li><a routerLink="/almacen/recepcion" routerLinkActive="sub-active">Recepción</a></li>
-                    <li><a routerLink="/almacen/bobinas" routerLinkActive="sub-active">Bobinas</a></li>
-                    <li><a routerLink="/almacen/producto-terminado" routerLinkActive="sub-active">Producto terminado</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="menuAbierto === 'laboratorio' || router.url.includes('/laboratorio')">
-            <li>
-                <a class="parent-link" (click)="ShowLaboratorio()"
-                    [ngClass]="{'is-active': router.url.includes('/laboratorio')}"
-                    title="Laboratorio">
-                    <i class="fas fa-flask"></i>
-                    <span class="nav-label">Laboratorio</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/laboratorio/especificacion" routerLinkActive="sub-active">Especificación</a>
-                    </li>
-                    <li><a routerLink="/laboratorio/analisis" routerLinkActive="sub-active">Análisis</a></li>
-                    <li><a routerLink="/laboratorio/defectos" routerLinkActive="sub-active">Defectos</a></li>
-                    <li><a routerLink="/laboratorio/certificado" routerLinkActive="sub-active">Certificados</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="menuAbierto === 'produccion' || router.url.includes('/maquinas') || router.url.includes('/ventas/produccion')">
-            <li>
-                <a class="parent-link" (click)="showProduccion()"
-                    [ngClass]="{'is-active': (router.url.includes('/maquinas') || router.url.includes('/ventas/produccion'))}"
-                    title="Producción">
-                    <i class="fas fa-industry"></i>
-                    <span class="nav-label">Producción</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/ventas/produccion" routerLinkActive="sub-active">Órdenes</a></li>
-                    <li><a routerLink="/maquinas/fases" routerLinkActive="sub-active">Fases</a></li>
-                    <li><a routerLink="/maquinas/maquinas" routerLinkActive="sub-active">Máquinas</a></li>
-                    <li><a routerLink="/maquinas/categoria" routerLinkActive="sub-active">Categoría</a></li>
-                    <li><a routerLink="/maquinas/productos" routerLinkActive="sub-active">Productos</a></li>
-                    <li><a routerLink="/maquinas/tintas" routerLinkActive="sub-active">Tintas</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul class="menu-list-wrapper"
-            [class.is-expanded]="menuAbierto === 'empresa' || router.url.includes('/empresa')">
-            <li>
-                <a class="parent-link" (click)="showEmpresa()"
-                    [ngClass]="{'is-active': router.url.includes('/empresa')}"
-                    title="Empresa">
-                    <i class="fas fa-building"></i>
-                    <span class="nav-label">Empresa</span>
-                    <i class="fas fa-chevron-down arrow"></i>
-                </a>
-                <ul class="submenu">
-                    <li><a routerLink="/empresa/departamentos" routerLinkActive="sub-active">Departamentos</a></li>
-                    <li><a routerLink="/empresa/cargos" routerLinkActive="sub-active">Cargos</a></li>
-                    <li><a routerLink="/empresa/empleados" routerLinkActive="sub-active">Empleados</a></li>
-                    <li><a routerLink="/empresa/horarios" routerLinkActive="sub-active">Horarios</a></li>
-                </ul>
-            </li>
-        </ul>
-    </aside>
-
-    <span class="iconos-footer">
-        <button class="action-btn" (click)="panel = !panel" title="Notificaciones">
-            <i class="fas fa-bell"></i>
-            <span class="badge red-glow"
-                *ngIf="notification.notificaciones.length > 0">{{notification.notificaciones.length}}</span>
-        </button>
-        <button class="action-btn" (click)="notification.nuevaNotificacion()" title="Notificaciones"><i class="fas fa-undo-alt"></i></button>
-        <button class="action-btn" (click)="Solicitud_Material = true" title="Solicitar material"><i class="fas fa-shopping-cart"></i></button>
-        <button class="action-btn" (click)="abrirAsignacion()" title="Asignaciones">
-            <i class="fas fa-paper-plane"></i>
-            <span class="badge red-glow" *ngIf="showAsignaciones() > 0">{{showAsignaciones()}}</span>
-        </button>
-        <button class="action-btn" (click)="Etiquetas = true" title="Etiquetas"><i class="fas fa-tags"></i></button>
-    </span>
-
-    <div class="user-area">
-        <div class="user-profile-trigger" (click)="toggleProfileMenu($event)" title="Menú de usuario">
-            <div class="avatar-wrapper">
-                <i class="fas fa-user-circle"></i>
-                <span class="status-dot"></span>
-            </div>
-            <div class="user-text">
-                <span class="full-name">{{ usuario.Nombre }} {{ usuario.Apellido }}</span>
-                <span class="user-role">Administrador</span>
-            </div>
-            <i class="fas fa-cog settings-icon"></i>
-        </div>
-
-        <div class="profile-menu shadow-lg" [class.show-menu]="isMenuVisible">
-            <div class="menu-header-mini">Mi Cuenta</div>
-            <button class="menu-item" (click)="cambiarContrasena()">
-                <i class="fas fa-key"></i> <span>Seguridad</span>
-            </button>
-            <div class="menu-divider"></div>
-            <button class="menu-item logout" (click)="cerrarSesion()">
-                <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
-            </button>
-        </div>
+    <div class="profile-menu shadow-lg" [class.show-menu]="isMenuVisible">
+      <div class="menu-header-mini">Mi Cuenta</div>
+      <button class="menu-item" (click)="cambiarContrasena()"><i class="fas fa-key"></i> <span>Seguridad</span></button>
+      <div class="menu-divider"></div>
+      <button class="menu-item logout" (click)="cerrarSesion()">
+        <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+      </button>
     </div>
+  </div>
 </div>

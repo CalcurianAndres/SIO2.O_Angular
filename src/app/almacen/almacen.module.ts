@@ -5,6 +5,7 @@ import { AlmacenRoutingModule } from './almacen-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NavbarModule } from '../shared/navbar/navbar.module';
+import { SharedModule } from '../shared/shared.module';
 import { RecepcionComponent } from './recepcion/recepcion.component';
 import { NuevaRecepcionComponent } from './recepcion/nueva-recepcion/nueva-recepcion.component';
 import { ListadoComponent } from './recepcion/listado/listado.component';
@@ -21,8 +22,6 @@ import { NewConvertidoraComponent } from './bobinas/new-convertidora/new-convert
 import { NewBobinaComponent } from './bobinas/new-bobina/new-bobina.component';
 import { DescuentoBobinaComponent } from './recepcion/nueva-recepcion/descuento-bobina/descuento-bobina.component';
 import { ProductoTerminadoComponent } from './producto-terminado/producto-terminado.component';
-
-
 
 @NgModule({
   declarations: [
@@ -42,7 +41,7 @@ import { ProductoTerminadoComponent } from './producto-terminado/producto-termin
     NewConvertidoraComponent,
     NewBobinaComponent,
     DescuentoBobinaComponent,
-    ProductoTerminadoComponent
+    ProductoTerminadoComponent,
   ],
   imports: [
     CommonModule,
@@ -50,8 +49,9 @@ import { ProductoTerminadoComponent } from './producto-terminado/producto-termin
     NavbarModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
   ],
-  exports:[ComentariosComponent]
+  exports: [ComentariosComponent],
 })
-export class AlmacenModule { }
+export class AlmacenModule {}

@@ -1,48 +1,54 @@
-<div class="modal" [ngClass]="{'is-active':descuento}">
-    <div class="modal-background"></div>
-    <div class="modal-card long animate__animated animate__fadeInUp">
-        <div class="modal-card-head">
-            <p class="modal-card-title fuente">
-                Descontar Bobinas
-            </p>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-        </div>
-        <div class="modal-card-body">
-            <div class="field is-grouped">
-                <div class="control">
-                    <b>Descuento:</b> {{descuento_total | number:'1.2-2'}} t<br>
-                    <b>Hojas conv. teorica:</b> {{hojas_deberia | number:'1.0-0'}} und<br>
-                    <b>Hojas recibidas:</b> {{entregada | number:'1.0-0'}} und<br>
-                    <b>Rendimiento:</b> {{(entregada / hojas_deberia) * 100 | number:'1.2-2'}}% <br>
-                    <b>Desperdicio:</b> {{100 - ((entregada / hojas_deberia) * 100) | number:'1.2-2'}}% <br>
-                </div>
-            </div>
-            <div class="control">
-                <button class="button is-success" (click)="descontarBobinas()">
-                    <span class="icon"><i class="fas fa-check"></i></span>
-                    <span>Descontar</span>
-                </button>
-                <!-- <button (click)="shownInfo()">test</button> -->
-            </div>
-            <hr>
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Nº Bobina</th>
-                        <th>Peso (t)</th>
-                        <th>Consumido (t)</th>
-                        <th>Restante (t)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let bobinas of bobinasPorLote(); index as i">
-                        <td>{{bobinas.codigo}}</td>
-                        <td>{{bobinas.neto}}</td>
-                        <td><input type="number" class="input is-small" style="width: 70px;" [(ngModel)]="descuentos[i]"  (ngModelChange)="actualizarDescuentoTotal()"></td>
-                        <td>{{ (descuentos[i] != null ? bobinas.neto - descuentos[i] : bobinas.neto) | number:'1.2-2' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="modal" [ngClass]="{ 'is-active': descuento }">
+  <div class="modal-background"></div>
+  <div class="modal-card long animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">Descontar Bobinas</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
+    <div class="modal-card-body">
+      <div class="field is-grouped">
+        <div class="control">
+          <b>Descuento:</b> {{ descuento_total | number: '1.2-2' }} t<br />
+          <b>Hojas conv. teorica:</b> {{ hojas_deberia | number: '1.0-0' }} und<br />
+          <b>Hojas recibidas:</b> {{ entregada | number: '1.0-0' }} und<br />
+          <b>Rendimiento:</b> {{ (entregada / hojas_deberia) * 100 | number: '1.2-2' }}% <br />
+          <b>Desperdicio:</b> {{ 100 - (entregada / hojas_deberia) * 100 | number: '1.2-2' }}% <br />
+        </div>
+      </div>
+      <div class="control">
+        <button class="button is-success" (click)="descontarBobinas()">
+          <span class="icon"><i class="fas fa-check"></i></span>
+          <span>Descontar</span>
+        </button>
+        <!-- <button (click)="shownInfo()">test</button> -->
+      </div>
+      <hr />
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Nº Bobina</th>
+            <th>Peso (t)</th>
+            <th>Consumido (t)</th>
+            <th>Restante (t)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bobinas of bobinasPorLote(); index as i">
+            <td>{{ bobinas.codigo }}</td>
+            <td>{{ bobinas.neto }}</td>
+            <td>
+              <input
+                type="number"
+                class="input is-small"
+                style="width: 70px"
+                [(ngModel)]="descuentos[i]"
+                (ngModelChange)="actualizarDescuentoTotal()"
+              />
+            </td>
+            <td>{{ (descuentos[i] != null ? bobinas.neto - descuentos[i] : bobinas.neto) | number: '1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

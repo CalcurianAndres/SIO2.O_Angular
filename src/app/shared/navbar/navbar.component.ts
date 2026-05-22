@@ -13,30 +13,43 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   selector: 'app-navbar',
   standalone: false,
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-
   menuAbierto: string = '';
   _isCollapsed = true;
   isPinned = false;
 
-  get isCollapsed(): boolean { return this._isCollapsed; }
+  get isCollapsed(): boolean {
+    return this._isCollapsed;
+  }
   set isCollapsed(val: boolean) {
     this._isCollapsed = val;
     document.documentElement.style.setProperty('--sidebar-width', val ? '65px' : '240px');
   }
 
   toggleMenu(seccion: string) {
-    this.menuAbierto = (this.menuAbierto === seccion) ? '' : seccion;
+    this.menuAbierto = this.menuAbierto === seccion ? '' : seccion;
   }
 
-  showCompras() { this.toggleMenu('compras'); }
-  showVentas() { this.toggleMenu('ventas'); }
-  showInventario() { this.toggleMenu('inventario'); }
-  ShowLaboratorio() { this.toggleMenu('laboratorio'); }
-  showProduccion() { this.toggleMenu('produccion'); }
-  showEmpresa() { this.toggleMenu('empresa'); }
+  showCompras() {
+    this.toggleMenu('compras');
+  }
+  showVentas() {
+    this.toggleMenu('ventas');
+  }
+  showInventario() {
+    this.toggleMenu('inventario');
+  }
+  ShowLaboratorio() {
+    this.toggleMenu('laboratorio');
+  }
+  showProduccion() {
+    this.toggleMenu('produccion');
+  }
+  showEmpresa() {
+    this.toggleMenu('empresa');
+  }
 
   onMouseEnter() {
     this.isCollapsed = false;
@@ -56,7 +69,8 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  constructor(public router: Router,
+  constructor(
+    public router: Router,
     public Login: LoginService,
     public notificacion: NotificacionesService,
     public ordenes: OproduccionService,
@@ -64,12 +78,12 @@ export class NavbarComponent implements OnInit {
     public solicitudes: SolicitudesService,
     public socket: WebSocketService,
     public notification: NotificationsService,
-    public devolucuiones: DevolucionesService
+    public devolucuiones: DevolucionesService,
   ) {
     this.usuario = Login.usuario;
   }
 
-  public Menu_: any = []
+  public Menu_: any = [];
   public empresa = false;
   public compras = false;
   public ventas = false;
@@ -80,10 +94,8 @@ export class NavbarComponent implements OnInit {
   public pass = false;
   public asignacion: boolean = false;
   public Etiquetas: boolean = false;
-  public notificaciones: any = []
+  public notificaciones: any = [];
   public confirmacion: boolean = false;
-
-
 
   ngOnInit() {
     document.documentElement.style.setProperty('--sidebar-width', '65px');
@@ -93,7 +105,6 @@ export class NavbarComponent implements OnInit {
     else if (url.includes('almacen')) this.menuAbierto = 'inventario';
     this.notificacion.subscribeToPushNotifications();
   }
-
 
   Menu: boolean = false;
   Solicitud_Material: boolean = false;
@@ -105,18 +116,19 @@ export class NavbarComponent implements OnInit {
     this.isMenuVisible = !this.isMenuVisible;
   }
 
-  panel = false
+  panel = false;
 
   showAsignaciones() {
-
     if (this.ordenes.orden) {
-      let n = this.ordenes.orden.filter(orden => orden.status === 'Por asignar').length + this.solicitudes.solicitudes.filter(solicitud => solicitud.status === 'Por Asignar').length;
+      let n =
+        this.ordenes.orden.filter((orden) => orden.status === 'Por asignar').length +
+        this.solicitudes.solicitudes.filter((solicitud) => solicitud.status === 'Por Asignar').length;
       if (n > 0) {
-        this.titleService.setTitle(`(${n}) - SIO | Sistema Integral de Operación`)
+        this.titleService.setTitle(`(${n}) - SIO | Sistema Integral de Operación`);
       } else {
-        this.titleService.setTitle(`SIO | Sistema Integral de Operación`)
+        this.titleService.setTitle(`SIO | Sistema Integral de Operación`);
       }
-      return n
+      return n;
     }
   }
 
@@ -152,7 +164,7 @@ export class NavbarComponent implements OnInit {
   select_menu(n) {
     this.Menu_ = [];
     this.Menu_[n] = true;
-    this.empresa = false
+    this.empresa = false;
   }
 
   // showEmpresa() {
@@ -210,17 +222,15 @@ export class NavbarComponent implements OnInit {
   // }
 
   cerrar() {
-    console.log('close')
+    console.log('close');
     this.pass = false;
   }
 
   abrirAsignacion() {
-    let n = this.ordenes.orden.filter(orden => orden.status === 'Por asignar').length;
-    let x = this.solicitudes.solicitudes.filter(solic => solic.status === 'Por Asignar').length
-    if ((n + x) > 0) {
+    let n = this.ordenes.orden.filter((orden) => orden.status === 'Por asignar').length;
+    let x = this.solicitudes.solicitudes.filter((solic) => solic.status === 'Por Asignar').length;
+    if (n + x > 0) {
       this.asignacion = true;
     }
   }
-
 }
-

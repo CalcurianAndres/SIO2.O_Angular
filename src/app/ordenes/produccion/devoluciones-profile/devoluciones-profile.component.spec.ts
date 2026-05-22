@@ -8,7 +8,7 @@ describe('DevolucionesProfileComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DevolucionesProfileComponent]
+      declarations: [DevolucionesProfileComponent],
     });
     fixture = TestBed.createComponent(DevolucionesProfileComponent);
     component = fixture.componentInstance;

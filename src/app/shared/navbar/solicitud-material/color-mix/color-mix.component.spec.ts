@@ -8,7 +8,7 @@ describe('ColorMixComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ColorMixComponent]
+      declarations: [ColorMixComponent],
     });
     fixture = TestBed.createComponent(ColorMixComponent);
     component = fixture.componentInstance;

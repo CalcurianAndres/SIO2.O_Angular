@@ -7,35 +7,33 @@ import { DepartamentosComponent } from './departamentos/departamentos.component'
 import { TrabajadoresComponent } from './trabajadores/trabajadores.component';
 import { HorariosComponent } from './horarios/horarios.component';
 
-const routes: Routes =[
+const routes: Routes = [
   {
-    path:'',
-    component:EmpleadosComponent,
-    children:[
+    path: '',
+    component: EmpleadosComponent,
+    children: [
       {
-        path:'cargos',
-        component:GestionComponent
+        path: 'cargos',
+        component: GestionComponent,
       },
       {
         path: 'departamentos',
-        component:DepartamentosComponent
+        component: DepartamentosComponent,
       },
       {
         path: 'empleados',
-        component:TrabajadoresComponent
+        component: TrabajadoresComponent,
       },
       {
-        path:'horarios',
-        component:HorariosComponent
-      }
-    ]
-}]
+        path: 'horarios',
+        component: HorariosComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class EmpleadosRoutingModule { }
+export class EmpleadosRoutingModule {}

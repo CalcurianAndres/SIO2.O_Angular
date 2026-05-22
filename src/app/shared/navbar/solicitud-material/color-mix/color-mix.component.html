@@ -1,140 +1,176 @@
 <div class="card mt-5 title_ tercera">
-    <!-- <span class="red-bar"></span> -->
-    <div class="card-content">
-      <h1 class="title blancas">
-        Preparación de tintas
-      </h1>
-      <div class="iconos">
-        <i class="fab fa-mix"></i>
+  <!-- <span class="red-bar"></span> -->
+  <div class="card-content">
+    <h1 class="title blancas">Preparación de tintas</h1>
+    <div class="iconos">
+      <i class="fab fa-mix"></i>
+    </div>
+  </div>
+</div>
+<br />
+<span class="link more" (click)="home()"> <i class="fas fa-home"></i> Inicio </span>
+<br />
+<br />
+<div class="columns">
+  <div class="column is-5">
+    <div class="card">
+      <div class="card-content">
+        <div class="subtitles">Colores Pantone</div>
+        <div class="color-list">
+          <div
+            class="color-item"
+            *ngFor="let pantones of materiales.PantonesSolo()"
+            (click)="MostrarInfo(pantones.codigo, pantones.nombre, pantones._id)"
+          >
+            <div class="color-box" [style.background-color]="pantones.rgb"></div>
+            <span>Pantone {{ pantones.codigo }}</span>
+          </div>
+        </div>
       </div>
     </div>
-</div>
-<br>
-<span class="link more" (click)="home()">
-    <i class="fas fa-home"></i> Inicio
-</span>
-<br> <br>
-<div class="columns">
-    <div class="column is-5">
-        <div class="card">
-            <div class="card-content">
-                <div class="subtitles">Colores Pantone</div>
-                <div class="color-list">
-                    <div class="color-item" *ngFor="let pantones of materiales.PantonesSolo()" (click)="MostrarInfo(pantones.codigo, pantones.nombre, pantones._id)">
-                        <div class="color-box" [style.background-color]="pantones.rgb"></div>
-                        <span>Pantone {{pantones.codigo}}</span>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="column">
+    <div class="card">
+      <div class="card-content">
+        <span class="subtitles" *ngIf="name.length > 0">
+          {{ name }}
+        </span>
+        <br />
+        <div class="field is-grouped">
+          <div class="control">
+            <label for="" class="label">Cantidad (kg) a preparar</label>
+            <input type="number" name="" id="" class="input" style="width: 70px" [(ngModel)]="cantidad_a_preparar" />
+          </div>
         </div>
+      </div>
     </div>
-    <div class="column">
-        <div class="card">
-            <div class="card-content">
-
-                <span class="subtitles" *ngIf="name.length > 0">
-                    {{name}}
-                </span>
-                <br>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <label for="" class="label">Cantidad (kg) a preparar</label>
-                        <input type="number" name="" id="" class="input" style="width: 70px;" [(ngModel)]="cantidad_a_preparar">
-                    </div>
+    <br />
+    <div class="card">
+      <div class="card-content">
+        <ng-container *ngIf="_seBusco">
+          <div class="empty-message" *ngIf="formulas_.length < 1">
+            <p>No hay fórmulas disponibles.</p>
+          </div>
+          <ng-container *ngFor="let formula of formulas_; index as i">
+            <span class="preparacion">
+              <div class="columns">
+                <div class="column is-2">
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    class="checkbox"
+                    [checked]="available[i]"
+                    (change)="activate(i, $event.target)"
+                  />
                 </div>
-            </div>
-        </div>
-        <br>
-        <div class="card">
-            <div class="card-content">
-                <ng-container *ngIf="_seBusco">
-                    <div class="empty-message" *ngIf="formulas_.length < 1">
-                        <p>No hay fórmulas disponibles.</p>
-                    </div>
-                    <ng-container *ngFor="let formula of formulas_;index as i">
-                        <span class="preparacion">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <input type="checkbox" name="" id="" class="checkbox" [checked]="available[i]"  (change)="activate(i, $event.target)">
-                                </div>
-                                <div class="column">
-                                    Formula {{i+1}}
-                                </div>
-                            </div>
-                        </span> <br>
-                        <table class="table is-fullwidth is-striped">
-                            <tbody>
-                                <tr *ngFor="let material of formula.formula;index as indice">
-                                    <td>{{material.material.nombre}} {{material.material.serie}} ({{material.material.fabricante.alias}})</td>
-                                    <td>{{material.cantidad * cantidad_a_preparar | number}}kg</td>
-                                </tr>
-                                <tr *ngFor="let cantidad of seleccionarEnvases(cantidad_a_preparar)">
-                                    <td>Envase con capacidad {{cantidad.capacidad}}kg</td>
-                                    <td>{{cantidad.cantidad}}Und</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="column">Formula {{ i + 1 }}</div>
+              </div>
+            </span>
+            <br />
+            <table class="table is-fullwidth is-striped">
+              <tbody>
+                <tr *ngFor="let material of formula.formula; index as indice">
+                  <td>
+                    {{ material.material.nombre }} {{ material.material.serie }} ({{
+                      material.material.fabricante.alias
+                    }})
+                  </td>
+                  <td>{{ material.cantidad * cantidad_a_preparar | number }}kg</td>
+                </tr>
+                <tr *ngFor="let cantidad of seleccionarEnvases(cantidad_a_preparar)">
+                  <td>Envase con capacidad {{ cantidad.capacidad }}kg</td>
+                  <td>{{ cantidad.cantidad }}Und</td>
+                </tr>
+              </tbody>
+            </table>
 
-                        <button class="button is-success is-small" [disabled]="!available[i]" (click)="guardarSolicitud(i)">
-                            <span></span>
-                            <span>Solicitar</span>
-                        </button>
+            <button class="button is-success is-small" [disabled]="!available[i]" (click)="guardarSolicitud(i)">
+              <span></span>
+              <span>Solicitar</span>
+            </button>
 
-                        <br><br>
-                    </ng-container>
-                </ng-container>
-            </div>
-        </div>
+            <br /><br />
+          </ng-container>
+        </ng-container>
+      </div>
     </div>
+  </div>
 </div>
-<hr>
+<hr />
 <div class="card" *ngIf="EtiquetasPendiente().length > 0">
-    <div class="card-content">
-        <div class="etiquetas">
-            <div class="subtitles">Preparaciones pendientes</div>
-            <br>
-            <span>
-                <div class="card" *ngFor="let requisicion of EtiquetasPendiente();index as indice">
-                    <div class="card-content">
-                        <b style="color:black; font-family: 'Gilroy';">{{requisicion.motivo}}</b> <br>
-                        <b style="color: rgb(63, 63, 63); font-size: small;">{{requisicion.createdAt | date:'dd/MM/yyyy - hh:mm:ss a'}}</b>
-                        <br><br>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <label class="label">Envases pesados</label>
-                                <input type="number" name="" id="" class="input" style="width:90px" [(ngModel)]="envases_pesados" (change)="pesos_de_envase = []">
-                            </div>
-                            <div class="control">
-                                <label class="label">Preparado por</label>
-                                <div class="select">
-                                    <select [(ngModel)]="empleado">
-                                        <option value="Empleado 1">empleado 1</option>
-                                        <option value="Empleado 2">empleado 2</option>
-                                        <option value="Empleado 3">empleado 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <span class="subtitles">Peso Kg por envase</span>
-                        <br>
-                        <div class="fields-container" style="display: flex; flex-wrap: wrap; gap: 10px;" *ngIf="empleado && envases_pesados > 0">
-                            <div class="field" *ngFor="let field of [].constructor(envases_pesados); index as i" style="flex: 1 0 10%; box-sizing: border-box;">
-                                <div class="control">
-                                    <label for="" class="label">Envase {{i+1}}</label>
-                                    <input type="number" class="input" style="width: 100%; box-sizing: border-box; max-width: 80px;" [(ngModel)]="pesos_de_envase[i]">
-                                </div>
-                            </div>
-                        </div>
+  <div class="card-content">
+    <div class="etiquetas">
+      <div class="subtitles">Preparaciones pendientes</div>
+      <br />
+      <span>
+        <div class="card" *ngFor="let requisicion of EtiquetasPendiente(); index as indice">
+          <div class="card-content">
+            <b style="color: black; font-family: 'Gilroy'">{{ requisicion.motivo }}</b> <br />
+            <b style="color: rgb(63, 63, 63); font-size: small">{{
+              requisicion.createdAt | date: 'dd/MM/yyyy - hh:mm:ss a'
+            }}</b>
+            <br /><br />
+            <div class="field is-grouped">
+              <div class="control">
+                <label class="label">Envases pesados</label>
+                <input
+                  type="number"
+                  name=""
+                  id=""
+                  class="input"
+                  style="width: 90px"
+                  [(ngModel)]="envases_pesados"
+                  (change)="pesos_de_envase = []"
+                />
+              </div>
+              <div class="control">
+                <label class="label">Preparado por</label>
+                <div class="select">
+                  <select [(ngModel)]="empleado">
+                    <option value="Empleado 1">empleado 1</option>
+                    <option value="Empleado 2">empleado 2</option>
+                    <option value="Empleado 3">empleado 3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <span class="subtitles">Peso Kg por envase</span>
+            <br />
+            <div
+              class="fields-container"
+              style="display: flex; flex-wrap: wrap; gap: 10px"
+              *ngIf="empleado && envases_pesados > 0"
+            >
+              <div
+                class="field"
+                *ngFor="let field of [].constructor(envases_pesados); index as i"
+                style="flex: 1 0 10%; box-sizing: border-box"
+              >
+                <div class="control">
+                  <label for="" class="label">Envase {{ i + 1 }}</label>
+                  <input
+                    type="number"
+                    class="input"
+                    style="width: 100%; box-sizing: border-box; max-width: 80px"
+                    [(ngModel)]="pesos_de_envase[i]"
+                  />
+                </div>
+              </div>
+            </div>
 
-                        <hr>
+            <hr />
 
-                        <button class="button is-success" *ngIf="pesos_de_envase.length === envases_pesados && pesos_de_envase.length > 0"
-                            (click)="ImprimirEtiquetas(indice)">
-                            <span class="icon"></span>
-                            <span>Imprimir etiqueta</span>
-                        </button>
-                        <!-- <div class="columns">
+            <button
+              class="button is-success"
+              *ngIf="pesos_de_envase.length === envases_pesados && pesos_de_envase.length > 0"
+              (click)="ImprimirEtiquetas(indice)"
+            >
+              <span class="icon"></span>
+              <span>Imprimir etiqueta</span>
+            </button>
+            <!-- <div class="columns">
                             <div class="column is-5">
                                 <hr>
                                 <div class="field" *ngFor="let field of [].constructor(envases_pesados); index as i">
@@ -173,12 +209,11 @@
                                 </div>
                             </div>
                         </div> -->
-
-                    </div>
-                </div>
-            </span>
+          </div>
         </div>
+      </span>
     </div>
+  </div>
 </div>
 
 <!-- <div class="card">

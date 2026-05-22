@@ -4,38 +4,34 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-conf-devoluciones',
-  standalone:false,
+  standalone: false,
   templateUrl: './conf-devoluciones.component.html',
-  styleUrls: ['./conf-devoluciones.component.scss']
+  styleUrls: ['./conf-devoluciones.component.scss'],
 })
 export class ConfDevolucionesComponent {
+  public api = inject(DevolucionesService);
 
-  public api = inject(DevolucionesService)
-
-
-  @Input() confirmacion:any;
-  @Input() devolucion:any;
+  @Input() confirmacion: any;
+  @Input() devolucion: any;
   @Output() onCloseModal = new EventEmitter();
 
-  cerrar(){
-    this.onCloseModal.emit()
+  cerrar() {
+    this.onCloseModal.emit();
   }
 
-
-  confirmar(){
-    this.api.guardarDevolucion(this.api.buscarDevolucionPorID(this.devolucion))
+  confirmar() {
+    this.api.guardarDevolucion(this.api.buscarDevolucionPorID(this.devolucion));
     setTimeout(() => {
       this.cerrar();
       Swal.fire({
-        text:this.api.mensaje.mensaje,
-        icon:this.api.mensaje.icon,
-        toast:true,
-        position:'top-end',
-        timer:5000,
-        showConfirmButton:false,
-        timerProgressBar:true
-      })
+        text: this.api.mensaje.mensaje,
+        icon: this.api.mensaje.icon,
+        toast: true,
+        position: 'top-end',
+        timer: 5000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
     }, 1000);
   }
-
 }

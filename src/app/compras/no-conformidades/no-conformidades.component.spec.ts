@@ -8,7 +8,7 @@ describe('NoConformidadesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NoConformidadesComponent]
+      declarations: [NoConformidadesComponent],
     });
     fixture = TestBed.createComponent(NoConformidadesComponent);
     component = fixture.componentInstance;

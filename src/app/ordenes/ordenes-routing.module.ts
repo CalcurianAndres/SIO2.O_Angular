@@ -10,48 +10,45 @@ import { AsignacionesComponent } from './produccion/asignaciones/asignaciones.co
 import { DevolucionesProfileComponent } from './produccion/devoluciones-profile/devoluciones-profile.component';
 import { SolicitudesProfileComponent } from './produccion/solicitudes-profile/solicitudes-profile.component';
 
-const routes: Routes =[
+const routes: Routes = [
   {
-    path:'',
-    component:OrdenesComponent,
-    children:[
+    path: '',
+    component: OrdenesComponent,
+    children: [
       {
-        path:'compra',
-        component:CompraComponent
+        path: 'compra',
+        component: CompraComponent,
       },
       {
-        path:'produccion',
-        component:ProduccionComponent
+        path: 'produccion',
+        component: ProduccionComponent,
       },
       {
-        path:'clientes',
-        component:ClientesComponent
+        path: 'clientes',
+        component: ClientesComponent,
       },
       {
-        path:'planificacion',
-        component:PlanificacionComponent
+        path: 'planificacion',
+        component: PlanificacionComponent,
       },
       {
-        path:'asignacion/:id',
-        component:AsignacionesComponent
-      }
-      ,
-      {
-        path:'devolucion/:id',
-        component:DevolucionesProfileComponent
+        path: 'asignacion/:id',
+        component: AsignacionesComponent,
       },
       {
-        path:'solicitud/:id',
-        component:SolicitudesProfileComponent
-      }
-    ]
-}]
+        path: 'devolucion/:id',
+        component: DevolucionesProfileComponent,
+      },
+      {
+        path: 'solicitud/:id',
+        component: SolicitudesProfileComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class OrdenesRoutingModule { }
+export class OrdenesRoutingModule {}

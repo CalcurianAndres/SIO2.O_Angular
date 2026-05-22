@@ -8,7 +8,7 @@ describe('AnalisisTintaComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AnalisisTintaComponent]
+      declarations: [AnalisisTintaComponent],
     });
     fixture = TestBed.createComponent(AnalisisTintaComponent);
     component = fixture.componentInstance;

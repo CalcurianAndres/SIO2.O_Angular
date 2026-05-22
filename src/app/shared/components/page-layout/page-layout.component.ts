@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-page-layout',
   standalone: false,
   templateUrl: './page-layout.component.html',
-  styleUrls: ['./page-layout.component.scss']
+  styleUrls: ['./page-layout.component.scss'],
 })
 export class PageLayoutComponent {}
