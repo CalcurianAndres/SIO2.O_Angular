@@ -95,3 +95,52 @@ No test files exist. `ng test` runs Karma/Jasmine framework but has nothing to e
 - Service Worker auto-registers on build — no manual registration in `main.ts`
 - When adding new CSS variables for themes, ensure sidebar-specific vars use `--sidebar-*` prefix so they stay dark in both themes
 - Toast, breadcrumb, skeleton components — register in `SharedComponentsModule`, not `SharedModule`
+
+## Docker / Entorno
+
+### Estructura
+```
+Nueva carpeta/
+├── docker-compose.yml    # Orquesta SIOF + SIOB + MongoDB
+├── setup.bat             # Build SIOF → copia a SIOB → docker-compose up
+├── SIOF/
+│   ├── Dockerfile        # nginx multi-stage
+│   ├── nginx.conf        # SPA + proxy /api + /socket.io a siob:3000
+│   └── .dockerignore
+└── SIOB/
+    ├── Dockerfile        # Express multi-stage (ya existía)
+    ├── docker-compose.yml# Solo SIOB + MongoDB (independiente)
+    └── .dockerignore
+```
+
+### Desarrollo en casa (hot-reload)
+```bash
+# Terminal 1 — MongoDB
+docker run -d --name mongo-sio -p 27017:27017 mongo
+
+# Terminal 2 — Backend
+cd SIOB && npm run dev          # nodemon en src/ (puerto 3000)
+
+# Terminal 3 — Frontend
+cd SIOF && npm start            # ng serve (puerto 4200)
+```
+
+El environment de SIOF detecta automáticamente si está en ng serve (puerto 4200)
+y apunta a `http://localhost:3000`. En producción usa URLs relativas.
+
+### Probar todo junto (Docker)
+```bash
+setup.bat   # build SIOF → copia a SIOB/public/ → docker-compose up -d
+# Abrir http://localhost
+```
+
+### SSL
+SIOB intenta cargar certs de `c:/certificado/server/`. Si no existen (casa),
+cae automáticamente a HTTP. Forzar HTTPS con env vars:
+`SSL_KEY`, `SSL_CERT`, `SSL_CA`.
+
+### Environment auto-detection (SIOF)
+En `src/environments/environment.ts`:
+- Puerto 4200 (ng serve) → `http://localhost:3000`
+- Host 192.168.0.22 (oficina) → `https://192.168.0.22`
+- Cualquier otro (Docker/producción) → URLs relativas (mismo origen)
