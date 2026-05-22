@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
 
@@ -36,7 +37,7 @@ export class NotificacionesService {
 
   private sendSubscriptionToBackend(subscription: PushSubscription) {
     // Aquí envías la suscripción al backend
-    fetch('https://192.168.0.22/api/subscribe', {
+    fetch(`${environment.apiUrl}/subscribe`, {
       method: 'POST',
       body: JSON.stringify(subscription),
       headers: { 'Content-Type': 'application/json' },

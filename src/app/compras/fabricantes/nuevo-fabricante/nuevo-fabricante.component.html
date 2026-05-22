@@ -330,11 +330,11 @@
       <ng-container *ngIf="nuevo">
         <label for="" class="label"> </label>
         <input type="checkbox" name="" id="" (change)="proveedor($event.target)" />
-        <span style="color: black"> Proveedor directo</span>
+        <span style="color: var(--text-heading)"> Proveedor directo</span>
       </ng-container>
       <ng-container *ngIf="editar">
         <hr />
-        <a style="color: black" (click)="BuscarProveedor()"> Ver informacion de proveedor </a>
+        <a style="color: var(--accent-blue)" (click)="BuscarProveedor()"> Ver informacion de proveedor </a>
       </ng-container>
 
       <div class="proveedor_directo" *ngIf="proveedor_directo || proveedor_directo_abierto">
@@ -365,7 +365,7 @@
             />
           </div>
         </div>
-        <strong style="color: black">Persona de contacto</strong>
+        <strong style="color: var(--text-heading)">Persona de contacto</strong>
         <div class="field is-grouped">
           <div class="control">
             <label for="" class="label">Nombre</label>

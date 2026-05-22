@@ -1,13 +1,13 @@
 .modal .modal-card .bg {
-  background-color: rgb(38, 52, 61);
-  color: white;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text-heading);
 }
 
 table tr td {
-  background-color: rgb(38, 52, 61);
-  color: white;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text-heading);
 }
 table tr th {
-  background-color: rgb(38, 52, 61);
-  color: white;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text-heading);
 }

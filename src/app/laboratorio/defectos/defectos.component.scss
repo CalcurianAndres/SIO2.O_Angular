@@ -107,10 +107,10 @@
 }
 
 .dark {
-  background-color: #3c3f41;
+  background-color: var(--bg-secondary);
 }
 .dark label {
-  color: white;
+  color: var(--text-heading);
 }
 
 ul {
@@ -314,12 +314,12 @@ input[type='range']::-moz-range-thumb {
 
 .yellow {
   background-color: rgb(240, 240, 103);
-  color: black;
+  color: var(--text-primary);
 }
 
 .red {
   background-color: rgb(240, 103, 103);
-  color: black;
+  color: var(--text-primary);
 }
 
 .card_ {

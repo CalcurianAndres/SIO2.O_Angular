@@ -1,54 +1,7 @@
-/* Contenedor del Acordeón */
-.accordion-wrapper {
-  background: transparent;
-}
-
-.accordion-item {
-  background: #ffffff;
-  border: 1px solid #fcfcfd;
-  border-radius: 16px;
-  margin-bottom: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: #0f172a;
-}
-
-.accordion-item:hover {
-  border-color: #d1d5db;
-  transform: translateY(-2px);
-}
-
-.accordion-trigger {
-  display: none;
-}
-
-/* Encabezado */
-.accordion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  cursor: pointer;
-  user-select: none;
-}
-
 .product-meta {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-}
-
-.product-icon {
-  width: 48px;
-  height: 48px;
-  background: #f8faff;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0062ff;
-  font-weight: 700;
-  font-size: 1.2rem;
-  border: 1px solid #edf2ff;
 }
 
 .product-info-text {
@@ -59,8 +12,7 @@
 .product-name {
   font-weight: 600;
   font-size: 1.15rem;
-  // letter-spacing: -0.01em;
-  color: #0f172a;
+  color: var(--text-heading);
 }
 
 .product-stats {
@@ -72,7 +24,7 @@
 
 .stat-item {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -81,57 +33,13 @@
 .dot {
   width: 4px;
   height: 4px;
-  background: #cbd5e1;
+  background: var(--text-muted);
   border-radius: 50%;
+  opacity: 0.4;
 }
 
-/* Chevron Animado */
-.chevron-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.chevron-circle svg {
-  width: 18px;
-  height: 18px;
-  stroke: #475569;
-}
-
-/* Contenido Expandible */
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #ffffff;
-}
-
-.accordion-trigger:checked ~ .accordion-content {
-  max-height: 1200px;
-}
-
-.accordion-trigger:checked ~ .accordion-header {
-  border-bottom: 1px solid #fcfcfd;
-}
-
-.accordion-trigger:checked ~ .accordion-header .chevron-circle {
-  background: #0062ff;
-  transform: rotate(180deg);
-}
-
-.accordion-trigger:checked ~ .accordion-header .chevron-circle svg {
-  stroke: white;
-}
-
-/* Estilos de Tabla Interna */
 .detail-pane {
-  padding: 2rem;
-  background-color: #fafbfc;
+  padding: 1.5rem;
 }
 
 

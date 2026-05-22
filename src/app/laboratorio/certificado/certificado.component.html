@@ -1,9 +1,9 @@
 <!-- Modal de Muestreo -->
 <div class="modal" [ngClass]="{ 'is-active': showModal }">
   <div class="modal-background" (click)="showModal = false"></div>
-  <div class="modal-card" style="width: 99%">
+  <div class="modal-card modal-card-wide">
     <header class="modal-card-head">
-      <p class="modal-card-title has-text-white">
+      <p class="modal-card-title">
         <i class="fas fa-microscope mr-2"></i> OP: 2026001 - Cajita Feliz Genérica
       </p>
       <button class="delete" aria-label="close" (click)="showModal = false"></button>
@@ -11,18 +11,17 @@
 
     <section class="modal-card-body">
       <div class="iso-dashboard">
-        <!-- Cabecera y Controles Iniciales -->
         <div class="iso-panel">
           <div class="panel-header">
             <div class="brand">
-              <i class="config-icon">📊</i>
+              <i class="fas fa-chart-bar config-icon"></i>
               <div>
                 <h2>Muestreo de producto terminado</h2>
               </div>
             </div>
 
             <button class="button is-info is-light" (click)="downloadPdf()" *ngIf="samplingPlan">
-              <span>📄 Descargar Certificado</span>
+              <i class="fas fa-file-pdf mr-1"></i> Descargar Certificado
             </button>
           </div>
 
@@ -89,12 +88,11 @@
             class="progress is-link custom-progress"
             [value]="currentProgress"
             [max]="samplingPlan.sampleSize"
-            style="height: 12px; border-radius: 20px"
           ></progress>
         </div>
 
         <!-- CONTROL DE COLORES  -->
-        <div class="box p-4 border-light shadow-sm mb-5 has-background-white">
+        <div class="p-4 modal-box shadow-sm mb-5">
           <h4 class="title is-6 has-text-link mb-3">
             <i class="fas fa-palette mr-2"></i>Inspección visual de color (Estandar de color)
           </h4>
@@ -103,8 +101,7 @@
           <div class="columns is-multiline is-variable is-2">
             <div class="column is-4" *ngFor="let color of inkAnalysisList; let i = index">
               <div
-                class="p-3 border-light shadow-sm"
-                style="border-radius: 6px; background-color: #fafafa; border-left: 5px solid #4a4a4a"
+                class="p-3 border-light shadow-sm color-card"
               >
                 <!-- Encabezado del Color -->
                 <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
@@ -142,7 +139,7 @@
         <div class="columns is-multiline">
           <!-- COLUMNA IZQUIERDA: BLOQUE DIMENSIONAL -->
           <div class="column is-12 is-6-desktop">
-            <div class="box p-4 has-background-white-bis border-light shadow-sm" style="height: 100%">
+            <div class="p-4 modal-box shadow-sm" style="height: 100%">
               <h4 class="title is-6 has-text-link mb-3">
                 <i class="fas fa-ruler-combined mr-2"></i>1. Evaluación de Estándares de Calidad
               </h4>
@@ -311,7 +308,7 @@
 
           <!-- COLUMNA DERECHA: BLOQUE DE DEFECTOS -->
           <div class="column is-12 is-6-desktop">
-            <div class="box p-4 has-background-white border-light shadow-sm" style="height: 100%">
+            <div class="p-4 modal-box shadow-sm" style="height: 100%">
               <h4 class="title is-6 has-text-danger mb-3">
                 <i class="fas fa-exclamation-circle mr-2"></i>2. Registro de Defectos
               </h4>
@@ -369,7 +366,7 @@
                 <div class="column p-1">
                   <div
                     class="notification p-2"
-                    [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'has-background-white-bis'"
+                    [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'notif-badge'"
                   >
                     <p class="is-size-7 mb-0">Crit.</p>
                     <p class="title is-6 mb-0">{{ stats.criticos }}/{{ limits.criticos.re }}</p>
@@ -378,7 +375,7 @@
                 <div class="column p-1">
                   <div
                     class="notification p-2"
-                    [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'has-background-white-bis'"
+                    [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'notif-badge'"
                   >
                     <p class="is-size-7 mb-0">May.</p>
                     <p class="title is-6 mb-0">{{ stats.mayores }}/{{ limits.mayores.re }}</p>
@@ -387,7 +384,7 @@
                 <div class="column p-1">
                   <div
                     class="notification p-2"
-                    [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'has-background-white-bis'"
+                    [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'notif-badge'"
                   >
                     <p class="is-size-7 mb-0">Men.</p>
                     <p class="title is-6 mb-0">{{ stats.menores }}/{{ limits.menores.re }}</p>
@@ -404,8 +401,7 @@
           <div class="column is-12 is-7-desktop">
             <h5 class="title is-6 has-text-grey"><i class="fas fa-history mr-2"></i>Historial de Mediciones Físicas</h5>
             <div
-              class="table-container shadow-sm border-light"
-              style="border-radius: 6px; max-height: 300px; overflow-y: auto"
+              class="table-container shadow-sm border-light table-scroll"
             >
               <table class="table is-fullwidth is-striped is-narrow is-size-7">
                 <thead class="has-background-link-dark">
@@ -534,38 +530,18 @@
 <app-page-layout>
   <app-section-header title="Certificados de calidad" description="Generación de certificados de análisis" icon="fa-flask" color="red"></app-section-header>
   <br />
-  <div class="orders-container" style="padding: 1rem">
-    <div
-      class="box"
-      style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); overflow: hidden; padding: 0"
-    >
-      <table class="table is-fullwidth is-hoverable" style="margin-bottom: 0">
+  <div class="card">
+    <div class="card-content darker">
+      <table class="table is-fullwidth is-hoverable cert-table">
         <thead>
-          <tr style="background-color: #f7fafc">
-            <th
-              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%"
-            >
-              Número de OP
-            </th>
-            <th style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase">
-              Producto
-            </th>
-            <th
-              class="has-text-centered"
-              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 15%"
-            >
-              Cantidad
-            </th>
-            <th
-              class="has-text-right"
-              style="padding: 1rem 1.25rem; font-size: 0.85rem; color: #718096; text-transform: uppercase; width: 20%"
-            >
-              Acción
-            </th>
+          <tr>
+            <th>Número de OP</th>
+            <th>Producto</th>
+            <th class="has-text-centered">Cantidad</th>
+            <th class="has-text-right">Acción</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Iteramos directamente sobre una lista plana de OPs individuales -->
           <tr
             *ngFor="
               let op of [
@@ -577,57 +553,30 @@
             (click)="showModal = true"
             class="is-clickable"
             title="Click para iniciar muestreo"
-            style="transition: background-color 0.2s ease"
           >
-            <!-- 1. Número de Orden y Fecha -->
-            <td style="padding: 1.25rem; vertical-align: middle">
-              <div style="display: flex; flex-direction: column">
-                <span style="font-weight: 700; color: #1a202c; font-size: 1.05rem">{{ op.opNumero }}</span>
-                <span style="font-size: 0.75rem; color: #a0aec0; margin-top: 0.25rem">
-                  {{ op.fecha | date: 'dd/MM/yyyy HH:mm' }}
-                </span>
+            <td>
+              <div>
+                <span class="op-number">{{ op.opNumero }}</span>
+                <div class="date-label">{{ op.fecha | date: 'dd/MM/yyyy HH:mm' }}</div>
               </div>
             </td>
 
-            <!-- 2. Producto -->
-            <td style="padding: 1.25rem; vertical-align: middle">
-              <span style="font-weight: 600; color: #2d3748; font-size: 1rem">
+            <td>
+              <span class="product-label">
                 {{ op.nombre }}
               </span>
             </td>
 
-            <!-- 3. Cantidad Individual -->
-            <td class="has-text-centered" style="padding: 1.25rem; vertical-align: middle">
-              <span
-                class="tag is-normal"
-                style="
-                  font-size: 1.1rem;
-                  font-weight: 700;
-                  background-color: #edf2f7;
-                  color: #2d3748;
-                  padding: 0.5rem 0.75rem;
-                  border-radius: 6px;
-                "
-              >
+            <td class="has-text-centered">
+              <span class="qty-badge">
                 {{ op.cantidad | number }}
               </span>
             </td>
 
-            <!-- 4. Acción Directa -->
-            <td class="has-text-right" style="padding: 1.25rem; vertical-align: middle">
+            <td class="has-text-right">
               <button class="button is-link is-light" style="font-weight: 600; border-radius: 8px">
                 <span class="icon is-small">
-                  <svg
-                    style="width: 14px; height: 14px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                  </svg>
+                  <i class="fas fa-play"></i>
                 </span>
                 <span>Iniciar Muestreo</span>
               </button>

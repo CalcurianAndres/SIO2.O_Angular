@@ -439,7 +439,7 @@
 }
 
 .dark {
-  background-color: #3c3f41;
+  background-color: var(--bg-secondary);
 }
 
 .label {
@@ -500,18 +500,6 @@ a {
   text-decoration: underline dotted;
 }
 
-.subtitles {
-  display: block;
-  width: 100%;
-  background-color: #3c3f41;
-  padding: 3px;
-  border-radius: 5px;
-  color: white;
-  font-family: 'Gilroy';
-  font-size: large;
-  padding-left: 15px;
-}
-
 .tooltip {
   position: relative;
   display: inline-block;
@@ -546,7 +534,7 @@ a {
 
 .message-heading {
   font-size: 15px;
-  color: #000000; /* Color de texto suave */
+  color: var(--text-heading);
   text-transform: uppercase;
   letter-spacing: 2px;
   padding: 20px;

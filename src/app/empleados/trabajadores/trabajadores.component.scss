@@ -6,10 +6,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .Departamentos {
   display: flex;
@@ -69,6 +65,6 @@
 
 .info {
   display: block;
-  color: black;
+  color: var(--text-primary);
   margin: 10px;
 }

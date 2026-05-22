@@ -51,10 +51,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .iconos {
   position: absolute;
@@ -107,7 +103,7 @@
   text-align: center;
   padding: 10px;
   font-family: 'Gilroy';
-  color: black;
+  color: var(--text-primary);
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75) inset;
   -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75) inset;
   -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75) inset;
@@ -116,7 +112,7 @@
 .hours {
   text-align: center;
   font-family: 'Gilroy';
-  color: black;
+  color: var(--text-primary);
   position: absolute;
   margin-top: -30px; /* Ajusta este valor según sea necesario */
   // margin-left: 50%;
@@ -159,7 +155,7 @@
 .pantone-necesario {
   font-family: 'Gilroy';
   font-size: large;
-  color: black;
+  color: var(--text-primary);
   background-color: white;
   border-radius: 8px;
   padding: 3px;
@@ -192,7 +188,7 @@
 }
 
 .informacion-barniz {
-  color: black;
+  color: var(--text-primary);
   font-family: 'Gilroy';
 }
 
@@ -265,7 +261,7 @@ mwlResizable {
 }
 
 .day-info {
-  color: black;
+  color: var(--text-primary);
   font-family: 'Gilroy';
   text-align: center;
   // position: sticky;
@@ -505,5 +501,5 @@ mwlResizable {
 }
 
 .content {
-  color: black;
+  color: var(--text-primary);
 }

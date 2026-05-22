@@ -6,10 +6,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 /* Estilos principales del calendario */
 .calendar-container {
@@ -51,7 +47,7 @@
 
 .non-laboral {
   background-color: lightblue;
-  color: black;
+  color: var(--text-primary);
 }
 
 .day:hover {

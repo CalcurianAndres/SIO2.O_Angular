@@ -112,10 +112,6 @@
   font-size: 14px;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .iconos {
   position: absolute;
@@ -189,7 +185,7 @@ strong {
 }
 
 .used {
-  color: black;
+  color: var(--text-primary);
 }
 
 .right-aligned-input {

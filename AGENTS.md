@@ -60,8 +60,22 @@ Import `SharedModule` in any feature module to use:
 - `<app-section-header>` — inputs: title, description, icon, color ('red'|'green'|'purple'|'blue'|'orange'|'teal'|'navy'), gradient
   - Module colors: Compras=green, Almacen=orange, Laboratorio=red, Producción (fases+maquinas+ordenes prod)=purple, Ventas=blue, Empleados=teal, Dashboard=navy
 - `<app-modal>` — inputs: visible, title, longClass; output: onClose
+- `<app-toast>` — auto-included in app component; use `ToastService` to push messages
+- `<app-breadcrumb>` — auto-included in page-layout; builds from URL segments
+- `<app-skeleton>` — loading placeholder (inputs: type='text'|'card'|'table'|'circle', rows, width)
 
 After creating new shared components, restart Angular Language Service (`Ctrl+Shift+P` → "Angular: Restart Angular Language Service").
+
+## Theme / Dark Mode
+
+- Toggle in profile menu (user avatar in sidebar). Preference saved in `localStorage.DARK_MODE`.
+- CSS custom properties in `:root` (dark) and `[data-theme='light']` (light).
+- **Sidebar is always dark** — uses `--sidebar-*` variables (never overridden in light theme):
+  - `--sidebar-bg: rgb(38,52,61)`, `--sidebar-text`, `--sidebar-text-heading`, `--sidebar-text-muted`, `--sidebar-border`, `--sidebar-accent`, `--sidebar-elevated`
+- **`.darker` area**: `--bg-secondary: #3c3f41` (dark) / `#eef2f6` (light, bluish-gray)
+- All Bulma components overridden with CSS variables in styles.scss (card, table, modal, input, button, message, tabs, menu, etc.)
+- Modal z-index: `10000` (above sidebar's `1000`)
+- Route transition: fade animation via `BrowserAnimationsModule` + `shared/animations.ts`
 
 ## Sidebar
 
@@ -79,3 +93,5 @@ No test files exist. `ng test` runs Karma/Jasmine framework but has nothing to e
 - The CSS class `.darker` is position-dependent on `--sidebar-width` (not a fixed width)
 - Never duplicate component declarations across modules (Angular 16 throws)
 - Service Worker auto-registers on build — no manual registration in `main.ts`
+- When adding new CSS variables for themes, ensure sidebar-specific vars use `--sidebar-*` prefix so they stay dark in both themes
+- Toast, breadcrumb, skeleton components — register in `SharedComponentsModule`, not `SharedModule`

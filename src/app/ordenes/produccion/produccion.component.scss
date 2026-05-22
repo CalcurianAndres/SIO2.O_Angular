@@ -6,10 +6,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .tags {
   overflow: hidden;
@@ -246,10 +242,6 @@
   animation-delay: 0.21s;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .progress-container {
   width: 380px;
@@ -279,12 +271,12 @@
   left: 0;
   height: 100%;
   line-height: 50px;
-  color: black;
+  color: var(--text-primary);
   font-weight: bold;
 }
 
 .highlight {
-  color: black;
+  color: var(--text-primary);
 }
 
 .top_Banner {
@@ -360,7 +352,7 @@
   visibility: hidden;
   width: 150px;
   background-color: rgb(251, 255, 172);
-  color: #000000;
+  color: var(--text-primary);
   text-align: left;
   border-radius: 5px;
   padding: 5px 0;

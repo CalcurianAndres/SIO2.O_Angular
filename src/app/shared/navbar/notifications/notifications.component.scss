@@ -5,7 +5,7 @@
   width: 450px;
   height: calc(100vh - 100px); /* Hasta 100px antes del final */
   background: rgba(0, 0, 0, 0.5);
-  color: black;
+  color: var(--text-primary);
   padding: 20px;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
   transition: left 0.3s ease-in-out;

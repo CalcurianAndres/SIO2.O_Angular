@@ -6,10 +6,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .especificacion {
   background-color: #d5234d;
@@ -152,11 +148,12 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.subtitles {
-  font-size: large;
+.textInfo {
+  width: auto;
+  margin: 2px;
 }
 .fechas {
-  color: black;
+  color: var(--text-muted);
 }
 
 .boton {
@@ -173,7 +170,7 @@
 .clientesName {
   display: flex;
   align-items: center;
-  color: black;
+  color: var(--text-primary);
 }
 
 .clientesName::after {

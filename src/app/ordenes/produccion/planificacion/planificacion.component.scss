@@ -6,10 +6,6 @@
   font-size: x-large;
 }
 
-.dark {
-  color: white;
-  background-color: #9fadbc;
-}
 
 .calendar {
   display: flex;
@@ -76,12 +72,9 @@ mwlResizable {
 }
 
 .day-info {
-  color: black;
+  color: var(--text-primary);
   font-family: 'Gilroy';
   text-align: center;
-  // position: sticky;
-  // position: absolute;
-  // left: 0px;
 }
 
 .x-stronger {

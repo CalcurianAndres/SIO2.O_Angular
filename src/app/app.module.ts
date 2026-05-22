@@ -1,32 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
 import { NavbarModule } from './shared/navbar/navbar.module';
+import { SharedComponentsModule } from './shared/components/shared-components.module';
 import { ComprasModule } from './compras/compras.module';
 import { AlmacenModule } from './almacen/almacen.module';
 import { LaboratorioModule } from './laboratorio/laboratorio.module';
-import { FasesYMaquinariasComponent } from './fases-ymaquinarias/fases-ymaquinarias.component';
-import { MainComponent } from './fases-ymaquinarias/main/main.component';
 import { FasesYmaquinariasModule } from './fases-ymaquinarias/fases-ymaquinarias.module';
-import { SolicitudMaterialComponent } from './shared/navbar/solicitud-material/solicitud-material.component';
-import { OrdenesComponent } from './ordenes/ordenes.component';
 import { OrdenesModule } from './ordenes/ordenes.module';
-import { LoginComponent } from './login/login.component';
+import { OrdenesComponent } from './ordenes/ordenes.component';
 import { LoginModule } from './login/login.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from './Dashboard/dashboard.module';
-
-import { LOCALE_ID, isDevMode } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
+import { LOCALE_ID } from '@angular/core';
 import localeEs from '@angular/common/locales/es';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { RecibosComponent } from './shared/recibos/recibos.component';
 
 registerLocaleData(localeEs);
 
@@ -34,10 +27,14 @@ registerLocaleData(localeEs);
   declarations: [AppComponent, OrdenesComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     AppRoutingModule,
     NavbarModule,
+    SharedComponentsModule,
     ComprasModule,
     AlmacenModule,
     LaboratorioModule,
@@ -48,8 +45,6 @@ registerLocaleData(localeEs);
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: true,
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],

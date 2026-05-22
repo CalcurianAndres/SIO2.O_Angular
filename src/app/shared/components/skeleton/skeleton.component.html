@@ -1,0 +1,22 @@
+<ng-container [ngSwitch]="type">
+  <div *ngSwitchCase="'text'" class="skeleton-text" [style.width]="width">
+    <div class="skeleton-line" *ngFor="let _ of [].constructor(rows)"></div>
+  </div>
+
+  <div *ngSwitchCase="'card'" class="skeleton-card" [style.width]="width">
+    <div class="skeleton-image"></div>
+    <div class="skeleton-line short"></div>
+    <div class="skeleton-line"></div>
+    <div class="skeleton-line short"></div>
+  </div>
+
+  <div *ngSwitchCase="'table'" class="skeleton-table" [style.width]="width">
+    <div class="skeleton-row header" *ngFor="let _ of [].constructor(rows)">
+      <div class="skeleton-cell" *ngFor="let _ of [].constructor(4)"></div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'circle'" class="skeleton-circle" [style.width]="width">
+    <div class="skeleton-circ"></div>
+  </div>
+</ng-container>

@@ -3,9 +3,9 @@
 }
 
 .icono {
-  background-color: rgb(38, 52, 61);
+  background-color: var(--sidebar-bg);
   padding: 5px;
-  color: white;
+  color: var(--sidebar-text-heading);
   border-radius: 3px;
 }
 
@@ -15,16 +15,16 @@
   overflow-y: scroll;
   margin: 5px auto;
   padding: 2px;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: black;
+  color: var(--text-primary);
 }
 .color-item {
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-color);
 }
 .color-box {
   width: 30px;
@@ -35,25 +35,25 @@
 
 .color-item:hover {
   cursor: pointer;
-  background-color: #e0e0e0;
+  background-color: var(--hover-bg);
 }
 
 .info {
-  color: black;
+  color: var(--text-primary);
 }
 
 .preparacion {
   font-family: 'Gilroy';
-  color: black;
+  color: var(--text-heading);
 }
 
 .empty-message {
-  background-color: #f7f7f7; /* Color de fondo del mensaje */
+  background-color: var(--bg-secondary);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
-  animation: fadeIn 0.5s ease; /* Animación de aparición */
+  animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {

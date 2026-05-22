@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import io from 'socket.io-client';
@@ -6,7 +7,7 @@ import io from 'socket.io-client';
   providedIn: 'root',
 })
 export class WebSocketService {
-  io = io('https://192.168.0.22:443', {
+  io = io(environment.wsUrl, {
     transports: ['websocket'],
     withCredentials: true,
     autoConnect: true,

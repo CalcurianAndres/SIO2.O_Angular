@@ -2,36 +2,26 @@
   <app-section-header title="Producto Terminado" description="Producto finalizado para despacho" icon="fa-warehouse" color="orange"></app-section-header>
   <br />
 
-  <div class="accordion-wrapper">
+  <div class="card">
+    <div class="card-content">
+      <div class="accordion-wrapper">
         <div class="accordion-item" *ngFor="let item of api.producto_terminado_agrupado; let i = index">
           <input type="checkbox" [id]="'check' + i" class="accordion-trigger" />
           <label [for]="'check' + i" class="accordion-header">
             <div class="product-meta">
               <div class="product-info-text">
-                <!-- Nombre del Producto -->
                 <span class="product-name">{{ item.nombre }}</span>
                 <div class="product-stats">
-                  <!-- Suma total de cantidades -->
-                  <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: #000">
+                  <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: var(--text-heading)">
                     {{ item.cantidadTotal | number }}
                   </span>
                   <span class="dot"></span>
-                  <!-- Conteo de OPs -->
                   <span class="stat-item">{{ item.totalOPs }} OP</span>
                 </div>
               </div>
             </div>
             <div class="chevron-circle">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <i class="fas fa-chevron-down"></i>
             </div>
           </label>
 
@@ -46,7 +36,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- Filas detalladas de cada registro de Producto Terminado -->
                   <tr *ngFor="let detalle of item.detalles">
                     <td>{{ detalle.opNumero }}</td>
                     <td class="has-text-centered">
@@ -60,4 +49,6 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
 </app-page-layout>

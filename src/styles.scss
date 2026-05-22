@@ -68,29 +68,31 @@ $card-shadow:
   0 0px 0 1px rgba(0, 0, 0, 0.02);
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background: var(--border-color);
+  border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:window-inactive {
-  background: rgba(255, 255, 255, 0.3);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
 }
 
 .modal .modal-card .modal-card-head .red_cross {
-  background-color: #f03a5f;
+  background-color: var(--accent-red);
   font-size: 50px;
 }
 
@@ -120,7 +122,7 @@ table tr th {
 }
 
 .card .darker {
-  background-color: $darker-color;
+  background-color: var(--bg-secondary);
   display: block;
   position: fixed;
   height: 95%;
@@ -131,7 +133,7 @@ table tr th {
 }
 
 .modal .modal-background {
-  background-color: rgba(60, 63, 65, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }
 
@@ -143,6 +145,51 @@ table tr th {
 
 :root {
   --sidebar-width: 65px;
+  --bg-primary: #26343d;
+  --bg-secondary: #454a4e;
+  --bg-card: #3c3f41;
+  --text-primary: #9fadbc;
+  --text-heading: #ffffff;
+  --text-muted: #64748b;
+  --border-color: #2d2f39;
+  --accent-red: #ff4444;
+  --accent-green: #48c78e;
+  --accent-blue: #3b82f6;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --card-shadow: 0 0 1em 8px rgba(0, 0, 0, 0.1), 0 0px 0 1px rgba(0, 0, 0, 0.02);
+  --sidebar-bg: rgb(38, 52, 61);
+  --sidebar-elevated: #1e2028;
+  --sidebar-text: #9fadbc;
+  --sidebar-text-heading: #ffffff;
+  --sidebar-text-muted: #64748b;
+  --sidebar-border: #2d2f39;
+  --sidebar-accent: #ff4444;
+  --stat-bg: #2a3843;
+  --stat-text: #ffffff;
+  --stat-number: #ffffff;
+}
+
+[data-theme='light'] {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #eef2f6;
+  --bg-card: #ffffff;
+  --text-primary: #334155;
+  --text-heading: #1a1a2e;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --accent-red: #dc2626;
+  --accent-green: #16a34a;
+  --accent-blue: #2563eb;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --stat-bg: #f8fafc;
+  --stat-text: #475569;
+  --stat-number: #1a1a2e;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .container_ {
@@ -167,11 +214,11 @@ table tr th {
 
 .color_bold {
   font-family: 'Gilroy';
-  color: $dark-text;
+  color: var(--text-primary);
 }
 
 .card .blancas {
-  color: white;
+  color: var(--text-heading);
 }
 
 .blue_ {
@@ -185,10 +232,10 @@ table tr th {
 .subtitles {
   display: block;
   width: 100%;
-  background-color: #3c3f41;
+  background-color: var(--bg-secondary);
   padding: 3px;
   border-radius: 5px;
-  color: white;
+  color: var(--text-heading);
   font-family: 'Gilroy';
   font-size: large;
   padding-left: 15px;
@@ -291,6 +338,329 @@ table tr th {
 
 @import '../node_modules/bulma-o-steps/bulma-steps.css';
 
+// ─── Bulma component overrides for theme variables ───
+.card,
+.card-content,
+.card-header,
+.card-footer {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+.card-header-title,
+.card-footer-item {
+  color: var(--text-primary);
+}
+.card {
+  box-shadow: var(--card-shadow);
+}
+.card-footer {
+  border-top-color: var(--border-color);
+}
+.card-footer-item {
+  border-right-color: var(--border-color);
+}
+.card-header {
+  border-bottom-color: var(--border-color);
+}
+.card-header.dark {
+  background-color: var(--bg-secondary);
+  color: var(--text-heading);
+}
+
+.table {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.table td,
+.table th {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+.table thead td,
+.table thead th {
+  color: var(--text-heading);
+}
+.table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+  background-color: var(--hover-bg);
+}
+.table tbody tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.modal .modal-card,
+.modal .modal-card .modal-card-body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.modal .modal-card .modal-card-head {
+  background-color: var(--bg-card);
+  border-bottom-color: var(--border-color);
+}
+.modal .modal-card .modal-card-title {
+  color: var(--text-heading);
+}
+.modal .modal-card .modal-card-foot {
+  background-color: var(--bg-card);
+  border-top-color: var(--border-color);
+}
+
+.input,
+.textarea,
+.select select {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+.input:focus,
+.textarea:focus,
+.select select:focus {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 0.125em rgba(255, 68, 68, 0.25);
+}
+
+.button {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.button:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-heading);
+  border-color: var(--text-muted);
+}
+.button.is-primary,
+.button.is-link,
+.button.is-danger,
+.button.is-success,
+.button.is-warning,
+.button.is-info {
+  color: #fff;
+}
+
+.message {
+  background-color: var(--bg-secondary);
+}
+.message-body {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.tabs a {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-color);
+}
+.tabs a:hover {
+  color: var(--text-heading);
+  border-bottom-color: var(--text-heading);
+}
+.tabs li.is-active a {
+  color: var(--accent-red);
+  border-bottom-color: var(--accent-red);
+}
+
+.menu-list a {
+  color: var(--text-primary);
+}
+.menu-list a:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-heading);
+}
+.menu-label {
+  color: var(--text-muted);
+}
+
+.title {
+  color: var(--text-heading);
+}
+.subtitle {
+  color: var(--text-primary);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+}
+.breadcrumb a:hover {
+  color: var(--accent-red);
+}
+.breadcrumb li.is-active a {
+  color: var(--text-primary);
+}
+
+.label {
+  color: var(--text-primary);
+}
+
+.tag {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.notification {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.box {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--card-shadow);
+}
+
+.content {
+  color: var(--text-primary);
+}
+
+.hero {
+  background-color: var(--bg-primary);
+}
+.section {
+  background-color: var(--bg-primary);
+}
+
+.pagination-link,
+.pagination-previous,
+.pagination-next {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.pagination-link.is-current {
+  background-color: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #fff;
+}
+
+.panel,
+.panel-heading,
+.panel-block {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dropdown-menu {
+  background-color: var(--bg-elevated);
+}
+.dropdown-item {
+  color: var(--text-primary);
+}
+.dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.progress {
+  background-color: var(--bg-secondary);
+}
+
+// ─── Modal z-index fix ───
+.modal {
+  z-index: 10000;
+}
+
+// ─── Global accordion ───
+.accordion-wrapper {
+  background: transparent;
+}
+.accordion-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.accordion-trigger {
+  display: none;
+}
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: var(--bg-secondary);
+}
+.accordion-trigger:checked ~ .accordion-content {
+  max-height: 1200px;
+}
+.accordion-trigger:checked ~ .accordion-header .chevron-circle {
+  transform: rotate(180deg);
+}
+.chevron-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--hover-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: var(--text-muted);
+}
+.chevron-circle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+.chevron-circle .fa-chevron-down {
+  font-size: 14px;
+}
+
+// ─── Stat card ───
+.card.stat-card {
+  overflow: hidden;
+}
+.stat-card .card-content {
+  padding: 1.25rem;
+  background: var(--stat-bg);
+  color: var(--stat-text);
+}
+.stat-card .stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--stat-number);
+  font-family: 'Gilroy';
+  line-height: 1;
+}
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--stat-text);
+  opacity: 0.8;
+}
+.stat-card .stat-detail {
+  font-size: 0.9rem;
+  color: var(--stat-text);
+  opacity: 0.9;
+}
+.stat-card .position__ {
+  position: relative;
+  margin-top: -1px;
+}
+
+// ─── Icon color standards ───
+.icon-action { color: var(--accent-blue); }
+.icon-danger { color: var(--accent-red); }
+.icon-edit { color: var(--accent-green); }
+.icon-muted { color: var(--text-muted); }
+
+.btn-action-icon {
+  background-color: transparent;
+  border: none;
+  color: var(--accent-blue);
+}
+
+// ─── Global transition ───
 * {
   transition-property: background-color, border-color, color, box-shadow;
   transition-duration: 0.2s;

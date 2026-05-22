@@ -18,7 +18,7 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 export class NavbarComponent implements OnInit {
   menuAbierto: string = '';
   _isCollapsed = true;
-  isPinned = false;
+  isPinned = localStorage.getItem('SIDEBAR_PINNED') === 'true';
 
   get isCollapsed(): boolean {
     return this._isCollapsed;
@@ -64,6 +64,7 @@ export class NavbarComponent implements OnInit {
   togglePin(event: Event) {
     event.stopPropagation();
     this.isPinned = !this.isPinned;
+    localStorage.setItem('SIDEBAR_PINNED', String(this.isPinned));
     if (this.isPinned) {
       this.isCollapsed = false;
     }
@@ -81,6 +82,7 @@ export class NavbarComponent implements OnInit {
     public devolucuiones: DevolucionesService,
   ) {
     this.usuario = Login.usuario;
+    document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
   }
 
   public Menu_: any = [];
@@ -96,9 +98,19 @@ export class NavbarComponent implements OnInit {
   public Etiquetas: boolean = false;
   public notificaciones: any = [];
   public confirmacion: boolean = false;
+  isDarkMode = localStorage.getItem('DARK_MODE') !== 'false';
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('DARK_MODE', String(this.isDarkMode));
+    document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+  }
 
   ngOnInit() {
-    document.documentElement.style.setProperty('--sidebar-width', '65px');
+    document.documentElement.style.setProperty('--sidebar-width', this.isPinned ? '240px' : '65px');
+    if (this.isPinned) {
+      this._isCollapsed = false;
+    }
     const url = this.router.url;
     if (url.includes('compras')) this.menuAbierto = 'compras';
     else if (url.includes('ventas')) this.menuAbierto = 'ventas';
@@ -167,15 +179,7 @@ export class NavbarComponent implements OnInit {
     this.empresa = false;
   }
 
-  // showEmpresa() {
-  //   this.empresa = true;
-  //   this.compras = false;
-  //   this.ventas = false;
-  //   this.inventario = false;
-  //   this.laboratorio = false;
-  //   this.produccion = false;
 
-  // }
   // showCompras() {
   //   this.compras = true;
   //   this.empresa = false

@@ -201,6 +201,10 @@
 
     <div class="profile-menu shadow-lg" [class.show-menu]="isMenuVisible">
       <div class="menu-header-mini">Mi Cuenta</div>
+      <button class="menu-item" (click)="toggleDarkMode()">
+        <i [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode" class="fas"></i>
+        <span>{{ isDarkMode ? 'Modo claro' : 'Modo oscuro' }}</span>
+      </button>
       <button class="menu-item" (click)="cambiarContrasena()"><i class="fas fa-key"></i> <span>Seguridad</span></button>
       <div class="menu-divider"></div>
       <button class="menu-item logout" (click)="cerrarSesion()">

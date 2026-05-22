@@ -106,7 +106,7 @@
       <span>
         <div class="card" *ngFor="let requisicion of EtiquetasPendiente(); index as indice">
           <div class="card-content">
-            <b style="color: black; font-family: 'Gilroy'">{{ requisicion.motivo }}</b> <br />
+            <b style="color: var(--text-heading); font-family: 'Gilroy'">{{ requisicion.motivo }}</b> <br />
             <b style="color: rgb(63, 63, 63); font-size: small">{{
               requisicion.createdAt | date: 'dd/MM/yyyy - hh:mm:ss a'
             }}</b>
@@ -223,7 +223,7 @@
 
         <div class="card"  *ngFor="let requisicion of Reformulacion();index as i">
             <div class="card-content">
-                <b style="color:black; font-family: 'Gilroy';">{{requisicion.motivo}}</b> <br>
+                <b style="color: var(--text-heading); font-family: 'Gilroy';">{{requisicion.motivo}}</b> <br>
                 <b style="color: rgb(63, 63, 63); font-size: small;">{{requisicion.createdAt | date:'dd/MM/yyyy - hh:mm:ss a'}}</b>
                 <br><br>
                 <button class="button is-danger is-small">

@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -12,7 +13,7 @@ export class EtiquetasService {
   ) {}
 
   ImprimirEtiqueta(data) {
-    const url = `https://192.168.0.22/api/etiqueta-preparacion`;
+    const url = `${environment.apiUrl}/etiqueta-preparacion`;
     return this.http.post(url, data);
   }
 }
