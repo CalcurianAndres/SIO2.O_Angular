@@ -55,3 +55,28 @@ SIOB's SSL certs (`c:/certificado/server/`) are optional — falls back to HTTP 
 ## Tests
 
 No tests exist. `ng test` runs Karma/Jasmine with nothing to execute.
+
+## Linux dev setup
+
+```bash
+# Prerequisites: node 18+, npm, docker (for MongoDB only)
+
+# 1. MongoDB
+docker run -d --name mongo-sio -p 27017:27017 mongo
+
+# 2. Backend
+git clone https://github.com/CalcurianAndres/SIO2.0_Express.git
+cd SIO2.0_Express && npm install && npm run dev   # :3000
+
+# 3. Frontend
+git clone https://github.com/CalcurianAndres/SIO2.O_Angular.git
+cd SIO2.O_Angular && npm install --legacy-peer-deps && npm start   # :4200
+```
+
+## Production test (Docker all together)
+
+```bash
+# From the parent directory containing both repos:
+./setup.sh   # builds SIOF, copies to SIOB/public/, docker compose up
+# http://localhost
+```
