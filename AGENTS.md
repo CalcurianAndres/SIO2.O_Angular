@@ -42,7 +42,9 @@ npm run lint && npm run format && npm run lint:fix  # run in order
 
 ## Docker
 
-Backend (SIOB) + MongoDB are in `../docker-compose.yml` alongside this project. SIOF has its own `Dockerfile` (multi-stage nginx). For local dev:
+SIOB has its own `docker-compose.yml` (backend + MongoDB).
+SIOF has its own `Dockerfile` (multi-stage nginx, commented out in compose by default).
+For development (hot-reload):
 
 ```bash
 docker run -d --name mongo-sio -p 27017:27017 mongo  # start DB only
@@ -76,7 +78,7 @@ cd SIO2.O_Angular && npm install --legacy-peer-deps && npm start   # :4200
 ## Production test (Docker all together)
 
 ```bash
-# From the parent directory containing both repos:
-./setup.sh   # builds SIOF, copies to SIOB/public/, docker compose up
+# From SIOB directory (builds SIOF, copies to SIOB/public/, docker compose up):
+../SIOB/setup.sh
 # http://localhost
 ```
