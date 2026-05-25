@@ -49,7 +49,7 @@ export class PreparacionTintasComponent {
     //   nombre:splited[1],
     //   marca:splited[2],
 
-    let data: any = [];
+    const data: any = [];
     console.log(formula);
     for (let i = 0; i < formula.formula.length; i++) {
       data.push({

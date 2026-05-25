@@ -13,43 +13,48 @@ export class FasesComponent {
   constructor(
     public api: FasesService,
     public maquinas: MaquinasService,
-  ) {}
+  ) {
+    setTimeout(() => (this.cargando = false), 1200);
+  }
 
-  public data = {
-    nombre: '',
-    descripcion: '',
-  };
+  public data = { nombre: '', descripcion: '' };
   public informacion: any = '';
   public machines: any = '';
 
   public nueva: boolean = false;
   public editar: boolean = false;
   public info: boolean = false;
-
-  nueva_fase() {
-    this.nueva = true;
-  }
+  public cargando: boolean = true;
 
   filas() {
     return Math.ceil(this.api.fases.length / 5);
   }
 
+  seleccion(i: number) {
+    this.info = true;
+    this.informacion = this.api.fases[i];
+    this.machines = this.maquinas.buscarMaquinaPorFases(this.api.fases[i]._id);
+  }
+
+  Editar(i: number) {
+    this.data = this.api.fases[i];
+    this.editar = true;
+  }
+
+  nueva_fase() {
+    this.nueva = true;
+  }
+
   cerrarSimple() {
     this.nueva = false;
     this.editar = false;
-    this.data = {
-      nombre: '',
-      descripcion: '',
-    };
+    this.data = { nombre: '', descripcion: '' };
   }
 
   cerrar() {
     this.nueva = false;
     this.editar = false;
-    this.data = {
-      nombre: '',
-      descripcion: '',
-    };
+    this.data = { nombre: '', descripcion: '' };
     setTimeout(() => {
       Swal.fire({
         icon: this.api.mensaje.icon,
@@ -63,30 +68,17 @@ export class FasesComponent {
     }, 1000);
   }
 
-  editarFase(fase) {
-    this.data = fase;
-    this.editar = true;
-  }
-
-  verInfo(data) {
-    this.info = true;
-    this.informacion = data;
-    this.machines = this.maquinas.buscarMaquinaPorFases(data._id);
-  }
-
-  eliminarMaquina(i) {
-    // console.log(i)
+  borrarFase(id: string) {
     Swal.fire({
-      title: '¿Quieres eliminar esta fase?',
+      title: '¿Eliminar esta fase?',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonColor: '#48c78e',
       confirmButtonText: 'Eliminar',
-      denyButtonText: `No Eliminar`,
+      denyButtonText: 'No Eliminar',
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.api.eliminarFase(i._id);
+        this.api.eliminarFase(id);
         this.cerrar();
       }
     });

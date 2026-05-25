@@ -2,130 +2,73 @@
   <div class="modal-background"></div>
   <div class="modal-card full animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">Grupo</p>
+      <p class="modal-card-title fuente"><i class="fas fa-cubes"></i> Materiales del grupo</p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
-    <ng-container *ngIf="material_selected.length < 1">
-      <div class="modal-card-body light">Aún no hay materiales registrados</div>
-    </ng-container>
-    <div class="modal-card-body light" *ngIf="material_selected.length > 0">
-      <table class="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Material</th>
-            <th>Marca</th>
-            <th>Serie</th>
-            <th *ngIf="material_selected[0].origen">origen</th>
-            <th *ngIf="material_selected[0].gramaje">Gramaje</th>
-            <th *ngIf="material_selected[0].gramaje">Calibre</th>
-            <th *ngIf="material_selected[0].color">Color</th>
-            <th></th>
-            <!-- <th>Presentación</th> -->
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngIf="material_selected.length > 0">
-            <ng-container *ngFor="let material of material_selected; index as i">
-              <tr *ngIf="!Edicion[i]">
-                <td>
-                  {{ material.nombre }}
-                </td>
-                <td>
-                  {{ material.fabricante.alias }}
-                </td>
-                <td>
-                  {{ material.serie }}
-                </td>
-                <td *ngIf="material.origen">
-                  {{ material.origen }}
-                </td>
-                <td *ngIf="material.gramaje">
-                  {{ material.gramaje }}
-                </td>
-                <td *ngIf="material.gramaje">
-                  {{ material.calibre }}
-                </td>
-                <td *ngIf="material.color && colores(material.color)">{{ colores(material.color) }}</td>
-                <td *ngIf="material.color && !colores(material.color)">{{ material.codigo }}</td>
-                <td>
-                  <span id="editar_{{ i }}">
-                    <i class="far fa-edit green" (click)="editar(i)"></i> 
-                    <i class="fas fa-trash-alt red" (click)="EliminarMaterial(material._id, i)"></i>
-                  </span>
-                </td>
-                <!-- <td>Paleta</td> -->
+    <div class="modal-card-body">
+      <!-- Agregar button -->
+      <button class="button is-success mb-3" (click)="agregarMaterial()">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Agregar Material</span>
+      </button>
+
+      <!-- Empty state -->
+      <div *ngIf="!material_selected || material_selected.length === 0" class="has-text-centered py-5">
+        <i class="fas fa-box-open" style="font-size: 2rem; color: var(--text-muted); opacity: 0.4"></i>
+        <p class="mt-2" style="color: var(--text-muted)">No hay materiales en este grupo</p>
+      </div>
+
+      <!-- Table -->
+      <ng-container *ngIf="material_selected && material_selected.length > 0">
+        <div class="table-container">
+          <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Serie</th>
+                <th>Fabricante</th>
+                <th>Cód. Proveedor</th>
+                <th class="has-text-centered">Acciones</th>
               </tr>
-              <tr *ngIf="Edicion[i]">
-                <td>
-                  <input type="text" class="input" [(ngModel)]="material.nombre" />
-                </td>
-                <td>
-                  <div class="columns">
-                    <div class="column">
-                      <div class="select">
-                        <select (change)="CambiarFabricante($event.target, i)">
-                          <option value="">Fabricante</option>
-                          <option value="{{ i }}" *ngFor="let fabricante of fabricantes; index as i">
-                            {{ fabricante.alias }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="column" *ngIf="material.origen">
-                      <div class="select">
-                        <select (change)="agregarOrigen($event.target, i)">
-                          <option value="">Ubicacion</option>
-                          <option
-                            value="{{ ubicacion.pais }}({{ ubicacion.estado }})"
-                            *ngFor="let ubicacion of ubicaciones; index as i"
-                          >
-                            {{ ubicacion.pais }}({{ ubicacion.estado }})
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <input type="text" class="input" [(ngModel)]="material.serie" />
-                </td>
-                <td *ngIf="material.gramaje">
-                  <input type="text" class="input" [(ngModel)]="material.gramaje" />
-                </td>
-                <td *ngIf="material.gramaje">
-                  <input type="text" class="input" [(ngModel)]="material.calibre" />
-                </td>
-                <td *ngIf="material.color">
-                  <div class="select" *ngIf="!Pantone[i]">
-                    <select [(ngModel)]="material.color" (change)="EdiciondeColor($event.target, i)">
-                      <option value="A">Amarillo</option>
-                      <option value="C">Cyan</option>
-                      <option value="M">Magenta</option>
-                      <option value="K">Negro</option>
-                      <option value="#">Otro</option>
-                    </select>
-                  </div>
-                  <div *ngIf="Pantone[i]">
-                    <div class="columns">
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="material.codigo" />
-                      </div>
-                      <div class="column">
-                        <button class="button is-info" (click)="Pantone_(i)">
-                          <span><i class="fas fa-undo"></i></span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <i class="fas fa-check green" (click)="confirmar(i)"></i>
+            </thead>
+            <tbody>
+              <tr *ngFor="let material of paginatedMaterials; index as i">
+                <td>{{ material.nombre }}</td>
+                <td>{{ material.serie }}</td>
+                <td>{{ material.fabricante?.alias || '-' }}</td>
+                <td>{{ material.codigo || '-' }}</td>
+                <td class="has-text-centered">
+                  <i class="far fa-edit green mr-2" title="Editar"></i>
+                  <i class="fas fa-trash-alt red" (click)="eliminarMaterial(material._id)" title="Eliminar"></i>
                 </td>
               </tr>
-            </ng-container>
-          </ng-container>
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="is-flex is-align-items-center is-justify-content-space-between mt-3">
+          <div class="is-flex is-align-items-center">
+            <span class="mr-2" style="font-size: 0.85rem; color: var(--text-muted)">Filas por página:</span>
+            <div class="select" style="width: auto">
+              <select (change)="changePageSize($event)" style="font-size: 0.85rem; padding: 2px 24px 2px 8px">
+                <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === pageSize">{{ size }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="is-flex is-align-items-center" style="gap: 4px">
+            <button class="button is-small" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span style="font-size: 0.85rem; color: var(--text-muted); padding: 0 8px">
+              Pág {{ currentPage }} de {{ totalPages }}
+            </span>
+            <button class="button is-small" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

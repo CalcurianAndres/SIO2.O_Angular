@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Fabricante, Fabricante_populated, Grupo, Origenes, Proveedores } from '../../models/modelos-compra';
 import { FabricantesService } from 'src/app/services/fabricantes.service';
@@ -10,7 +10,7 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
   templateUrl: './nuevo-fabricante.component.html',
   styleUrls: ['./nuevo-fabricante.component.scss'],
 })
-export class NuevoFabricanteComponent implements OnInit {
+export class NuevoFabricanteComponent implements OnInit, OnChanges {
   @Input() nuevo: any;
   @Input() data!: Fabricante_populated;
   @Input() editar: any;
@@ -36,63 +36,199 @@ export class NuevoFabricanteComponent implements OnInit {
   proveedor_directo_selected: any;
   proveedor_directo_abierto: boolean = false;
 
-  elementosVisibles: boolean[] = [];
-
   public origenes: Array<Origenes> = [];
   public grupos: Array<Grupo> = [];
+
+  public guardando: boolean = false;
+  public correo_valido = false;
+
+  public edicionGrupo: boolean[] = [];
 
   constructor(
     public api: FabricantesService,
     public proveedor_service: ProveedoresService,
   ) {}
 
-  ngOnInit(): void {
-    var phrases = [
-      'Arreglando código de programación',
-      'Ajustando colores',
-      'Descargando la información',
-      'Buscando errores',
-      'Programando la respuesta que quieres',
-      'Ya casi terminamos',
-    ];
+  public paises: string[] = [
+    'Afganistán',
+    'Albania',
+    'Alemania',
+    'Andorra',
+    'Angola',
+    'Anguilla',
+    'Antártida',
+    'Antigua y Barbuda',
+    'Arabia Saudí',
+    'Argelia',
+    'Argentina',
+    'Armenia',
+    'Aruba',
+    'Australia',
+    'Austria',
+    'Azerbaiyán',
+    'Bahamas',
+    'Bangladesh',
+    'Barbados',
+    'Bélgica',
+    'Belice',
+    'Benin',
+    'Bielorrusia',
+    'Bolivia',
+    'Bosnia y Herzegovina',
+    'Botswana',
+    'Brasil',
+    'Brunei',
+    'Bulgaria',
+    'Burkina Faso',
+    'Burundi',
+    'Bután',
+    'Cabo Verde',
+    'Camboya',
+    'Camerún',
+    'Canadá',
+    'Chad',
+    'Chile',
+    'China',
+    'Chipre',
+    'Colombia',
+    'Comores',
+    'Congo',
+    'Corea',
+    'Corea del Norte',
+    'Costa Rica',
+    'Croacia',
+    'Cuba',
+    'Dinamarca',
+    'Dominica',
+    'Ecuador',
+    'Egipto',
+    'El Salvador',
+    'Emiratos Árabes Unidos',
+    'Eritrea',
+    'Eslovenia',
+    'España',
+    'Estados Unidos',
+    'Estonia',
+    'Etiopía',
+    'Filipinas',
+    'Finlandia',
+    'Francia',
+    'Gabón',
+    'Gambia',
+    'Georgia',
+    'Ghana',
+    'Grecia',
+    'Groenlandia',
+    'Guatemala',
+    'Guinea',
+    'Guinea Ecuatorial',
+    'Haití',
+    'Honduras',
+    'Hungría',
+    'India',
+    'Indonesia',
+    'Irak',
+    'Irán',
+    'Irlanda',
+    'Islandia',
+    'Israel',
+    'Italia',
+    'Jamaica',
+    'Japón',
+    'Jordania',
+    'Kazajistán',
+    'Kenia',
+    'Kirguizistán',
+    'Kuwait',
+    'Laos',
+    'Letonia',
+    'Líbano',
+    'Liberia',
+    'Libia',
+    'Liechtenstein',
+    'Lituania',
+    'Luxemburgo',
+    'Macedonia',
+    'Madagascar',
+    'Malasia',
+    'Malawi',
+    'Maldivas',
+    'Malí',
+    'Malta',
+    'Marruecos',
+    'Mauricio',
+    'Mauritania',
+    'México',
+    'Moldavia',
+    'Mónaco',
+    'Mongolia',
+    'Mozambique',
+    'Namibia',
+    'Nepal',
+    'Nicaragua',
+    'Nigeria',
+    'Noruega',
+    'Nueva Zelanda',
+    'Omán',
+    'Países Bajos',
+    'Pakistán',
+    'Panamá',
+    'Papúa Nueva Guinea',
+    'Paraguay',
+    'Perú',
+    'Polonia',
+    'Portugal',
+    'Puerto Rico',
+    'Qatar',
+    'Reino Unido',
+    'República Centroafricana',
+    'República Checa',
+    'República Dominicana',
+    'Rumania',
+    'Rusia',
+    'Senegal',
+    'Serbia',
+    'Singapur',
+    'Siria',
+    'Sri Lanka',
+    'Sudáfrica',
+    'Sudán',
+    'Suecia',
+    'Suiza',
+    'Surinam',
+    'Tailandia',
+    'Taiwán',
+    'Tanzania',
+    'Tayikistán',
+    'Timor Oriental',
+    'Togo',
+    'Trinidad y Tobago',
+    'Túnez',
+    'Turkmenistán',
+    'Turquía',
+    'Ucrania',
+    'Uganda',
+    'Uruguay',
+    'Uzbekistán',
+    'Vaticano',
+    'Venezuela',
+    'Vietnam',
+    'Yemen',
+    'Zambia',
+    'Zimbabue',
+  ];
 
-    // Function to change the random phrase
-    function changeRandomPhrase() {
-      var randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      document.getElementById('random-phrases')!.textContent = randomPhrase;
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['nuevo'] && changes['nuevo'].currentValue) {
+      this.guardando = false;
     }
-
-    // Call the function every 1 second
-    setInterval(changeRandomPhrase, 2000);
+    if (changes['editar'] && changes['editar'].currentValue) {
+      this.guardando = false;
+    }
   }
 
-  editar_(i: number) {
-    this.elementosVisibles[i] = true;
-  }
-
-  guardarCambios(i: number) {
-    this.elementosVisibles[i] = false;
-  }
-
-  // //genera una funcion llamada editar_() que coloque agregue es estilo display:none al elemento con id contacto_i
-  // editar_(i:number) {
-  //   const elemento = document.getElementById(`contactos_${i}`);
-  //   if (elemento) {
-  //     elemento.style.display = 'none';
-  //     const elemento2 = document.getElementById(`formularios_${i}`);
-  //     if (elemento2) {
-  //       elemento2.style.display = 'block';
-  //       // elimina elemento con id botones_i
-  //       const elemento3 = document.getElementById(`botones_${i}`);
-  //       if (elemento3) {
-  //         elemento3.style.display = 'none';
-  //       }
-  //     }
-
-  //   }
-  // }
-
-  //guardar dentro de this.p_contacto un objeto con nombre,telefono,correo cara uno correspondiente al valor de las variables p_nombre, p_telefono, p_correo
   AgregarContacto() {
     this.p_contacto.push({
       nombre: this.p_nombre,
@@ -105,6 +241,7 @@ export class NuevoFabricanteComponent implements OnInit {
     this.p_correo = '';
     this.p_cargo = '';
   }
+
   AgregarContacto_() {
     this.proveedor_directo_selected[0].contactos.push({
       nombre: this.p_nombre,
@@ -122,41 +259,20 @@ export class NuevoFabricanteComponent implements OnInit {
     if (this.p_rif.length === 1) {
       this.p_rif = this.p_rif + '-';
     }
-
-    if (this.proveedor_directo_selected[0].rif === 1) {
-      this.proveedor_directo_selected[0].rif + '-';
+    if (this.proveedor_directo_selected?.rif === 1) {
+      this.proveedor_directo_selected.rif + '-';
     }
   }
 
   checkValidity(email: any) {
-    // Expresión regular para validar el formato del email
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Verificar si el email cumple con el formato válido
-    if (!emailRegex.test(email)) {
-      return false;
-    }
-
-    // Otras validaciones personalizadas, si es necesario
-
-    return true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
-  public correo_valido = false;
   validateEmail(correo: any) {
-    var validationMessage = document.getElementById('validationMessage');
-
-    if (this.checkValidity(correo)) {
-      this.correo_valido = true;
-      validationMessage!.textContent = '';
-      validationMessage!.style.color = 'green';
-    } else {
-      validationMessage!.textContent = 'correo Invalido';
-      validationMessage!.style.color = 'red';
-    }
+    this.correo_valido = this.checkValidity(correo);
   }
 
-  //crea una funcion llamada deletecontacto que reciba un indice que sera buscado en this.p_contacto y sera elminado del mismo
   deletecontacto(index: number) {
     this.p_contacto.splice(index, 1);
   }
@@ -172,14 +288,13 @@ export class NuevoFabricanteComponent implements OnInit {
   cerrar() {
     this.onCloseModal.emit();
   }
+
   cerrar_() {
-    console.log('close');
     this.onCloseModal_.emit();
   }
 
   addOrigen() {
-    let busqueda = this.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
-
+    const busqueda = this.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
     if (!busqueda) {
       this.origenes.push({ pais: this.pais, estado: this.estado });
       this.estado = '';
@@ -203,8 +318,7 @@ export class NuevoFabricanteComponent implements OnInit {
   }
 
   addOrigen_() {
-    let busqueda = this.data.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
-
+    const busqueda = this.data.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
     if (!busqueda) {
       this.data.origenes.push({ pais: this.pais, estado: this.estado });
       this.estado = '';
@@ -212,10 +326,10 @@ export class NuevoFabricanteComponent implements OnInit {
   }
 
   addGrupo_() {
-    let s_ = this.grupo.split('*');
-    let nombre = s_[0];
-    let id = s_[1];
-    let busqueda = this.data.grupo.find((x) => x._id === id && x.nombre === nombre);
+    const s_ = this.grupo.split('*');
+    const nombre = s_[0];
+    const id = s_[1];
+    const busqueda = this.data.grupo.find((x) => x._id === id && x.nombre === nombre);
     if (!busqueda) {
       this.data.grupo.push({ _id: id, nombre });
       this.grupo = '';
@@ -226,28 +340,20 @@ export class NuevoFabricanteComponent implements OnInit {
     this.edicionGrupo[i] = true;
   }
 
-  public edicionGrupo: boolean[] = [];
-
   editarGrupoEspec(index: any) {
-    let data_actual: any = this.data.grupo[index];
-    console.log(data_actual);
+    const data_actual: any = this.data.grupo[index];
     data_actual.split('*');
-    let nombre = data_actual.split('*')[0];
-    let _id = data_actual.split('*')[1];
-
-    this.data.grupo[index] = {
-      _id,
-      nombre,
-    };
+    const nombre = data_actual.split('*')[0];
+    const _id = data_actual.split('*')[1];
+    this.data.grupo[index] = { _id, nombre };
     this.edicionGrupo[index] = false;
   }
 
   addGrupo() {
-    console.log('aja');
-    let s_ = this.grupo.split('*');
-    let nombre = s_[0];
-    let id = s_[1];
-    let busqueda = this.grupos.find((x) => x._id === id && x.nombre === nombre);
+    const s_ = this.grupo.split('*');
+    const nombre = s_[0];
+    const id = s_[1];
+    const busqueda = this.grupos.find((x) => x._id === id && x.nombre === nombre);
     if (!busqueda) {
       this.grupos.push({ _id: id, nombre });
       this.grupo = '';
@@ -255,6 +361,8 @@ export class NuevoFabricanteComponent implements OnInit {
   }
 
   guardarFabricante(): void {
+    this.guardando = true;
+
     const { nombre, alias, origenes, grupos } = this;
     const nuevoFabricante: Fabricante = {
       nombre,
@@ -269,7 +377,7 @@ export class NuevoFabricanteComponent implements OnInit {
     if (this.proveedor_directo) {
       setTimeout(() => {
         const { nombre, p_contacto, p_direccion, p_rif } = this;
-        let proveedor: Proveedores = {
+        const proveedor: Proveedores = {
           fabricantes: '',
           nombre,
           contactos: p_contacto,
@@ -278,29 +386,13 @@ export class NuevoFabricanteComponent implements OnInit {
         };
         this.proveedor_service.nuevoProveedor(proveedor);
         this.onCloseModal.emit();
-        this.nombre = '';
-        this.alias = '';
-        this.pais = '';
-        this.estado = '';
-        this.grupo = '';
-        this.proveedor_directo = false;
-
-        this.p_nombre = '';
-        this.p_telefono = '';
-        this.p_correo = '';
-        this.p_contacto = [];
-        this.p_direccion = '';
-        this.p_rif = '';
-        this.p_cargo = '';
-        this.origenes = [];
-        this.grupos = [];
+        this.limpiarFormulario();
       }, 1000);
     }
     this.onCloseModal.emit();
   }
 
   BuscarProveedor() {
-    console.log(this.data);
     if (!this.proveedor_directo_abierto) {
       this.proveedor_directo_selected = this.proveedor_service.seleccionarUnProveedor(this.data.nombre);
       this.proveedor_directo_abierto = true;
@@ -310,8 +402,9 @@ export class NuevoFabricanteComponent implements OnInit {
   }
 
   editarFabricante() {
+    this.guardando = true;
     this.api.editarFabricante(this.data);
-    console.log(this.proveedor_directo_selected);
+
     if (this.proveedor_directo_selected) {
       setTimeout(() => {
         this.proveedor_service.editarProveedores(this.proveedor_directo_selected[0]);
@@ -319,5 +412,25 @@ export class NuevoFabricanteComponent implements OnInit {
       }, 1000);
     }
     this.onCloseModal.emit();
+  }
+
+  private limpiarFormulario() {
+    this.nombre = '';
+    this.alias = '';
+    this.pais = '';
+    this.estado = '';
+    this.grupo = '';
+    this.proveedor_directo = false;
+
+    this.p_nombre = '';
+    this.p_telefono = '';
+    this.p_correo = '';
+    this.p_contacto = [];
+    this.p_direccion = '';
+    this.p_rif = '';
+    this.p_cargo = '';
+    this.origenes = [];
+    this.grupos = [];
+    this.guardando = false;
   }
 }

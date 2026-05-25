@@ -1,709 +1,203 @@
 <app-nuevo-orden [nueva]="nueva" [Orden]="Orden" (onCloseModal)="cerrar()" (onChangeProv)="reset()"> </app-nuevo-orden>
+
 <app-page-layout>
-  <app-section-header title="Órdenes de compra" description="Solicitudes y seguimiento de compras" icon="fa-shopping-cart" color="green"></app-section-header>
-  <br />
-  <div class="columns">
-    <div class="column is-1">
+  <app-section-header
+    title="Órdenes de compra"
+    description="Solicitudes y seguimiento de compras"
+    icon="fa-shopping-cart"
+    color="green"
+  ></app-section-header>
+
+  <!-- Top bar: New order + KPI indicators -->
+  <div class="columns is-variable is-4">
+    <div class="column">
       <div class="field is-grouped">
         <div class="control">
-          <button class="button is-info boton" (click)="nueva = true">
+          <button class="button is-info" (click)="nueva = true">
             <span class="icon"><i class="fas fa-plus-circle"></i></span>
-            <span>Orden</span>
+            <span>Nueva Orden</span>
           </button>
         </div>
       </div>
     </div>
-      
-    <div class="column">
-      <div class="Filter" [ngClass]="{ active: filtrado }">
-        <div class="home">
-          <button class="button button-hidde gray" (click)="buscarporFecha()" [ngClass]="{ selected: fecha }">
-            <span class="icon">
-              <i class="fas fa-home"></i>
-            </span>
-          </button>
-        </div>
-        <div class="icon-filter">
-          <button class="button button-hidde gray" (click)="mostrarFiltros()">
-            <span class="icon">
-              <i class="fas fa-filter"></i>
-            </span>
-          </button>
-        </div>
-        <div class="filters">
-          <div class="field is-grouped">
-            <div class="control">
-              <button
-                class="button button-hidde gray"
-                (click)="RealizarBusquedaFecha()"
-                [ngClass]="{ selected: DesdeHasta && !cliente }"
-              >
-                <span class="icon">
-                  <i class="fas fa-calendar-day"></i>
-                </span>
-              </button>
-            </div>
-            <!-- <div class="control">
-                                    <button class="button button-hidde gray">
-                                        <span class="icon">
-                                            <i class="fas fa-users" (click)="buscarporCliente()" [ngClass]="{'selected':cliente}"></i>
-                                        </span>
-                                    </button>
-                                </div> -->
-            <div class="control">
-              <button class="button button-hidde gray">
-                <span class="icon">
-                  <i class="fas fa-lock"></i>
-                </span>
-              </button>
-            </div>
-            <div class="control">
-              <button
-                class="button button-hidde gray"
-                (click)="BusquedaPorNumero()"
-                [ngClass]="{ selected: OC_NUMBER }"
-              >
-                <span class="icon">
-                  <i class="fas fa-hashtag"></i>
-                </span>
-              </button>
-            </div>
+    <div class="column is-8">
+      <div class="columns is-variable is-2">
+        <div class="column">
+          <div class="kpi-card kpi-orange">
+            <div class="kpi-number">{{ api.ordenesMesActual }}</div>
+            <div class="kpi-label">Órdenes <strong>Mes</strong></div>
+            <div class="kpi-period">{{ mesActual }}</div>
           </div>
         </div>
-        <i class="fas fa-grip-lines-vertical grip" (click)="mostrarFiltros()" style="cursor: pointer"></i>
+        <div class="column">
+          <div class="kpi-card kpi-green">
+            <div class="kpi-number">{{ api.ordenesAnoActual }}</div>
+            <div class="kpi-label">Órdenes <strong>Año</strong></div>
+            <div class="kpi-period">{{ yearActual }}</div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-number">{{ ordenesCerradas }}</div>
+            <div class="kpi-label">Órdenes <strong>Cerradas</strong></div>
+            <div class="kpi-period">{{ yearActual }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="search" [ngClass]="{ active: DesdeHasta }">
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'home' }" (click)="setFilter('home')">
+      <i class="fas fa-home"></i> Todas
+    </button>
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'date' }" (click)="setFilter('date')">
+      <i class="fas fa-calendar-day"></i> Por fecha
+    </button>
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'number' }" (click)="setFilter('number')">
+      <i class="fas fa-hashtag"></i> Por N°
+    </button>
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'client' }" (click)="setFilter('client')">
+      <i class="fas fa-users"></i> Por proveedor
+    </button>
+  </div>
+
+  <!-- Filter panels -->
+  <div class="filter-panel" *ngIf="filterMode === 'date'">
     <div class="field is-grouped">
       <div class="control">
-        <label class="label tags_closer">Desde</label>
+        <label class="label">Desde</label>
         <input type="date" class="input" #desde />
       </div>
       <div class="control">
-        <label class="label tags_closer">Hasta</label>
+        <label class="label">Hasta</label>
         <input type="date" class="input" #hasta />
       </div>
-      <div class="control" *ngIf="!cliente">
-        <label for="" class="label tags_closer"> </label>
+      <div class="control">
+        <label class="label"> </label>
         <button class="button is-success" (click)="buscarPorFecha(desde.value, hasta.value)">
-          <span class="icon"><i class="fas fa-search"></i></span>
-        </button>
-      </div>
-      <div class="control" *ngIf="cliente">
-        <label for="" class="label tags_closer"> </label>
-        <button class="button is-success" (click)="buscarPorFecha_cliente(desde.value, hasta.value)">
-          <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <i class="fas fa-search"></i>
         </button>
       </div>
     </div>
   </div>
-  <div class="search_" [ngClass]="{ active_: OC_NUMBER }">
+
+  <div class="filter-panel" *ngIf="filterMode === 'number'">
     <div class="field is-grouped">
       <div class="control">
-        <label class="label">Numero OC</label>
-        <input type="text" class="input" placeholder="Desde" [(ngModel)]="searchTerm" (input)="search()" />
+        <label class="label">Número de OC</label>
+        <input
+          type="text"
+          class="input"
+          placeholder="Buscar por número..."
+          [(ngModel)]="searchTerm"
+          (input)="search()"
+        />
       </div>
     </div>
   </div>
+
+  <div class="filter-panel" *ngIf="filterMode === 'client'">
+    <div class="field is-grouped">
+      <div class="control is-expanded">
+        <label class="label">Proveedor</label>
+        <div class="select is-fullwidth">
+          <select (change)="filtrarPorProveedor($event.target)">
+            <option value="">— Todos —</option>
+            <option *ngFor="let p of proveedoresUnicas" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <br />
-  <div class="columns">
-    <div class="column">
-      <div class="card">
-        <div class="card-content">
-          <span class="title" *ngIf="fecha">Home</span>
-          <span class="title" *ngIf="DesdeHasta && !cliente">Por fecha:</span>
-          <span class="title" *ngIf="cliente">Por clientes:</span>
-          <span class="title" *ngIf="OC_NUMBER">Por Nro de Orden:</span>
-          <br />
-          <br />
-          <ng-container *ngIf="fecha">
-            <ng-container *ngFor="let ordenes of api.orden; index as i">
-              <div class="card animate__animated animate__fadeInUp">
-                <div class="card-header dark">
-                  <div class="card-header-title">
-                    {{ ordenes.proveedor.nombre }} - <span class="Proveedor"> OCP:{{ addSlice(ordenes.numero) }}</span>
-                         <i class="fas fa-download blue_" style="cursor: pointer" (click)="DescargarPDF(ordenes)"></i>
-                  </div>
-                  <i
-                    class="fas fa-chevron-up"
-                    style="cursor: pointer"
-                    (click)="show_info_(i)"
-                    [ngClass]="{ 'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i] }"
-                  ></i>
-                </div>
-                <div class="card-content orden_Info" [ngClass]="{ active: ORDEN[i] }">
-                  <table class="table is-fullwidth is-striped tabla" [ngClass]="{ active_: ORDEN[i] }">
-                    <thead>
-                      <tr>
-                        <th>Producto</th>
-                        <th>Código</th>
-                        <th>Cantidad</th>
-                        <th>Precio unitario (USD)</th>
-                        <th>Base Imp.</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let material of ordenes.pedido; index as x">
-                        <td>
-                          {{ material.material.nombre }} ({{ material.material.fabricante.alias }})
-                          <ng-container *ngIf="material.material.calibre">
-                            {{ material.material.gramaje }}g {{ material.material.calibre }}pt
-                          </ng-container>
-                        </td>
-                        <td>{{ material.material.modelo }}</td>
-                        <td>{{ material.cantidad | number: '1.0-2' }}{{ material.unidad }}</td>
-                        <td>{{ formatear_cifras(material.precio) }}</td>
-                        <td>{{ material.precio * material.cantidad | number: '1.0-2' }}</td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Sub-Total</th>
-                        <th>{{ calcularTotalNeto(ordenes).toFixed(2) | number: '1.0-2' }}</th>
-                      </tr>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>I.V.A ({{ ordenes.iva }}%)</th>
-                        <th>{{ calcularTotalIva(ordenes).toFixed(2) | number: '1.0-2' }}</th>
-                      </tr>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Neto</th>
-                        <th>
-                          {{ (calcularTotalNeto(ordenes) + calcularTotalIva(ordenes)).toFixed(2) | number: '1.0-2' }}
-                        </th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-              <br />
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="Busqueda">
-            <div class="custom-card" *ngIf="!filtrados || filtrados.length == 0">
-              <p class="message">No hay resultados de busqueda</p>
-            </div>
-            <ng-container *ngFor="let ordenes of filtrados; index as i">
-              <div class="card animate__animated animate__fadeInUp">
-                <div class="card-header dark">
-                  <div class="card-header-title">
-                    {{ ordenes.proveedor.nombre }} - <span class="Proveedor"> OCP:{{ addSlice(ordenes.numero) }}</span>
-                         <i class="fas fa-download blue_" style="cursor: pointer" (click)="DescargarPDF(ordenes)"></i>
-                  </div>
-                  <i
-                    class="fas fa-chevron-up"
-                    style="cursor: pointer"
-                    (click)="show_info_(i)"
-                    [ngClass]="{ 'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i] }"
-                  ></i>
-                </div>
-                <div class="card-content orden_Info" [ngClass]="{ active: ORDEN[i] }">
-                  <table class="table is-fullwidth is-striped tabla" [ngClass]="{ active_: ORDEN[i] }">
-                    <thead>
-                      <tr>
-                        <th>Producto</th>
-                        <th>Código</th>
-                        <th>Cantidad</th>
-                        <th>Precio unitario (USD)</th>
-                        <th>Base Imp.</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let material of ordenes.pedido; index as x">
-                        <td>{{ material.material.nombre }} ({{ material.material.fabricante.alias }})</td>
-                        <td>{{ material.material.modelo }}</td>
-                        <td>{{ material.cantidad | number: '1.0-2' }}{{ material.unidad }}</td>
-                        <td>{{ formatear_cifras(material.precio) | number: '1.0-2' }}</td>
-                        <td>{{ formatear_cifras(material.precio * material.cantidad) | number: '1.0-2' }}</td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Sub-Total</th>
-                        <th>{{ calcularTotalNeto(ordenes).toFixed(2) | number: '1.0-2' }}</th>
-                      </tr>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>I.V.A</th>
-                        <th>{{ calcularTotalIva(ordenes).toFixed(2) | number: '1.0-2' }}</th>
-                      </tr>
-                      <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>Neto</th>
-                        <th>
-                          {{ (calcularTotalNeto(ordenes) + calcularTotalIva(ordenes)).toFixed(2) | number: '1.0-2' }}
-                        </th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-              <br />
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="cliente">
-            <ng-container *ngFor="let clientes of PorClientes; index as i">
-              <span class="clientesName" style="cursor: pointer" (click)="show_info(i)"
-                >{{ clientes[0] }} 
-                <i
-                  class="fas fa-chevron-up"
-                  [ngClass]="{ 'rotate-down': Info_clientes[i], 'rotate-up': !Info_clientes[i] }"
-                ></i>
-              </span>
 
-              <div class="orden_Info" [ngClass]="{ active: Info_clientes[i] }" style="background-color: transparent">
-                <ng-container *ngFor="let orden of clientes[1]; index as y" style="background-color: transparent">
-                  <div class="card animate__animated animate__fadeInUp" [ngClass]="{ active: Info_clientes[y] }">
-                    <div class="card-header dark">
-                      <p class="card-header-title">
-                        <strong style="font-family: 'Gilroy'">OC: {{ orden.orden }} </strong>
-                        <span class="fechas">
-                          <b>Fecha:</b> {{ orden.fecha | date: 'dd/mm/yyyy' }} - <b>Recepción:</b>
-                          {{ orden.recepcion | date: 'dd/mm/yyyy' }}
-                        </span>
-                      </p>
-                      <i
-                        class="fas fa-chevron-up"
-                        style="cursor: pointer"
-                        (click)="show_info_(y)"
-                        [ngClass]="{ 'rotate-down': ORDEN[y], 'rotate-up': !ORDEN[y] }"
-                      ></i>
-                    </div>
-                    <div class="card-content orden_Info" [ngClass]="{ active: ORDEN[y] }">
-                      <table class="table is-fullwidth is-striped tabla" [ngClass]="{ active_: ORDEN[y] }">
-                        <thead>
-                          <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>F. Solic.</th>
-                            <th>OP</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let producto of orden.pedido">
-                            <td>{{ producto.producto.identificacion.producto }}</td>
-                            <td>{{ formatNumberWithDotSeparator(producto.cantidad) }}</td>
-                            <td>{{ producto.solicitud | date: 'dd/mm/yyyy' }}</td>
-                            <td></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <br />
-                </ng-container>
-              </div>
-            </ng-container>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-    <div class="column is-4">
-      <div class="card tags">
-        <div class="card-content ty orange">
-          <div class="columns">
-            <div class="column is-2">
-              <span class="number_">
-                <h1>{{ api.ordenesMesActual }}</h1>
-              </span>
-            </div>
-            <div class="column is-2">
-              <span class="fina">Órdenes</span> <br />
-              <span class="gruesa">Mes</span>
-            </div>
-            <div class="column">
-              <span class="Detalle">
-                {{ mesActual }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="position__">
-          <svg
-            class="waves"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 40"
-            preserveAspectRatio="none"
-            shape-rendering="auto"
-          >
-            <defs>
-              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-            </defs>
-            <g class="moving-waves">
-              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="card tags">
-        <div class="card-content ty green__">
-          <div class="columns">
-            <div class="column is-2">
-              <span class="number_">
-                <h1>{{ api.ordenesAnoActual }}</h1>
-              </span>
-            </div>
-            <div class="column is-2">
-              <span class="fina">Órdenes</span> <br />
-              <span class="gruesa">Año</span>
-            </div>
-            <div class="column">
-              <span class="Detalle">
-                {{ yearActual }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="position__">
-          <svg
-            class="waves"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 40"
-            preserveAspectRatio="none"
-            shape-rendering="auto"
-          >
-            <defs>
-              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-            </defs>
-            <g class="moving-waves">
-              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="card tags">
-        <div class="card-content ty blue___">
-          <div class="columns">
-            <div class="column is-1">
-              <span class="number_">
-                <h1>0</h1>
-              </span>
-            </div>
-            <div class="column is-3">
-              <span class="fina">Órdenes</span> <br />
-              <span class="gruesa">cerradas</span>
-            </div>
-            <div class="column">
-              <span class="Detalle">
-                {{ yearActual }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="position__">
-          <svg
-            class="waves"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 40"
-            preserveAspectRatio="none"
-            shape-rendering="auto"
-          >
-            <defs>
-              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-            </defs>
-            <g class="moving-waves">
-              <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-              <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-              <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-              <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-            </g>
-          </svg>
-        </div>
+  <!-- Empty state -->
+  <div *ngIf="!cargando && ordenesVisibles.length === 0" class="empty-state">
+    <i class="fas fa-file-invoice empty-icon"></i>
+    <p class="empty-title">No hay órdenes de compra</p>
+    <p class="empty-hint">Haz clic en "Nueva Orden" para crear la primera</p>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && api.orden?.length === 0" class="skeleton-list">
+    <div *ngFor="let _ of [].constructor(3)" class="card skeleton-order-card">
+      <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
+      <div class="card-content">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line" style="width: 60%"></div>
       </div>
     </div>
   </div>
-  <!-- THIS IS THE END OF THE NEW DESIGN -->
-  <!-- <div class="tags are-large">
-                <button class="button is-info boton" (click)="nueva_orden()">
-                    <span class="icon"><i class="fas fa-plus-circle"></i></span>
-                    <span>Orden</span>
-                </button>  
-                <span class="tag" [ngClass]="{'is-success':fecha}" (click)="buscarporFecha()"><i class="fas fa-calendar-alt"></i> Fechas</span>
-                <span class="tag" [ngClass]="{'is-success':cliente}" (click)="buscarporCliente()"><i class="fas fa-users"></i> Proveedores</span>
-                <span class="tag"><i class="fas fa-slash"></i> Cerradas</span>
-                <div class="field has-addons busqueda">
-                    <div class="control">
-                      <input class="input" type="text" placeholder="Buscar OC">
-                    </div>
-                    <div class="control">
-                      <button class="button is-info">
-                        <span class="icon">
-                            <i class="fas fa-search"></i>
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column">
 
-                    <ng-container *ngIf="fecha">
-                        <ng-container *ngFor="let orden of ordenes.orden;index as i">
-                            <div class="card animate__animated animate__fadeInUp" >
-                                <div class="card-header dark">
-                                    <p class="card-header-title">
-                                        {{orden.proveedor.nombre}} - <span class="Proveedor"> OC:{{addSlice(orden.numero)}}</span> 
-                                             <i class="fas fa-download blue_" style="cursor: pointer;" (click)="DescargarPDF(orden)"></i>
-                                    </p>
-                                    <i class="fas fa-chevron-up" style="cursor: pointer;" (click)="show_info(i)" [ngClass]="{'rotate-down': ORDEN[i], 'rotate-up': !ORDEN[i]}"></i>
-                                </div>
-                                <div class="card-content orden_Info" [ngClass]="{'active': ORDEN[i]}">
-                                    <table class="table is-fullwidth is-striped tabla" [ngClass]="{'active_': ORDEN[i]}">
-                                        <thead>
-                                            <tr>
-                                                <th>Producto</th>
-                                                <th>Código</th>
-                                                <th>Cantidad</th>
-                                                <th>Precio unitario</th>
-                                                <th>Base Imp.</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let material of orden.pedido">
-                                                <td>{{material.material.nombre}} ({{material.material.fabricante.alias}})</td>
-                                                <td>{{material.material.modelo}}</td>
-                                                <td>{{material.cantidad}}{{material.unidad}}</td>
-                                                <td>{{material.precio}}</td>
-                                                <td>{{ material.precio * material.cantidad | number: '1.2-2' }}</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th>Sub-Total</th>
-                                                <th>{{calcularTotalNeto(orden).toFixed(2)}}</th>
-                                            </tr>
-                                            <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th>I.V.A</th>
-                                                <th>{{calcularTotalIva(orden).toFixed(2)}}</th>
-                                            </tr>
-                                            <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th>Neto</th>
-                                                <th>{{(calcularTotalNeto(orden) + calcularTotalIva(orden)).toFixed(2) | number: '1.2-2'}}</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <br>
-                        </ng-container>
-                    </ng-container>
-
-                    <ng-container *ngIf="cliente">
-                        <ng-container *ngFor="let proveedor of porProveedor;index as i">
-                            <span class="clientesName" style="cursor: pointer; font-family: 'Gilroy';" (click)="show_info_(i)">{{proveedor[0]}} 
-                                <i class="fas fa-chevron-up" [ngClass]="{'rotate-down': Info_clientes[i], 'rotate-up': !Info_clientes[i]}"></i>
-                            </span>
-                            <div class="orden_Info" [ngClass]="{'active':Info_clientes[i]}">
-                                <div class="card animate__animated animate__fadeInUp carta_espacio" *ngFor="let orden of proveedor[1];index as y">
-                                    <div class="card-header dark">
-                                        <p class="card-header-title">
-                                            <span class="Proveedor"> OC:{{addSlice(orden.numero)}}</span> 
-                                                 <i class="fas fa-download blue_" style="cursor: pointer;" (click)="DescargarPDF(orden)"></i>
-                                        </p>
-                                        <i class="fas fa-chevron-up" style="cursor: pointer;" (click)="show_info(y)" [ngClass]="{'rotate-down': ORDEN[y], 'rotate-up': !ORDEN[y]}"></i>
-                                    </div>
-                                    <div class="card-content orden_Info" [ngClass]="{'active': ORDEN[y]}">
-                                        <table class="table is-fullwidth is-striped tabla" [ngClass]="{'active_': ORDEN[y]}">
-                                            <thead>
-                                                <tr>
-                                                    <th>Producto</th>
-                                                    <th>Código</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Precio unitario</th>
-                                                    <th>Base Imp.</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let material of orden.pedido;index as x">
-                                                    <td>{{material.material.nombre}} ({{material.material.fabricante.alias}})</td>
-                                                    <td>{{material.material.modelo}}</td>
-                                                    <td>{{material.cantidad}}{{material.unidad}}</td>
-                                                    <td>{{material.precio}}</td>
-                                                    <td>{{ material.precio * material.cantidad | number: '1.2-2' }}</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>Sub-Total</th>
-                                                    <th>{{calcularTotalNeto(orden).toFixed(2)}}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>I.V.A</th>
-                                                    <th>{{calcularTotalIva(orden).toFixed(2)}}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                    <th>Neto</th>
-                                                    <th>{{(calcularTotalNeto(orden) + calcularTotalIva(orden)).toFixed(2) | number: '1.2-2'}}</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </ng-container>
-
-                </div>
-                <div class="column is-4">
-                    <div class="card tags">
-                        <div class="card-content ty orange">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>16</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">Mes</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        {{mesActual}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                              <defs>
-                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                              </defs>
-                              <g class="moving-waves">
-                                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                              </g>
-                            </svg>
-                          </div>
-                    </div>
-                    <div class="card tags">
-                        <div class="card-content ty green__">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>58</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-2">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">Año</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        {{yearActual}}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                              <defs>
-                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                              </defs>
-                              <g class="moving-waves">
-                                  <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                              </g>
-                            </svg>
-                          </div>
-                    </div>
-                    <div class="card tags">
-                        <div class="card-content ty blue___">
-                            <div class="columns">
-                                <div class="column is-2">
-                                    <span class="number_">
-                                        <h1>16</h1>
-                                    </span>
-                                </div>
-                                <div class="column is-3">
-                                    <span class="fina">Órdenes</span> <br>
-                                    <span class="gruesa">cerradas</span>
-                                </div>
-                                <div class="column">
-                                    <span class="Detalle">
-                                        Septiembre
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position__">
-                            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
-                              <defs>
-                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-                              </defs>
-                              <g class="moving-waves">
-                                <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.25)" />
-                                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.20)" />
-                                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0)" />
-                                <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.10)" />
-                                <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.05)" />
-                                <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0)" />
-                              </g>
-                            </svg>
-                          </div>
-                    </div>
-                </div>
-            </div> -->
+  <!-- Order list -->
+  <ng-container *ngIf="!cargando && ordenesVisibles.length > 0">
+    <div *ngFor="let orden of ordenesVisibles; index as i" class="card order-card animate__animated animate__fadeInUp">
+      <div class="card-header" (click)="toggleOrder(i)">
+        <div class="card-header-title">
+          <div class="order-header-info">
+            <span class="order-provider">{{ orden.proveedor.nombre }}</span>
+            <span class="order-number">OCP: {{ addSlice(orden.numero) }}</span>
+            <span class="order-status-badge" [ngClass]="orden.estado === 'cerrada' ? 'badge-closed' : 'badge-open'">
+              {{ orden.estado || 'Abierta' }}
+            </span>
+          </div>
+        </div>
+        <div class="order-header-actions">
+          <i
+            class="fas fa-download pdf-btn"
+            title="Descargar PDF"
+            (click)="$event.stopPropagation(); DescargarPDF(orden)"
+          ></i>
+          <i
+            class="fas fa-chevron-up chevron-btn"
+            [ngClass]="{ 'rotate-down': ordenExpandida[i], 'rotate-up': !ordenExpandida[i] }"
+          ></i>
+        </div>
+      </div>
+      <div class="card-content order-details" [ngClass]="{ active: ordenExpandida[i] }">
+        <table class="table is-fullwidth is-striped">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Código</th>
+              <th>Cantidad</th>
+              <th>Precio unitario (USD)</th>
+              <th>Base Imp.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let material of orden.pedido">
+              <td>
+                {{ material.material.nombre }} ({{ material.material.fabricante.alias }})
+                <span *ngIf="material.material.gramaje">
+                  — {{ material.material.gramaje }}g {{ material.material.calibre }}pt</span
+                >
+              </td>
+              <td>{{ material.material.modelo }}</td>
+              <td>{{ material.cantidad | number: '1.0-2' }}{{ material.unidad }}</td>
+              <td>{{ formatear_cifras(material.precio) }}</td>
+              <td>{{ material.precio * material.cantidad | number: '1.0-2' }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4">Sub-Total</th>
+              <th>{{ calcularTotalNeto(orden).toFixed(2) | number: '1.0-2' }}</th>
+            </tr>
+            <tr>
+              <th colspan="4">I.V.A ({{ orden.iva }}%)</th>
+              <th>{{ calcularTotalIva(orden).toFixed(2) | number: '1.0-2' }}</th>
+            </tr>
+            <tr>
+              <th colspan="4">Neto</th>
+              <th>{{ (calcularTotalNeto(orden) + calcularTotalIva(orden)).toFixed(2) | number: '1.0-2' }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </ng-container>
 </app-page-layout>

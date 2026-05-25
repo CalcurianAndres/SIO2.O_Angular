@@ -25,7 +25,7 @@ export class OrdenesComponent {
       'Enero',
       'Febrero',
       'Marzo',
-      'Septiembre',
+      'Abril',
       'Mayo',
       'Junio',
       'Julio',
@@ -41,8 +41,6 @@ export class OrdenesComponent {
   }
 
   public nueva = false;
-  public ORDEN = [false, false];
-
   public Orden = {
     proveedor: '',
     fabricante: '',
@@ -57,142 +55,80 @@ export class OrdenesComponent {
     calibre: '',
   };
 
-  public cliente = false; // Variable para controlar si se está buscando por cliente
-  public fecha = true; // Variable para controlar si se está buscando por fecha
-  public porProveedor: any = [];
-  public Info_clientes = [false, false]; // Array de booleanos para controlar la visualización de información adicional por cliente
-
-  public filtrado = false;
-  public DesdeHasta = false;
-  public Busqueda = false;
-  public OC_NUMBER = false;
   public filtrados: any = [];
-  public PorClientes: any = [];
   public searchTerm: any;
-  public semaforo = ['rojo', 'amarillo', 'verde'];
+  public filterMode: string = 'home';
+  public ordenExpandida: boolean[] = [];
+  public cargando = false;
+
+  get ordenesCerradas(): number {
+    return this.api.orden?.filter((o) => o.estado === 'cerrada').length || 0;
+  }
+
+  get proveedoresUnicas(): string[] {
+    if (!this.api.orden) return [];
+    return [...new Set(this.api.orden.map((o) => o.proveedor?.nombre).filter(Boolean))] as string[];
+  }
+
+  get ordenesVisibles(): any[] {
+    if (this.filtrados.length > 0) return this.filtrados;
+    return this.api.orden || [];
+  }
+
+  setFilter(mode: string) {
+    this.filterMode = mode;
+    this.filtrados = [];
+    this.searchTerm = '';
+  }
+
+  toggleOrder(n: number) {
+    this.ordenExpandida[n] = !this.ordenExpandida[n];
+  }
 
   formatear_cifras(valor: number) {
     return this.decimalPipe.transform(valor, '1.0-2');
   }
 
-  mostrarFiltros() {
-    if (!this.filtrado) {
-      this.filtrado = true;
-    } else {
-      this.filtrado = false;
-    }
-  }
-
-  RealizarBusquedaFecha() {
-    if (!this.DesdeHasta) {
-      this.DesdeHasta = true;
-    }
-    this.fecha = false; // Ocultar la búsqueda por fecha
-    this.cliente = false; // Mostrar la búsqueda por cliente
-    this.Busqueda = true;
-    this.Busqueda = true;
-    this.OC_NUMBER = false;
-    this.filtrados = [];
-  }
-
-  BusquedaPorNumero() {
-    this.OC_NUMBER = true;
-    this.DesdeHasta = false;
-    this.fecha = false;
-    this.cliente = false;
-    this.Busqueda = true;
-    this.filtrados = [];
-  }
-
-  formatNumberWithDotSeparator(number: number): string {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
   buscarPorFecha(desde: string, hasta: string) {
-    // Convertir las fechas sin alterar la zona horaria
     const inicio = new Date(desde + 'T00:00:00');
     const fin = new Date(hasta + 'T23:59:59');
-
     this.filtrados = this.api.orden.filter((orden) => {
       const fechaOrden = new Date(orden.createdAt);
-      console.log(fechaOrden, 'Inicio:', inicio, 'Fin:', fin);
       return fechaOrden >= inicio && fechaOrden <= fin;
     });
   }
 
   buscarPorFecha_cliente(desde, hasta) {
-    let OrdenesPorClientes = {};
-    let filtracion = this.api.orden.filter((orden) => {
-      // Convertir las fechas de los objetos OrdenCompra a objetos Date
+    const OrdenesPorClientes = {};
+    const filtracion = this.api.orden.filter((orden) => {
       const fechaOrden = new Date(orden.recepcion);
-
-      // Verificar si la fecha de la orden está dentro del rango especificado
       return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
     });
-
     filtracion.forEach((orden) => {
       const { cliente } = orden;
-
-      // Si el proveedor no existe en el objeto, lo creamos
       if (!OrdenesPorClientes[cliente.nombre]) {
         OrdenesPorClientes[cliente.nombre] = [];
       }
-
-      // Agregamos el material al proveedor correspondiente
       OrdenesPorClientes[cliente.nombre].push(orden);
     });
-
-    // Convertimos el objeto en un arreglo de proveedores
     this.PorClientes = Object.entries(OrdenesPorClientes);
   }
 
   search() {
-    // Eliminar cualquier guion '-' del searchTerm antes de la búsqueda
     const cleanedSearchTerm = this.searchTerm.replace(/-/g, '');
-
-    // Realizar la búsqueda con el término limpio
     this.filtrados = this.api.orden.filter((orden) => orden.numero.toString().includes(cleanedSearchTerm));
-
-    console.log(this.filtrados);
   }
 
-  // Función para buscar por cliente
-  buscarporCliente() {
-    this.fecha = false; // Ocultar la búsqueda por fecha
-    this.cliente = true; // Mostrar la búsqueda por cliente
-
-    console.log(this.api.separarPorProveedor());
-    this.porProveedor = this.api.separarPorProveedor();
-  }
-
-  // Función para buscar por fecha
-  buscarporFecha() {
-    this.fecha = true; // Mostrar la búsqueda por fecha
-    this.cliente = false; // Ocultar la búsqueda por cliente
-    this.DesdeHasta = false;
-    this.OC_NUMBER = false;
-    this.Busqueda = false;
-  }
-
-  nueva_orden() {
-    this.nueva = !this.nueva;
-  }
-
-  show_info(n) {
-    if (this.ORDEN[n]) {
-      this.ORDEN[n] = false; // Si la información está mostrándose, ocultarla
-    } else {
-      this.ORDEN[n] = true; // Si la información está oculta, mostrarla
+  filtrarPorProveedor(target) {
+    const valor = target.value;
+    if (!valor) {
+      this.filtrados = [];
+      return;
     }
+    this.filtrados = this.api.orden.filter((orden) => orden.proveedor?.nombre === valor);
   }
 
-  show_info_(n) {
-    if (this.ORDEN[n]) {
-      this.ORDEN[n] = false; // Si la información está mostrándose, ocultarla
-    } else {
-      this.ORDEN[n] = true; // Si la información está oculta, mostrarla
-    }
-  }
+  public PorClientes: any = [];
 
   cerrar() {
     this.Orden = {
@@ -208,12 +144,11 @@ export class OrdenesComponent {
       gramaje: '',
       calibre: '',
     };
-
     this.nueva = false;
   }
 
   addSlice(n: number) {
-    let numberToString = n.toString();
+    const numberToString = n.toString();
     return `${numberToString.slice(0, 2)}-${numberToString.slice(2)}`;
   }
 
@@ -254,16 +189,12 @@ export class OrdenesComponent {
     );
     const precios = [orden].map((orden) => orden.pedido.map((item) => item.precio));
 
-    // Calcula el I.V.A. para cada posición en los arrays
     const ivas = cantidades[0].map((cantidad, i) => {
-      console.log(i);
       const ivaCalculado = ((orden.iva / 100) * precios[0][i] * cantidad).toFixed(2);
       return parseFloat(ivaCalculado);
     });
 
-    console.log('Valores de I.V.A. calculados para cada posición:', ivas);
-
-    let netos = cantidades[0].map((cantidad, i) => {
+    const netos = cantidades[0].map((cantidad, i) => {
       const neto = (precios[0][i] * cantidad).toFixed(2);
       return parseFloat(neto);
     });
@@ -276,15 +207,15 @@ export class OrdenesComponent {
     sumaIvas = sumaIvas.toFixed(2);
     sumaIvas = sumaIvas.toString();
 
-    let N_orden = this.addSlice(orden.numero);
+    const N_orden = this.addSlice(orden.numero);
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
 
-    let hoy = `${day}/${month}/${year}`;
-    let entrega = moment(orden.entrega).format('DD/MM/YYYY');
-    let usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
+    const hoy = `${day}/${month}/${year}`;
+    const entrega = moment(orden.entrega).format('DD/MM/YYYY');
+    const usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
 
     let TotalNeto = (Number(SumaNetos) + Number(sumaIvas)).toFixed(2);
     TotalNeto = TotalNeto.toString();

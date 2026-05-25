@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OproduccionService } from 'src/app/services/oproduccion.service';
 
 @Component({
@@ -6,57 +6,77 @@ import { OproduccionService } from 'src/app/services/oproduccion.service';
   templateUrl: './producto-terminado.component.html',
   styleUrls: ['./producto-terminado.component.scss'],
 })
-export class ProductoTerminadoComponent {
+export class ProductoTerminadoComponent implements OnInit {
   constructor(public api: OproduccionService) {}
-  productos: Producto[] = [
-    {
-      nombre: 'Etiq. Mayonesa Mavesa',
-      presentacion: '445g',
-      unidades: 'Vidrio',
-      ocs: [
-        { id: '001', cantidad: 500000, preFacturada: true, facturada: true, seleccionada: false },
-        { id: '002', cantidad: 500000, preFacturada: true, facturada: false, seleccionada: false },
-      ],
-    },
-    {
-      nombre: 'Etiq. Cerveza Regional',
-      presentacion: '222mL',
-      unidades: 'Lata',
-      ocs: [{ id: '003', cantidad: 200000, preFacturada: true, facturada: true, seleccionada: false }],
-    },
-    {
-      nombre: 'Est. Flips Chocolate',
-      presentacion: '220g',
-      unidades: 'Caja',
-      ocs: [{ id: '004', cantidad: 80000, preFacturada: false, facturada: false, seleccionada: false }],
-    },
-  ];
 
-  getTotal(producto: Producto): number {
-    return producto.ocs.reduce((acc, oc) => acc + oc.cantidad, 0);
+  cargando = true;
+  searchTerm = '';
+  currentPage = 1;
+  pageSize = 10;
+  pageSizes = [10, 25, 50, 100];
+  expandedIndex: number | null = null;
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.cargando = false;
+    }, 600);
   }
 
-  isEntregado(oc: OC): boolean {
-    return oc.preFacturada && oc.facturada;
+  get items() {
+    return this.api.producto_terminado_agrupado || [];
+  }
+
+  get kpiTotalProductos() {
+    return this.items.length;
+  }
+
+  get kpiTotalUnidades() {
+    return this.items.reduce((sum: number, item: any) => sum + (item.cantidadTotal || 0), 0);
+  }
+
+  get kpiTotalOPs() {
+    return this.items.reduce((sum: number, item: any) => sum + (item.totalOPs || 0), 0);
+  }
+
+  get filteredItems(): any[] {
+    if (!this.searchTerm.trim()) return this.items;
+    const term = this.searchTerm.toLowerCase();
+    return this.items.filter((item: any) => item.nombre?.toLowerCase().includes(term));
+  }
+
+  get totalPages() {
+    return Math.ceil(this.filteredItems.length / this.pageSize) || 1;
+  }
+
+  get paginatedItems(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredItems.slice(start, start + this.pageSize);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  onSearch() {
+    this.currentPage = 1;
+  }
+
+  changePageSize(event: any) {
+    this.pageSize = +event.target.value;
+    this.currentPage = 1;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  toggleExpand(index: number) {
+    this.expandedIndex = this.expandedIndex === index ? null : index;
   }
 
   notificarDespacho(nombre: string) {
     alert(`Notificando despacho para: ${nombre}`);
   }
-}
-
-// product.model.ts
-export interface OC {
-  id: string;
-  cantidad: number;
-  preFacturada: boolean;
-  facturada: boolean;
-  seleccionada: boolean;
-}
-
-export interface Producto {
-  nombre: string;
-  presentacion: string;
-  unidades: string;
-  ocs: OC[];
 }

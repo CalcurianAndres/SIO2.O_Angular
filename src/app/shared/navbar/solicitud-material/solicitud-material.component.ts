@@ -45,13 +45,13 @@ export class SolicitudMaterialComponent implements OnInit {
   }
 
   generarSolicitud() {
-    let data: any = {
+    const data: any = {
       materiales: [],
       motivo: this.motivo_,
     };
 
     for (let i = 0; i < this.materiales.filtrarPorMateriales(this.materiales_id).length; i++) {
-      let material = this.materiales.filtrarPorMateriales(this.materiales_id)[i];
+      const material = this.materiales.filtrarPorMateriales(this.materiales_id)[i];
 
       data.materiales.push({
         material: material._id,

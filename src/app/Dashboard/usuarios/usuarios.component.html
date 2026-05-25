@@ -1,5 +1,10 @@
 <app-page-layout>
-  <app-section-header title="Usuarios" description="Administración de usuarios del sistema" icon="fa-chart-bar" color="navy"></app-section-header>
+  <app-section-header
+    title="Usuarios"
+    description="Administración de usuarios del sistema"
+    icon="fa-chart-bar"
+    color="navy"
+  ></app-section-header>
   <br />
   <div class="card">
     <div class="card-content">
@@ -79,7 +84,11 @@
                 style="color: var(--accent-red); cursor: pointer"
                 (click)="eliminarUsuario(usuario, i)"
               ></i
-              >   <i class="fas fa-key" style="color: var(--accent-blue); cursor: pointer" (click)="resetPassword(usuario)"></i>
+              >   <i
+                class="fas fa-key"
+                style="color: var(--accent-blue); cursor: pointer"
+                (click)="resetPassword(usuario)"
+              ></i>
             </td>
           </tr>
         </tbody>

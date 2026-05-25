@@ -122,9 +122,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_interna.largo.desviacion < 1) {
-      let str = this.analisis.longitud_interna.largo.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_interna.largo.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -160,9 +160,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_interna.ancho.desviacion < 1) {
-      let str = this.analisis.longitud_interna.ancho.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_interna.ancho.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -198,9 +198,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_interna.alto.desviacion < 1) {
-      let str = this.analisis.longitud_interna.alto.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_interna.alto.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -236,9 +236,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_externa.largo.desviacion < 1) {
-      let str = this.analisis.longitud_externa.largo.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_externa.largo.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -274,9 +274,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_externa.ancho.desviacion < 1) {
-      let str = this.analisis.longitud_externa.ancho.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_externa.ancho.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -312,9 +312,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.longitud_externa.alto.desviacion < 1) {
-      let str = this.analisis.longitud_externa.alto.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.longitud_externa.alto.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -342,9 +342,9 @@ export class AnalisisCajasComponent {
     );
 
     if (this.analisis.espesor.desviacion < 1) {
-      let str = this.analisis.espesor.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.espesor.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -364,9 +364,9 @@ export class AnalisisCajasComponent {
     this.analisis.resultado.validado.usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
     this.analisis.resultado.validado.fecha = moment().format('DD/MM/YYYY');
 
-    let analisis = this.analisis;
-    let Material = this.Materiales[0];
-    let recepcion = this.Recepcion;
+    const analisis = this.analisis;
+    const Material = this.Materiales[0];
+    const recepcion = this.Recepcion;
 
     console.log(Material);
     // console.log(recepcion)
@@ -380,7 +380,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_interna_largo_largo = analisis.longitud_interna.largo.largo.map((num) =>
+    const _analisis_longitud_interna_largo_largo = analisis.longitud_interna.largo.largo.map((num) =>
       num.toFixed(maxDecimals).replace('.', ','),
     );
 
@@ -393,7 +393,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_interna_ancho_ancho = analisis.longitud_interna.ancho.ancho.map((num) =>
+    const _analisis_longitud_interna_ancho_ancho = analisis.longitud_interna.ancho.ancho.map((num) =>
       num.toFixed(maxDecimals1).replace('.', ','),
     );
 
@@ -406,7 +406,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_interna_alto_alto = analisis.longitud_interna.alto.alto.map((num) =>
+    const _analisis_longitud_interna_alto_alto = analisis.longitud_interna.alto.alto.map((num) =>
       num.toFixed(maxDecimals2).replace('.', ','),
     );
 
@@ -419,7 +419,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_externa_largo_largo = analisis.longitud_externa.largo.largo.map((num) =>
+    const _analisis_longitud_externa_largo_largo = analisis.longitud_externa.largo.largo.map((num) =>
       num.toFixed(maxDecimals3).replace('.', ','),
     );
 
@@ -432,7 +432,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_externa_alto_alto = analisis.longitud_externa.alto.alto.map((num) =>
+    const _analisis_longitud_externa_alto_alto = analisis.longitud_externa.alto.alto.map((num) =>
       num.toFixed(maxDecimals4).replace('.', ','),
     );
 
@@ -445,7 +445,7 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_longitud_externa_ancho_ancho = analisis.longitud_externa.ancho.ancho.map((num) =>
+    const _analisis_longitud_externa_ancho_ancho = analisis.longitud_externa.ancho.ancho.map((num) =>
       num.toFixed(maxDecimals5).replace('.', ','),
     );
 
@@ -458,25 +458,27 @@ export class AnalisisCajasComponent {
     );
 
     // Rellenar con ceros los números para que todos tengan el mismo número de decimales y cambiar puntos por comas
-    let _analisis_espesor_espesor = analisis.espesor.espesor.map((num) => num.toFixed(maxDecimals6).replace('.', ','));
+    const _analisis_espesor_espesor = analisis.espesor.espesor.map((num) =>
+      num.toFixed(maxDecimals6).replace('.', ','),
+    );
 
-    let li_largo: any = [];
-    let li_ancho: any = [];
-    let li_alto: any = [];
-    let le_largo: any = [];
-    let le_ancho: any = [];
-    let le_alto: any = [];
-    let espesor: any = [];
+    const li_largo: any = [];
+    const li_ancho: any = [];
+    const li_alto: any = [];
+    const le_largo: any = [];
+    const le_ancho: any = [];
+    const le_alto: any = [];
+    const espesor: any = [];
 
-    let li_largo_esp: any = [];
-    let li_ancho_esp: any = [];
-    let li_alto_esp: any = [];
-    let le_largo_esp: any = [];
-    let le_ancho_esp: any = [];
-    let le_alto_esp: any = [];
-    let espesor_esp: any = [];
+    const li_largo_esp: any = [];
+    const li_ancho_esp: any = [];
+    const li_alto_esp: any = [];
+    const le_largo_esp: any = [];
+    const le_ancho_esp: any = [];
+    const le_alto_esp: any = [];
+    const espesor_esp: any = [];
 
-    let fabricacion = recepcion.f_fabricacion ? recepcion.f_fabricacion : 'N/A';
+    const fabricacion = recepcion.f_fabricacion ? recepcion.f_fabricacion : 'N/A';
 
     li_largo_esp[0] = Material.material.especificacion2.especificacion.li_largo_min
       ? Material.material.especificacion2.especificacion.li_largo_min
@@ -548,7 +550,7 @@ export class AnalisisCajasComponent {
       ? Material.material.especificacion2.especificacion.espesor_max
       : 'N/A';
 
-    let muestras: number[] = [];
+    const muestras: number[] = [];
 
     for (let i = 1; i <= analisis.muestras; i++) {
       muestras.push(i);
@@ -582,10 +584,10 @@ export class AnalisisCajasComponent {
     espesor[1] = analisis.espesor.min;
     espesor[2] = analisis.espesor.max;
 
-    let operaciones = ['S', 'MÍN', 'MÁX'];
-    let operaciones2 = ['MÍN', 'NOM', 'MÁX'];
+    const operaciones = ['S', 'MÍN', 'MÁX'];
+    const operaciones2 = ['MÍN', 'NOM', 'MÁX'];
 
-    let hoy = moment().format('dd/mm/yyyy');
+    const hoy = moment().format('dd/mm/yyyy');
     async function GenerarCertificado() {
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdfFonts);
@@ -925,8 +927,8 @@ export class AnalisisCajasComponent {
     setTimeout(() => {
       if (this.analisis.resultado.resultado === 'APROBADO') {
         async function EnviarAlmacen(materiales, recepcion, almacen) {
-          let materiales_ = materiales;
-          for (let material of materiales_) {
+          const materiales_ = materiales;
+          for (const material of materiales_) {
             material.oc = material.oc._id;
             material.material = material.material._id;
             material.recepcion = recepcion._id; // Asegúrate de que `recepcion` está accesible en este contexto

@@ -74,18 +74,18 @@ export class AnalisisOtrosComponent {
   }
 
   AnalisisCompletado() {
-    let hoy = moment().format('DD/MM/YYYY');
+    const hoy = moment().format('DD/MM/YYYY');
     this.analisis.resultado.validado.fecha = hoy;
     this.analisis.resultado.validado.usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
 
-    let analisis = this.analisis;
-    let Material = this.Materiales[0];
-    let recepcion = this.Recepcion;
+    const analisis = this.analisis;
+    const Material = this.Materiales[0];
+    const recepcion = this.Recepcion;
 
-    let key = this.getThirdKeyValue().key;
-    let value = this.getThirdKeyValue().value;
+    const key = this.getThirdKeyValue().key;
+    const value = this.getThirdKeyValue().value;
 
-    let fecha_recepcion = moment(recepcion.recepcion).format('DD/MM/YYYY');
+    const fecha_recepcion = moment(recepcion.recepcion).format('DD/MM/YYYY');
 
     console.log(analisis.apariencia);
     let apariencia = 'NO CUMPLE';
@@ -109,7 +109,7 @@ export class AnalisisOtrosComponent {
       resultString += `${cantidad} ${presentacion}(s) de ${neto}${unidad} `;
     }
 
-    let mat = recepcion.materiales[0];
+    const mat = recepcion.materiales[0];
     let netos = 0;
     for (let i = 0; i < mat.length; i++) {
       console.log(mat[i]);
@@ -420,8 +420,8 @@ export class AnalisisOtrosComponent {
     setTimeout(() => {
       if (this.analisis.resultado.resultado === 'APROBADO') {
         async function EnviarAlmacen(materiales, recepcion, almacen) {
-          let materiales_ = materiales;
-          for (let material of materiales_) {
+          const materiales_ = materiales;
+          for (const material of materiales_) {
             material.oc = material.oc._id;
             material.material = material.material._id;
             material.recepcion = recepcion._id; // Asegúrate de que `recepcion` está accesible en este contexto

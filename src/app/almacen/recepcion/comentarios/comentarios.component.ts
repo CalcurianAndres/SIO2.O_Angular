@@ -30,7 +30,7 @@ export class ComentariosComponent {
   newMessage: string = '';
 
   sendMessage() {
-    let data = {
+    const data = {
       usuario: `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`,
       mensaje: this.newMessage,
       recepcion: this.recepcion_id,

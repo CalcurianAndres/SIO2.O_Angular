@@ -26,8 +26,8 @@ export class UsuariosComponent implements OnInit {
   public usuarios: any = [];
 
   crearUsuario() {
-    let nombre = this.trabajadores.trabajador[this.index_trabajador].datos_personales.nombres.split(' ');
-    let apellido = this.trabajadores.trabajador[this.index_trabajador].datos_personales.apellidos.split(' ');
+    const nombre = this.trabajadores.trabajador[this.index_trabajador].datos_personales.nombres.split(' ');
+    const apellido = this.trabajadores.trabajador[this.index_trabajador].datos_personales.apellidos.split(' ');
     let apellido_;
 
     if (apellido.length > 2) {
@@ -36,7 +36,7 @@ export class UsuariosComponent implements OnInit {
       apellido_ = `${apellido[0]}`;
     }
 
-    let data = {
+    const data = {
       Nombre: nombre[0],
       Apellido: apellido_,
       Correo: this.trabajadores.trabajador[this.index_trabajador].datos_personales.email,

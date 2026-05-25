@@ -2,24 +2,43 @@
   <div class="modal-background"></div>
   <div class="modal-card animate__animated animate__fadeInUp" *ngIf="fabricante">
     <div class="modal-card-head">
-      <div class="modal-card-title fuente">
-        {{ fabricante.nombre }}
-      </div>
+      <p class="modal-card-title fuente">
+        <i class="fas fa-industry"></i> {{ fabricante.nombre }}
+        <span *ngIf="fabricante.proveedor" class="badge proveedor-badge"> <i class="fas fa-truck"></i> Proveedor </span>
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
-    <div class="modal-card-body light">
-      <i class="fas fa-circle red"></i> <strong class="fuente">Alias:</strong> {{ fabricante.alias }} <br />
-      <br />
-      <i class="fas fa-circle red"></i> <strong class="fuente">Orígenes:</strong>
-      <br />
-      <ng-container *ngFor="let origen of fabricante.origenes">
-             <i class="far fa-flag"></i> {{ origen.pais }} ({{ origen.estado }})<br />
-      </ng-container>
-      <br />
-      <i class="fas fa-circle red"></i> <strong class="fuente">Grupos:</strong> <br />
-      <ng-container *ngFor="let grupo of fabricante.grupo">
-             <i class="fas fa-parachute-box"></i> {{ grupo.nombre }}<br />
-      </ng-container>
+
+    <div class="modal-card-body">
+      <!-- Alias -->
+      <div class="detail-row" *ngIf="fabricante.alias">
+        <span class="detail-label"><i class="fas fa-tag"></i> Alias</span>
+        <span class="detail-value">{{ fabricante.alias }}</span>
+      </div>
+
+      <hr class="modal-divider" />
+
+      <!-- Orígenes -->
+      <label class="section-label"><i class="fas fa-globe-americas"></i> Orígenes</label>
+      <div class="tags-list" *ngIf="fabricante.origenes && fabricante.origenes.length > 0">
+        <span class="tag is-info is-light" *ngFor="let origen of fabricante.origenes">
+          <i class="fas fa-flag"></i> {{ origen.pais }}<span *ngIf="origen.estado"> ({{ origen.estado }})</span>
+        </span>
+      </div>
+      <p class="empty-hint" *ngIf="!fabricante.origenes || fabricante.origenes.length === 0">
+        Sin orígenes registrados
+      </p>
+
+      <hr class="modal-divider" />
+
+      <!-- Grupos -->
+      <label class="section-label"><i class="fas fa-layer-group"></i> Grupos que fabrica</label>
+      <div class="tags-list" *ngIf="fabricante.grupo && fabricante.grupo.length > 0">
+        <span class="tag is-info is-light" *ngFor="let grupo of fabricante.grupo">
+          <i class="fas fa-cube"></i> {{ grupo.nombre }}
+        </span>
+      </div>
+      <p class="empty-hint" *ngIf="!fabricante.grupo || fabricante.grupo.length === 0">Sin grupos asociados</p>
     </div>
   </div>
 </div>

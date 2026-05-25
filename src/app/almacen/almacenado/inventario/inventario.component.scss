@@ -1,89 +1,100 @@
 .long {
   width: 80%;
 }
-.no-inventario {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  width: 100%;
-  background-color: var(--bg-secondary);
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  color: var(--text-muted);
-  position: relative;
-}
 
-.no-inventario::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to bottom, transparent, var(--bg-card));
-  opacity: 0.5;
-  z-index: -1;
-}
-
-.no-inventario span {
-  position: relative;
-  z-index: 1;
-}
-.EnviarAlFinal {
-  position: absolute;
-  right: 20px;
-  font-size: large;
-}
-
-.General {
-  position: relative;
-  background-color: var(--bg-secondary);
-  padding: 20px;
-  margin-top: 15px;
-  border-radius: 5px;
-  border: solid 0.5px var(--border-color);
-}
-
-.Lotes {
-  border-radius: 4px;
-  padding: 10px;
-  margin: 5px;
-  background-color: var(--bg-card);
-  border: solid 0.5px var(--border-color);
-  position: relative;
+// --- Order Card pattern (matching recepcion) ---
+.order-card {
+  margin-bottom: 0.75rem;
+  border-radius: 10px;
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
-.strong {
-  font-family: 'Gilroy';
-}
-
-.Arrow {
-  color: var(--text-primary);
-  border: none;
-  font-size: x-large;
+.order-card .card-header {
   cursor: pointer;
-  background-color: transparent;
-  transition: transform 0.5s;
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  min-height: 52px;
 }
 
-.Arrow.clicked {
-  transform: rotate(180deg);
+.order-header-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.bigger {
-  font-size: x-large;
+.order-provider {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
 }
 
-.peso {
-  top: 20px;
+.order-number {
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
-.white_ {
-  color: var(--text-heading);
-  text-shadow: var(--text-muted);
+.order-header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// --- Chevron ---
+.chevron-btn {
+  font-size: 1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform 0.3s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevron-btn.rotate-down { transform: rotate(0deg); }
+.chevron-btn.rotate-up { transform: rotate(180deg); }
+
+// --- Expandable body ---
+.order-details {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.order-details.active {
+  max-height: 2000px;
+  padding: 1rem;
+}
+
+// --- Empty State ---
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  font-size: 3.5rem;
+  color: var(--text-muted);
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.empty-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }

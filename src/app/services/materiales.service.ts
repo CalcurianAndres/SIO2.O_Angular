@@ -34,14 +34,17 @@ export class MaterialesService {
   }
 
   buscarSoloSustrato() {
+    if (!this.materiales) return [];
     return this.materiales.filter((mat: any) => mat.grupo.trato === true);
   }
 
   buscarMaterialPorId(id) {
+    if (!this.materiales) return undefined;
     return this.materiales.find((mat: any) => mat._id === id);
   }
 
   filtrarGrupos(id: any) {
+    if (!this.materiales) return [];
     return this.materiales.filter((x: any) => x.grupo._id === id);
   }
 
@@ -54,14 +57,17 @@ export class MaterialesService {
   }
 
   filtrarPorFabricante(id_fabricante) {
+    if (!this.materiales) return [];
     return this.materiales.filter((x: any) => x.fabricante._id === id_fabricante);
   }
 
   filtrarPorGrupos(ids: string[]): any[] {
+    if (!this.materiales) return [];
     return this.materiales.filter((x: any) => ids.some((groupId: string) => groupId.includes(x.grupo._id)));
   }
 
   filtrarPorMateriales(materiales_id: string[]): any[] {
+    if (!this.materiales) return [];
     return this.materiales.filter((x: any) => materiales_id.some((grupoIds: string) => grupoIds.includes(x._id)));
   }
 
@@ -70,20 +76,23 @@ export class MaterialesService {
   }
 
   filtrarPorGrupoSinEspecificacion(id: string): Materiales[] {
+    if (!this.materiales) return [];
     return this.materiales.filter(
       (material: any) => material.grupo._id === id && !material.especificacion && !material.especificacion2,
     );
   }
 
   filtrarPorGrupoConEspecificacion(id: any): Materiales[] {
+    if (!this.materiales) return [];
     return this.materiales.filter(
       (material: any) => material.grupo._id === id && (material.especificacion || material.especificacion2),
     );
   }
 
   buscarCajasYmetros(nombre) {
+    if (!this.materiales) return undefined;
     nombre = nombre.replace(/\s*\([^)]*\)/g, '');
-    let caja = this.materiales.find((m) => m.nombre.includes(nombre));
+    const caja = this.materiales.find((m) => m.nombre.includes(nombre));
     return caja;
   }
 
@@ -100,7 +109,7 @@ export class MaterialesService {
    * @returns {Array|Object} - Devuelve el envase que tenga la misma capacidad que le pasas como parametro
    */
   BuscarPorCapacidad(capacidad: number) {
-    // Filtrar los envases en el almacén
+    if (!this.materiales) return undefined;
     const envases = this.materiales.filter((x) => x.grupo.nombre === 'Envases');
 
     console.log(envases);
@@ -109,6 +118,7 @@ export class MaterialesService {
   }
 
   PantonesSolo() {
+    if (!this.materiales) return [];
     const materialesFiltrados: any = [];
     const codigosEncontrados: string[] = [];
     this.materiales.forEach((material) => {

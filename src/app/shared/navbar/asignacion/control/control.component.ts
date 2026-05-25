@@ -94,7 +94,7 @@ export class ControlComponent {
       this.sumatoria = this.sumatoria - this.cantidades[n];
       this.cantidades[n] = 0;
       this.lotes.splice(n, 1);
-      let i = this.descuentos.findIndex((x) => x.producto === id);
+      const i = this.descuentos.findIndex((x) => x.producto === id);
       this.descuentos.splice(i, 1);
     }
   }

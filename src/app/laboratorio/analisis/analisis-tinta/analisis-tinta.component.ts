@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { rgb2lab, lab2rgb, deltaE } from 'rgb-lab';
-import { Draggable } from 'Draggable';
 import { AnalisisService } from 'src/app/services/analisis.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
 import { Cell, Img, PdfMakeWrapper, Stack, Table, Txt } from 'pdfmake-wrapper';
@@ -157,7 +156,7 @@ export class AnalisisTintaComponent implements OnChanges {
   }
 
   subirImagen(e) {
-    let image = e.target.files[0];
+    const image = e.target.files[0];
     this.subirImagen_.actualizarFoto(image, 'analisis', 'id').then((img) => {
       this.Analisis.img = img;
     });
@@ -192,13 +191,13 @@ export class AnalisisTintaComponent implements OnChanges {
   comparar(dato) {
     switch (dato) {
       case 'C1':
-        let estandar = lab2rgb([
+        const estandar = lab2rgb([
           this.Analisis.carton.estandar_1.l,
           this.Analisis.carton.estandar_1.a,
           this.Analisis.carton.estandar_1.b,
         ]);
         this.estandar = 'background-color: rgb(' + estandar[0] + ',' + estandar[1] + ',' + estandar[2] + ')';
-        let muestra = lab2rgb([
+        const muestra = lab2rgb([
           this.Analisis.carton.muestra_1.l,
           this.Analisis.carton.muestra_1.a,
           this.Analisis.carton.muestra_1.b,
@@ -206,13 +205,13 @@ export class AnalisisTintaComponent implements OnChanges {
         this.muestra = 'background-color: rgb(' + muestra[0] + ',' + muestra[1] + ',' + muestra[2] + ')';
         break;
       case 'C2':
-        let estandar2 = lab2rgb([
+        const estandar2 = lab2rgb([
           this.Analisis.carton.estandar_2.l,
           this.Analisis.carton.estandar_2.a,
           this.Analisis.carton.estandar_2.b,
         ]);
         this.estandar = 'background-color: rgb(' + estandar2[0] + ',' + estandar2[1] + ',' + estandar2[2] + ')';
-        let muestra2 = lab2rgb([
+        const muestra2 = lab2rgb([
           this.Analisis.carton.muestra_2.l,
           this.Analisis.carton.muestra_2.a,
           this.Analisis.carton.muestra_2.b,
@@ -220,13 +219,13 @@ export class AnalisisTintaComponent implements OnChanges {
         this.muestra = 'background-color: rgb(' + muestra2[0] + ',' + muestra2[1] + ',' + muestra2[2] + ')';
         break;
       case 'C3':
-        let estandar3 = lab2rgb([
+        const estandar3 = lab2rgb([
           this.Analisis.carton.estandar_3.l,
           this.Analisis.carton.estandar_3.a,
           this.Analisis.carton.estandar_3.b,
         ]);
         this.estandar = 'background-color: rgb(' + estandar3[0] + ',' + estandar3[1] + ',' + estandar3[2] + ')';
-        let muestra3 = lab2rgb([
+        const muestra3 = lab2rgb([
           this.Analisis.carton.muestra_3.l,
           this.Analisis.carton.muestra_3.a,
           this.Analisis.carton.muestra_3.b,
@@ -238,7 +237,7 @@ export class AnalisisTintaComponent implements OnChanges {
   }
 
   move() {
-    let rgb_converted = lab2rgb([
+    const rgb_converted = lab2rgb([
       this.Analisis.carton.estandar_1.l,
       this.Analisis.carton.estandar_1.a,
       this.Analisis.carton.estandar_1.b,
@@ -246,7 +245,7 @@ export class AnalisisTintaComponent implements OnChanges {
   }
 
   move2() {
-    let rgb_converted = lab2rgb([
+    const rgb_converted = lab2rgb([
       this.Analisis.carton.muestra_1.l,
       this.Analisis.carton.muestra_1.a,
       this.Analisis.carton.muestra_1.b,
@@ -259,32 +258,32 @@ export class AnalisisTintaComponent implements OnChanges {
 
     switch (n) {
       case 0:
-        let estandar = lab2rgb([
+        const estandar = lab2rgb([
           this.Analisis.carton.estandar_1.l,
           this.Analisis.carton.estandar_1.a,
           this.Analisis.carton.estandar_1.b,
         ]);
-        let muestra = lab2rgb([
+        const muestra = lab2rgb([
           this.Analisis.carton.muestra_1.l,
           this.Analisis.carton.muestra_1.a,
           this.Analisis.carton.muestra_1.b,
         ]);
-        let estandar2 = lab2rgb([
+        const estandar2 = lab2rgb([
           this.Analisis.carton.estandar_2.l,
           this.Analisis.carton.estandar_2.a,
           this.Analisis.carton.estandar_2.b,
         ]);
-        let muestra2 = lab2rgb([
+        const muestra2 = lab2rgb([
           this.Analisis.carton.muestra_2.l,
           this.Analisis.carton.muestra_2.a,
           this.Analisis.carton.muestra_2.b,
         ]);
-        let estandar3 = lab2rgb([
+        const estandar3 = lab2rgb([
           this.Analisis.carton.estandar_3.l,
           this.Analisis.carton.estandar_3.a,
           this.Analisis.carton.estandar_3.b,
         ]);
-        let muestra3 = lab2rgb([
+        const muestra3 = lab2rgb([
           this.Analisis.carton.muestra_3.l,
           this.Analisis.carton.muestra_3.a,
           this.Analisis.carton.muestra_3.b,
@@ -304,32 +303,32 @@ export class AnalisisTintaComponent implements OnChanges {
           'background-color: rgb(' + muestra3[0] + ',' + muestra3[1] + ',' + muestra3[2] + ')';
         break;
       case 1:
-        let estandar_ = lab2rgb([
+        const estandar_ = lab2rgb([
           this.Analisis.papel.estandar_1.l,
           this.Analisis.papel.estandar_1.a,
           this.Analisis.papel.estandar_1.b,
         ]);
-        let muestra_ = lab2rgb([
+        const muestra_ = lab2rgb([
           this.Analisis.papel.muestra_1.l,
           this.Analisis.papel.muestra_1.a,
           this.Analisis.papel.muestra_1.b,
         ]);
-        let estandar2_ = lab2rgb([
+        const estandar2_ = lab2rgb([
           this.Analisis.papel.estandar_2.l,
           this.Analisis.papel.estandar_2.a,
           this.Analisis.papel.estandar_2.b,
         ]);
-        let muestra2_ = lab2rgb([
+        const muestra2_ = lab2rgb([
           this.Analisis.papel.muestra_2.l,
           this.Analisis.papel.muestra_2.a,
           this.Analisis.papel.muestra_2.b,
         ]);
-        let estandar3_ = lab2rgb([
+        const estandar3_ = lab2rgb([
           this.Analisis.papel.estandar_3.l,
           this.Analisis.papel.estandar_3.a,
           this.Analisis.papel.estandar_3.b,
         ]);
-        let muestra3_ = lab2rgb([
+        const muestra3_ = lab2rgb([
           this.Analisis.papel.muestra_3.l,
           this.Analisis.papel.muestra_3.a,
           this.Analisis.papel.muestra_3.b,
@@ -385,10 +384,10 @@ export class AnalisisTintaComponent implements OnChanges {
         this.onCloseModal.emit();
       }, 2000);
     } else {
-      let analisis = this.Analisis;
-      let recepcion = this.Recepcion;
+      const analisis = this.Analisis;
+      const recepcion = this.Recepcion;
 
-      let fabricacion = moment(recepcion.createdAt).format('DD/MM/yyyy');
+      const fabricacion = moment(recepcion.createdAt).format('DD/MM/yyyy');
 
       let tono = '';
       let opacidad = '';
@@ -1530,11 +1529,11 @@ export class AnalisisTintaComponent implements OnChanges {
   }
 
   AnalisisCompletado(preparacion) {
-    let analisis = this.Analisis;
-    let producto = this.Materiales;
-    let recepcion = this.Recepcion;
-    let cualidad = [];
-    let index = this.Index;
+    const analisis = this.Analisis;
+    const producto = this.Materiales;
+    const recepcion = this.Recepcion;
+    const cualidad = [];
+    const index = this.Index;
 
     let tono = '';
     let opacidad = '';
@@ -2674,8 +2673,8 @@ export class AnalisisTintaComponent implements OnChanges {
       setTimeout(() => {
         if (RESULTADO === 'APROBADO') {
           async function EnviarAlmacen(materiales, recepcion, almacen) {
-            let materiales_ = materiales;
-            for (let material of materiales_) {
+            const materiales_ = materiales;
+            for (const material of materiales_) {
               material.oc = material.oc._id;
               material.material = material.material._id;
               material.recepcion = recepcion._id; // Asegúrate de que `recepcion` está accesible en este contexto

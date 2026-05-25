@@ -188,7 +188,7 @@ export class NewProductoComponent {
   }
 
   subirImagen(e, n) {
-    let image = e.target.files[0];
+    const image = e.target.files[0];
     let tipo = '';
     switch (n) {
       case 0:
@@ -308,7 +308,7 @@ export class NewProductoComponent {
   }
 
   add_sustrato() {
-    let splited = this.sustrato_selected.split('&');
+    const splited = this.sustrato_selected.split('&');
 
     // Verificar si el sustrato seleccionado no existe en el array antes de agregarlo
     if (!this.producto.materia_prima.sustrato.includes(splited[0])) {
@@ -324,13 +324,13 @@ export class NewProductoComponent {
   }
 
   maquina_impresora() {
-    let splited = this.maquina_selected.split('&');
+    const splited = this.maquina_selected.split('&');
     if (!this.producto.impresion.impresoras.includes(splited[0])) {
       this.producto.impresion.impresoras.push(splited[0]);
       this.impresoras_nombre.push(splited[1]);
       if (this.producto.impresion.impresoras.length > 1) {
         console.log(this.producto.impresion.secuencia[0]);
-        let colores__ = this.producto.impresion.secuencia[0].slice();
+        const colores__ = this.producto.impresion.secuencia[0].slice();
         this.producto.impresion.secuencia.push(colores__);
       }
     }
@@ -339,7 +339,7 @@ export class NewProductoComponent {
   }
 
   maquina_troqueladora() {
-    let splited = this.troqueladora_selected.split('&');
+    const splited = this.troqueladora_selected.split('&');
     if (!this.producto.post_impresion.troqueladora.includes(splited[0])) {
       this.producto.post_impresion.troqueladora.push(splited[0]);
       this.troqueladora_nombres.push(splited[1]);
@@ -349,7 +349,7 @@ export class NewProductoComponent {
   }
 
   maquina_guillotina() {
-    let splited = this.guillotina_selected.split('&');
+    const splited = this.guillotina_selected.split('&');
     if (!this.producto.post_impresion.guillotina.includes(splited[0])) {
       this.producto.post_impresion.guillotina.push(splited[0]);
       this.guillotina_nombres.push(splited[1]);
@@ -359,7 +359,7 @@ export class NewProductoComponent {
   }
 
   maquina_pegadora() {
-    let splited = this.pegadora_selected.split('&');
+    const splited = this.pegadora_selected.split('&');
     if (!this.producto.post_impresion.pegadora.includes(splited[0])) {
       this.producto.post_impresion.pegadora.push(splited[0]);
       this.pegadora_nombres.push(splited[1]);
@@ -370,7 +370,7 @@ export class NewProductoComponent {
 
   otros_nombre: any = [];
   otros_() {
-    let splited = this.otros_selectec.split('&');
+    const splited = this.otros_selectec.split('&');
     if (!this.producto.post_impresion.otros.includes(splited[0])) {
       this.producto.post_impresion.otros.push(splited[0]);
       this.otros_nombre.push(splited[1]);
@@ -380,7 +380,7 @@ export class NewProductoComponent {
   }
 
   Solucion_fuente() {
-    let splited = this.solucion_selected.split('&');
+    const splited = this.solucion_selected.split('&');
     if (!this.producto.impresion.fuentes.includes(splited[0])) {
       this.producto.impresion.fuentes.push(splited[0]);
       this.fuentes_nombres.push(splited[1]);
@@ -390,7 +390,7 @@ export class NewProductoComponent {
   }
 
   add_tinta() {
-    let splited = this.tinta_selected.tinta.split('&');
+    const splited = this.tinta_selected.tinta.split('&');
     // Verificar si la tinta seleccionada no existe en el array antes de agregarla
     const tintaExistente = this.producto.materia_prima.tintas.find((tinta) => tinta.tinta === splited[0]);
 
@@ -419,7 +419,7 @@ export class NewProductoComponent {
         splited[2] = splited[3];
     }
 
-    let colorExiste = this.producto.impresion.secuencia[0].find((x) => x === splited[2]);
+    const colorExiste = this.producto.impresion.secuencia[0].find((x) => x === splited[2]);
     if (!colorExiste) {
       this.producto.impresion.secuencia[0].push(splited[2]);
     }
@@ -483,7 +483,7 @@ export class NewProductoComponent {
 
   AddTintas(color, cantidad, index) {
     console.log(color);
-    let colores = color.split('&');
+    const colores = color.split('&');
 
     if (!this.SecuenciaDeColores[index].tintas) {
       this.SecuenciaDeColores[index].tintas = [];
@@ -519,7 +519,7 @@ export class NewProductoComponent {
   }
 
   add_barniz() {
-    let splited = this.barniz_selected.barniz.split('&');
+    const splited = this.barniz_selected.barniz.split('&');
     // Verificar si la tinta seleccionada no existe en el array antes de agregarla
     const barnizExistente = this.producto.materia_prima.barnices.find((barniz) => barniz.barniz === splited[0]);
 
@@ -540,7 +540,7 @@ export class NewProductoComponent {
   }
 
   add_pegamento() {
-    let splited = this.pegamento_selected.pega.split('&');
+    const splited = this.pegamento_selected.pega.split('&');
     // Verificar si la tinta seleccionada no existe en el array antes de agregarla
     const pegamentoExistente = this.producto.post_impresion.pegamento.find(
       (pegamento) => pegamento.pega === splited[0],
@@ -559,7 +559,7 @@ export class NewProductoComponent {
   }
 
   add_caja() {
-    let splited = this.caja_selected.split('&');
+    const splited = this.caja_selected.split('&');
     this.producto.post_impresion.caja.nombre = splited[1];
     this.caja_nombre = splited[1];
   }
@@ -583,14 +583,14 @@ export class NewProductoComponent {
   }
 
   especificacion() {
-    let data = '';
+    const data = '';
 
     async function generarPDF() {
-      let Sustratos = ['Cartón Rev. Gris'];
-      let tintas = ['Barniz S/Impreción (Olin) 0.5kg', 'Barniz S/Impresión (Huber) 0.5kg'];
-      let capacidad = [100, 95, 100, 95];
+      const Sustratos = ['Cartón Rev. Gris'];
+      const tintas = ['Barniz S/Impreción (Olin) 0.5kg', 'Barniz S/Impresión (Huber) 0.5kg'];
+      const capacidad = [100, 95, 100, 95];
 
-      let Carton = [
+      const Carton = [
         {
           marca: 'MCM',
           ubicacion: [
@@ -660,7 +660,7 @@ export class NewProductoComponent {
         },
       ];
 
-      let Colores = [
+      const Colores = [
         {
           color: 'Amarillo',
           tinta: ['Amarillo Proceso', 'Amarillo Cofre', 'Amarillo Proceso'],
@@ -685,7 +685,7 @@ export class NewProductoComponent {
         },
       ];
 
-      let formulas = [
+      const formulas = [
         ['- Rojo proceso (Olin) 0.5kg', '- Amarillo proceso Apache (Olin) 0.3kg', '- Negro intenso (Olin) 0.1kg'],
         [
           '- Rojo proceso (Huber) 0.7kg',
@@ -694,7 +694,7 @@ export class NewProductoComponent {
         ],
       ];
 
-      let formulas_ = [
+      const formulas_ = [
         {
           color: 'Rojo Fuego',
           formulas: [
@@ -710,31 +710,31 @@ export class NewProductoComponent {
           ],
         },
       ];
-      let rojoFuego1 = [
+      const rojoFuego1 = [
         '- Rojo proceso (Olin) 0.5kg',
         '- Amarillo proceso Apache (Olin) 0.3kg',
         '- Negro intenso (Olin) 0.1kg',
       ];
-      let rojoFuego2 = [
+      const rojoFuego2 = [
         '- Rojo proceso (Huber) 0.7kg',
         '- Amarillo proceso Apache (Olin) 0.2kg',
         '- Negro proceso Apache (Olin) 0.1kg',
       ];
 
-      let PeliculasA = [
+      const PeliculasA = [
         'Pelicula N°1: Cyan:AH-001-1- A -2',
         'Pelicula N°2: Magenta:AH-001-1- A -3',
         'Pelicula N°3: Negro:AH-001-1- A -1',
         'Pelicula N°4: Amarillo:AH-001-1- A -4',
       ];
-      let PeliculasB = [
+      const PeliculasB = [
         'Pelicula N°1: Cyan:AH-001-1- B -2',
         'Pelicula N°2: Magenta:AH-001-1- B -3',
         'Pelicula N°3: Negro:AH-001-1- B -1',
         'Pelicula N°4: Amarillo:AH-001-1- B -4',
       ];
-      let impresoras = ['Roland 700 - (13)', 'Roland Rekord (4C) - (14)'];
-      let impresoras_ = ['Roland 700', 'Roland Rekord (4C)'];
+      const impresoras = ['Roland 700 - (13)', 'Roland Rekord (4C) - (14)'];
+      const impresoras_ = ['Roland 700', 'Roland Rekord (4C)'];
 
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdfFonts);

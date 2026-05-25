@@ -47,13 +47,13 @@ export class DevolucionesComponent {
   }
 
   enviar() {
-    let Materiales = Object.entries(this.valoresAsignados).map(([codigo, { cantidad, asignacion }]) => ({
+    const Materiales = Object.entries(this.valoresAsignados).map(([codigo, { cantidad, asignacion }]) => ({
       material: codigo,
       cantidad: cantidad,
       asignacion: asignacion,
     }));
 
-    let data = {
+    const data = {
       op: this.op._id,
       observaciones: this.observaciones,
       material: Materiales,

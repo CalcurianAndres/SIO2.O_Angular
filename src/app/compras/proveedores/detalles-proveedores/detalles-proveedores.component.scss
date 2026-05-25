@@ -1,0 +1,97 @@
+.modal-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+/* Detail rows */
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 100px;
+  i {
+    font-size: 0.75rem;
+    width: 16px;
+    text-align: center;
+  }
+}
+
+.detail-value {
+  font-size: 0.9rem;
+  color: var(--text-heading);
+  font-weight: 500;
+}
+
+/* Section dividers */
+.modal-divider {
+  margin: 0.75rem 0;
+  opacity: 0.2;
+}
+
+/* Section labels */
+.section-label {
+  font-size: 0.8rem !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  i {
+    font-size: 0.75rem;
+  }
+}
+
+/* Tags list */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+}
+
+.contact-detail {
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  i {
+    font-size: 0.65rem;
+  }
+}
+
+/* Empty hint */
+.empty-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Modal card body padding */
+.modal-card-body {
+  padding: 1.25rem;
+}

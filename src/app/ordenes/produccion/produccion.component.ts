@@ -14,6 +14,7 @@ import { PdfMakeWrapper, Txt, Table, Cell, Img, QR } from 'pdfmake-wrapper';
 import pdfFonts from '../../../assets/fonts/custom';
 import { DevolucionesService } from 'src/app/services/devoluciones.service';
 import { SolicitudesService } from 'src/app/services/solicitudes.service';
+import Swal from 'sweetalert2';
 // import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
 
 // If any issue using previous fonts import. you can try this:
@@ -32,7 +33,88 @@ export class ProduccionComponent implements OnInit, OnChanges {
   public desde = '';
   public hasta = '';
 
+  // Filter tabs
+  public filterStatus: string = 'todas';
+
+  setFilter(status: string) {
+    this.filterStatus = status;
+    this.currentIndex = 0;
+  }
+
+  // Carrusel
+  public currentIndex = 0;
+
+  get ordenesFiltradas(): any[] {
+    const base = this.resultados.length > 0 ? this.resultados : this.api.orden || [];
+    if (this.filterStatus === 'activas') {
+      return base.filter((o: any) => o.status !== 'cerrada');
+    }
+    if (this.filterStatus === 'cerradas') {
+      return base.filter((o: any) => o.status === 'cerrada');
+    }
+    if (this.filterStatus === 'ano') {
+      const year = new Date().getFullYear();
+      return base.filter((o: any) => new Date(o.createdAt).getFullYear() === year);
+    }
+    return base;
+  }
+
+  get currentOp(): any {
+    return this.ordenesFiltradas[this.currentIndex];
+  }
+
+  get ordenesActivas(): number {
+    return this.api.orden?.length || 0;
+  }
+
+  get ordenesAno(): number {
+    if (!this.api.orden) return 0;
+    const year = new Date().getFullYear();
+    return this.api.orden.filter((o: any) => {
+      const d = new Date(o.createdAt);
+      return d.getFullYear() === year;
+    }).length;
+  }
+
+  get ordenesCerradas(): number {
+    if (!this.api.orden) return 0;
+    return this.api.orden.filter((o: any) => o.status === 'cerrada').length;
+  }
+
+  carouselNext() {
+    if (this.currentIndex < this.ordenesFiltradas.length - 1) {
+      this.currentIndex++;
+    }
+  }
+
+  carouselPrev() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
+  }
+
+  goToCarousel(index: number) {
+    if (index >= 0 && index < this.ordenesFiltradas.length) {
+      this.currentIndex = index;
+    }
+  }
+
   public anoActual: any;
+  public mesActual: string;
+  private meses = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
 
   public gestiones: boolean = false;
   public orden_selected: any = [];
@@ -77,6 +159,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
   public correccion = '';
 
   public Despacho = false;
+  public guardandoDespacho = false;
 
   ngOnInit() {}
 
@@ -92,7 +175,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
   };
 
   add_orden_al_despacho() {
-    let data = {
+    if (!this.op_seleccionada) return;
+    const data = {
       op: this.op_seleccionada._id,
       numero_op: this.op_seleccionada.numero_op,
       producto: this.op_seleccionada.producto[0].identificacion.producto,
@@ -102,9 +186,40 @@ export class ProduccionComponent implements OnInit, OnChanges {
       almacenes: '',
       parcial: false,
     };
-    console.log(data.producto);
     this.despachos_por_confirmar.despachos.push(data);
     this.op_seleccionada = '';
+  }
+
+  eliminarDelDespacho(index: number) {
+    this.despachos_por_confirmar.despachos.splice(index, 1);
+  }
+
+  anunciarDespacho() {
+    if (this.despachos_por_confirmar.despachos.length === 0) return;
+    if (!this.despachos_por_confirmar.fecha) {
+      Swal.fire('Fecha requerida', 'Selecciona una fecha para el despacho', 'warning');
+      return;
+    }
+    Swal.fire({
+      title: '¿Anunciar despacho?',
+      text: `Se despacharán ${this.despachos_por_confirmar.despachos.length} producto(s)`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, anunciar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#48c78e',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.guardandoDespacho = true;
+        // TODO: llamar al servicio para guardar el despacho
+        setTimeout(() => {
+          this.guardandoDespacho = false;
+          this.Despacho = false;
+          this.despachos_por_confirmar = { observacion: '', fecha: '', despachos: [] };
+          Swal.fire('Despacho anunciado', 'El despacho ha sido registrado exitosamente', 'success');
+        }, 1500);
+      }
+    });
   }
 
   //ETIQUETAS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -112,9 +227,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
   public etiqueta_generada_por_imprimir: any;
 
   generarImpresion(indexEtiqueta, indexFase) {
-    let gestion = this.api.GestionesDeFase(this.orden_selected, indexFase)[indexEtiqueta];
+    const gestion = this.api.GestionesDeFase(this.orden_selected, indexFase)[indexEtiqueta];
 
-    let data = {
+    const data = {
       gestion: gestion._id,
       completo: gestion,
       op_completa: gestion.orden,
@@ -706,7 +821,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
     PdfMakeWrapper.useFont('Gilroy');
 
     // Array de pasos (steps) que puede variar en cantidad
-    let steps: any = [];
+    const steps: any = [];
 
     const formatter = new Intl.DateTimeFormat('es-ES', {
       day: '2-digit',
@@ -878,7 +993,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
         .widths(['69%', '1%', '30%']).end,
     );
 
-    let emision = formatter.format(new Date(orden.createdAt));
+    const emision = formatter.format(new Date(orden.createdAt));
     pdf.add(
       new Table([
         [
@@ -925,7 +1040,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
       ]).widths(['100%']).end,
     );
 
-    let fecha_oc = formatter.format(new Date(orden.solicitud));
+    const fecha_oc = formatter.format(new Date(orden.solicitud));
 
     pdf.add(
       new Table([
@@ -1021,9 +1136,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
     let total = pedidosFiltrados.reduce((acumulador, pedido) => acumulador + Number(pedido.cantidad), 0);
     total = Number(total).toLocaleString('es-ES');
 
-    let celdas: any = [];
+    const celdas: any = [];
     for (let i = 0; i < pedidosFiltrados.length; i++) {
-      let l = pedidosFiltrados.length - 1;
+      const l = pedidosFiltrados.length - 1;
 
       celdas.push([
         new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end)
@@ -1140,7 +1255,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
     asignadas = Number(asignadas).toLocaleString('es-ES');
     let demasia = Number(orden.demasia).toFixed(2);
     demasia = Number(demasia).toLocaleString('es-ES');
-    let pa_imprimir = Number(orden.hojas).toLocaleString('es-ES');
+    const pa_imprimir = Number(orden.hojas).toLocaleString('es-ES');
 
     demasia_percent = Number(demasia_percent.toFixed(2)).toLocaleString('es-ES');
 
@@ -1216,7 +1331,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
         .widths(['3%', '22%', '20%', '45%', '10%']).end,
     );
 
-    let data: any = [];
+    const data: any = [];
 
     for (let i = 0; i < orden.producto[0].impresion.secuencia[0].length; i++) {
       console.log(orden.tinta[i].tinta);
@@ -1517,7 +1632,9 @@ export class ProduccionComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     public oc: OcompraService,
   ) {
-    this.anoActual = new Date().getFullYear();
+    const now = new Date();
+    this.anoActual = now.getFullYear();
+    this.mesActual = this.meses[now.getMonth()];
   }
 
   subOrdenes() {
@@ -1550,7 +1667,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
   }
 
   buscarSiExisteDefecto(defectos: any, index: any) {
-    let defecto = defectos.find((x) => x.paleta === index);
+    const defecto = defectos.find((x) => x.paleta === index);
     if (defecto) {
       return {
         existe: true,
@@ -1645,7 +1762,7 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
         this.visibilityFlags[i][j] = true;
 
-        let gestion_ = this.api.GestionesDeFase(this.orden_selected, i)[j];
+        const gestion_ = this.api.GestionesDeFase(this.orden_selected, i)[j];
         this.current[i] += Number(gestion_.productos);
 
         // Opción nativa: Creamos objetos Date y les asignamos la hora del string "HH:mm"

@@ -90,8 +90,8 @@ export class RecepcionService {
 
   filtrarMaterialesPorGrupoYAnalisis(nombreGrupo: string, materia?: any) {
     console.log(materia);
-    let materialesFiltrados: any[] = [];
-    let materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
+    const materialesFiltrados: any[] = [];
+    const materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
     this.recepciones.forEach((recepcion) => {
       recepcion.materiales.forEach((grupoMateriales) => {
         grupoMateriales.forEach((material) => {
@@ -118,8 +118,8 @@ export class RecepcionService {
 
   filtrarMaterialesPorLoteYAnalisis(nombreLote: string, materia?: any) {
     console.log(nombreLote);
-    let materialesFiltrados: any[] = [];
-    let materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
+    const materialesFiltrados: any[] = [];
+    const materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
     this.recepciones.forEach((recepcion) => {
       recepcion.materiales.forEach((grupoMateriales) => {
         grupoMateriales.forEach((material) => {
@@ -142,8 +142,8 @@ export class RecepcionService {
 
   filtrarMaterialesPorfechaYAnalisis(nombreLote: string, materia?: any) {
     console.log(nombreLote);
-    let materialesFiltrados: any[] = [];
-    let materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
+    const materialesFiltrados: any[] = [];
+    const materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
     this.recepciones.forEach((recepcion) => {
       recepcion.materiales.forEach((grupoMateriales) => {
         grupoMateriales.forEach((material) => {
@@ -165,8 +165,8 @@ export class RecepcionService {
   }
 
   filtrarMaterialesporFecha(desde, hasta) {
-    let materialesFiltrados: any[] = [];
-    let materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
+    const materialesFiltrados: any[] = [];
+    const materialesSet = new Set(); // Utilizar un Set para mantener los materiales únicos
     this.recepciones.forEach((recepcion) => {
       const fecha_moment = moment(recepcion.createdAt).format('yyyy-MM-DD');
       const fecha = Date.parse(fecha_moment);

@@ -190,7 +190,7 @@ export class NuevaEspecificacionComponent {
   }
 
   guardar() {
-    let data = {
+    const data = {
       especificacion: this.EspecificacionTinta,
       material: this.Materiales[this.Material_selected],
     };
@@ -211,7 +211,7 @@ export class NuevaEspecificacionComponent {
   }
 
   guardar_sustrato() {
-    let data = {
+    const data = {
       especificacion: this.EspecificacionSustrato,
       material: this.Materiales[this.Material_selected],
     };
@@ -250,7 +250,7 @@ export class NuevaEspecificacionComponent {
   }
 
   guardarPads() {
-    let data = {
+    const data = {
       especificacion: this.EspecificacionPads,
       material: this.Materiales[this.Material_selected],
     };
@@ -285,7 +285,7 @@ export class NuevaEspecificacionComponent {
     if (this.newKey && this.newKey_Value) {
       this.Esp_otro[this.newKey] = this.newKey_Value;
     }
-    let data = {
+    const data = {
       especificacion: this.Esp_otro,
       material: this.Materiales[this.Material_selected],
     };

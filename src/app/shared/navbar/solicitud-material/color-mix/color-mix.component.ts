@@ -123,7 +123,7 @@ export class ColorMixComponent implements OnInit {
   }
 
   guardarSolicitud(i) {
-    let data: { material: string; cantidad: number }[] = [];
+    const data: { material: string; cantidad: number }[] = [];
 
     this.formulas_[i].formula.forEach((item: any) => {
       if (item.material && item.cantidad) {
@@ -171,9 +171,9 @@ export class ColorMixComponent implements OnInit {
   }
 
   ImprimirEtiquetas(i: number) {
-    let requi = this.EtiquetasPendiente()[i];
+    const requi = this.EtiquetasPendiente()[i];
 
-    let data: {
+    const data: {
       nombre: string;
       preparacion: string;
       lote: string;
@@ -197,7 +197,7 @@ export class ColorMixComponent implements OnInit {
       }
 
       for (let i = 0; i < this.envases_pesados; i++) {
-        let almacen = {
+        const almacen = {
           analisis: '',
           codigo: i + 1,
           presentacion: 'Env. plástico',

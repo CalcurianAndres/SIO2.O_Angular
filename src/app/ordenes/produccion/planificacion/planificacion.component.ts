@@ -176,25 +176,25 @@ export class PlanificacionComponent {
   ) {}
 
   isDateInRange(date_: string, fases: any[], index: number): number {
-    let date = new Date(date_.split(' ')[1]);
-    let dateStr = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const date = new Date(date_.split(' ')[1]);
+    const dateStr = date.toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
     // Verifica si la fecha está dentro de algún rango de fases
-    let index_ = fases.findIndex((fase) => {
-      let inicio = new Date(fase.fases[0].fecha);
-      let final = new Date(fase.fases[0].final);
+    const index_ = fases.findIndex((fase) => {
+      const inicio = new Date(fase.fases[0].fecha);
+      const final = new Date(fase.fases[0].final);
       return date >= inicio && date <= final;
     });
 
-    let enRango = index_ !== -1;
+    const enRango = index_ !== -1;
 
     // Verifica si la fecha está en el calendario (día festivo)
     // Verifica si la fecha está en el calendario (día festivo)
-    let enCalendario = this.calendario.calendario.some((calendario) => {
+    const enCalendario = this.calendario.calendario.some((calendario) => {
       return calendario.dias.some((dias) => {
-        let month = (dias.month + 1).toString().padStart(2, '0');
-        let day = dias.day.toString().padStart(2, '0');
-        let fecha = `${dias.year}-${month}-${day}`;
+        const month = (dias.month + 1).toString().padStart(2, '0');
+        const day = dias.day.toString().padStart(2, '0');
+        const fecha = `${dias.year}-${month}-${day}`;
         return date_.split(' ')[1] === fecha;
       });
     });
@@ -213,9 +213,9 @@ export class PlanificacionComponent {
 
     this.calendario.calendario.some((calendario) => {
       return calendario.dias.some((dias) => {
-        let month = (dias.month + 1).toString().padStart(2, '0');
-        let day = dias.day.toString().padStart(2, '0');
-        let fecha = `${dias.year}-${month}-${day}`;
+        const month = (dias.month + 1).toString().padStart(2, '0');
+        const day = dias.day.toString().padStart(2, '0');
+        const fecha = `${dias.year}-${month}-${day}`;
 
         // Verificamos si la fecha coincide
         if (date_.split(' ')[1] === fecha) {
@@ -235,9 +235,9 @@ export class PlanificacionComponent {
 
     this.calendario.calendario.some((calendario) => {
       return calendario.dias.some((dias) => {
-        let month = (dias.month + 1).toString().padStart(2, '0');
-        let day = dias.day.toString().padStart(2, '0');
-        let fecha = `${dias.year}-${month}-${day}`;
+        const month = (dias.month + 1).toString().padStart(2, '0');
+        const day = dias.day.toString().padStart(2, '0');
+        const fecha = `${dias.year}-${month}-${day}`;
 
         // Verificamos si la fecha coincide
         if (date_.split(' ')[1] === fecha) {
@@ -254,14 +254,14 @@ export class PlanificacionComponent {
   }
 
   isDateInRangeMachine(date_: string, maquina: string): number {
-    let date = new Date(date_.split(' ')[1]);
+    const date = new Date(date_.split(' ')[1]);
     let color = 0;
 
-    let enCalendario = this.calendario.calendario.some((calendario) => {
+    const enCalendario = this.calendario.calendario.some((calendario) => {
       return calendario.dias.some((dias) => {
-        let month = (dias.month + 1).toString().padStart(2, '0');
-        let day = dias.day.toString().padStart(2, '0');
-        let fecha = `${dias.year}-${month}-${day}`;
+        const month = (dias.month + 1).toString().padStart(2, '0');
+        const day = dias.day.toString().padStart(2, '0');
+        const fecha = `${dias.year}-${month}-${day}`;
         return date_.split(' ')[1] === fecha;
       });
     });
@@ -271,13 +271,13 @@ export class PlanificacionComponent {
     }
 
     // Iteramos sobre las órdenes
-    for (let orden of this.api.orden) {
+    for (const orden of this.api.orden) {
       color++; // Contamos las órdenes
 
       // Buscar el índice de la fase que esté en el rango de fechas
-      let index_ = orden.fases.findIndex((fase) => {
-        let inicio = new Date(fase.fases[0].fecha);
-        let final = new Date(fase.fases[0].final);
+      const index_ = orden.fases.findIndex((fase) => {
+        const inicio = new Date(fase.fases[0].fecha);
+        const final = new Date(fase.fases[0].final);
         return date >= inicio && date <= final && fase.maquina._id === maquina;
       });
 
@@ -330,14 +330,14 @@ export class PlanificacionComponent {
   }
 
   ExisteEnLaSemana(op: any, old_op: any, maquina: any) {
-    let inicio = op.fases[0].fases[0].fecha.split('-')[2];
-    let final = op.fases[0].fases[0].final.split('-')[2]; // Extraemos solo el día
-    let inicioNumero = parseInt(inicio, 10); // Convertimos a número
-    let finalNumero = parseInt(final, 10); // Convertimos a número
+    const inicio = op.fases[0].fases[0].fecha.split('-')[2];
+    const final = op.fases[0].fases[0].final.split('-')[2]; // Extraemos solo el día
+    const inicioNumero = parseInt(inicio, 10); // Convertimos a número
+    const finalNumero = parseInt(final, 10); // Convertimos a número
 
-    let existeFinal = this.semanas[this.Semana_selected].includes(finalNumero);
-    let existeInicio = this.semanas[this.Semana_selected].includes(inicioNumero);
-    let posicion = this.semanas[this.Semana_selected].indexOf(inicioNumero); // Buscamos la posición dentro del array
+    const existeFinal = this.semanas[this.Semana_selected].includes(finalNumero);
+    const existeInicio = this.semanas[this.Semana_selected].includes(inicioNumero);
+    const posicion = this.semanas[this.Semana_selected].indexOf(inicioNumero); // Buscamos la posición dentro del array
     let wd = finalNumero - inicioNumero;
     wd += 1;
 
@@ -347,7 +347,7 @@ export class PlanificacionComponent {
     } else {
       let final_viejo = this.buscarFase(maquina)[old_op - 1].fases[0].fases[0].final.split('-')[2];
       final_viejo = parseInt(final_viejo, 10);
-      let existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
+      const existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
       if (existeFinal_viejo) {
         m_l = inicioNumero - final_viejo;
       } else {
@@ -363,7 +363,7 @@ export class PlanificacionComponent {
       } else {
         let final_viejo = this.buscarFase(maquina)[old_op - 1].fases[0].fases[0].final.split('-')[2];
         final_viejo = parseInt(final_viejo, 10);
-        let existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
+        const existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
         if (existeFinal_viejo) {
           m_l = inicioNumero - final_viejo;
           m_l += 1;
@@ -376,7 +376,7 @@ export class PlanificacionComponent {
       if (old_op > 0) {
         let final_viejo = this.buscarFase(maquina)[old_op - 1].fases[0].fases[0].final.split('-')[2];
         final_viejo = parseInt(final_viejo, 10);
-        let existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
+        const existeFinal_viejo = this.semanas[this.Semana_selected].includes(final_viejo);
         if (existeFinal_viejo) {
           m_l = inicioNumero - final_viejo;
           m_l -= 1;
@@ -403,7 +403,7 @@ export class PlanificacionComponent {
   generarSemanas() {
     const fecha = new Date(this.año, this.mes - 1, 1); // Primer día del mes
     const diasEnMes = new Date(this.año, this.mes, 0).getDate(); // Número de días en el mes
-    let dias: number[] = [];
+    const dias: number[] = [];
 
     // Obtener el primer día de la semana (0 = Domingo, 1 = Lunes, ..., 6 = Sábado)
     const primerDiaSemana = fecha.getDay();
@@ -487,15 +487,15 @@ export class PlanificacionComponent {
     if (index > 0) {
       return '0px';
     }
-    let dia = fecha.split('-')[2];
-    let px = (Number(dia) - 1) * 55;
+    const dia = fecha.split('-')[2];
+    const px = (Number(dia) - 1) * 55;
     return `${px}px`;
   }
 
   calcularWith(fechaI: string, fechaF: string) {
-    let inicio = fechaI.split('-')[2];
-    let Final = fechaF.split('-')[2];
-    let px = (Number(Final) - Number(inicio) + 1) * 55;
+    const inicio = fechaI.split('-')[2];
+    const Final = fechaF.split('-')[2];
+    const px = (Number(Final) - Number(inicio) + 1) * 55;
 
     return `${px}px`;
   }
@@ -507,8 +507,8 @@ export class PlanificacionComponent {
     const month = fechaMoment.month(); // El mes en moment es 0-indexed (enero es 0, diciembre es 11)
     const day = fechaMoment.date();
 
-    let Calendario = this.horarios.calendario.find((x) => x.year === year);
-    let feriado = Calendario.dias.find((x) => x.month === month && x.day === day);
+    const Calendario = this.horarios.calendario.find((x) => x.year === year);
+    const feriado = Calendario.dias.find((x) => x.month === month && x.day === day);
 
     if (feriado) {
       return 'X';
@@ -519,14 +519,14 @@ export class PlanificacionComponent {
 
   formatearFecha_(fecha) {
     moment.locale('es');
-    let Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
-    let feriado = Calendario.dias.find(
+    const Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
+    const feriado = Calendario.dias.find(
       (x) => x.month === Number(moment(fecha).format('M')) - 1 && x.day === Number(moment(fecha).format('D')),
     );
 
     if (feriado) {
-      let hoy = moment().format('yyyy-MM-DD');
-      let fin = moment(fecha);
+      const hoy = moment().format('yyyy-MM-DD');
+      const fin = moment(fecha);
 
       this.feriados.push(fin.diff(hoy, 'days'));
 
@@ -579,11 +579,11 @@ export class PlanificacionComponent {
         w = 55;
       }
 
-      let width_actual = Number(this.width[i].replace('px', ''));
+      const width_actual = Number(this.width[i].replace('px', ''));
 
       if (w > width_actual) {
-        let diferencia = w - width_actual;
-        let number = Number(this.margin_left[i].replace('px', ''));
+        const diferencia = w - width_actual;
+        const number = Number(this.margin_left[i].replace('px', ''));
 
         let new_margin = number - diferencia;
 
@@ -603,12 +603,12 @@ export class PlanificacionComponent {
   }
 
   onDragEnd(event: any, i: number) {
-    let currentX = event.source.getFreeDragPosition().x; // Obtiene la posición final
-    let deltaX = currentX - this.dragStartX; // Calcula cuánto se movió
+    const currentX = event.source.getFreeDragPosition().x; // Obtiene la posición final
+    const deltaX = currentX - this.dragStartX; // Calcula cuánto se movió
 
     // Redondea a múltiplos de 55px
-    let steps = Math.round(deltaX / 55);
-    let newMargin = Math.max(parseInt(this.margin_left_1[i] || '0') + steps * 55, 0);
+    const steps = Math.round(deltaX / 55);
+    const newMargin = Math.max(parseInt(this.margin_left_1[i] || '0') + steps * 55, 0);
 
     this.margin_left_1[i] = `${newMargin}px`; // Aplica el nuevo margin-left
 
@@ -629,25 +629,25 @@ export class PlanificacionComponent {
     console.log(op, 'Numero op');
 
     // Obtener la diferencia de posición en el eje X
-    let movementX = event.distance.x; // Asumiendo que event.distance.x contiene el desplazamiento total en px
+    const movementX = event.distance.x; // Asumiendo que event.distance.x contiene el desplazamiento total en px
 
     // Calcular cuántos pasos de 110px se han movido
-    let daysToMove = Math.round(movementX / 110); // Se redondea para asegurar precisión
+    const daysToMove = Math.round(movementX / 110); // Se redondea para asegurar precisión
 
     // Función para modificar una fecha sumando o restando días
     function modifyDate(dateString: string, days: number): string {
       // let lastnumber = Number(dateString.split('-')[2])
       // lastnumber += days
       // return `${dateString.split('-')[0]}-${dateString.split('-')[1]}-${lastnumber}`
-      let date = new Date(dateString);
-      let dataActual = new Date(op.fases[0].fases[0].fecha);
+      const date = new Date(dateString);
+      const dataActual = new Date(op.fases[0].fases[0].fecha);
 
       date.setDate(date.getDate() + days);
       return date.toISOString().split('T')[0]; // Convertimos la fecha de nuevo a 'yyyy-mm-dd'
     }
 
     // Filtrar todas las órdenes con numero_op mayor al de la orden actual
-    let ordersToUpdate = this.api.orden.filter((x) => Number(x.numero_op) >= Number(op.numero_op));
+    const ordersToUpdate = this.api.orden.filter((x) => Number(x.numero_op) >= Number(op.numero_op));
 
     // Actualizar fechas en todas las órdenes afectadas
     ordersToUpdate.forEach((order) => {
@@ -656,8 +656,8 @@ export class PlanificacionComponent {
         if (fase.maquina._id === op.fases[0].maquina._id) {
           maquina = true;
         }
-        let date = new Date(fase.fases[0].fecha);
-        let dataActual = new Date(op.fases[0].fases[0].fecha);
+        const date = new Date(fase.fases[0].fecha);
+        const dataActual = new Date(op.fases[0].fases[0].fecha);
 
         if (dataActual <= date && maquina) {
           if (fase.fases[0].fecha) {
@@ -693,12 +693,12 @@ export class PlanificacionComponent {
   }
 
   onDragEnd2(event: any, i: number) {
-    let currentX = event.source.getFreeDragPosition().x; // Obtiene la posición final
-    let deltaX = currentX - this.dragStartX; // Calcula cuánto se movió
+    const currentX = event.source.getFreeDragPosition().x; // Obtiene la posición final
+    const deltaX = currentX - this.dragStartX; // Calcula cuánto se movió
 
     // Redondea a múltiplos de 55px
-    let steps = Math.round(deltaX / 55);
-    let newMargin = Math.max(parseInt(this.margin_left[i] || '0') + steps * 55, 0);
+    const steps = Math.round(deltaX / 55);
+    const newMargin = Math.max(parseInt(this.margin_left[i] || '0') + steps * 55, 0);
 
     this.margin_left[i] = `${newMargin}px`; // Aplica el nuevo margin-left
 

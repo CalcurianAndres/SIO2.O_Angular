@@ -131,8 +131,8 @@ export class NavbarComponent implements OnInit {
   panel = false;
 
   showAsignaciones() {
-    if (this.ordenes.orden) {
-      let n =
+    if (this.ordenes.orden && this.solicitudes.solicitudes) {
+      const n =
         this.ordenes.orden.filter((orden) => orden.status === 'Por asignar').length +
         this.solicitudes.solicitudes.filter((solicitud) => solicitud.status === 'Por Asignar').length;
       if (n > 0) {
@@ -178,7 +178,6 @@ export class NavbarComponent implements OnInit {
     this.Menu_[n] = true;
     this.empresa = false;
   }
-
 
   // showCompras() {
   //   this.compras = true;
@@ -231,8 +230,9 @@ export class NavbarComponent implements OnInit {
   }
 
   abrirAsignacion() {
-    let n = this.ordenes.orden.filter((orden) => orden.status === 'Por asignar').length;
-    let x = this.solicitudes.solicitudes.filter((solic) => solic.status === 'Por Asignar').length;
+    if (!this.ordenes.orden || !this.solicitudes.solicitudes) return;
+    const n = this.ordenes.orden.filter((orden) => orden.status === 'Por asignar').length;
+    const x = this.solicitudes.solicitudes.filter((solic) => solic.status === 'Por Asignar').length;
     if (n + x > 0) {
       this.asignacion = true;
     }

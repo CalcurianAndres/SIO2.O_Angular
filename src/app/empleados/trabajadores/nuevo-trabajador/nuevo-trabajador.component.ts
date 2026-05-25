@@ -112,14 +112,14 @@ export class NuevoTrabajadorComponent implements OnInit {
       this.CI = newValue.substring(0, newValue.length - 1);
     } else {
       // Agregar guiones automáticamente
-      let formattedValue = newValue.replace(/(\d{0})(\d{8})/, '$1-$2');
+      const formattedValue = newValue.replace(/(\d{0})(\d{8})/, '$1-$2');
       this.trabajador.datos_personales.cedula = this.CI;
       this.CI = formattedValue; // Establecer el valor formateado n el campo de input
     }
   }
 
   BuscarMunicipio(e) {
-    let dividir = e.value.split('-');
+    const dividir = e.value.split('-');
     this.trabajador.datos_personales.estado = dividir[1];
     this.http
       .get(`http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica`)
@@ -129,7 +129,7 @@ export class NuevoTrabajadorComponent implements OnInit {
   }
 
   BuscarParroquia(e) {
-    let dividir = e.value.split('-');
+    const dividir = e.value.split('-');
     this.trabajador.datos_personales.municipio = dividir[1];
     this.http
       .get(`http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica`)
@@ -303,10 +303,10 @@ export class NuevoTrabajadorComponent implements OnInit {
   // Función para actualizar el objeto 'softwares' cuando cambia un checkbox
   updateSoftwares() {
     // Obtener referencias a los elementos del DOM
-    let wordCheckbox: any = document.getElementById('wordCheckbox');
-    let excelCheckbox: any = document.getElementById('excelCheckbox');
-    let powerPointCheckbox: any = document.getElementById('powerPointCheckbox');
-    let acrobatCheckbox: any = document.getElementById('acrobatCheckbox');
+    const wordCheckbox: any = document.getElementById('wordCheckbox');
+    const excelCheckbox: any = document.getElementById('excelCheckbox');
+    const powerPointCheckbox: any = document.getElementById('powerPointCheckbox');
+    const acrobatCheckbox: any = document.getElementById('acrobatCheckbox');
 
     this.trabajador.manejo_herramientas.softwares.word = wordCheckbox.checked;
     this.trabajador.manejo_herramientas.softwares.excel = excelCheckbox.checked;

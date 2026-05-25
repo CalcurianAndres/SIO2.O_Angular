@@ -25,7 +25,7 @@ export class ListadoComponent {
   }
 
   verificarCodigoUnico(codigo, i): void {
-    let existencia = this.lista.filter((x: any, n: number) => x.codigo === codigo.value && n != i);
+    const existencia = this.lista.filter((x: any, n: number) => x.codigo === codigo.value && n != i);
     console.log(existencia);
     if (existencia.length > 0) {
       Swal.fire({

@@ -121,15 +121,17 @@ table tr th {
   font-family: 'Gilroy';
 }
 
-.card .darker {
+.darker {
   background-color: var(--bg-secondary);
-  display: block;
   position: fixed;
+  top: 10px;
   height: 95%;
   width: calc(100vw - var(--sidebar-width) - 30px);
   left: calc(var(--sidebar-width) + 15px);
   overflow-y: auto;
-  overflow-x: hidden;
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
 }
 
 .modal .modal-background {
@@ -251,8 +253,18 @@ body {
   padding-left: 15px;
 }
 
-/* Estilos para el checkbox */
+/* ── Checkbox personalizado ── */
 .checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.checkbox input[type='checkbox'],
+input[type='checkbox'].checkbox {
   appearance: none;
   width: 20px;
   height: 20px;
@@ -261,53 +273,53 @@ body {
   position: relative;
   cursor: pointer;
   background-color: var(--bg-card);
+  flex-shrink: 0;
+  margin: 0;
   transition:
-    background-color 0.3s,
-    border-color 0.3s;
+    background-color 0.2s,
+    border-color 0.2s;
 }
 
-.checkbox:checked {
+.checkbox input[type='checkbox']:checked,
+input[type='checkbox'].checkbox:checked {
   background-color: var(--status-success);
   border-color: var(--status-success);
 }
 
-.checkbox:checked::after {
+.checkbox input[type='checkbox']:checked::after,
+input[type='checkbox'].checkbox:checked::after {
   content: '';
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 8px;
-  height: 8px;
-  background-color: #fff;
-  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E")
+    center/contain no-repeat;
 }
 
-.checkbox:hover {
-  border-color: var(--accent-green);
+.checkbox input[type='checkbox']:hover,
+input[type='checkbox'].checkbox:hover {
+  border-color: var(--status-success);
 }
 
-.checkbox:focus {
-  outline: none;
-  box-shadow: 0 0 5px color-mix(in srgb, var(--status-success) 50%, transparent);
+.checkbox input[type='checkbox']:focus-visible,
+input[type='checkbox'].checkbox:focus-visible {
+  outline: 2px solid var(--status-success);
+  outline-offset: 2px;
 }
 
-.checkbox:disabled {
+.checkbox input[type='checkbox']:disabled,
+input[type='checkbox'].checkbox:disabled {
   background-color: var(--hover-bg);
   border-color: var(--border-color);
   cursor: not-allowed;
 }
 
-.checkbox:disabled:checked {
+.checkbox input[type='checkbox']:disabled:checked,
+input[type='checkbox'].checkbox:disabled:checked {
   background-color: var(--text-muted);
   border-color: var(--text-muted);
-}
-
-.checkbox:disabled:hover {
-  border-color: var(--border-color);
-}
-
-.checkbox:disabled:focus {
-  box-shadow: none;
 }
 
 @import '../node_modules/bulma/sass/utilities/_all.sass';
@@ -327,7 +339,6 @@ body {
 @import '../node_modules/bulma/sass/components/modal.sass';
 @import '../node_modules/bulma/sass/components/message.sass';
 @import '../node_modules/bulma/sass/components/tabs.sass';
-@import '../node_modules/bulma/sass/components/breadcrumb.sass';
 @import '../node_modules/bulma/sass/elements/progress.sass';
 @import '../node_modules/bulma/sass/elements/image.sass';
 @import '../node_modules/bulma/sass/components/menu.sass';
@@ -335,6 +346,8 @@ body {
 @import '../node_modules/animate.css/animate.css';
 
 @import '../node_modules/bulma-o-steps/bulma-steps.css';
+
+@tailwind utilities;
 
 // ─── Bulma component overrides for theme variables ───
 .card,
@@ -556,16 +569,6 @@ body {
   color: var(--text-heading);
 }
 .subtitle {
-  color: var(--text-primary);
-}
-
-.breadcrumb a {
-  color: var(--text-muted);
-}
-.breadcrumb a:hover {
-  color: var(--accent-red);
-}
-.breadcrumb li.is-active a {
   color: var(--text-primary);
 }
 
@@ -795,10 +798,18 @@ body {
 }
 
 // ─── Icon color standards ───
-.icon-action { color: var(--accent-blue); }
-.icon-danger { color: var(--accent-red); }
-.icon-edit { color: var(--accent-green); }
-.icon-muted { color: var(--text-muted); }
+.icon-action {
+  color: var(--accent-blue);
+}
+.icon-danger {
+  color: var(--accent-red);
+}
+.icon-edit {
+  color: var(--accent-green);
+}
+.icon-muted {
+  color: var(--text-muted);
+}
 
 .btn-action-icon {
   background-color: transparent;
@@ -807,22 +818,54 @@ body {
 }
 
 // ─── Status utility classes ───
-.text-success { color: var(--status-success); }
-.text-danger { color: var(--status-danger); }
-.text-warning { color: var(--status-warning); }
-.text-info { color: var(--status-info); }
-.bg-success { background-color: color-mix(in srgb, var(--status-success) 15%, var(--bg-card)); }
-.bg-danger { background-color: color-mix(in srgb, var(--status-danger) 15%, var(--bg-card)); }
-.bg-warning { background-color: color-mix(in srgb, var(--status-warning) 15%, var(--bg-card)); }
-.bg-info { background-color: color-mix(in srgb, var(--status-info) 15%, var(--bg-card)); }
-.border-left-success { border-left: 4px solid var(--status-success); }
-.border-left-danger { border-left: 4px solid var(--status-danger); }
-.border-left-warning { border-left: 4px solid var(--status-warning); }
-.border-left-info { border-left: 4px solid var(--status-info); }
-.border-top-success { border-top: 4px solid var(--status-success); }
-.border-top-danger { border-top: 4px solid var(--status-danger); }
-.border-top-warning { border-top: 4px solid var(--status-warning); }
-.border-top-info { border-top: 4px solid var(--status-info); }
+.text-success {
+  color: var(--status-success);
+}
+.text-danger {
+  color: var(--status-danger);
+}
+.text-warning {
+  color: var(--status-warning);
+}
+.text-info {
+  color: var(--status-info);
+}
+.bg-success {
+  background-color: color-mix(in srgb, var(--status-success) 15%, var(--bg-card));
+}
+.bg-danger {
+  background-color: color-mix(in srgb, var(--status-danger) 15%, var(--bg-card));
+}
+.bg-warning {
+  background-color: color-mix(in srgb, var(--status-warning) 15%, var(--bg-card));
+}
+.bg-info {
+  background-color: color-mix(in srgb, var(--status-info) 15%, var(--bg-card));
+}
+.border-left-success {
+  border-left: 4px solid var(--status-success);
+}
+.border-left-danger {
+  border-left: 4px solid var(--status-danger);
+}
+.border-left-warning {
+  border-left: 4px solid var(--status-warning);
+}
+.border-left-info {
+  border-left: 4px solid var(--status-info);
+}
+.border-top-success {
+  border-top: 4px solid var(--status-success);
+}
+.border-top-danger {
+  border-top: 4px solid var(--status-danger);
+}
+.border-top-warning {
+  border-top: 4px solid var(--status-warning);
+}
+.border-top-info {
+  border-top: 4px solid var(--status-info);
+}
 
 // ─── Global transition ───
 * {

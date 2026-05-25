@@ -106,7 +106,7 @@ export class HorariosComponent {
     const currentYear = new Date().getFullYear(); // Obtiene el año actual
 
     // Encuentra el calendario del año actual
-    let calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
+    const calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
 
     // Verifica si se encontró un calendario y luego busca en los días
     if (calendario_actual) {
@@ -125,7 +125,7 @@ export class HorariosComponent {
   // Función para obtener el motivo del día no laboral
   getMotivo(month: number, day: number): string {
     // Encuentra el calendario del año actual
-    let calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
+    const calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
 
     // Verifica si se encontró un calendario
     if (calendario_actual) {
@@ -227,18 +227,18 @@ export class HorariosComponent {
     this.api.guardarCalendario(nonWorkingDay);
 
     let color = 0;
-    let date = new Date(`${this.currentYear}-${month + 1}-${day}`);
+    const date = new Date(`${this.currentYear}-${month + 1}-${day}`);
     let first = -1;
 
     // Iteramos por cada orden
-    for (let orden of this.order.orden) {
+    for (const orden of this.order.orden) {
       color++; // Contamos las órdenes
 
       // Iteramos por cada fase de la orden
       for (let i = 0; i < orden.fases.length; i++) {
-        let fase = orden.fases[i];
-        let inicio = new Date(fase.fases[0].fecha);
-        let final = new Date(fase.fases[0].final);
+        const fase = orden.fases[i];
+        const inicio = new Date(fase.fases[0].fecha);
+        const final = new Date(fase.fases[0].final);
 
         // Verificamos si la fecha está dentro del rango de la fase
         if (date >= inicio && date <= final) {

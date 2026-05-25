@@ -11,17 +11,19 @@ import { ProveedoresService } from 'src/app/services/proveedores.service';
   styleUrls: ['./fabricantes.component.scss'],
 })
 export class FabricantesComponent {
-  constructor(
-    public api: FabricantesService,
-    public proveedores: ProveedoresService,
-  ) {}
-
   public nuevo: boolean = false;
   public detalle: boolean = false;
   public editar: boolean = false;
   public selected!: any;
   public data: any = [];
-  public cargando: boolean = false;
+  public cargando: boolean = true;
+
+  constructor(
+    public api: FabricantesService,
+    public proveedores: ProveedoresService,
+  ) {
+    setTimeout(() => (this.cargando = false), 1200);
+  }
 
   filas() {
     return Math.ceil((this.api.fabricantes.length + 1) / 5);

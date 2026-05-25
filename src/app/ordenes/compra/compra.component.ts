@@ -9,14 +9,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./compra.component.scss'],
 })
 export class CompraComponent {
-  public mesActual;
-  public yearActual;
+  public mesActual: string;
+  public yearActual: number;
   constructor(public api: OcompraService) {
     const meses = [
       'Enero',
       'Febrero',
       'Marzo',
-      'Septiembre',
+      'Abril',
       'Mayo',
       'Junio',
       'Julio',
@@ -28,35 +28,24 @@ export class CompraComponent {
     ];
     const fechaActual = new Date();
     this.mesActual = meses[fechaActual.getMonth()];
-    this.yearActual = new Date().getFullYear();
+    this.yearActual = fechaActual.getFullYear();
   }
 
-  public cliente = false; // Variable para controlar si se está buscando por cliente
-  public fecha = true; // Variable para controlar si se está buscando por fecha
-  public Info_clientes = [false, false]; // Array de booleanos para controlar la visualización de información adicional por cliente
-  public ORDEN = [false, false];
+  // --- Core UI state ---
+  public cargando = false;
   public nueva = false;
-  public filtrado = false;
-  public DesdeHasta = false;
-  public PorClientes: any;
-  public OC_NUMBER = false;
-  public semaforo = ['rojo', 'amarillo', 'verde'];
-  public Busqueda = false;
-  public filtrados: any;
-  searchTerm: string = '';
   public new_sub = false;
+  public filterMode: string = 'home';
+  public ordenExpandida: boolean[] = [];
+  public filtrados: any = [];
+  public searchTerm: string = '';
 
-  derivadasVisibles: { [key: string]: boolean } = {};
+  // --- Client grouping state ---
+  public PorClientes: any;
+  public Info_clientes: boolean[] = [];
 
-  toggleDerivadas(ocIdx: number, prodIdx: number) {
-    const key = `${ocIdx}-${prodIdx}`;
-    this.derivadasVisibles[key] = !this.derivadasVisibles[key];
-  }
-
-  isDerivadaVisible(ocIdx: number, prodIdx: number): boolean {
-    return !!this.derivadasVisibles[`${ocIdx}-${prodIdx}`];
-  }
-
+  // --- Derivaciones state ---
+  public derivadasVisibles: { [key: string]: boolean } = {};
   public orden = {
     cliente: '',
     orden: '',
@@ -64,7 +53,6 @@ export class CompraComponent {
     recepcion: '',
     pedido: [],
   };
-
   public producto_padre: any = '';
   public almacenes_selected: any = [];
   public derivacion_nueva = {
@@ -73,19 +61,136 @@ export class CompraComponent {
     solicitud: '',
     entrega: '',
   };
-
   public orden_selected = 0;
   public producto_selected = 0;
   public maximo_oc = 0;
-  GuardarNuevaDerivacion() {
-    let x = this.orden_selected;
-    let y = this.producto_selected;
 
+  // --- Pagination ---
+  public currentPage: number = 1;
+  public pageSize: number = 10;
+
+  get totalPages(): number {
+    const total = this.ordenesVisibles.length;
+    return Math.ceil(total / this.pageSize) || 1;
+  }
+  get paginatedOrdenes(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.ordenesVisibles.slice(start, start + this.pageSize);
+  }
+  goToPage(p: number) {
+    if (p >= 1 && p <= this.totalPages) this.currentPage = p;
+  }
+
+  // --- Getters ---
+  get ordenesCerradas(): number {
+    return this.api.orden?.filter((o) => o.estado === 'cerrada').length || 0;
+  }
+  get ordenesMesActual(): number {
+    if (!this.api.orden) return 0;
+    const now = new Date();
+    return this.api.orden.filter((o) => {
+      const d = new Date(o.createdAt || o.fecha);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+  }
+  get ordenesAnoActual(): number {
+    if (!this.api.orden) return 0;
+    const now = new Date();
+    return this.api.orden.filter((o) => {
+      const d = new Date(o.createdAt || o.fecha);
+      return d.getFullYear() === now.getFullYear();
+    }).length;
+  }
+  get clientesUnicas(): string[] {
+    if (!this.api.orden) return [];
+    return [...new Set(this.api.orden.map((o) => o.cliente?.nombre).filter(Boolean))] as string[];
+  }
+  get ordenesVisibles(): any[] {
+    if (this.filtrados.length > 0) return this.filtrados;
+    return this.api.orden || [];
+  }
+
+  // --- Filter ---
+  setFilter(mode: string) {
+    this.filterMode = mode;
+    this.filtrados = [];
+    this.searchTerm = '';
+    this.currentPage = 1;
+  }
+  search() {
+    const cleaned = this.searchTerm.replace(/-/g, '');
+    this.filtrados = this.api.orden.filter((o) => o.orden.toLowerCase().includes(cleaned.toLowerCase()));
+    this.currentPage = 1;
+  }
+  buscarPorFecha(desde: string, hasta: string) {
+    this.filtrados = this.api.orden.filter((o) => {
+      const fechaOrden = new Date(o.recepcion);
+      return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
+    });
+    this.currentPage = 1;
+  }
+  buscarPorFecha_cliente(desde: string, hasta: string) {
+    const OrdenesPorClientes = {};
+    const filtracion = this.api.orden.filter((o) => {
+      const fechaOrden = new Date(o.recepcion);
+      return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
+    });
+    filtracion.forEach((o) => {
+      const { cliente } = o;
+      if (!OrdenesPorClientes[cliente.nombre]) {
+        OrdenesPorClientes[cliente.nombre] = [];
+      }
+      OrdenesPorClientes[cliente.nombre].push(o);
+    });
+    this.PorClientes = Object.entries(OrdenesPorClientes);
+    this.currentPage = 1;
+  }
+  buscarporCliente() {
+    this.PorClientes = this.api.separarPorCliente();
+    this.setFilter('client');
+  }
+  filtrarPorCliente(target: any) {
+    const valor = target.value;
+    if (!valor) {
+      this.filtrados = [];
+      return;
+    }
+    this.filtrados = this.api.orden.filter((o) => o.cliente?.nombre === valor);
+    this.currentPage = 1;
+  }
+
+  // --- Toggle ---
+  toggleOrder(n: number) {
+    this.ordenExpandida[n] = !this.ordenExpandida[n];
+  }
+  show_info(n: number) {
+    this.Info_clientes[n] = !this.Info_clientes[n];
+  }
+
+  // --- Derivaciones ---
+  toggleDerivadas(ocIdx: number, prodIdx: number) {
+    const key = `${ocIdx}-${prodIdx}`;
+    this.derivadasVisibles[key] = !this.derivadasVisibles[key];
+  }
+  isDerivadaVisible(ocIdx: number, prodIdx: number): boolean {
+    return !!this.derivadasVisibles[`${ocIdx}-${prodIdx}`];
+  }
+  nueva_derivacion(producto: any, cliente: any, index_orden: number, index_producto: number) {
+    this.producto_padre = producto.producto.identificacion.producto;
+    this.maximo_oc = producto.cantidad;
+    this.almacenes_selected = cliente.almacenes;
+    this.new_sub = true;
+    this.derivacion_nueva = { nro: null, cantidad: 0, solicitud: '', entrega: '' };
+    this.orden_selected = index_orden;
+    this.producto_selected = index_producto;
+  }
+  GuardarNuevaDerivacion() {
+    const x = this.orden_selected;
+    const y = this.producto_selected;
     if (!this.api.orden[x].pedido[y].derivadas) {
       this.api.orden[x].pedido[y].derivadas = [];
     }
     this.api.orden[x].pedido[y].derivadas.push(this.derivacion_nueva);
-
     this.new_sub = false;
     this.api.guardarOrden(this.api.orden[x]);
     setTimeout(() => {
@@ -100,130 +205,11 @@ export class CompraComponent {
       });
     }, 1000);
   }
-  nueva_derivacion(producto: any, cliente: any, index_orden, index_producto) {
-    this.producto_padre = producto.producto.identificacion.producto;
-    this.maximo_oc = producto.cantidad;
-    this.almacenes_selected = cliente.almacenes;
-    this.new_sub = true;
-    this.derivacion_nueva = {
-      nro: null,
-      cantidad: 0,
-      solicitud: '',
-      entrega: '',
-    };
-    this.orden_selected = index_orden;
-    this.producto_selected = index_producto;
-  }
+
+  // --- Helpers ---
+  public semaforo = ['rojo', 'amarillo', 'verde'];
 
   formatNumberWithDotSeparator(number: number): string {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-
-  search() {
-    this.filtrados = this.api.orden.filter((orden) =>
-      orden.orden.toLowerCase().includes(this.searchTerm.toLowerCase()),
-    );
-    console.log(this.filtrados);
-  }
-
-  buscarPorFecha(desde, hasta) {
-    this.filtrados = this.api.orden.filter((orden) => {
-      // Convertir las fechas de los objetos OrdenCompra a objetos Date
-      const fechaOrden = new Date(orden.recepcion);
-
-      // Verificar si la fecha de la orden está dentro del rango especificado
-      return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
-    });
-  }
-
-  mostrarFiltros() {
-    if (!this.filtrado) {
-      this.filtrado = true;
-    } else {
-      this.filtrado = false;
-    }
-  }
-
-  BusquedaPorNumero() {
-    this.OC_NUMBER = true;
-    this.DesdeHasta = false;
-    this.fecha = false;
-    this.cliente = false;
-    this.Busqueda = true;
-    this.filtrados = [];
-  }
-
-  RealizarBusquedaFecha() {
-    if (!this.DesdeHasta) {
-      this.DesdeHasta = true;
-    }
-    this.fecha = false; // Ocultar la búsqueda por fecha
-    this.cliente = false; // Mostrar la búsqueda por cliente
-    this.Busqueda = true;
-    this.Busqueda = true;
-    this.OC_NUMBER = false;
-    this.filtrados = [];
-  }
-
-  show_info_(n) {
-    if (this.ORDEN[n]) {
-      this.ORDEN[n] = false; // Si la información está mostrándose, ocultarla
-    } else {
-      this.ORDEN[n] = true; // Si la información está oculta, mostrarla
-    }
-  }
-
-  // Función para buscar por cliente
-  buscarporCliente() {
-    this.PorClientes = this.api.separarPorCliente();
-    this.fecha = false; // Ocultar la búsqueda por fecha
-    this.cliente = true; // Mostrar la búsqueda por cliente
-    this.Busqueda = false;
-    this.DesdeHasta = true;
-    this.OC_NUMBER = false;
-  }
-
-  buscarPorFecha_cliente(desde, hasta) {
-    let OrdenesPorClientes = {};
-    let filtracion = this.api.orden.filter((orden) => {
-      // Convertir las fechas de los objetos OrdenCompra a objetos Date
-      const fechaOrden = new Date(orden.recepcion);
-
-      // Verificar si la fecha de la orden está dentro del rango especificado
-      return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
-    });
-
-    filtracion.forEach((orden) => {
-      const { cliente } = orden;
-
-      // Si el proveedor no existe en el objeto, lo creamos
-      if (!OrdenesPorClientes[cliente.nombre]) {
-        OrdenesPorClientes[cliente.nombre] = [];
-      }
-
-      // Agregamos el material al proveedor correspondiente
-      OrdenesPorClientes[cliente.nombre].push(orden);
-    });
-
-    // Convertimos el objeto en un arreglo de proveedores
-    this.PorClientes = Object.entries(OrdenesPorClientes);
-  }
-
-  // Función para buscar por fecha
-  buscarporFecha() {
-    this.fecha = true; // Mostrar la búsqueda por fecha
-    this.cliente = false; // Ocultar la búsqueda por cliente
-    this.DesdeHasta = false;
-    this.OC_NUMBER = false;
-    this.Busqueda = false;
-  }
-
-  // Función para mostrar información adicional por cliente
-  show_info(n) {
-    if (this.Info_clientes[n]) {
-      this.Info_clientes[n] = false; // Si la información está mostrándose, ocultarla
-    } else {
-      this.Info_clientes[n] = true; // Si la información está oculta, mostrarla
-    }
   }
 }

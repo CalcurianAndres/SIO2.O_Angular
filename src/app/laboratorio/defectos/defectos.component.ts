@@ -259,7 +259,7 @@ export class DefectosComponent {
   }
 
   guardarCambios() {
-    let data = {
+    const data = {
       cliente: this.cliente_,
       categoria: this.categoria_,
       defectos: {
@@ -296,7 +296,7 @@ export class DefectosComponent {
   }
 
   BuscarDefectosAlmacenados() {
-    let resultado = this.api.buscarPorClienteYCategoria(this.cliente_, this.categoria_);
+    const resultado = this.api.buscarPorClienteYCategoria(this.cliente_, this.categoria_);
     if (!resultado) {
       this.edicion_general = true;
     } else {
@@ -323,7 +323,7 @@ export class DefectosComponent {
   }
 
   guardar() {
-    let data = {
+    const data = {
       op: this.orden_selected,
       tipo: this.tipo_selected,
       defectos: this.defecto_selected,

@@ -20,7 +20,7 @@ export class GruposService {
     // this.socket.io.emit('NuevoGrupo',{nombre,parcial:false,icono:'test'})
   }
 
-  EliminarGrupo(id: String) {
+  EliminarGrupo(id: string) {
     this.socket.io.emit('CLIENTE:deleteGrupo', id);
   }
 

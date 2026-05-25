@@ -48,7 +48,7 @@ export class InventarioComponent {
   }
 
   showDetalle(n: any, i: any) {
-    let key = `${n}_${i}`;
+    const key = `${n}_${i}`;
     if (!this.LoteOculto[key]) {
       this.LoteOculto[key] = true;
     } else {
@@ -57,7 +57,7 @@ export class InventarioComponent {
   }
 
   MostrarDetalles(n: any, i: any) {
-    let key = `${n}_${i}`;
+    const key = `${n}_${i}`;
     if (!this.LoteOculto[key]) {
       return false;
     } else {

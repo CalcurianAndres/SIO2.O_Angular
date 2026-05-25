@@ -1,4 +1,4 @@
-<app-nuevo-producto [nuevo]="nuevo" [producto]="producto" (onCloseModal)="cerrar()"> </app-nuevo-producto>
+<app-nuevo-producto [nuevo]="nuevo" [producto]="producto" (onCloseModal)="cerrar()"></app-nuevo-producto>
 
 <app-cambios
   [cambios]="cambios"
@@ -9,87 +9,161 @@
 >
 </app-cambios>
 
-<app-new-producto
-  [nuevo]="nuevo"
-  [producto]="Producto"
-  [sustratos_nombres]="sustratos_nombres"
-  [tinta_nombres]="tinta_nombres"
-  [barniz_nombres]="barniz_nombres"
-  [impresoras_nombre]="impresoras_nombre"
-  [troqueladora_nombres]="troqueladora_nombres"
-  [guillotina_nombres]="guillotina_nombres"
-  [pegadora_nombres]="pegadora_nombres"
-  [pega_nombres]="pega_nombres"
-  [cajas_nombres]="cajas_nombres"
-  [caja_nombre]="caja_nombre"
-  (onCloseModal)="cerrar()"
->
-</app-new-producto>
 <app-page-layout>
-  <app-section-header title="Productos" description="Catálogo de productos fabricados" icon="fa-industry" color="purple"></app-section-header>
+  <app-section-header
+    title="Productos"
+    description="Catálogo de productos fabricados"
+    icon="fa-industry"
+    color="purple"
+  ></app-section-header>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-info" (click)="nuevoProducto()">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Nuevo Producto</span>
+      </button>
+    </div>
+  </div>
+
   <br />
-  <button class="button is-info" (click)="nuevoProducto()">
-    <span class="icon">
-      <i class="fas fa-plus-circle"></i>
-    </span>
-    <span>Producto</span></button
-  >  <br /><br />
-  <div class="columns">
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && !productos_.producto?.length" class="skeleton-list">
+    <div *ngFor="let _ of [].constructor(4)" class="skeleton-row">
+      <div class="skeleton-line" style="width: 60%"></div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!cargando && (!productos_.producto || productos_.producto.length === 0)" class="empty-state">
+    <i class="fas fa-industry empty-icon"></i>
+    <p class="empty-title">No hay productos registrados</p>
+    <p class="empty-hint">Selecciona un cliente y crea el primer producto</p>
+  </div>
+
+  <div *ngIf="productos_.producto?.length > 0" class="columns">
     <div class="column is-3">
       <div class="card">
         <div class="card-content">
-          <div class="subtitles">Clientes</div>
-          <div class="clientes-list">
-            <ul>
-              <li *ngFor="let cliente of clientes.clientes" (click)="BuscarProductos(cliente._id)">
-                {{ cliente.nombre }}
-              </li>
-            </ul>
-          </div>
+          <div class="section-label mb-2"><i class="fas fa-users"></i> Clientes</div>
+          <ul class="clientes-list">
+            <li
+              *ngFor="let cliente of clientes.clientes"
+              (click)="BuscarProductos(cliente._id)"
+              [ngClass]="{ 'is-selected': id_selected === cliente._id }"
+            >
+              {{ cliente.nombre }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
     <div class="column">
       <div class="card">
         <div class="card-content">
-          <div class="subtitles">Productos</div>
-          <br />
-          <div class="message" *ngIf="productos.length < 1">
-            <p>No hay productos <i class="fas fa-frown"></i></p>
+          <div class="section-label mb-2"><i class="fas fa-box"></i> Productos</div>
+
+          <!-- Search -->
+          <div class="field" *ngIf="id_selected">
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="text"
+                placeholder="Buscar producto…"
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()"
+              />
+              <span class="icon is-left"><i class="fas fa-search"></i></span>
+            </div>
           </div>
-          <ng-container *ngIf="productos.length > 0">
-            <table class="table is-fullwidth">
+
+          <br *ngIf="id_selected && searchTerm" />
+          <div *ngIf="!id_selected" class="empty-state is-small">
+            <i class="fas fa-hand-pointer empty-icon is-small"></i>
+            <p class="empty-title is-size-6">Selecciona un cliente</p>
+            <p class="empty-hint is-size-7">Elige un cliente de la lista para ver sus productos</p>
+          </div>
+
+          <ng-container *ngIf="id_selected">
+            <div *ngIf="productos.length === 0" class="has-text-centered has-text-grey is-size-7 py-4">
+              <i class="fas fa-box-open fa-2x mb-2" style="opacity: 0.3"></i>
+              <p>No hay productos para este cliente</p>
+            </div>
+            <table *ngIf="filteredProductos.length > 0" class="table is-fullwidth is-hoverable">
               <thead>
                 <tr>
                   <th>Especificación</th>
                   <th>Producto</th>
-                  <th></th>
+                  <th class="has-text-centered"><i class="fas fa-cog"></i></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let producto of productos">
-                  <td>
-                    E-{{ producto.identificacion.cliente.codigo }}-{{ producto.identificacion.codigo }}-{{
-                      producto.identificacion.version
-                    }}-0{{ this.productos_.buscarHistorialPorProducto(producto._id).length + 1 }}
+                <tr *ngFor="let p of paginatedProductos">
+                  <td class="is-family-code is-size-7">
+                    E-{{ p.identificacion.cliente.codigo }}-{{ p.identificacion.codigo }}-{{
+                      p.identificacion.version
+                    }}-0{{ productos_.buscarHistorialPorProducto(p._id).length + 1 }}
                   </td>
-                  <td>{{ producto.identificacion.categoria.nombre }} {{ producto.identificacion.producto }}</td>
                   <td>
-                    <i class="fas fa-edit green" style="cursor: pointer" (click)="EditarProducto(producto)"></i>
-                     <i class="fas fa-download blue_" style="cursor: pointer" (click)="DescargarPDF(producto)"></i>  <i
-                      class="fas fa-comment"
-                      style="cursor: pointer"
-                      (click)="Cambios_realizados(producto._id, producto)"
+                    <span class="has-text-weight-semibold"
+                      >{{ p.identificacion.categoria?.nombre }} {{ p.identificacion.producto }}</span
+                    >
+                  </td>
+                  <td class="has-text-centered">
+                    <i class="fas fa-pen action-icon" title="Editar producto" (click)="editarProducto(p)"></i>
+                    <i class="fas fa-download action-icon" title="Descargar PDF" (click)="DescargarPDF(p)"></i>
+                    <i
+                      class="fas fa-comment action-icon"
+                      title="Historial de cambios"
+                      (click)="Cambios_realizados(p._id, p)"
                     ></i>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div
+              *ngIf="searchTerm && filteredProductos.length === 0"
+              class="has-text-centered has-text-grey is-size-7 py-3"
+            >
+              Sin resultados para "{{ searchTerm }}"
+            </div>
+            <!-- Pagination -->
+            <div class="pagination-bar" *ngIf="totalPages > 1">
+              <span class="pagination-info is-size-7 has-text-grey"
+                >{{ filteredProductos.length }} producto(s) — Pág {{ currentPage }} de {{ totalPages }}</span
+              >
+              <div class="pagination-controls">
+                <div class="select is-small">
+                  <select [(ngModel)]="pageSize" (change)="currentPage = 1">
+                    <option [value]="10">10</option>
+                    <option [value]="25">25</option>
+                    <option [value]="50">50</option>
+                  </select>
+                </div>
+                <button class="button is-small" [disabled]="currentPage <= 1" (click)="goToPage(currentPage - 1)">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button
+                  class="button is-small"
+                  *ngFor="let p of [].constructor(totalPages); let i = index"
+                  [ngClass]="{ 'is-info': currentPage === i + 1 }"
+                  (click)="goToPage(i + 1)"
+                >
+                  {{ i + 1 }}
+                </button>
+                <button
+                  class="button is-small"
+                  [disabled]="currentPage >= totalPages"
+                  (click)="goToPage(currentPage + 1)"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
           </ng-container>
         </div>
       </div>
     </div>
   </div>
 </app-page-layout>
-
-<!-- <button>Enviar notificación</button> -->

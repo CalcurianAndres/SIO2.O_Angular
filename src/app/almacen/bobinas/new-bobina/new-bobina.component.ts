@@ -57,7 +57,7 @@ export class NewBobinaComponent {
   }
 
   calcularToneladas() {
-    let gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
+    const gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
 
     const pesoKg = (gramaje * (this.ancho / 100) * (this.largo / 100) * this.hojas) / 1000;
     this.peso = Number((pesoKg / 1000).toFixed(2));
@@ -80,7 +80,7 @@ export class NewBobinaComponent {
   obtenerLotes(e: any) {}
 
   async generatePdf() {
-    let data = {
+    const data = {
       convertidora: this.convertidora,
       material: this.sustrato,
       ancho: this.ancho,
@@ -118,7 +118,7 @@ export class NewBobinaComponent {
       this.onCloseModal.emit();
     }, 1000);
 
-    let material = this.materiales.materiales.find((m: any) => m._id === this.sustrato).nombre;
+    const material = this.materiales.materiales.find((m: any) => m._id === this.sustrato).nombre;
 
     PdfMakeWrapper.setFonts(pdfFonts, {
       Gilroy: {

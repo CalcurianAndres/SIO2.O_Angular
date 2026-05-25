@@ -22,9 +22,11 @@ import { TicketsRComponent } from './defectos/tickets-r/tickets-r.component';
 import { TicketsAComponent } from './defectos/tickets-a/tickets-a.component';
 import { EtiquetasComponent } from './etiquetas/etiquetas.component';
 import { CertificadoComponent } from './certificado/certificado.component';
+import { AnalisisPendientesComponent } from './analisis-pendientes/analisis-pendientes.component';
 
 @NgModule({
   declarations: [
+    AnalisisPendientesComponent,
     LaboratorioIndexComponent,
     LaboratorioComponent,
     AnalisisTintaComponent,

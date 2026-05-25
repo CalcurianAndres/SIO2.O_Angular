@@ -82,3 +82,26 @@ cd SIO2.O_Angular && npm install --legacy-peer-deps && npm start   # :4200
 ../SIOB/setup.sh
 # http://localhost
 ```
+
+## Session Log — 2026-05-25
+
+### Goal
+Enable full product lifecycle: create/edit/PDF products with nested schema, seed enough data to create OPs.
+
+### Code changes
+- **`modelos-compra.ts`**: added `_id?: string` to `Producto` class.
+- **`nuevo-producto.component.ts`**: added `toNested()` (flat → nested schema transform), `editando` getter, `GuardarProducto` with edit flow passthrough.
+- **`nuevo-producto.component.html`**: dynamic modal title (`{{ editando ? 'Editar producto' : 'Nuevo producto' }}`).
+- **`productos.component.ts`**: added `editarProducto(p)` + `fromNested(p)` (nested → flat reverse transform), resilient `DescargarPDF()` with optional chaining for empty subdocuments.
+- **`productos.component.html`**: edit (pencil) icon row.
+- **`productos.service.ts`**: safe navigation (`?.`) in `buscarPorClientes()`.
+
+### Data seeded (MongoDB)
+- **Grupos**: Tintas, Barniz S/Impresión, Barniz Acuoso, Solución de fuentes, Pega, Cajas Corrugadas.
+- **Fases**: Impresión, Troquelado, Cortado, Pegado.
+- **Fabricantes**: Kodak Venezuela, BASF Química, Cartones Nacionales, Sun Chemical.
+- **Maquinas**: Impresora 1, Troqueladora 1, Guillotina 1, Pegadora 1.
+- **Materiales**: 63 total (19 sustratos, 15 tintas, 9 barnices, 6 pegas, 5 cajas, 3 soluciones de fuente).
+- **Productos**: 4 (Cajita, Caja Chocolates 30x20, Folder tamaño carta, Cajita Feliz Genérica).
+- **Órdenes de Compra**: 4 (OC-001/002/003/004-2026), cada una con pedido a un producto y cliente.
+- **Fix**: All `ObjectId` references converted from strings to proper ObjectId across ocompras, productos, materials, maquinas.

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { Proveedores } from '../models/modelos-compra';
 import Swal from 'sweetalert2';
@@ -12,14 +12,12 @@ import Swal from 'sweetalert2';
 export class ProveedoresComponent {
   public nuevo: boolean = false;
   public editar: boolean = false;
-  public cargando: boolean = false;
+  public cargando: boolean = true;
   public detalle: boolean = false;
   public proveedor_selected!: Proveedores;
 
-  constructor(public api: ProveedoresService) {}
-
-  addnuevo() {
-    this.nuevo = true;
+  constructor(public api: ProveedoresService) {
+    setTimeout(() => (this.cargando = false), 1200);
   }
 
   cerrar() {
@@ -51,12 +49,7 @@ export class ProveedoresComponent {
     this.detalle = true;
   }
 
-  filas() {
-    return Math.ceil((this.api.proveedores.length + 1) / 5);
-  }
-
   EditarProveedor(i: number) {
-    console.log('funciona');
     this.editar = true;
     this.proveedor_selected = this.api.proveedores[i];
   }
@@ -64,7 +57,7 @@ export class ProveedoresComponent {
   borrarFabricante(id: string) {
     Swal.fire({
       title: '¿Eliminar este proveedor?',
-      text: 'El fabricante se eliminará de manera permanente',
+      text: 'El proveedor se eliminará de manera permanente',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#48c78e',

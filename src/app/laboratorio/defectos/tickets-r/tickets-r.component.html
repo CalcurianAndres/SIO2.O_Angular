@@ -45,7 +45,7 @@
                     <div class="empleados_" *ngIf="filteredEmployees().length">
                       <div *ngFor="let trabajador of filteredEmployees()">
                         <div class="columns">
-                           <div class="column is-6" style="font-size: small; color: var(--text-primary)">
+                          <div class="column is-6" style="font-size: small; color: var(--text-primary)">
                             <br />
                             {{ trabajador.datos_personales.nombres }} {{ trabajador.datos_personales.apellidos }}<br />
                             <span style="font-family: 'Gilroy'">
@@ -92,7 +92,7 @@
                 </button>
               </div>
             </article>
-              <article *ngIf="ticket.cerrado" style="color: var(--text-primary)">
+            <article *ngIf="ticket.cerrado" style="color: var(--text-primary)">
               <span class="bullet"></span> <span style="font-weight: bold"> Fecha:</span>
               {{ ticket.fecha_destruccion | date: 'dd/MM/YYYY' }} <br />
               <span class="bullet"></span> <span style="font-weight: bold"> Cantidad destruida:</span>
@@ -100,7 +100,7 @@
               <span class="bullet"></span> <span style="font-weight: bold"> Persona que lo destruyó:</span>
               {{ ticket.destructor }} <br />
             </article>
-              <article style="color: var(--text-primary)">
+            <article style="color: var(--text-primary)">
               <span class="bullet"></span> <span style="font-weight: bold"> Nº paleta:</span> {{ ticket.paleta }}
             </article>
           </div>

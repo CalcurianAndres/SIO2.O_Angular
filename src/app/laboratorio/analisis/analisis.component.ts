@@ -494,7 +494,7 @@ export class AnalisisComponent {
   }
 
   CalcularPeso(materiales) {
-    let cantidad = materiales.reduce((total, material) => total + Number(material.neto), 0);
+    const cantidad = materiales.reduce((total, material) => total + Number(material.neto), 0);
     return cantidad.toFixed(2);
   }
 

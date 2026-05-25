@@ -9,86 +9,80 @@
   (onCloseModal)="cerrarModal()"
   (onCloseModal_)="cerrarModal_()"
 >
-  (onLoading)='cargando_()'
 </app-nuevo-grupo>
+
+<app-materiales
+  [material_selected]="material_selected"
+  [material]="material"
+  (onCloseModal)="cerrarMateriales()"
+  (onAgregarMaterial)="NuevoMaterial()"
+>
+</app-materiales>
 
 <app-nuevo-material
   [nuevo_material]="nuevo_material"
   [cargando]="cargando"
+  [selectedGrupo]="selectedGrupo"
   (onCloseModal)="cerrarNuevoMaterial()"
   (onCloseModal_)="cerrarModal_()"
 >
 </app-nuevo-material>
 
-<app-materiales [material_selected]="material_selected" [material]="material" (onCloseModal)="cerrarMateriales()">
-</app-materiales>
-
 <app-page-layout>
-  <app-section-header title="Grupo de materiales" description="Clasificación de materiales por categoría" icon="fa-shopping-cart" color="green"></app-section-header>
-  <br />
+  <app-section-header
+    title="Grupo de materiales"
+    description="Clasificación de materiales por categoría"
+    icon="fa-shopping-cart"
+    color="green"
+  >
+  </app-section-header>
+
   <button class="button is-info" (click)="AgregarNuevo()">
-    <span class="icon">
-      <i class="fas fa-plus-circle"></i>
-    </span>
-    <span>Grupo</span></button
-  > 
-  <button class="button is-success" (click)="NuevoMaterial()">
-    <span class="icon">
-      <i class="fas fa-plus-circle"></i>
-    </span>
-    <span>Material</span></button
-  > 
-  <!-- <span class="icon" (click)="AgregarNuevo()"><i class="fas fa-plus-circle blue_"></i></span> -->
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Nuevo Grupo</span>
+  </button>
   <br /><br />
-  <ng-container *ngFor="let fila of [].constructor(filas()); index as fila_i">
-    <div class="columns">
-      <div class="column" *ngFor="let tarjeta of [].constructor(5); index as i">
-        <ng-container *ngIf="api.grupos[5 * fila_i + i]">
-          <div class="card animate__animated animate__fadeInUp">
-            <div class="card-header">
-              <div class="card-header-title">
-                <div class="subtitle">
-                  <div class="columns">
-                    <div class="column is-1">
-                      <i class="{{ api.grupos[5 * fila_i + i].icono }}"></i>
-                    </div>
-                    <div class="column">
-                      {{ api.grupos[5 * fila_i + i].nombre }}
-                      <i
-                        class="fas fa-glass-whiskey indicator animate__animated animate__flash"
-                        *ngIf="api.grupos[5 * fila_i + i].parcial"
-                      ></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <footer class="card-footer">
-              <a class="card-footer-item"
-                ><i class="fas fa-info-circle blue_" (click)="buscarMaterial(5 * fila_i + i)"></i
-              ></a>
-              <a class="card-footer-item"
-                ><i
-                  class="far fa-edit green"
-                  (click)="
-                    EditarGrupo(
-                      api.grupos[5 * fila_i + i].nombre,
-                      api.grupos[5 * fila_i + i].icono,
-                      api.grupos[5 * fila_i + i].parcial,
-                      api.grupos[5 * fila_i + i]._id,
-                      api.grupos[5 * fila_i + i].trato,
-                      api.grupos[5 * fila_i + i].otro
-                    )
-                  "
-                ></i
-              ></a>
-              <a class="card-footer-item"
-                ><i class="fas fa-trash-alt red" (click)="eliminarGrupo(api.grupos[5 * fila_i + i]._id)"></i
-              ></a>
-            </footer>
-          </div>
-        </ng-container>
+
+  <!-- Empty state -->
+  <div *ngIf="!cargando && api.grupos.length === 0" class="empty-state">
+    <i class="fas fa-cubes empty-icon"></i>
+    <p class="empty-title">Crea tu primer grupo</p>
+    <p class="empty-hint">Haz clic en el botón "Nuevo Grupo" para comenzar</p>
+    <i class="fas fa-arrow-up empty-arrow"></i>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && api.grupos.length === 0" class="grupo-grid">
+    <div *ngFor="let _ of [].constructor(5)" class="card skeleton-card">
+      <div class="card-header skeleton-header"></div>
+      <div class="card-content">
+        <div class="skeleton-line skeleton-line-short"></div>
       </div>
+      <div class="card-footer skeleton-footer"></div>
     </div>
-  </ng-container>
+  </div>
+
+  <!-- Card grid -->
+  <div *ngIf="api.grupos.length > 0" class="grupo-grid">
+    <div *ngFor="let grupo of api.grupos" class="card grupo-card animate__animated animate__fadeInUp">
+      <div class="card-header">
+        <div class="card-header-title">
+          <i class="{{ grupo.icono || 'fa-cube' }} grupo-icon"></i>
+          <span class="grupo-nombre">{{ grupo.nombre }}</span>
+          <span *ngIf="grupo.parcial" class="badge parcial-badge"> <i class="fas fa-glass-whiskey"></i> Parcial </span>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a class="card-footer-item" (click)="buscarMaterial(grupo)" title="Ver materiales">
+          <i class="fas fa-info-circle blue_"></i>
+        </a>
+        <a class="card-footer-item" (click)="EditarGrupo(grupo)" title="Editar">
+          <i class="far fa-edit green"></i>
+        </a>
+        <a class="card-footer-item" (click)="eliminarGrupo(grupo._id)" title="Eliminar">
+          <i class="fas fa-trash-alt red"></i>
+        </a>
+      </footer>
+    </div>
+  </div>
 </app-page-layout>

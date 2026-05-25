@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GruposService } from 'src/app/services/grupos.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
 import Swal from 'sweetalert2';
@@ -9,41 +9,27 @@ import Swal from 'sweetalert2';
   templateUrl: './grupos.component.html',
   styleUrls: ['./grupos.component.scss'],
 })
-export class GruposComponent implements OnInit {
-  nombre = '';
-  parcial = 'false';
-  icono = '';
+export class GruposComponent {
   nuevo: boolean = false;
   editar: boolean = false;
   material: boolean = false;
   nuevo_material: boolean = false;
   cargando: boolean = false;
   data: any = [];
-  lineas: number = 0;
   material_selected = [];
   trato = false;
   otro = false;
+  selectedGrupo: any = null;
 
   constructor(
     public api: GruposService,
     public materiales: MaterialesService,
   ) {}
 
-  ngOnInit(): void {}
-
-  cargando_() {
-    this.cargando = true;
-    this.nuevo = false;
-  }
-
   AgregarNuevo() {
     this.nuevo = true;
     this.trato = false;
     this.otro = false;
-  }
-
-  filas() {
-    return Math.ceil(this.api.grupos.length / 5);
   }
 
   eliminarGrupo(id: any) {
@@ -56,41 +42,35 @@ export class GruposComponent implements OnInit {
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
       cancelButtonColor: '#f03a5f',
-    })
-      .then((resultado) => {
-        if (resultado.isConfirmed) {
-          this.cargando = true;
-          this.api.EliminarGrupo(id);
-          setTimeout(() => {
-            this.cargando = false;
-            Swal.fire({
-              title: this.api.mensaje.mensaje,
-              icon: this.api.mensaje.icon,
-              timer: 5000,
-              showConfirmButton: false,
-              timerProgressBar: true,
-              toast: true,
-              position: 'top-end',
-            });
-          }, 1000);
-        }
-      })
-      .catch((err) => {
-        return err;
-      });
+    }).then((resultado) => {
+      if (resultado.isConfirmed) {
+        this.cargando = true;
+        this.api.EliminarGrupo(id);
+        setTimeout(() => {
+          this.cargando = false;
+          Swal.fire({
+            title: this.api.mensaje.mensaje,
+            icon: this.api.mensaje.icon,
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+          });
+        }, 1000);
+      }
+    });
   }
 
-  EditarGrupo(nombre: any, icono: any, parcial: any, id: any, trato, otro) {
+  EditarGrupo(grupo: any) {
     this.data = {
-      id,
-      nombre,
-      icono,
-      parcial,
+      id: grupo._id,
+      nombre: grupo.nombre,
+      icono: grupo.icono,
+      parcial: grupo.parcial,
     };
-
-    this.trato = trato;
-    this.otro = otro;
-
+    this.trato = grupo.trato;
+    this.otro = grupo.otro;
     this.editar = true;
   }
 
@@ -98,7 +78,6 @@ export class GruposComponent implements OnInit {
     this.cargando = true;
     this.nuevo = false;
     this.editar = false;
-
     setTimeout(() => {
       this.cargando = false;
       Swal.fire({
@@ -117,6 +96,12 @@ export class GruposComponent implements OnInit {
     this.nuevo = false;
     this.editar = false;
     this.nuevo_material = false;
+  }
+
+  buscarMaterial(grupo: any) {
+    this.selectedGrupo = grupo;
+    this.material_selected = this.materiales.filtrarGrupos(grupo._id);
+    this.material = true;
   }
 
   NuevoMaterial() {
@@ -138,12 +123,6 @@ export class GruposComponent implements OnInit {
         position: 'top-end',
       });
     }, 1000);
-  }
-
-  buscarMaterial(grupo: number) {
-    const id = this.api.grupos[grupo]._id;
-    this.material_selected = this.materiales.filtrarGrupos(id);
-    this.material = true;
   }
 
   cerrarMateriales() {

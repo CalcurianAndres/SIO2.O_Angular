@@ -42,7 +42,7 @@ export class NotificationsService {
   }
 
   nuevaNotificacion() {
-    let notificacion = {
+    const notificacion = {
       titulo: 'Titulo de la notificacion',
       mensaje: 'Esto es una notificacion de prueba',
     };
@@ -51,7 +51,7 @@ export class NotificationsService {
 
   VerNotificacion(notificacionId: string) {
     // Encuentra la notificación y agrégale la clase CSS de salida
-    let notificacionIndex = this.notificaciones.findIndex((n) => n._id === notificacionId);
+    const notificacionIndex = this.notificaciones.findIndex((n) => n._id === notificacionId);
 
     if (notificacionIndex !== -1) {
       // Agregar la clase para animar la salida

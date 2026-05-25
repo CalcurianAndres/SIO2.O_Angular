@@ -2,12 +2,6 @@
   width: 900px;
 }
 
-.button-hidde {
-  border: none;
-  box-shadow: none;
-  color: var(--accent-blue);
-}
-
 .button-hidde_ {
   border: none;
   box-shadow: none;
@@ -20,11 +14,8 @@
   color: white;
 }
 
-table tr td {
-  background-color: rgb(38, 52, 61);
-  color: white;
-}
-table tr th {
+.bg table tr td,
+.bg table tr th {
   background-color: rgb(38, 52, 61);
   color: white;
 }

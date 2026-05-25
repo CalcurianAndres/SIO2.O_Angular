@@ -1,707 +1,560 @@
-<div class="modal">
-  <div class="modal-background" (click)="closeModal()"></div>
-  <div class="modal-content">
-    <div class="box">
-      <div class="columns is-multiline is-mobile">
-        <div class="column is-one-quarter" *ngFor="let card of cards">
-          <div class="card">
-            <div class="card-content">
-              <p class="title">{{ card }}</p>
+<div class="modal" [ngClass]="{ 'is-active': nuevo }">
+  <div class="modal-background" (click)="cerrar()"></div>
+  <div class="modal-card product-modal">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente"><i class="fas fa-industry mr-2"></i> {{ editando ? 'Editar producto' : 'Nuevo producto' }}</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrar()" [disabled]="guardando"></button>
+    </div>
+    <div class="modal-card-body">
+      <!-- Step indicator -->
+      <div class="step-indicator">
+        <div
+          class="step-dot-wrapper"
+          *ngFor="let s of steps"
+          (click)="goToStep(s.num)"
+          [ngClass]="{ active: currentStep === s.num, completed: s.num < currentStep }"
+        >
+          <div class="step-dot"><i class="fas" [ngClass]="s.icon"></i></div>
+          <span class="step-label">{{ s.label }}</span>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-wrapper">
+        <div class="progress-bar"><div class="progress-fill" [style.width.%]="progressPercentage"></div></div>
+        <span class="progress-text">{{ progressPercentage }}%</span>
+      </div>
+
+      <hr class="modal-divider" />
+
+      <!-- ===== STEP 1: Identificación ===== -->
+      <div *ngIf="currentStep === 1" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-id-card"></i> Identificación del producto</span>
+        <hr class="modal-divider" />
+        <div class="columns is-multiline">
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Cliente</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="producto.cliente">
+                    <option value="" disabled selected>Seleccione cliente</option>
+                    <option *ngFor="let c of clientes.clientes" [value]="c._id">{{ c.nombre }}</option>
+                  </select>
+                </div>
+                <div class="icon is-small is-left"><i class="fas fa-user"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Nombre del producto</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Ej: Caja plegadiza" [(ngModel)]="producto.producto" />
+                <span class="icon is-small is-left"><i class="fas fa-tag"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Código del producto</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Ej: PROD-001" [(ngModel)]="producto.codigo" />
+                <span class="icon is-small is-left"><i class="fas fa-hashtag"></i></span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <button class="modal-close is-large" aria-label="close" (click)="closeModal()"></button>
-</div>
 
-<div class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <div class="carousel-container">
-      <div class="carousel" id="carousel">
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 1. Especificación del producto </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>1.1 Cliente</th>
-              <td>
-                <div class="select">
-                  <select name="" id="" [(ngModel)]="producto.cliente">
-                    <option value="{{ cliente._id }}" *ngFor="let cliente of clientes.clientes">
-                      {{ cliente.nombre }}
-                    </option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>1.2 Producto</th>
-              <td>
-                <input type="text" class="input" placeholder="Producto" [(ngModel)]="producto.producto" />
-              </td>
-            </tr>
-            <tr>
-              <th>1.3 Código del produco</th>
-              <td>
-                <input type="text" class="input" placeholder="Código del producto" [(ngModel)]="producto.codigo" />
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 2. Dimensiones del producto </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <!-- 2.1. Tamaño del producto desplegado (mm)	225.5 x 150.5 ± 1
-2.2. Tamaño del producto cerrado (mm)	79 x 100 x 29 ± 1
-2.3. diseño del producto -->
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>2.1. Tamaño del producto desplegado (mm)</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <input type="text" class="input" [(ngModel)]="producto.tamano_desplegado[0]" />
-                  </div>
-                  <span class="centered">X</span>
-                  <div class="column">
-                    <input type="text" class="input" [(ngModel)]="producto.tamano_desplegado[1]" />
-                  </div>
-                  <span class="centered">±</span>
-                  <div class="column">
-                    <input type="text" class="input" [(ngModel)]="producto.tamano_desplegado[2]" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>2.2. Tamaño del producto cerrado (mm)</th>
-              <td>
-                <div class="columns">
-                  <div class="column"><input type="text" class="input" [(ngModel)]="producto.tamano_cerrado[0]" /></div>
-                  <span class="centered">X</span>
-                  <div class="column"><input type="text" class="input" [(ngModel)]="producto.tamano_cerrado[1]" /></div>
-                  <span class="centered">±</span>
-                  <div class="column"><input type="text" class="input" [(ngModel)]="producto.tamano_cerrado[2]" /></div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>2.3. diseño del producto</th>
-              <td>
-                <div class="file is-info has-name">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="resume" />
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                      </span>
-                      <span class="file-label"> Info file… </span>
-                    </span>
-                    <span class="file-name"> Screen Shot 2017-07-29 at 15.54.25.png </span>
-                  </label>
-                </div>
-              </td>
-            </tr>
-          </table>
-          <br />
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 3. Materia prima </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>3.1. Tipo de sustrato a utilizar</th>
-              <td>
-                <div class="select">
-                  <select id="" [(ngModel)]="sustrato_selected">
-                    <ng-container *ngFor="let sustrato of materiales.materiales">
-                      <option value="{{ sustrato._id }}" *ngIf="sustrato.grupo.trato">
-                        {{ sustrato.nombre }}({{ sustrato.fabricante.alias }}) {{ sustrato.gramaje }}g cal:{{
-                          sustrato.calibre
-                        }}
-                      </option>
-                    </ng-container>
-                  </select>
-                </div>
-                 
-                <button class="button is-success" (click)="AlmacenarSustrato()">
-                  <span class="icon">
-                    <i class="fas fa-plus"></i>
-                  </span></button
-                > 
-                <button class="button is-info">
-                  <span class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th>3.4. Colores aprobados:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <div class="columns">
-                      <div class="column is-half">
-                        <label for="" class="label">Tinta (Marcas)</label>
-                        <div class="select">
-                          <select name="" id="" (click)="notificar()" [(ngModel)]="tinta_selected.tinta">
-                            <option value="#">Seleccione tinta</option>
-                            <ng-container *ngFor="let tinta of materiales.materiales">
-                              <option value="{{ tinta._id }}" *ngIf="tinta.grupo.nombre === 'Tintas'">
-                                {{ tinta.nombre }}({{ tinta.fabricante.alias }})
-                              </option>
-                            </ng-container>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label for="" class="label tooltip">Cantidad</label>
-                          <div class="control">
-                            <input type="number" class="input" [(ngModel)]="tinta_selected.cantidad" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <label for="" class="label"> </label>
-                    <button class="button is-success" (click)="AlmacenaTinta()">
-                      <span class="icon">
-                        <i class="fas fa-plus"></i>
-                      </span></button
-                    > 
-                    <button class="button is-info">
-                      <span class="icon">
-                        <i class="far fa-eye"></i>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>3.6. Barnices aprobados:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <div class="columns">
-                      <div class="column">
-                        <label for="" class="label">Barniz (Marcas)</label>
-                        <div class="select">
-                          <select name="" id="" [(ngModel)]="this.barniz_selected.barniz">
-                            <ng-container *ngFor="let barniz of materiales.materiales">
-                              <option
-                                value="{{ barniz._id }}"
-                                *ngIf="
-                                  barniz.grupo.nombre === 'Barniz S/Impresión' ||
-                                  barniz.grupo.nombre === 'Barniz Acuoso'
-                                "
-                              >
-                                {{ barniz.nombre }}({{ barniz.fabricante.alias }})
-                              </option>
-                            </ng-container>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label for="" class="label tooltip">
-                            Cantidad
-                            <!-- <span class="tooltip">Por cada 1.000 hojas</span> -->
-                          </label>
-                          <div class="control">
-                            <input type="number" class="input" [(ngModel)]="this.barniz_selected.cantidad" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <label for="" class="label"> </label>
-                    <button class="button is-success" (click)="AlmacenarBarniz()">
-                      <span class="icon">
-                        <i class="fas fa-plus"></i>
-                      </span></button
-                    > 
-                    <button class="button is-info">
-                      <span class="icon">
-                        <i class="far fa-eye"></i>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr></tr>
-          </table>
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 4. Pre-impresión </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>4.1. Nombre del archivo del diseño del producto:</th>
-              <td>
+      <!-- ===== STEP 2: Dimensiones ===== -->
+      <div *ngIf="currentStep === 2" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-ruler"></i> Dimensiones del producto</span>
+        <hr class="modal-divider" />
+        <div class="columns is-multiline">
+          <div class="column is-12">
+            <label class="label">2.1 Tamaño desplegado (mm)</label>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ancho" [(ngModel)]="producto.tamano_desplegado[0]" />
+              </div>
+              <span class="dim-sep">×</span>
+              <div class="column">
+                <input class="input" placeholder="Largo" [(ngModel)]="producto.tamano_desplegado[1]" />
+              </div>
+              <span class="dim-sep">±</span>
+              <div class="column">
+                <input class="input" placeholder="Tolerancia" [(ngModel)]="producto.tamano_desplegado[2]" />
+              </div>
+            </div>
+          </div>
+          <div class="column is-12">
+            <label class="label">2.2 Tamaño cerrado (mm)</label>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ancho" [(ngModel)]="producto.tamano_cerrado[0]" />
+              </div>
+              <span class="dim-sep">×</span>
+              <div class="column">
+                <input class="input" placeholder="Largo" [(ngModel)]="producto.tamano_cerrado[1]" />
+              </div>
+              <span class="dim-sep">±</span>
+              <div class="column">
+                <input class="input" placeholder="Tolerancia" [(ngModel)]="producto.tamano_cerrado[2]" />
+              </div>
+            </div>
+          </div>
+          <div class="column is-12">
+            <div class="field">
+              <label class="label">2.3 Diseño del producto</label>
+              <div class="control has-icons-left">
                 <input
-                  type="text"
                   class="input"
-                  placeholder="Archivo del diseño del producto"
-                  [(ngModel)]="producto.archivo_diseno"
+                  type="text"
+                  placeholder="Nombre del archivo de diseño"
+                  [(ngModel)]="producto.diseno"
                 />
-              </td>
-            </tr>
-            <tr>
-              <th>4.3. Nombre del archivo del montaje del producto:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <label for="" class="label">Montaje A</label>
-                    <input type="text" class="input" [(ngModel)]="producto.archivo_montaje[0]" />
-                  </div>
-                  <div class="column">
-                    <label for="" class="label">Montaje B</label>
-                    <input type="text" class="input" [(ngModel)]="producto.archivo_montaje[1]" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>4.5. Tipo / Marca de plancha:</th>
-              <td>
-                <input type="text" class="input" [(ngModel)]="producto.tipo_plancha" />
-              </td>
-            </tr>
-            <tr>
-              <th>4.6. Tiempo de exposición de quemado de plancha (s):</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <input type="text" class="input" [(ngModel)]="producto.tiempo_exposicion" />
-                  </div>
-                  <div class="column">
-                    <input type="text" class="input" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </table>
+                <span class="icon is-small is-left"><i class="fas fa-palette"></i></span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 5. Impresión </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>5.1. Maquina impresora aprobada</th>
-              <td>
-                <div class="select">
-                  <select name="" id="" [(ngModel)]="maquina_selected">
-                    <ng-container *ngFor="let maquina of maquinas.maquinas">
-                      <option value="{{ maquina._id }}" *ngIf="Impresion_(maquina, 'Impresión')">
-                        {{ maquina.nombre }}
-                      </option>
-                    </ng-container>
-                  </select>
-                </div>
-                 
-                <button class="button is-success" (click)="AlmacenarMaquina()">
-                  <span class="icon">
-                    <i class="fas fa-plus"></i>
-                  </span></button
-                > 
-                <button class="button is-info">
-                  <span class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th>5.2. Tamaño de sustrato a imprimir / ejemplares por pliego:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <label for="" class="label">Montaje A</label>
-                    <div class="columns">
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[0]" />
-                      </div>
-                      <span class="centered">x</span>
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[1]" />
-                      </div>
-                      <span class="centered">cm</span>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[2]" />
-                      </div>
-                      <div class="column">
-                        <span class="centere">Ejemplares</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <label for="" class="label">Montaje B</label>
-                    <div class="columns">
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[3]" />
-                      </div>
-                      <span class="centered">x</span>
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[4]" />
-                      </div>
-                      <span class="centered">cm</span>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <input type="text" class="input" [(ngModel)]="producto.tamano_sustrato_imprimir[5]" />
-                      </div>
-                      <div class="column">
-                        <span class="centere">Ejemplares</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 5. Impresión </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>5.4. Área efectiva de impresión (cm²):</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <label for="" class="label">Montaje A</label>
-                    <input type="text" class="input" [(ngModel)]="producto.area_efectiva[0]" />
-                  </div>
-                  <div class="column">
-                    <label for="" class="label">Montaje B</label>
-                    <input type="text" class="input" [(ngModel)]="producto.area_efectiva[1]" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>5.8. Solución de fuente:</th>
-              <td>
-                <div class="select">
-                  <select name="" id="">
-                    <option value="">Fuentes 1</option>
-                    <option value="">Fuentes 2</option>
-                    <option value="">Fuentes 3</option>
-                    <option value="">Fuentes 4</option>
-                    <option value="">Fuentes 5</option>
-                    <option value="">Fuentes 6</option>
-                    <option value="">Fuentes 7</option>
-                    <option value="">Fuentes 8</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 6. Post-impresión </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>6.1. Máquina troqueladora aprobada:</th>
-              <td>
-                <div class="select">
-                  <select name="" id="" [(ngModel)]="troqueladora_selected">
-                    <ng-container *ngFor="let maquina of maquinas.maquinas">
-                      <option value="{{ maquina._id }}" *ngIf="Impresion_(maquina, 'Troquelado')">
-                        {{ maquina.nombre }}
-                      </option>
-                    </ng-container>
-                  </select>
-                </div>
-                 
-                <button class="button is-success" (click)="AlmacenarTroqueladora()">
-                  <span class="icon">
-                    <i class="fas fa-plus"></i>
-                  </span></button
-                > 
-                <button class="button is-info">
-                  <span class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </button>
-              </td>
-              <th>6.8. Tipo de caja para embalaje:</th>
-              <td><input type="text" class="input" [(ngModel)]="producto.caja[0]" /></td>
-            </tr>
-            <tr>
-              <th>Guillotina aprobada:</th>
-              <td>
-                <div class="select">
-                  <select name="" id="" [(ngModel)]="guillotina_selected">
-                    <ng-container *ngFor="let maquina of maquinas.maquinas">
-                      <option value="{{ maquina._id }}" *ngIf="Impresion_(maquina, 'Cortado')">
-                        {{ maquina.nombre }}
-                      </option>
-                    </ng-container>
-                  </select>
-                </div>
-                 
-                <button class="button is-success" (click)="AlmacenarGuillotina()">
-                  <span class="icon">
-                    <i class="fas fa-plus"></i>
-                  </span></button
-                > 
-                <button class="button is-info">
-                  <span class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </button>
-              </td>
-              <th>6.9. Modelo de la caja:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <div class="columns">
-                      <div class="column">
-                        <label for="" class="label">Caja</label>
-                        <div class="select">
-                          <select name="" id="">
-                            <ng-container *ngFor="let material of materiales.materiales">
-                              <option value="" *ngIf="material.grupo.nombre === 'Cajas corrugadas'">
-                                {{ material.nombre }}
-                              </option>
-                            </ng-container>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label for="" class="label tooltip2">Cantidad</label>
-                          <div class="control">
-                            <input type="text" class="input" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>6.6. Máquina pegadora aprobada:</th>
-              <td>
-                <div class="select">
-                  <select name="" id="" [(ngModel)]="pegadora_selected">
-                    <ng-container *ngFor="let maquina of maquinas.maquinas">
-                      <option value="{{ maquina._id }}" *ngIf="Impresion_(maquina, 'Pegado')">
-                        {{ maquina.nombre }}
-                      </option>
-                    </ng-container>
-                  </select>
-                </div>
-                 
-                <button class="button is-success" (click)="AlmacenarTroqueladora()">
-                  <span class="icon">
-                    <i class="fas fa-plus"></i>
-                  </span></button
-                > 
-                <button class="button is-info">
-                  <span class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                </button>
-              </td>
-              <th>6.11. Cantidad de unidades por caja:</th>
-              <td><input type="text" class="input" [(ngModel)]="producto.unidades_por_caja" /></td>
-            </tr>
-            <tr>
-              <th>6.7. Pegamento aprobado:</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <div class="columns">
-                      <div class="column">
-                        <label for="" class="label">Pega (Marca)</label>
-                        <div class="select">
-                          <select name="" id="">
-                            <ng-container *ngFor="let material of materiales.materiales">
-                              <option value="" *ngIf="material.grupo.nombre === 'Pegas'">{{ material.nombre }}</option>
-                            </ng-container>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label for="" class="label tooltip">Cantidad</label>
-                          <div class="control">
-                            <input type="text" class="input" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <label for="" class="label"> </label>
-                    <button class="button is-success">
-                      <span class="icon">
-                        <i class="fas fa-plus"></i>
-                      </span></button
-                    > 
-                    <button class="button is-info">
-                      <span class="icon">
-                        <i class="far fa-eye"></i>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <!-- <th>6.12. Cantidad por paquetes:</th>
-                            <td><input type="text" class="input"></td> -->
-            </tr>
-          </table>
-        </div>
-        <div class="panel">
-          <span class="titulo">
-            <strong>
-              <b class="text_"> 6. Post-impresión </b>
-            </strong>
-            <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
-          </span>
-          <br />
-          <table class="table tabla is-fullwidth">
-            <tr>
-              <th>6.13. Distribución del producto en caja</th>
-              <td>
-                <div class="columns">
-                  <div class="column">
-                    <label for="" class="label">Vista aerea</label>
-                    <div class="file is-info has-name">
-                      <label class="file-label">
-                        <input class="file-input" type="file" name="resume" />
-                        <span class="file-cta">
-                          <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                          </span>
-                          <span class="file-label"> Info file… </span>
-                        </span>
-                        <span class="file-name"> Screen Shot 2017-07-29 at 15.54.25.png </span>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <label for="" class="label">Vista 3D</label>
-                    <div class="file is-info has-name">
-                      <label class="file-label">
-                        <input class="file-input" type="file" name="resume" />
-                        <span class="file-cta">
-                          <span class="file-icon">
-                            <i class="fas fa-upload"></i>
-                          </span>
-                          <span class="file-label"> Info file… </span>
-                        </span>
-                        <span class="file-name"> Screen Shot 2017-07-29 at 15.54.25.png </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <!-- Tipo de paleta:
-Tamaño de paleta (cm):
-Cantidad de estibas:
-Peso de caja (Kg): -->
-            <tr>
-              <th>6.14. Paletizado</th>
-              <td>
-                <table class="table">
-                  <tr>
-                    <th>Tipo de paleta:</th>
-                    <td><input type="text" class="input" [(ngModel)]="producto.tipo_paleta" /></td>
-                    <th class="reduccion">Peso de caja (kg):</th>
-                    <td><input type="text" class="input" [(ngModel)]="producto.peso_cajas" /></td>
-                  </tr>
-                  <tr>
-                    <th>Tamaño de paleta (cm):</th>
-                    <td><input type="text" class="input" [(ngModel)]="producto.tamano_paleta" /></td>
-                    <td>
-                      <label for="" class="label">Peletizado aprobado</label>
-                      <div class="file is-info has-name">
-                        <label class="file-label">
-                          <input class="file-input" type="file" name="resume" />
-                          <span class="file-cta">
-                            <span class="file-icon">
-                              <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label"> Info file… </span>
-                          </span>
-                          <span class="file-name"> Screen Shot 2017-07-29 at 15.54.25.png </span>
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Cantidad de estibas:</th>
-                    <td><input type="text" class="input" [(ngModel)]="producto.cantidad_estibas" /></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <!-- Adicione os outros três painéis semelhantes aqui -->
       </div>
 
-      <span class="prev button_" (click)="changePanel(-1)">&#8249;</span>
-      <span class="next button_" (click)="changePanel(1)">&#8250;</span>
-      <span class="total">{{ currentPanel }}/{{ totalPanels }}</span>
-      <button class="button is-success Finalizar" *ngIf="currentPanel === totalPanels" (click)="GuardarProducto()">
-        <span class="icon"><i class="fas fa-save"></i></span>
-        <span>Guardar</span>
-      </button>
-      <!-- <button class="prev button_" (click)="changePanel(-1)">&#8249;</button>  -->
-      <!-- <button class="next button_" (click)="changePanel(1)">&#8250;</button> -->
+      <!-- ===== STEP 3: Materia prima ===== -->
+      <div *ngIf="currentStep === 3" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-boxes"></i> Materia prima</span>
+        <hr class="modal-divider" />
+
+        <!-- Sustratos -->
+        <label class="label">3.1 Sustratos aprobados</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-6">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="sustrato_selected">
+                  <option value="" disabled selected>Seleccione sustrato</option>
+                  <ng-container *ngFor="let s of materiales.materiales">
+                    <option [value]="s._id" *ngIf="s.grupo?.trato">
+                      {{ s.nombre }} ({{ s.fabricante?.alias }}) {{ s.gramaje }}g cal:{{ s.calibre }}
+                    </option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-layer-group"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarSustrato()" [disabled]="!sustrato_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.sustrato?.length">
+          <span *ngFor="let s of producto.sustrato; index as i" class="tag is-info is-light is-medium">
+            <i class="fas fa-layer-group mr-1"></i> {{ getNombreSustrato(s) }}
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.sustrato, i, 'Sustrato')"></i>
+          </span>
+        </div>
+
+        <!-- Tintas -->
+        <label class="label">3.4 Tintas aprobadas</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-3">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="tinta_selected.tinta" (click)="notificar()">
+                  <option value="" disabled selected>Tinta</option>
+                  <ng-container *ngFor="let t of materiales.materiales">
+                    <option [value]="t._id" *ngIf="t.grupo?.nombre === 'Tintas'">
+                      {{ t.nombre }} ({{ t.fabricante?.alias }})
+                    </option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-palette"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <div class="field">
+              <label class="label">Cantidad (kg)</label>
+              <input class="input" type="number" placeholder="0" [(ngModel)]="tinta_selected.cantidad" />
+            </div>
+          </div>
+          <div class="column is-2">
+            <label class="label">&nbsp;</label>
+            <button class="button is-success" (click)="AlmacenaTinta()" [disabled]="!tinta_selected.tinta">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.tintas?.length">
+          <span *ngFor="let t of producto.tintas; index as i" class="tag is-danger is-light is-medium">
+            <i class="fas fa-palette mr-1"></i> {{ getNombreTinta(t.tinta) }} — {{ t.cantidad }}kg
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.tintas, i, 'Tinta')"></i>
+          </span>
+        </div>
+
+        <!-- Barnices -->
+        <label class="label">3.6 Barnices aprobados</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-3">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="barniz_selected.barniz">
+                  <option value="" disabled selected>Barniz</option>
+                  <ng-container *ngFor="let b of materiales.materiales">
+                    <option
+                      [value]="b._id"
+                      *ngIf="b.grupo?.nombre === 'Barniz S/Impresión' || b.grupo?.nombre === 'Barniz Acuoso'"
+                    >
+                      {{ b.nombre }} ({{ b.fabricante?.alias }})
+                    </option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-fill-drip"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <div class="field">
+              <label class="label">Cantidad (kg)</label>
+              <input class="input" type="number" placeholder="0" [(ngModel)]="barniz_selected.cantidad" />
+            </div>
+          </div>
+          <div class="column is-2">
+            <label class="label">&nbsp;</label>
+            <button class="button is-success" (click)="AlmacenarBarniz()" [disabled]="!barniz_selected.barniz">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.barnices?.length">
+          <span *ngFor="let b of producto.barnices; index as i" class="tag is-warning is-light is-medium">
+            <i class="fas fa-fill-drip mr-1"></i> {{ getNombreTinta(b.barniz) }} — {{ b.cantidad }}kg
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.barnices, i, 'Barniz')"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- ===== STEP 4: Pre-impresión ===== -->
+      <div *ngIf="currentStep === 4" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-film"></i> Pre-impresión</span>
+        <hr class="modal-divider" />
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <div class="field">
+              <label class="label">4.1 Archivo de diseño</label>
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Nombre del archivo"
+                  [(ngModel)]="producto.archivo_diseno"
+                />
+                <span class="icon is-small is-left"><i class="fas fa-file"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3">
+            <div class="field">
+              <label class="label">4.3 Montaje A</label>
+              <input
+                class="input"
+                type="text"
+                placeholder="Archivo montaje A"
+                [(ngModel)]="producto.archivo_montaje[0]"
+              />
+            </div>
+          </div>
+          <div class="column is-3">
+            <div class="field">
+              <label class="label">4.3 Montaje B</label>
+              <input
+                class="input"
+                type="text"
+                placeholder="Archivo montaje B"
+                [(ngModel)]="producto.archivo_montaje[1]"
+              />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">4.5 Tipo / Marca de plancha</label>
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Ej: Polímero / MarcaX"
+                  [(ngModel)]="producto.tipo_plancha"
+                />
+                <span class="icon is-small is-left"><i class="fas fa-clipboard"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">4.6 Tiempo de exposición (s)</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Ej: 45" [(ngModel)]="producto.tiempo_exposicion" />
+                <span class="icon is-small is-left"><i class="fas fa-stopwatch"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 5: Impresión ===== -->
+      <div *ngIf="currentStep === 5" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-print"></i> Impresión</span>
+        <hr class="modal-divider" />
+
+        <label class="label">5.1 Máquinas impresoras aprobadas</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-5">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="maquina_selected">
+                  <option value="" disabled selected>Seleccione máquina</option>
+                  <ng-container *ngFor="let m of maquinas.maquinas">
+                    <option [value]="m._id" *ngIf="Impresion_(m, 'Impresión')">{{ m.nombre }}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-print"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarMaquina()" [disabled]="!maquina_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.maquinas?.length">
+          <span *ngFor="let m of producto.maquinas; index as i" class="tag is-primary is-light is-medium">
+            <i class="fas fa-print mr-1"></i> {{ getNombreMaquina(m) }}
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.maquinas, i, 'Máquina')"></i>
+          </span>
+        </div>
+
+        <label class="label">5.2 Tamaño de sustrato / ejemplares</label>
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <label class="label is-small">Montaje A</label>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ancho cm" [(ngModel)]="producto.tamano_sustrato_imprimir[0]" />
+              </div>
+              <span class="dim-sep">×</span>
+              <div class="column">
+                <input class="input" placeholder="Largo cm" [(ngModel)]="producto.tamano_sustrato_imprimir[1]" />
+              </div>
+            </div>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ejemplares" [(ngModel)]="producto.tamano_sustrato_imprimir[2]" />
+              </div>
+            </div>
+          </div>
+          <div class="column is-6">
+            <label class="label is-small">Montaje B</label>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ancho cm" [(ngModel)]="producto.tamano_sustrato_imprimir[3]" />
+              </div>
+              <span class="dim-sep">×</span>
+              <div class="column">
+                <input class="input" placeholder="Largo cm" [(ngModel)]="producto.tamano_sustrato_imprimir[4]" />
+              </div>
+            </div>
+            <div class="columns is-mobile">
+              <div class="column">
+                <input class="input" placeholder="Ejemplares" [(ngModel)]="producto.tamano_sustrato_imprimir[5]" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="columns is-multiline">
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">5.4 Área efectiva Montaje A (cm²)</label>
+              <input class="input" type="text" [(ngModel)]="producto.area_efectiva[0]" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">5.4 Área efectiva Montaje B (cm²)</label>
+              <input class="input" type="text" [(ngModel)]="producto.area_efectiva[1]" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">5.8 Solución de fuente</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Fuente" [(ngModel)]="producto.fuente[0]" />
+                <span class="icon is-small is-left"><i class="fas fa-tint"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 6: Post-impresión ===== -->
+      <div *ngIf="currentStep === 6" class="step-panel animate__animated animate__fadeIn">
+        <span class="section-label"><i class="fas fa-box"></i> Post-impresión</span>
+        <hr class="modal-divider" />
+
+        <!-- Troqueladora -->
+        <label class="label">6.1 Troqueladora aprobada</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-5">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="troqueladora_selected">
+                  <option value="" disabled selected>Seleccione troqueladora</option>
+                  <ng-container *ngFor="let m of maquinas.maquinas">
+                    <option [value]="m._id" *ngIf="Impresion_(m, 'Troquelado')">{{ m.nombre }}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-cut"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarTroqueladora()" [disabled]="!troqueladora_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.troqueladora?.length">
+          <span *ngFor="let t of producto.troqueladora; index as i" class="tag is-primary is-light is-medium">
+            <i class="fas fa-cut mr-1"></i> {{ getNombreMaquina(t) }}
+            <i
+              class="fas fa-times tag-delete"
+              (click)="confirmarEliminar(producto.troqueladora, i, 'Troqueladora')"
+            ></i>
+          </span>
+        </div>
+
+        <!-- Guillotina -->
+        <label class="label">Guillotina aprobada</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-5">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="guillotina_selected">
+                  <option value="" disabled selected>Seleccione guillotina</option>
+                  <ng-container *ngFor="let m of maquinas.maquinas">
+                    <option [value]="m._id" *ngIf="Impresion_(m, 'Cortado')">{{ m.nombre }}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-scissors"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarGuillotina()" [disabled]="!guillotina_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.guillotina?.length">
+          <span *ngFor="let g of producto.guillotina; index as i" class="tag is-primary is-light is-medium">
+            <i class="fas fa-scissors mr-1"></i> {{ getNombreMaquina(g) }}
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.guillotina, i, 'Guillotina')"></i>
+          </span>
+        </div>
+
+        <!-- Pegadora -->
+        <label class="label">6.6 Pegadora aprobada</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-5">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="pegadora_selected">
+                  <option value="" disabled selected>Seleccione pegadora</option>
+                  <ng-container *ngFor="let m of maquinas.maquinas">
+                    <option [value]="m._id" *ngIf="Impresion_(m, 'Pegado')">{{ m.nombre }}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-tools"></i></div>
+            </div>
+          </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarPegadora()" [disabled]="!pegadora_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.pegadora?.length">
+          <span *ngFor="let p of producto.pegadora; index as i" class="tag is-primary is-light is-medium">
+            <i class="fas fa-tools mr-1"></i> {{ getNombreMaquina(p) }}
+            <i class="fas fa-times tag-delete" (click)="confirmarEliminar(producto.pegadora, i, 'Pegadora')"></i>
+          </span>
+        </div>
+
+        <hr class="modal-divider" />
+        <div class="columns is-multiline">
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">6.8 Tipo de caja</label>
+              <input class="input" type="text" placeholder="Ej: Caja corrugada" [(ngModel)]="producto.caja[0]" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">6.11 Unidades por caja</label>
+              <input class="input" type="number" [(ngModel)]="producto.unidades_por_caja" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">6.14 Tipo de paleta</label>
+              <input class="input" type="text" placeholder="Ej: EUR" [(ngModel)]="producto.tipo_paleta" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Tamaño de paleta (cm)</label>
+              <input class="input" type="text" [(ngModel)]="producto.tamano_paleta" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Cantidad de estibas</label>
+              <input class="input" type="number" [(ngModel)]="producto.cantidad_estibas" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Peso de caja (kg)</label>
+              <input class="input" type="text" [(ngModel)]="producto.peso_cajas" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation + Save -->
+      <hr class="modal-divider" />
+      <div class="step-nav">
+        <button class="button" (click)="prevStep()" [disabled]="currentStep === 1">
+          <i class="fas fa-chevron-left mr-1"></i> Anterior
+        </button>
+        <button class="button is-info" *ngIf="currentStep < totalSteps" (click)="nextStep()">
+          Siguiente <i class="fas fa-chevron-right ml-1"></i>
+        </button>
+        <button
+          class="button is-success"
+          *ngIf="currentStep === totalSteps"
+          (click)="GuardarProducto()"
+          [disabled]="guardando"
+        >
+          <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
+          <span>{{ guardando ? 'Guardando…' : 'Guardar' }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

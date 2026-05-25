@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    let data = {
+    const data = {
       Correo: this.Correo,
       Password: this.Password,
     };

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from '../../../assets/fonts/custom';
@@ -6,15 +6,16 @@ import { AlmacenService } from 'src/app/services/almacen.service';
 import { BobinasService } from 'src/app/services/bobinas.service';
 import { RecepcionService } from 'src/app/services/recepcion.service';
 import Swal from 'sweetalert2';
-import Swall from 'sweetalert2';
+
 @Component({
   selector: 'app-recepcion',
   standalone: false,
   templateUrl: './recepcion.component.html',
   styleUrls: ['./recepcion.component.scss'],
 })
-export class RecepcionComponent {
+export class RecepcionComponent implements OnInit {
   public clicked: any = [];
+  public ordenExpandida: any = [];
   public detalle: boolean = false;
   public edicion: boolean = false;
   public nueva: boolean = false;
@@ -24,12 +25,84 @@ export class RecepcionComponent {
   public recepcion_id = '';
   public convertidora = '';
   public almacenar = false;
+  public cargando: boolean = true;
+
+  public filterMode: string = 'home';
+  public currentPage: number = 1;
+  public pageSize: number = 10;
+  public pageSizes: number[] = [10, 25, 50, 100];
 
   constructor(
     public api: RecepcionService,
     public almacen: AlmacenService,
     public bobinas: BobinasService,
   ) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      if (this.api.recepciones?.length > 0) {
+        this.cargando = false;
+      }
+    }, 800);
+  }
+
+  get kpiTotal(): number {
+    return this.api.recepciones?.length || 0;
+  }
+
+  get kpiPendientes(): number {
+    return this.api.recepciones?.filter((r) => r.status === 'Por notificar')?.length || 0;
+  }
+
+  get kpiNotificadas(): number {
+    return this.api.recepciones?.filter((r) => r.status === 'Notificado')?.length || 0;
+  }
+
+  setFilter(mode: string) {
+    this.filterMode = mode;
+    this.currentPage = 1;
+  }
+
+  get filteredRecepciones(): any[] {
+    if (!this.api.recepciones) return [];
+    let list = this.api.recepciones.filter(
+      (r) => r.status === 'Por notificar' || r.status === 'Notificado' || r.status === 'En observacion',
+    );
+    if (this.filterMode === 'pendientes') {
+      list = list.filter((r) => r.status === 'Por notificar');
+    } else if (this.filterMode === 'notificadas') {
+      list = list.filter((r) => r.status === 'Notificado');
+    } else if (this.filterMode === 'observacion') {
+      list = list.filter((r) => r.status === 'En observacion');
+    }
+    return list;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredRecepciones.length / this.pageSize) || 1;
+  }
+
+  get paginatedRecepciones(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredRecepciones.slice(start, start + this.pageSize);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(p: number) {
+    if (p >= 1 && p <= this.totalPages) this.currentPage = p;
+  }
+
+  changePageSize(event: any) {
+    this.pageSize = Number(event.target.value);
+    this.currentPage = 1;
+  }
+
+  toggleOrder(i: number) {
+    this.ordenExpandida[i] = !this.ordenExpandida[i];
+  }
 
   DescargarIdentificacionProductoPDF = async (recepcion, Material) => {
     // Configuring custom fonts
@@ -441,7 +514,7 @@ export class RecepcionComponent {
     });
 
     if (formValues) {
-      let data = {
+      const data = {
         status: formValues.status,
         observacion: formValues.text,
         recepcion: `${recepcion._id}_${i}`,
@@ -463,7 +536,7 @@ export class RecepcionComponent {
   };
 
   buscarUltimoReclamoPorRecepcion(recepcion, i) {
-    let recepcion_ = `${recepcion}_${i}`;
+    const recepcion_ = `${recepcion}_${i}`;
     return this.api.buscarUltimoReclamoPorRecepcion(recepcion_);
   }
 
@@ -479,7 +552,7 @@ export class RecepcionComponent {
   };
 
   sumarNetos(materiales) {
-    let cantidad = materiales.reduce((total, material) => total + Number(material.neto), 0);
+    const cantidad = materiales.reduce((total, material) => total + Number(material.neto), 0);
     return cantidad.toFixed(2);
   }
 
@@ -528,7 +601,7 @@ export class RecepcionComponent {
   notificar(id: string) {
     this.api.NoticarRecepcion(id); // Notifica la recepción con el ID proporcionado
     setTimeout(() => {
-      Swall.fire({
+      Swal.fire({
         text: this.api.mensaje.mensaje, // Muestra un mensaje
         icon: this.api.mensaje.icon, // Muestra un ícono
         toast: true,
@@ -549,7 +622,7 @@ export class RecepcionComponent {
 
   ProductoNoConforme(recepcion, materiales, observacion) {
     console.log(recepcion);
-    let reception = moment(recepcion.recepcion).format('DD/MM/YYYY');
+    const reception = moment(recepcion.recepcion).format('DD/MM/YYYY');
 
     const pdf = new PdfMakeWrapper();
     PdfMakeWrapper.setFonts(pdfFonts);
@@ -682,7 +755,7 @@ export class RecepcionComponent {
   }
 
   DescargarFormato(informacion: any) {
-    let condiciones = [
+    const condiciones = [
       {
         cajas_buen_estado: true,
         cajas_limpias: true,
@@ -699,9 +772,9 @@ export class RecepcionComponent {
       },
     ];
 
-    let date = informacion.recepcion.split('-');
+    const date = informacion.recepcion.split('-');
     informacion.recepcion = `${date[2]}-${date[1]}-${date[0]}`;
-    let conditions: string[] = informacion.condicion.map((obj: any) => {
+    const conditions: string[] = informacion.condicion.map((obj: any) => {
       return Object.entries(obj)
         .filter(([propiedad, valor]) => propiedad !== '_id')
         .map(([propiedad, valor]) => {
@@ -953,7 +1026,7 @@ export class RecepcionComponent {
   }
 
   guardar_Bobinas() {
-    let data = this.bobinas_.map((item) => ({
+    const data = this.bobinas_.map((item) => ({
       ...item,
       convertidora: this.convertidora,
     }));

@@ -53,9 +53,9 @@ export class AnalisisPadsComponent {
     );
 
     if (this.analisis.largo.desviacion < 1) {
-      let str = this.analisis.largo.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.largo.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -84,9 +84,9 @@ export class AnalisisPadsComponent {
     );
 
     if (this.analisis.ancho.desviacion < 1) {
-      let str = this.analisis.ancho.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.ancho.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -115,9 +115,9 @@ export class AnalisisPadsComponent {
     );
 
     if (this.analisis.signado.desviacion < 1) {
-      let str = this.analisis.signado.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.signado.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -146,9 +146,9 @@ export class AnalisisPadsComponent {
     );
 
     if (this.analisis.espesor.desviacion < 1) {
-      let str = this.analisis.espesor.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.espesor.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -178,9 +178,9 @@ export class AnalisisPadsComponent {
 
     // Calcular el número de decimales si la desviación es menor que 1
     if (analisis[tipo].desviacion < 1) {
-      let str = analisis[tipo].desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = analisis[tipo].desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
           if (decimales[i] !== '0') {
@@ -216,10 +216,10 @@ export class AnalisisPadsComponent {
   }
 
   AnalisisCompletado = async () => {
-    let analisis = this.analisis;
-    let Material = this.Materiales[0];
-    let recepcion = this.Recepcion;
-    let muestras: number[] = [];
+    const analisis = this.analisis;
+    const Material = this.Materiales[0];
+    const recepcion = this.Recepcion;
+    const muestras: number[] = [];
 
     for (let i = 1; i <= analisis.muestras; i++) {
       muestras.push(i);
@@ -305,7 +305,7 @@ export class AnalisisPadsComponent {
       return array;
     }
 
-    let largo_analisis: any[] = [];
+    const largo_analisis: any[] = [];
     largo_analisis[0] = analisis.largo.desviacion.toFixed(analisis.largo.decimales).replace('.', ',');
     largo_analisis[1] = analisis.largo.min.toFixed(2).replace('.', ',');
     largo_analisis[2] = analisis.largo.max.toFixed(2).replace('.', ',');
@@ -314,7 +314,7 @@ export class AnalisisPadsComponent {
     largo_analisis[1] = llenarConND2(largo_analisis[1], analisis.muestras);
     largo_analisis[2] = llenarConND2(largo_analisis[2], analisis.muestras);
 
-    let ancho_analisis: any[] = [];
+    const ancho_analisis: any[] = [];
     ancho_analisis[0] = analisis.ancho.desviacion.toFixed(analisis.ancho.decimales).replace('.', ',');
     ancho_analisis[1] = analisis.ancho.min.toFixed(2).replace('.', ',');
     ancho_analisis[2] = analisis.ancho.max.toFixed(2).replace('.', ',');
@@ -323,7 +323,7 @@ export class AnalisisPadsComponent {
     ancho_analisis[1] = llenarConND2(ancho_analisis[1], analisis.muestras);
     ancho_analisis[2] = llenarConND2(ancho_analisis[2], analisis.muestras);
 
-    let signado_analisis: any[] = [];
+    const signado_analisis: any[] = [];
     signado_analisis[0] = analisis.signado.desviacion.toFixed(analisis.signado.decimales).replace('.', ',');
     signado_analisis[1] = analisis.signado.min.toFixed(2).replace('.', ',');
     signado_analisis[2] = analisis.signado.max.toFixed(2).replace('.', ',');
@@ -332,7 +332,7 @@ export class AnalisisPadsComponent {
     signado_analisis[1] = llenarConND2(signado_analisis[1], analisis.muestras);
     signado_analisis[2] = llenarConND2(signado_analisis[2], analisis.muestras);
 
-    let espesor_analisis: any[] = [];
+    const espesor_analisis: any[] = [];
     espesor_analisis[0] = analisis.espesor.desviacion.toFixed(analisis.espesor.decimales).replace('.', ',');
     espesor_analisis[1] = analisis.espesor.min.toFixed(2).replace('.', ',');
     espesor_analisis[2] = analisis.espesor.max.toFixed(2).replace('.', ',');
@@ -341,7 +341,7 @@ export class AnalisisPadsComponent {
     espesor_analisis[1] = llenarConND2(espesor_analisis[1], analisis.muestras);
     espesor_analisis[2] = llenarConND2(espesor_analisis[2], analisis.muestras);
 
-    let especificacion_largo: any = [
+    const especificacion_largo: any = [
       Material.material.especificacion2.especificacion.largo_min || 'N/D',
       Material.material.especificacion2.especificacion.largo_nom || 'N/D',
       Material.material.especificacion2.especificacion.largo_max || 'N/D',
@@ -351,7 +351,7 @@ export class AnalisisPadsComponent {
     especificacion_largo[1] = llenarConND2(especificacion_largo[1], 1);
     especificacion_largo[2] = llenarConND2(especificacion_largo[2], 1);
 
-    let especificacion_ancho: any = [
+    const especificacion_ancho: any = [
       Material.material.especificacion2.especificacion.ancho_min || 'N/D',
       Material.material.especificacion2.especificacion.ancho_nom || 'N/D',
       Material.material.especificacion2.especificacion.ancho_max || 'N/D',
@@ -360,7 +360,7 @@ export class AnalisisPadsComponent {
     especificacion_ancho[1] = llenarConND2(especificacion_ancho[1], 1);
     especificacion_ancho[2] = llenarConND2(especificacion_ancho[2], 1);
 
-    let especificacion_signado: any = [
+    const especificacion_signado: any = [
       Material.material.especificacion2.especificacion.signado_min || 'N/D',
       Material.material.especificacion2.especificacion.signado_nom || 'N/D',
       Material.material.especificacion2.especificacion.signado_max || 'N/D',
@@ -369,7 +369,7 @@ export class AnalisisPadsComponent {
     especificacion_signado[1] = llenarConND2(especificacion_signado[1], 1);
     especificacion_signado[2] = llenarConND2(especificacion_signado[2], 1);
 
-    let especificacion_espesor: any = [
+    const especificacion_espesor: any = [
       Material.material.especificacion2.especificacion.espesor_min || 'N/D',
       Material.material.especificacion2.especificacion.espesor_nom || 'N/D',
       Material.material.especificacion2.especificacion.espesor_max || 'N/D',
@@ -378,12 +378,12 @@ export class AnalisisPadsComponent {
     especificacion_espesor[1] = llenarConND2(especificacion_espesor[1], 1);
     especificacion_espesor[2] = llenarConND2(especificacion_espesor[2], 1);
 
-    let fabricacion = recepcion.f_fabricacion ? recepcion.f_fabricacion : 'N/A';
+    const fabricacion = recepcion.f_fabricacion ? recepcion.f_fabricacion : 'N/A';
 
-    let operaciones = ['S', 'MÍN', 'MÁX'];
-    let operaciones2 = ['MÍN', 'STD', 'MÁX'];
+    const operaciones = ['S', 'MÍN', 'MÁX'];
+    const operaciones2 = ['MÍN', 'STD', 'MÁX'];
 
-    let hoy = moment().format('dd/mm/yyyy');
+    const hoy = moment().format('dd/mm/yyyy');
     async function GenerarCertificado() {
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdfFonts);
@@ -651,8 +651,8 @@ export class AnalisisPadsComponent {
     setTimeout(() => {
       if (this.analisis.resultado.resultado === 'APROBADO') {
         async function EnviarAlmacen(materiales, recepcion, almacen) {
-          let materiales_ = materiales;
-          for (let material of materiales_) {
+          const materiales_ = materiales;
+          for (const material of materiales_) {
             material.oc = material.oc._id;
             material.material = material.material._id;
             material.recepcion = recepcion._id; // Asegúrate de que `recepcion` está accesible en este contexto

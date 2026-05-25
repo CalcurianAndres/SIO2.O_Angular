@@ -203,11 +203,11 @@ export class InformacionComponent {
         .widths(['100%']).end,
     );
 
-    let materiales: any = [];
+    const materiales: any = [];
 
     console.log(devolucion.material);
     for (let i = 0; i < devolucion.material.length; i++) {
-      let l = devolucion.material.length - 1;
+      const l = devolucion.material.length - 1;
 
       materiales.push([
         new Cell(new Txt(devolucion.material[i].material.material.nombre).fontSize(9).end)
@@ -585,10 +585,10 @@ export class InformacionComponent {
         .widths(['100%']).end,
     );
 
-    let materiales: any = [];
+    const materiales: any = [];
     console.log(solicitud.materiales);
     for (let i = 0; i < solicitud.materiales.length; i++) {
-      let l = solicitud.materiales.length - 1;
+      const l = solicitud.materiales.length - 1;
 
       materiales.push([
         new Cell(new Txt(solicitud.materiales[i].material.nombre).fontSize(9).end)
@@ -728,7 +728,7 @@ export class InformacionComponent {
   }
 
   async generarAsignacion(asignacion) {
-    let img = await new Img('../../assets/poli_cintillo.png').width(60).margin([0, 3, 0, 0]).build();
+    const img = await new Img('../../assets/poli_cintillo.png').width(60).margin([0, 3, 0, 0]).build();
 
     console.log(asignacion);
 
@@ -903,7 +903,7 @@ export class InformacionComponent {
       };
     });
 
-    let materiales: any = [];
+    const materiales: any = [];
     for (let i = 0; i < asignacion.material.length; i++) {
       let l = 24;
 
@@ -1160,7 +1160,7 @@ export class InformacionComponent {
     PdfMakeWrapper.useFont('Gilroy');
 
     // Array de pasos (steps) que puede variar en cantidad
-    let steps: any = [];
+    const steps: any = [];
 
     for (let i = 0; i < orden.fases.length; i++) {
       steps.push({
@@ -1324,7 +1324,7 @@ export class InformacionComponent {
         .widths(['69%', '1%', '30%']).end,
     );
 
-    let emision = moment(orden.createdAt).format('DD/MM/YYYY');
+    const emision = moment(orden.createdAt).format('DD/MM/YYYY');
     pdf.add(
       new Table([
         [
@@ -1371,7 +1371,7 @@ export class InformacionComponent {
       ]).widths(['100%']).end,
     );
 
-    let fecha_oc = moment(orden.solicitud).format('DD/MM/YYYY');
+    const fecha_oc = moment(orden.solicitud).format('DD/MM/YYYY');
 
     pdf.add(
       new Table([
@@ -1467,9 +1467,9 @@ export class InformacionComponent {
     let total = pedidosFiltrados.reduce((acumulador, pedido) => acumulador + Number(pedido.cantidad), 0);
     total = Number(total).toLocaleString('es-ES');
 
-    let celdas: any = [];
+    const celdas: any = [];
     for (let i = 0; i < pedidosFiltrados.length; i++) {
-      let l = pedidosFiltrados.length - 1;
+      const l = pedidosFiltrados.length - 1;
 
       celdas.push([
         new Cell(new Txt(pedidosFiltrados[i].cantidadFormateada).fontSize(11).end)
@@ -1586,7 +1586,7 @@ export class InformacionComponent {
     asignadas = Number(asignadas).toLocaleString('es-ES');
     let demasia = Number(orden.demasia).toFixed(2);
     demasia = Number(demasia).toLocaleString('es-ES');
-    let pa_imprimir = Number(orden.hojas).toLocaleString('es-ES');
+    const pa_imprimir = Number(orden.hojas).toLocaleString('es-ES');
 
     demasia_percent = Number(demasia_percent.toFixed(2)).toLocaleString('es-ES');
 
@@ -1662,7 +1662,7 @@ export class InformacionComponent {
         .widths(['3%', '22%', '20%', '45%', '10%']).end,
     );
 
-    let data: any = [];
+    const data: any = [];
 
     for (let i = 0; i < orden.producto[0].impresion.secuencia[0].length; i++) {
       console.log(orden.tinta[i].tinta);

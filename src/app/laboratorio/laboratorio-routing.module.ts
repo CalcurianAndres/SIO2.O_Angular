@@ -8,6 +8,7 @@ import { EspecificacionesComponent } from './especificaciones/especificaciones.c
 import { AnalisisComponent } from './analisis/analisis.component';
 import { DefectosComponent } from './defectos/defectos.component';
 import { CertificadoComponent } from './certificado/certificado.component';
+import { AnalisisPendientesComponent } from './analisis-pendientes/analisis-pendientes.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'certificado',
         component: CertificadoComponent,
+      },
+      {
+        path: 'analisis-pendientes',
+        component: AnalisisPendientesComponent,
       },
     ],
   },

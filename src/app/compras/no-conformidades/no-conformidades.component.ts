@@ -129,7 +129,7 @@ export class NoConformidadesComponent {
 
   ProductoNoConforme(recepcion, materiales, observacion) {
     console.log(recepcion);
-    let reception = moment(recepcion.recepcion).format('DD/MM/YYYY');
+    const reception = moment(recepcion.recepcion).format('DD/MM/YYYY');
 
     const pdf = new PdfMakeWrapper();
     PdfMakeWrapper.setFonts(pdfFonts);

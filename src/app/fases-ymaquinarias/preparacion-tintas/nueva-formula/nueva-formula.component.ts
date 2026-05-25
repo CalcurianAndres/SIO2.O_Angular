@@ -33,8 +33,8 @@ export class NuevaFormulaComponent implements OnInit {
 
   agregarMaterial() {
     console.log(this.material);
-    let splited = this.material.split('*');
-    let data = {
+    const splited = this.material.split('*');
+    const data = {
       material: splited[0],
       nombre: splited[1],
       marca: splited[2],
@@ -48,7 +48,7 @@ export class NuevaFormulaComponent implements OnInit {
   }
 
   borrarMaterial(formula_id) {
-    let index = this.formular.findIndex((x) => x.material === formula_id);
+    const index = this.formular.findIndex((x) => x.material === formula_id);
     console.log(index);
 
     if (index !== -1) {
@@ -61,7 +61,7 @@ export class NuevaFormulaComponent implements OnInit {
 
   guardarFormula() {
     this.cargando = true;
-    let data = {
+    const data = {
       _id: this.id,
       pantone: this.preparacion,
       formula: this.formular,

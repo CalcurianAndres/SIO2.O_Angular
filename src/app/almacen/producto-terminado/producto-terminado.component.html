@@ -1,54 +1,210 @@
 <app-page-layout>
-  <app-section-header title="Producto Terminado" description="Producto finalizado para despacho" icon="fa-warehouse" color="orange"></app-section-header>
+  <app-section-header
+    title="Producto Terminado"
+    description="Producto finalizado para despacho"
+    icon="fa-warehouse"
+    color="orange"
+  ></app-section-header>
   <br />
 
-  <div class="card">
-    <div class="card-content">
-      <div class="accordion-wrapper">
-        <div class="accordion-item" *ngFor="let item of api.producto_terminado_agrupado; let i = index">
-          <input type="checkbox" [id]="'check' + i" class="accordion-trigger" />
-          <label [for]="'check' + i" class="accordion-header">
-            <div class="product-meta">
-              <div class="product-info-text">
-                <span class="product-name">{{ item.nombre }}</span>
-                <div class="product-stats">
-                  <span class="stat-item" style="font-size: 1.1rem; font-weight: 800; color: var(--text-heading)">
-                    {{ item.cantidadTotal | number }}
-                  </span>
-                  <span class="dot"></span>
-                  <span class="stat-item">{{ item.totalOPs }} OP</span>
-                </div>
-              </div>
-            </div>
-            <div class="chevron-circle">
-              <i class="fas fa-chevron-down"></i>
-            </div>
-          </label>
+  <!-- KPI Cards -->
+  <div class="columns is-variable is-2">
+    <div class="column">
+      <div class="kpi-card kpi-orange">
+        <div class="kpi-number">{{ kpiTotalProductos }}</div>
+        <div class="kpi-label">Total <strong>productos</strong></div>
+        <div class="kpi-period">registros agrupados</div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-number">{{ kpiTotalUnidades | number }}</div>
+        <div class="kpi-label">Total <strong>unidades</strong></div>
+        <div class="kpi-period">suma de cantidades</div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="kpi-card kpi-green">
+        <div class="kpi-number">{{ kpiTotalOPs }}</div>
+        <div class="kpi-label">Total <strong>OPs</strong></div>
+        <div class="kpi-period">órdenes de producción</div>
+      </div>
+    </div>
+  </div>
 
-          <div class="accordion-content">
-            <div class="detail-pane">
-              <table class="table is-fullwidth is-striped">
-                <thead>
-                  <tr>
-                    <th>OP</th>
-                    <th class="has-text-centered">Cantidad</th>
-                    <th class="has-text-right">Fecha de Fabricación</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let detalle of item.detalles">
-                    <td>{{ detalle.opNumero }}</td>
-                    <td class="has-text-centered">
-                      <strong>{{ detalle.cantidad | number }}</strong>
-                    </td>
-                    <td class="has-text-right has-text-grey">{{ detalle.fecha | date: 'EEE, d MMM, h:mm a' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+  <br />
+
+  <!-- Search -->
+  <div class="card">
+    <div class="card-content" style="padding: 0.75rem 1rem">
+      <div class="columns is-vcentered">
+        <div class="column is-1">
+          <span class="mensaje"><i class="fas fa-search"></i> Buscar:</span>
+        </div>
+        <div class="column">
+          <input
+            type="text"
+            class="input is-small"
+            placeholder="Buscar producto terminado..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
         </div>
       </div>
     </div>
   </div>
+
+  <br />
+
+  <!-- Loading state -->
+  <ng-container *ngIf="cargando && items.length === 0">
+    <app-skeleton type="table" [rows]="5"></app-skeleton>
+  </ng-container>
+
+  <!-- Empty state -->
+  <ng-container *ngIf="!cargando && filteredItems.length === 0">
+    <div class="card">
+      <div class="card-content has-text-centered py-6">
+        <i class="fas fa-warehouse" style="font-size: 2.5rem; color: var(--text-muted); opacity: 0.35"></i>
+        <p class="mt-3" style="color: var(--text-muted); font-size: 1rem">
+          {{ searchTerm ? 'No hay productos que coincidan con "' + searchTerm + '"' : 'No hay productos terminados disponibles' }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Data table -->
+  <ng-container *ngIf="filteredItems.length > 0">
+    <div class="card">
+      <div class="card-content" style="padding: 0">
+        <div class="table-container">
+          <table class="table is-fullwidth is-striped is-hoverable" style="margin-bottom: 0">
+            <thead>
+              <tr>
+                <th class="pl-4">Producto</th>
+                <th class="has-text-centered">Cantidad Total</th>
+                <th class="has-text-centered">OPs</th>
+                <th class="has-text-centered">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of paginatedItems; let i = index">
+                <tr>
+                  <td class="pl-4">
+                    <a class="product-name-link" (click)="toggleExpand(i)">
+                      <i
+                        class="fas fa-chevron-right expand-icon"
+                        [class.expanded]="expandedIndex === i"
+                      ></i>
+                      <span>{{ item.nombre }}</span>
+                    </a>
+                  </td>
+                  <td class="has-text-centered">
+                    <strong>{{ item.cantidadTotal | number }}</strong>
+                  </td>
+                  <td class="has-text-centered">{{ item.totalOPs }} OP</td>
+                  <td class="has-text-centered">
+                    <div class="buttons is-centered are-small mb-0">
+                      <a
+                        routerLink="/laboratorio/certificado"
+                        [queryParams]="{ producto: item.nombre }"
+                        class="button is-small is-link is-light"
+                        title="Certificado de calidad"
+                      >
+                        <i class="fas fa-flask"></i>
+                      </a>
+                      <button class="button is-small is-ghost" (click)="notificarDespacho(item.nombre)" title="Notificar despacho">
+                        <i class="fas fa-truck" style="color: var(--accent-blue)"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="expandedIndex === i">
+                  <td colspan="4" class="detail-row">
+                    <div class="detail-pane">
+                      <table class="table is-fullwidth is-striped is-narrow">
+                        <thead>
+                          <tr>
+                            <th>OP</th>
+                            <th class="has-text-centered">Cantidad</th>
+                            <th class="has-text-right">Fecha de Fabricación</th>
+                            <th class="has-text-centered">Certificado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let detalle of item.detalles">
+                            <td>{{ detalle.opNumero }}</td>
+                            <td class="has-text-centered">
+                              <strong>{{ detalle.cantidad | number }}</strong>
+                            </td>
+                            <td class="has-text-right has-text-grey">{{ detalle.fecha | date: 'EEE, d MMM, h:mm a' }}</td>
+                            <td class="has-text-centered">
+                              <a
+                                routerLink="/laboratorio/certificado"
+                                [queryParams]="{ op: detalle.opNumero, producto: item.nombre, cantidad: detalle.cantidad }"
+                                class="button is-small is-link is-light"
+                                style="font-weight: 600; border-radius: 6px"
+                              >
+                                <i class="fas fa-flask mr-1"></i> Muestreo
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="columns is-vcentered mt-2">
+      <div class="column is-narrow">
+        <span class="pagination-text" style="font-size: 0.8rem; color: var(--text-muted)">
+          Mostrando {{ paginatedItems.length }} de {{ filteredItems.length }}
+        </span>
+      </div>
+      <div class="column"></div>
+      <div class="column is-narrow">
+        <nav class="pagination is-small" role="navigation" aria-label="pagination">
+          <button
+            class="pagination-previous button is-small"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <ul class="pagination-list">
+            <li *ngFor="let p of pages">
+              <button
+                class="pagination-link button is-small"
+                [ngClass]="{ 'is-current': p === currentPage }"
+                (click)="goToPage(p)"
+              >
+                {{ p }}
+              </button>
+            </li>
+          </ul>
+          <button
+            class="pagination-next button is-small"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </nav>
+      </div>
+      <div class="column is-narrow">
+        <div class="select is-small">
+          <select (change)="changePageSize($event)">
+            <option *ngFor="let s of pageSizes" [value]="s" [selected]="s === pageSize">{{ s }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </app-page-layout>

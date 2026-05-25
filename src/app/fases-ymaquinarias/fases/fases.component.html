@@ -15,51 +15,64 @@
 >
 </app-informacion>
 <app-page-layout>
-  <app-section-header title="Fases de producción" description="Etapas del proceso productivo" icon="fa-industry" color="purple"></app-section-header>
-  <br />
+  <app-section-header
+    title="Fases de producción"
+    description="Etapas del proceso productivo"
+    icon="fa-industry"
+    color="purple"
+  ></app-section-header>
+
   <button class="button is-info" (click)="nueva_fase()">
-    <span class="icon">
-      <i class="fas fa-plus-circle"></i>
-    </span>
-    <span>Fase</span></button
-  >  <br /><br />
-  <ng-container *ngFor="let fila of [].constructor(filas()); index as fila_i">
-    <div class="columns">
-      <div class="column" *ngFor="let tarjeta of [].constructor(5); index as i">
-        <ng-container *ngIf="api.fases[5 * fila_i + i]">
-          <div class="card animate__animated animate__fadeInUp">
-            <div class="card-header">
-              <div class="card-header-title">
-                <div class="subtitle">
-                  <div class="columns">
-                    <div class="column is-1">
-                      <i class="{{ api.fases[5 * fila_i + i].nombre }}"></i>
-                    </div>
-                    <div class="column">
-                      {{ api.fases[5 * fila_i + i].nombre }}
-                      <i
-                        class="fas fa-glass-whiskey indicator animate__animated animate__flash"
-                        *ngIf="api.fases[5 * fila_i + i].parcial"
-                      ></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <footer class="card-footer">
-              <a class="card-footer-item" (click)="verInfo(api.fases[5 * fila_i + i])"
-                ><i class="fas fa-info-circle blue_"></i
-              ></a>
-              <a class="card-footer-item" (click)="editarFase(api.fases[5 * fila_i + i])"
-                ><i class="far fa-edit green"></i
-              ></a>
-              <a class="card-footer-item" (click)="eliminarMaquina(api.fases[5 * fila_i + i])"
-                ><i class="fas fa-trash-alt red"></i
-              ></a>
-            </footer>
-          </div>
-        </ng-container>
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Nueva Fase</span>
+  </button>
+  <br /><br />
+
+  <!-- Empty state -->
+  <div *ngIf="!cargando && api.fases.length === 0" class="empty-state">
+    <i class="fas fa-industry empty-icon"></i>
+    <p class="empty-title">No hay fases registradas</p>
+    <p class="empty-hint">Haz clic en el botón "Fase" para comenzar</p>
+    <i class="fas fa-arrow-up empty-arrow"></i>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && api.fases.length === 0" class="grupo-grid">
+    <div *ngFor="let _ of [].constructor(5)" class="card skeleton-card">
+      <div class="card-header skeleton-header"></div>
+      <div class="card-content">
+        <div class="skeleton-line skeleton-line-short"></div>
       </div>
+      <div class="card-footer skeleton-footer"></div>
     </div>
-  </ng-container>
+  </div>
+
+  <!-- Card grid -->
+  <div *ngIf="api.fases.length > 0" class="grupo-grid">
+    <div *ngFor="let fase of api.fases; index as i" class="card grupo-card animate__animated animate__fadeInUp">
+      <div class="card-header">
+        <div class="card-header-title">
+          <i class="fas fa-industry grupo-icon"></i>
+          <span class="grupo-nombre">{{ fase.nombre }}</span>
+          <span *ngIf="fase.parcial" class="badge parcial-badge" title="Fase parcial">
+            <i class="fas fa-glass-whiskey"></i>
+          </span>
+        </div>
+      </div>
+      <div class="card-content" *ngIf="fase.descripcion">
+        <p class="grupo-descripcion">{{ fase.descripcion }}</p>
+      </div>
+      <footer class="card-footer">
+        <a class="card-footer-item" (click)="seleccion(i)" title="Ver detalles">
+          <i class="fas fa-info-circle blue_"></i>
+        </a>
+        <a class="card-footer-item" (click)="Editar(i)" title="Editar">
+          <i class="far fa-edit green"></i>
+        </a>
+        <a class="card-footer-item" (click)="borrarFase(fase._id)" title="Eliminar">
+          <i class="fas fa-trash-alt red"></i>
+        </a>
+      </footer>
+    </div>
+  </div>
 </app-page-layout>

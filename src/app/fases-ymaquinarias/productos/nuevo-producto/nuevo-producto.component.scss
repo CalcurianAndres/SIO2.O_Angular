@@ -1,178 +1,189 @@
-.carousel-container {
-  position: relative;
-  width: 1100px; /* Largura de cada painel */
-  margin: 50px auto;
-  overflow: hidden; /* Adicionando overflow: hidden para esconder conteúdo que ultrapassa a largura */
-  background-color: transparent; /* Cor de fundo do contêiner do carrossel */
+/* ── Modal sizing ── */
+.product-modal {
+  width: 96vw;
+  max-width: 1200px;
+}
+.product-modal .modal-card-body {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.carousel {
+/* ── Step indicator ── */
+.step-indicator {
   display: flex;
-  transition: transform 0.5s ease-in-out;
-  width: 8800px; /* Largura total do carrossel - 4 painéis * 1100px */
-  background-color: transparent;
+  gap: 0;
+  margin-bottom: 0.75rem;
+  overflow-x: auto;
 }
-
-.panel {
-  width: 1100px;
-  box-sizing: border-box;
-  display: relative;
-  justify-content: center;
+.step-dot-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background-color: var(--bg-card);
-}
-
-.content {
-  padding: 20px;
-}
-
-.button_ {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 200px;
-  color: var(--text-muted);
-  opacity: 0.3;
-  border: none;
-  padding: 10px;
   cursor: pointer;
-  z-index: 7;
+  position: relative;
+  min-width: 70px;
 }
-.button_:hover {
-  color: var(--text-primary);
-}
-
-.total {
+.step-dot-wrapper::after {
+  content: '';
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 50px;
-  color: var(--text-muted);
-  opacity: 0.5;
-}
-
-.Finalizar {
-  position: absolute;
-  right: 100px;
-  bottom: 25px;
-}
-
-.prev {
-  left: -10px;
-}
-
-.next {
-  right: -10px;
-}
-
-.modal .modal-content {
-  width: 90%;
-  background-color: transparent;
-}
-.titulo {
-  display: block;
+  top: 18px;
+  left: 50%;
   width: 100%;
-  height: 60px;
-  padding: 5px;
-  background-color: var(--sidebar-bg);
-  color: var(--sidebar-text);
+  height: 2px;
+  background: var(--border-color);
+  z-index: 0;
+}
+.step-dot-wrapper:last-child::after {
+  display: none;
+}
+.step-dot-wrapper.completed::after {
+  background: var(--status-success);
+}
+.step-dot-wrapper.active::after {
+  background: var(--accent-blue);
+}
+.step-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  z-index: 1;
+  transition: all 0.25s;
+}
+.step-dot-wrapper.completed .step-dot {
+  background: var(--status-success);
+  border-color: var(--status-success);
+  color: #fff;
+}
+.step-dot-wrapper.active .step-dot {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+  transform: scale(1.1);
+}
+.step-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.step-dot-wrapper.active .step-label {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+.step-dot-wrapper.completed .step-label {
+  color: var(--status-success);
 }
 
-.text_ {
-  display: block;
-  color: var(--text-primary);
-  margin-top: 15px;
-  font-family: 'Gilroy';
+/* ── Progress bar ── */
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--status-success), var(--accent-blue));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 2.5rem;
+  text-align: right;
 }
 
-.tabla {
-  display: block;
-  width: 1000px;
-  margin-left: 50px;
-  margin-top: 15px;
+/* ── Step panel ── */
+.step-panel {
+  min-height: 200px;
 }
 
+/* ── Tags list ── */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+.tag-delete {
+  margin-left: 0.4rem;
+  cursor: pointer;
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+.tag-delete:hover {
+  opacity: 1;
+  color: var(--status-danger);
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ── Modal divider ── */
+hr.modal-divider {
+  margin: 0.75rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+/* ── Dimension separator ── */
+.dim-sep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Step navigation ── */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Red cross close ── */
 .red_cross {
   display: block;
-  color: red;
-  background-color: red;
+  color: var(--status-danger);
+  background-color: transparent;
   position: relative;
   float: right;
-  top: -25px;
-  right: 15px;
-}
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted #9999cc;
-  cursor: help;
 }
 
-.tooltip::after {
-  content: 'Por cada 1.000 hojas';
-  position: absolute;
-  background-color: #555;
-  color: #fff;
-  padding: 5px;
-  border-radius: 6px;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover::after {
-  visibility: visible;
-  opacity: 1;
-}
-
-.tooltip2 {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted #9999cc;
-  cursor: help;
-}
-
-.tooltip2::after {
-  content: 'Cabida por caja de este producto';
-  position: absolute;
-  background-color: #555;
-  color: #fff;
-  padding: 5px;
-  border-radius: 6px;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip2:hover::after {
-  visibility: visible;
-  opacity: 1;
-}
-
-.centered {
-  display: block;
-  margin-top: 23px;
-}
-
-/* app.component.css */
-.modal-content {
-  width: 90vw;
-  height: 90vh;
-  overflow: auto;
-}
-
-.card {
-  margin: 1em;
-  text-align: center;
-  transform: rotate(45deg);
+/* ── Overrides ── */
+.modal-card-title.fuente i {
+  color: var(--accent-blue);
 }

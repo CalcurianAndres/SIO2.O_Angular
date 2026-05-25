@@ -70,7 +70,7 @@ export class OproduccionService {
   }
 
   buscarTicketRojoPorCerrar(op) {
-    let tickets = this.buscarTicketRojoPorOrden(op);
+    const tickets = this.buscarTicketRojoPorOrden(op);
     return tickets.filter((t) => !t.cerrado === false);
   }
 

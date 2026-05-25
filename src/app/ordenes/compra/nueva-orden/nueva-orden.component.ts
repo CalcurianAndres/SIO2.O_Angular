@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { OcompraService } from 'src/app/services/ocompra.service';
 import { ProductosService } from 'src/app/services/productos.service';
@@ -21,6 +21,14 @@ export class NuevaOrdenComponent {
   @Input() orden: any;
   @Output() onCloseModal = new EventEmitter();
 
+  public guardando = false;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['nueva']?.currentValue === true) {
+      this.guardando = false;
+    }
+  }
+
   today: Date = new Date();
   public producto_selected: any = '';
   public producto_selected_: any = '';
@@ -34,18 +42,14 @@ export class NuevaOrdenComponent {
   }
 
   addProducto() {
-    console.log(this.producto_selected);
-
-    let data = {
+    const data = {
       nombre: this.producto_selected.identificacion.producto,
       producto: this.producto_selected._id,
       cantidad: this.cantidad_selected_,
       solicitud: this.fecha_selected,
       entrega: this.entrega,
     };
-
     this.orden.pedido.push(data);
-
     this.producto_selected = '';
     this.producto_selected_ = '';
     this.cantidad_selected = '';
@@ -55,7 +59,7 @@ export class NuevaOrdenComponent {
   }
 
   formatear(e) {
-    let format = e.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos;
+    let format = e.value.replace(/\D/g, '');
     this.cantidad_selected_ = format;
     format = format.replace(/\D/g, '');
     format = format.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -74,11 +78,11 @@ export class NuevaOrdenComponent {
       recepcion: '',
       pedido: [],
     };
-
     this.orden.cliente = e.value;
   }
 
   Guardar() {
+    this.guardando = true;
     this.api.guardarOrden(this.orden);
     this.orden = {
       cliente: '',
@@ -88,6 +92,7 @@ export class NuevaOrdenComponent {
       pedido: [],
     };
     setTimeout(() => {
+      this.guardando = false;
       Swal.fire({
         text: this.api.mensaje.mensaje,
         icon: this.api.mensaje.icon,

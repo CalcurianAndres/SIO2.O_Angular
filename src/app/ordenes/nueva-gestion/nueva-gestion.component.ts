@@ -97,7 +97,7 @@ export class NuevaGestionComponent {
   }
 
   FindDefecto(paleta: number) {
-    let verificacion = this.data.defectos.find((x) => x.paleta === paleta);
+    const verificacion = this.data.defectos.find((x) => x.paleta === paleta);
 
     if (verificacion) {
       return {
@@ -121,7 +121,7 @@ export class NuevaGestionComponent {
 
   agregarDefecto(e: any) {
     // Verifica si el defecto ya está en el array
-    let agregado = this.defectos_agregados.some((defecto) => defecto === e.value);
+    const agregado = this.defectos_agregados.some((defecto) => defecto === e.value);
 
     // Si no está agregado, añádelo
     if (!agregado) {
@@ -279,7 +279,7 @@ export class NuevaGestionComponent {
   }
 
   agregarEmpleado(nombre: any, apellido: any) {
-    let existe = this.data.team.find((empleado: string) => empleado === `${nombre} ${apellido}`);
+    const existe = this.data.team.find((empleado: string) => empleado === `${nombre} ${apellido}`);
     if (!existe) {
       this.data.team.push(`${nombre} ${apellido}`);
     }
@@ -302,7 +302,7 @@ export class NuevaGestionComponent {
 
     console.log(defecto_);
 
-    let data = {
+    const data = {
       menores: {},
       mayores: {},
     };

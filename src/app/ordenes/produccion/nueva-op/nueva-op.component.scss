@@ -1,70 +1,148 @@
-.back {
-  font-size: 55px;
+/* ── Step Wizard ── */
+.step-indicator {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.step-dot-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  min-width: 70px;
+}
+.step-dot-wrapper::after {
+  content: '';
   position: absolute;
-  left: 10%;
-  background-color: transparent;
+  top: 18px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border-color);
+  z-index: 0;
+}
+.step-dot-wrapper:last-child::after {
+  display: none;
+}
+.step-dot-wrapper.completed::after {
+  background: var(--status-success);
+}
+.step-dot-wrapper.active::after {
+  background: var(--accent-blue);
 }
 
-.back:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+.step-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  z-index: 1;
+  transition: all 0.25s;
+}
+.step-dot-wrapper.completed .step-dot {
+  background: var(--status-success);
+  border-color: var(--status-success);
+  color: #fff;
+}
+.step-dot-wrapper.active .step-dot {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+  transform: scale(1.1);
+}
+.step-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.step-dot-wrapper.active .step-label {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+.step-dot-wrapper.completed .step-label {
+  color: var(--status-success);
 }
 
-.front {
-  font-size: 55px;
-  position: absolute;
-  right: 10%;
-  background-color: transparent;
+/* ── Progress bar ── */
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--status-success), var(--accent-blue));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 2.5rem;
+  text-align: right;
 }
 
-.front:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
+/* ── Step navigation ── */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+/* ── Step panel ── */
+.step-panel {
+  min-height: 200px;
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ── Existing styles (preserved) ── */
 .longer {
   width: 60%;
 }
-.title_ {
-  background: var(--status-success);
-  background: linear-gradient(
-    45deg,
-    rgba(76, 175, 80, 1) 0%,
-    rgba(82, 190, 87, 1) 10%,
-    rgba(86, 200, 91, 1) 20%,
-    rgba(97, 219, 102, 1) 30%,
-    rgba(105, 232, 110, 1) 40%,
-    rgba(105, 232, 173, 1) 50%,
-    rgba(72, 208, 145, 1) 60%,
-    rgba(49, 164, 151, 1) 70%,
-    rgba(42, 157, 144, 1) 80%,
-    rgba(14, 107, 97, 1) 90%,
-    rgba(4, 73, 65, 1) 100%
-  );
-  overflow: hidden;
+
+.content {
+  color: var(--text-primary);
 }
-.tarjetas_menu {
-  cursor: pointer;
-  text-align: center;
+
+.gilroy {
   font-family: 'Gilroy';
-  color: white;
-  font-size: x-large;
 }
 
-
-.iconos {
-  position: absolute;
-  right: 45px;
-  top: -15px;
+.subtitles {
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.iconos i {
-  font-size: 130px;
-  transform: rotate(30deg);
-  top: -150px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
+/* ── Máquinas ── */
 .maquinas {
   display: block;
   max-height: 250px;
@@ -114,14 +192,14 @@
   font-family: 'Gilroy';
   color: var(--text-primary);
   position: absolute;
-  margin-top: -30px; /* Ajusta este valor según sea necesario */
-  // margin-left: 50%;
+  margin-top: -30px;
 }
 
 .short {
   width: 100px;
 }
 
+/* ── Tintas ── */
 .pantone-card {
   display: block;
   background-color: white;
@@ -132,26 +210,22 @@
   -webkit-box-shadow: 0px 0px 5px 5px rgba(208, 208, 208, 0.75);
   -moz-box-shadow: 0px 0px 5px 5px rgba(208, 208, 208, 0.75);
 }
-
 .pantone-title {
   display: block;
   width: 100%;
-  // background-color: red;
   align-content: center;
   text-align: center;
   font-family: 'Gilroy';
 }
-
 .pantone-color {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 90px;
   border: solid 5px white;
-  text-align: center; /* Alinea el texto al centro */
+  text-align: center;
 }
-
 .pantone-necesario {
   font-family: 'Gilroy';
   font-size: large;
@@ -160,24 +234,23 @@
   border-radius: 8px;
   padding: 3px;
 }
-
 .pantone-add {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  text-align: center; /* Alinea el texto al centro */
+  text-align: center;
   height: 40px;
   font-size: large;
 }
 
+/* ── Barniz / Pegamento ── */
 .barniz {
   display: block;
   width: 100%;
   height: 150px;
   border-right: solid 1px black;
 }
-
 .titulo-absoluto {
   position: relative;
   top: -85px;
@@ -186,45 +259,32 @@
   position: relative;
   top: -40px;
 }
-
 .informacion-barniz {
   color: var(--text-primary);
   font-family: 'Gilroy';
 }
 
-.gilroy {
-  font-family: 'Gilroy';
-}
-
+/* ── Calendar ── */
 .calendar {
   display: flex;
-  margin-bottom: solid 0.5px rgb(255, 0, 0);
   position: relative;
-  // justify-content: space-between;
 }
-
 .calendar-day {
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* Ajusta el padding según tus necesidades */
   padding: 29px;
   box-sizing: border-box;
-  // border-right: solid 1px black;
   max-width: 110px;
   min-width: 110px;
   border-top: solid 0.5px rgb(208, 208, 208);
 }
-
 .gray-tenue {
   background-color: #f1f1f1;
 }
-
 .calendar-color {
   width: 30%;
   height: 40px;
-  // background-color: rgba(255, 0, 0, 0.383);
-  // border: solid 2px red;
   border-radius: 7px;
   cursor: move;
   color: white;
@@ -235,60 +295,48 @@
   justify-content: center;
   margin: auto;
   left: 110px;
-  // margin-top: 5px;
 }
-
 mwlResizable {
-  box-sizing: border-box; // required for the enableGhostResize option to work
+  box-sizing: border-box;
 }
-
 .fase {
   position: absolute;
   height: 100%;
   cursor: col-resize;
   width: 5px;
-}
-
-.fase {
   right: 0;
 }
-
 .date-info {
   position: absolute;
   margin-top: -20px;
   left: 135px;
-  // background-color: white;
 }
-
 .day-info {
   color: var(--text-primary);
   font-family: 'Gilroy';
   text-align: center;
-  // position: sticky;
-  // position: absolute;
-  // left: 0px;
 }
-
+.fase-name {
+  flex: 1;
+  min-width: 110px;
+  max-width: 110px;
+  text-align: left;
+}
 .x-stronger {
   font-family: 'Gilroy';
 }
-
-.fase-name {
-  flex: 1;
-  // margin-top: -25px;
-  min-width: 110px;
-  max-width: 110px;
-  // background-color: red;
-  text-align: left;
+.no-laboral {
+  color: red;
+  background-color: rgb(255, 140, 140);
 }
 
+/* ── Máquinas list ── */
 .titulo {
   display: block;
   background-color: rgb(248, 248, 248);
   padding: 5px;
   position: relative;
   height: 60px;
-  // text-align: center;
   border-radius: 5px;
   margin: 5px;
   box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
@@ -296,32 +344,6 @@ mwlResizable {
   -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
   cursor: pointer;
 }
-
-.sub-titulo {
-  display: block;
-  display: block;
-  background-color: rgb(248, 248, 248);
-  padding: 5px;
-  position: relative;
-  width: 150px;
-  text-align: center;
-  border-radius: 5px;
-  box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
-  -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
-  -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
-  margin: 5px;
-  cursor: pointer;
-}
-
-.opciones {
-  position: absolute;
-  padding: 10px;
-  left: 190px;
-  border-radius: 5px;
-  background-color: rgba(160, 160, 160, 0.3);
-  backdrop-filter: blur(10px);
-}
-
 .titulo_ {
   display: block;
   background-color: rgb(248, 248, 248);
@@ -335,12 +357,28 @@ mwlResizable {
   -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
   cursor: pointer;
 }
-
-.red:hover {
-  color: rgb(110, 13, 13);
+.sub-titulo {
+  display: block;
+  background-color: rgb(248, 248, 248);
+  padding: 5px;
+  position: relative;
+  width: 150px;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.66);
+  margin: 5px;
   cursor: pointer;
 }
-
+.opciones {
+  position: absolute;
+  padding: 10px;
+  left: 190px;
+  border-radius: 5px;
+  background-color: rgba(160, 160, 160, 0.3);
+  backdrop-filter: blur(10px);
+}
 .color-page {
   position: absolute;
   left: 0px;
@@ -352,13 +390,14 @@ mwlResizable {
   -webkit-box-shadow: -4px 0px 5px -3px rgba(0, 0, 0, 0.75) inset;
   -moz-box-shadow: -4px 0px 5px -3px rgba(0, 0, 0, 0.75) inset;
   border-radius: 5px 0px 0px 5px;
-  -webkit-border-radius: 5px 0px 0px 5px;
-  -moz-border-radius: 5px 0px 0px 5px;
 }
-
 .delete_icon {
   position: absolute;
   right: 8px;
+}
+.red:hover {
+  color: rgb(110, 13, 13);
+  cursor: pointer;
 }
 
 .maquina {
@@ -368,7 +407,6 @@ mwlResizable {
   margin-top: 15px;
   color: rgb(69, 69, 69);
 }
-
 .fases-type {
   position: relative;
   box-shadow: 12px 1px 5px -9px rgba(0, 0, 0, 0.39) inset;
@@ -378,53 +416,28 @@ mwlResizable {
   height: 62px;
   background-size: 200% auto;
   background-image: linear-gradient(to right, transparent 50%, var(--accent-red) 50%);
-  // background-image: linear-gradient(to right, transparent 50%, #900c3f 50%);
   transition: background-position 1s;
   transition: color 1s;
-
   border-radius: 0px 5px 5px 0px;
-  -webkit-border-radius: 0px 5px 5px 0px;
-  -moz-border-radius: 0px 5px 5px 0px;
 }
-
 .fases-type:hover {
   background-position: right center;
   color: white;
   font-family: 'Gilroy';
 }
-
-.blue_ {
-  position: absolute;
-  right: 8px;
-}
-
 .maquina-name {
   background-color: rgb(226, 226, 226);
   margin-top: 7px;
   height: 60px;
   width: 50%;
   border-radius: 5px 0px 0px 5px;
-  -webkit-border-radius: 5px 0px 0px 5px;
-  -moz-border-radius: 5px 0px 0px 5px;
   box-shadow: -4px 0px 5px 0px rgba(0, 0, 0, 0.45);
   -webkit-box-shadow: -4px 0px 5px 0px rgba(0, 0, 0, 0.45);
   -moz-box-shadow: -4px 0px 5px 0px rgba(0, 0, 0, 0.45);
   cursor: auto;
 }
 
-.tooltip {
-  position: absolute;
-  background-color: black;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  display: none;
-}
-
-.tooltip.show {
-  display: block;
-}
-
+/* ── Config tooltip ── */
 .config {
   display: block;
   position: absolute;
@@ -438,6 +451,37 @@ mwlResizable {
 }
 .config label {
   color: white;
+}
+.config.show {
+  display: block;
+}
+.show {
+  display: block;
+}
+
+.Nombre_Fase {
+  position: absolute;
+  top: 10px;
+}
+.mostrada {
+  position: absolute;
+  bottom: 5px;
+}
+
+.tinta__ {
+  display: block;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.alerta::before {
+  content: 'Faltan ';
+  color: red;
+  font-family: 'Gilroy';
+}
+.alerta {
+  color: red;
+  font-family: 'Gilroy';
 }
 
 @keyframes shake {
@@ -457,49 +501,7 @@ mwlResizable {
     transform: translateX(0);
   }
 }
-
 .time_clock:hover {
   animation: shake 0.5s ease;
   cursor: pointer;
-}
-
-.show {
-  display: block;
-}
-
-.Nombre_Fase {
-  position: absolute;
-  top: 10px;
-  // background-color: red;
-}
-
-.mostrada {
-  position: absolute;
-  bottom: 5px;
-}
-
-.tinta__ {
-  display: block;
-  padding: 3px;
-  border-radius: 5px;
-}
-
-.alerta::before {
-  content: 'Faltan ';
-  color: red; /* Puedes cambiar el color si lo deseas */
-  font-family: 'Gilroy';
-}
-
-.alerta {
-  color: red; /* Puedes cambiar el color si lo deseas */
-  font-family: 'Gilroy';
-}
-
-.no-laboral {
-  color: red;
-  background-color: rgb(255, 140, 140);
-}
-
-.content {
-  color: var(--text-primary);
 }

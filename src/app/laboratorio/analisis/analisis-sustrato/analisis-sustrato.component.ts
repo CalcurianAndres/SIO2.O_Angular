@@ -96,9 +96,9 @@ export class AnalisisSustratoComponent {
       this.analisis.gramaje.decimales = 0;
     }
     if (this.analisis.gramaje.desviacion < 1) {
-      let str = this.analisis.gramaje.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.gramaje.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -134,9 +134,9 @@ export class AnalisisSustratoComponent {
         this.analisis.cobb.top.decimales = 0;
       }
       if (this.analisis.cobb.top.desviacion < 1) {
-        let str = this.analisis.cobb.top.desviacion.toString();
-        let split = str.split('.');
-        let decimales = split[1];
+        const str = this.analisis.cobb.top.desviacion.toString();
+        const split = str.split('.');
+        const decimales = split[1];
 
         if (decimales) {
           for (let i = 0; i < decimales.length; i++) {
@@ -155,7 +155,7 @@ export class AnalisisSustratoComponent {
       this.analisis.cobb.back.cobb[i] =
         (this.analisis.gramaje.masa_final[i] - this.analisis.gramaje.masa_inicial[i]) * 100;
       this.analisis.cobb.back.cobb[i] = Number(this.analisis.cobb.back.cobb[i].toFixed(2));
-      let fill = this.analisis.cobb.back.cobb.filter((x) => x >= 0);
+      const fill = this.analisis.cobb.back.cobb.filter((x) => x >= 0);
       this.analisis.cobb.back.max = Math.max(...fill);
       this.analisis.cobb.back.min = Math.min(...fill);
 
@@ -169,9 +169,9 @@ export class AnalisisSustratoComponent {
         this.analisis.cobb.back.decimales = 0;
       }
       if (this.analisis.cobb.back.desviacion < 1) {
-        let str = this.analisis.cobb.back.desviacion.toString();
-        let split = str.split('.');
-        let decimales = split[1];
+        const str = this.analisis.cobb.back.desviacion.toString();
+        const split = str.split('.');
+        const decimales = split[1];
 
         if (decimales) {
           for (let i = 0; i < decimales.length; i++) {
@@ -202,9 +202,9 @@ export class AnalisisSustratoComponent {
       this.analisis.calibre.mm.promedio,
     );
     if (this.analisis.calibre.mm.desviacion < 1) {
-      let str = this.analisis.calibre.mm.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.calibre.mm.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -227,9 +227,9 @@ export class AnalisisSustratoComponent {
       this.analisis.calibre.um.promedio,
     );
     if (this.analisis.calibre.um.desviacion < 1) {
-      let str = this.analisis.calibre.um.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.calibre.um.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -252,9 +252,9 @@ export class AnalisisSustratoComponent {
       this.analisis.calibre.pt.promedio,
     );
     if (this.analisis.calibre.pt.desviacion < 1) {
-      let str = this.analisis.calibre.pt.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.calibre.pt.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -291,9 +291,9 @@ export class AnalisisSustratoComponent {
       this.analisis.curling_blancura.curling.decimales = 0;
     }
     if (this.analisis.curling_blancura.curling.desviacion < 1) {
-      let str = this.analisis.curling_blancura.curling.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.curling_blancura.curling.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -330,9 +330,9 @@ export class AnalisisSustratoComponent {
       this.analisis.curling_blancura.blancura.decimales = 0;
     }
     if (this.analisis.curling_blancura.blancura.desviacion < 1) {
-      let str = this.analisis.curling_blancura.blancura.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.curling_blancura.blancura.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -369,9 +369,9 @@ export class AnalisisSustratoComponent {
       this.analisis.dimensiones.Escuadra.decimales = 0;
     }
     if (this.analisis.dimensiones.Escuadra.desviacion < 1) {
-      let str = this.analisis.dimensiones.Escuadra.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.dimensiones.Escuadra.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -408,9 +408,9 @@ export class AnalisisSustratoComponent {
       this.analisis.dimensiones.contraEscuadra.decimales = 0;
     }
     if (this.analisis.dimensiones.contraEscuadra.desviacion < 1) {
-      let str = this.analisis.dimensiones.contraEscuadra.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.dimensiones.contraEscuadra.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -446,9 +446,9 @@ export class AnalisisSustratoComponent {
       this.analisis.dimensiones.Pinza.decimales = 0;
     }
     if (this.analisis.dimensiones.Pinza.desviacion < 1) {
-      let str = this.analisis.dimensiones.Pinza.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.dimensiones.Pinza.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -485,9 +485,9 @@ export class AnalisisSustratoComponent {
       this.analisis.dimensiones.contraPinza.decimales = 0;
     }
     if (this.analisis.dimensiones.contraPinza.desviacion < 1) {
-      let str = this.analisis.dimensiones.contraPinza.desviacion.toString();
-      let split = str.split('.');
-      let decimales = split[1];
+      const str = this.analisis.dimensiones.contraPinza.desviacion.toString();
+      const split = str.split('.');
+      const decimales = split[1];
 
       if (decimales) {
         for (let i = 0; i < decimales.length; i++) {
@@ -517,13 +517,13 @@ export class AnalisisSustratoComponent {
   }
 
   AnalisisCompletado() {
-    let analisis = this.analisis;
-    let muestras_ = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    let Material = this.Materiales[0];
-    let recepcion = this.Recepcion;
+    const analisis = this.analisis;
+    const muestras_ = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    const Material = this.Materiales[0];
+    const recepcion = this.Recepcion;
     console.log(Material);
 
-    let hoy = moment().format('dd/mm/yyyy');
+    const hoy = moment().format('dd/mm/yyyy');
     async function GenerarCertificado() {
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdfFonts);
@@ -1345,8 +1345,8 @@ export class AnalisisSustratoComponent {
 
       if (RESULTADO === 'APROBADO') {
         async function EnviarAlmacen(materiales, recepcion, almacen) {
-          let materiales_ = materiales;
-          for (let material of materiales_) {
+          const materiales_ = materiales;
+          for (const material of materiales_) {
             material.oc = material.oc._id;
             material.material = material.material._id;
             material.recepcion = recepcion._id; // Asegúrate de que `recepcion` está accesible en este contexto

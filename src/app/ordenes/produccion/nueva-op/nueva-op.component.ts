@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { MaquinasService } from 'src/app/services/maquinas.service';
 import { OcompraService } from 'src/app/services/ocompra.service';
@@ -25,9 +25,65 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './nueva-op.component.html',
   styleUrls: ['./nueva-op.component.scss'],
 })
-export class NuevaOPComponent implements OnInit {
+export class NuevaOPComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.currentDate = moment().format('YYYY-MM-DD');
+  }
+
+  public currentStep = 1;
+  public guardando = false;
+  public steps = [
+    { num: 1, label: 'Identificación', icon: 'fa-id-card' },
+    { num: 2, label: 'Sustrato', icon: 'fa-layer-group' },
+    { num: 3, label: 'Tintas', icon: 'fa-palette' },
+    { num: 4, label: 'Barniz', icon: 'fa-fill-drip' },
+    { num: 5, label: 'Embalaje', icon: 'fa-box' },
+    { num: 6, label: 'Máquinas', icon: 'fa-cogs' },
+    { num: 7, label: 'Planificación', icon: 'fa-calendar-alt' },
+  ];
+
+  get totalSteps(): number {
+    return this.steps.length;
+  }
+
+  get progressPercentage(): number {
+    let filled = 0,
+      total = 0;
+    total += 6; // Step 1: cliente, oc, producto, solicitud, montaje, cantidad
+    if (this.OP.cliente) filled++;
+    if (this.OP.oc) filled++;
+    if (this.id_producto) filled++;
+    if (this.OP.solicitud) filled++;
+    if (this.OP.montaje !== '') filled++;
+    if (this.OP.cantidad > 0) filled++;
+    total += 1; // Step 2: sustrato
+    if (this.OP.sustrato.sustrato) filled++;
+    total += 1; // Step 3: al menos una tinta
+    if (this.OP.tinta.some((t) => t.tinta)) filled++;
+    total += 2; // Step 4: barniz + pega
+    if (this.OP.barniz.barniz) filled++;
+    if (this.OP.pega.pega) filled++;
+    total += 2; // Step 7: al menos una máquina + planificación
+    if (this.maquinasDestino.length > 0) filled++;
+    if (this.medidas && this.medidas.length > 0) filled++;
+    return total ? Math.round((filled / total) * 100) : 0;
+  }
+
+  nextStep() {
+    if (this.currentStep < this.totalSteps) this.currentStep++;
+  }
+  prevStep() {
+    if (this.currentStep > 1) this.currentStep--;
+  }
+  goToStep(n: number) {
+    if (n >= 1 && n <= this.totalSteps) this.currentStep = n;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['nueva']?.currentValue === true) {
+      this.guardando = false;
+      this.currentStep = 1;
+    }
   }
 
   despachoForm: FormGroup;
@@ -62,11 +118,9 @@ export class NuevaOPComponent implements OnInit {
   }
 
   agregarDespacho() {
-    let cantidades = this.despachos.controls.reduce((total, control) => {
+    const cantidades = this.despachos.controls.reduce((total, control) => {
       return total + (control.get('cantidad')?.value || 0);
     }, 0);
-
-    console.log(cantidades);
 
     if (this.despachos.length < 3) {
       this.despachos.push(this.crearDespacho());
@@ -222,9 +276,9 @@ export class NuevaOPComponent implements OnInit {
     const selected = (event.target as HTMLSelectElement).value !== '#';
     this.selectedTintas[tintaId] = selected;
 
-    let value = event.target.value;
+    const value = event.target.value;
 
-    let n = value.split('_');
+    const n = value.split('_');
 
     if (!this.OP.tinta[n[0]]) {
       this.OP.tinta[n[0]] = {
@@ -308,7 +362,7 @@ export class NuevaOPComponent implements OnInit {
   }
 
   calcularTinta(cantidad) {
-    let hojas_totales = Number(this.OP.hojas) + Number(this.OP.demasia);
+    const hojas_totales = Number(this.OP.hojas) + Number(this.OP.demasia);
     let total = (hojas_totales * cantidad) / 1000;
     total = Number(total.toFixed(2));
     return total;
@@ -362,11 +416,11 @@ export class NuevaOPComponent implements OnInit {
     if (!this.medidas[maquina].fases[fase].date[date]) {
       this.medidas[maquina].fases[fase].date[date] = true;
     } else {
-      let old_inicio = moment(this.medidas[maquina].fases[fase].inicio[date], 'hh:mm');
-      let old_fin = moment(this.medidas[maquina].fases[fase].fin[date], 'hh:mm');
+      const old_inicio = moment(this.medidas[maquina].fases[fase].inicio[date], 'hh:mm');
+      const old_fin = moment(this.medidas[maquina].fases[fase].fin[date], 'hh:mm');
 
-      let inicio_ = moment(inicio, 'hh:mm');
-      let fin_ = moment(fin, 'hh:mm');
+      const inicio_ = moment(inicio, 'hh:mm');
+      const fin_ = moment(fin, 'hh:mm');
 
       // Calculamos la duración en horas para ambos intervalos
       const duracion_old = moment.duration(old_fin.diff(old_inicio)).asHours();
@@ -390,7 +444,7 @@ export class NuevaOPComponent implements OnInit {
             console.log(this.medidas[maquina].fases[fase].width);
             console.log(parseInt(this.medidas[maquina].fases[fase].width) / 110);
 
-            let largo = parseInt(this.medidas[maquina].fases[fase].width) / 110;
+            const largo = parseInt(this.medidas[maquina].fases[fase].width) / 110;
 
             const finActual = moment(this.medidas[maquina].fases[fase].fin[largo - 1], 'HH:mm');
             const inicioActual = moment(this.medidas[maquina].fases[fase].inicio[largo - 1], 'HH:mm');
@@ -404,7 +458,7 @@ export class NuevaOPComponent implements OnInit {
               // Si la diferencia excede el tiempo entre fin[largo-1] e inicio[largo-1]
 
               // Descontamos solo el tiempo necesario para igualar a inicio[largo-1]
-              let newWidth = parseInt(this.medidas[maquina].fases[fase].width) - 110;
+              const newWidth = parseInt(this.medidas[maquina].fases[fase].width) - 110;
               this.medidas[maquina].fases[fase].width = `${newWidth}px`;
 
               // Calcula el tiempo restante y descuéntalo de fin[largo-2]
@@ -444,9 +498,9 @@ export class NuevaOPComponent implements OnInit {
           if (result.isConfirmed) {
             console.log(this.medidas[maquina].fases[fase].width);
             console.log(parseInt(this.medidas[maquina].fases[fase].width) / 110);
-            let horarioDefault = this.horarios.horarios.find((x) => x.default == true);
+            const horarioDefault = this.horarios.horarios.find((x) => x.default == true);
 
-            let largo = parseInt(this.medidas[maquina].fases[fase].width) / 110;
+            const largo = parseInt(this.medidas[maquina].fases[fase].width) / 110;
 
             const finActual = moment(this.medidas[maquina].fases[fase].fin[largo - 1], 'HH:mm');
             const inicioActual = moment(horarioDefault.a, 'HH:mm');
@@ -461,7 +515,7 @@ export class NuevaOPComponent implements OnInit {
 
               // Descontamos solo el tiempo necesario para igualar a inicio[largo-1]
               this.medidas[maquina].fases[fase].fin[largo - 1] = horarioDefault.a;
-              let newWidth = parseInt(this.medidas[maquina].fases[fase].width) + 110;
+              const newWidth = parseInt(this.medidas[maquina].fases[fase].width) + 110;
               this.medidas[maquina].fases[fase].width = `${newWidth}px`;
 
               // Calcula el tiempo restante y descuéntalo de fin[largo-2]
@@ -522,12 +576,12 @@ export class NuevaOPComponent implements OnInit {
   public OC_SELECTED;
 
   findProducts() {
-    let orden = this.Ordenes.find((x: any) => x._id === this.OP.oc);
+    const orden = this.Ordenes.find((x: any) => x._id === this.OP.oc);
     this.OC_SELECTED = orden;
 
     const agrupados = new Map();
 
-    for (let item of orden.pedido) {
+    for (const item of orden.pedido) {
       const id = item.producto._id;
       if (agrupados.has(id)) {
         agrupados.get(id).cantidad += Number(item.cantidad);
@@ -559,9 +613,9 @@ export class NuevaOPComponent implements OnInit {
   crearLargos(maquinasDestino) {
     const result = this.medidas || [];
 
-    let hoy = moment().format('yyyy-MM-DD');
+    const hoy = moment().format('yyyy-MM-DD');
 
-    let horarioDefault = this.horarios.horarios.find((x) => x.default == true);
+    const horarioDefault = this.horarios.horarios.find((x) => x.default == true);
 
     const inicioHorario = moment(horarioDefault.de, 'HH:mm');
     const finHorario = moment(horarioDefault.a, 'HH:mm');
@@ -574,7 +628,7 @@ export class NuevaOPComponent implements OnInit {
       const produccion_diaria = maquina.trabajo * horas_trabajo;
       let diasNecesarios = Math.ceil((this.OP.hojas + this.OP.demasia) / produccion_diaria);
 
-      let horas_necesarias = (this.OP.hojas + this.OP.demasia) / maquina.trabajo;
+      const horas_necesarias = (this.OP.hojas + this.OP.demasia) / maquina.trabajo;
 
       const horas_restantes = horas_necesarias % horas_trabajo;
 
@@ -586,7 +640,7 @@ export class NuevaOPComponent implements OnInit {
         }
       }
 
-      let largo = 110 * diasNecesarios;
+      const largo = 110 * diasNecesarios;
       if (!maquinaObj) {
         maquinaObj = {
           maquina: maquina,
@@ -596,7 +650,7 @@ export class NuevaOPComponent implements OnInit {
       }
 
       maquina.fases.forEach(() => {
-        let faseArray = {
+        const faseArray = {
           width: `${largo}px`,
           fecha: hoy,
           final: hoy,
@@ -669,12 +723,14 @@ export class NuevaOPComponent implements OnInit {
   }
 
   CalcularMetros(nombre) {
-    let cinta = this.materiales.buscarCajasYmetros(nombre).cinta;
+    const cinta = this.materiales.buscarCajasYmetros(nombre).cinta;
     return cinta;
   }
 
   mostrarProducto(e) {
-    let cantidades_tal = this.OC_SELECTED.pedido.filter((p) => p.producto._id === this.productos[e.value].producto._id);
+    const cantidades_tal = this.OC_SELECTED.pedido.filter(
+      (p) => p.producto._id === this.productos[e.value].producto._id,
+    );
 
     for (let i = 0; i < cantidades_tal.length; i++) {
       console.warn(this.OC_SELECTED.orden);
@@ -728,7 +784,7 @@ export class NuevaOPComponent implements OnInit {
   async onResizeEnd(event: ResizeEvent, maquina: number, fase: number): Promise<void> {
     this.dragDisabled = true;
 
-    let horarioDefault = this.horarios.horarios.find((x) => x.default == true);
+    const horarioDefault = this.horarios.horarios.find((x) => x.default == true);
 
     if (event.rectangle.width) {
       let newWidth = Math.round(event.rectangle.width / 110) * 110;
@@ -747,7 +803,7 @@ export class NuevaOPComponent implements OnInit {
 
       this.medidas[maquina].fases[fase].width = `${newWidth}px`;
       // Calculate this.test2 based on newWidth
-      let daysToAdd = Math.floor(newWidth / 110); // Calculate number of days to add based on newWidth
+      const daysToAdd = Math.floor(newWidth / 110); // Calculate number of days to add based on newWidth
       this.medidas[maquina].fases[fase].final = moment(this.medidas[maquina].fases[fase].fecha)
         .add(daysToAdd - 1, 'days')
         .format('yyyy-MM-DD'); // Add days to test1 and assign to test2
@@ -767,7 +823,7 @@ export class NuevaOPComponent implements OnInit {
   }
 
   onDragEnd(event: CdkDragEnd, maquina, fase) {
-    let hoy = moment().format('yyyy-MM-DD');
+    const hoy = moment().format('yyyy-MM-DD');
     const currentYPosition = event.source.getFreeDragPosition().y;
     let newPositionX = Math.round(event.source.getFreeDragPosition().x / 110) * 110;
     if (newPositionX < 0) {
@@ -786,11 +842,11 @@ export class NuevaOPComponent implements OnInit {
     console.log(this.position);
 
     // Calculate this.test2 based on newWidth
-    let daysToAdd = Math.floor(this.position / 110); // Calculate number of days to add based on newWidth
+    const daysToAdd = Math.floor(this.position / 110); // Calculate number of days to add based on newWidth
     this.medidas[maquina].fases[fase].fecha = moment(hoy).add(daysToAdd, 'days').format('YYYY-MM-DD'); // Add days to test1 and assign to test1
-    let widthString = this.medidas[maquina].fases[fase].width; // '330px'
-    let widthNumber = parseInt(widthString, 10); // 330
-    let daysToAdd2 = Math.floor(widthNumber / 110);
+    const widthString = this.medidas[maquina].fases[fase].width; // '330px'
+    const widthNumber = parseInt(widthString, 10); // 330
+    const daysToAdd2 = Math.floor(widthNumber / 110);
     this.medidas[maquina].fases[fase].final = moment(this.medidas[maquina].fases[fase].fecha)
       .add(daysToAdd2 - 1, 'days')
       .format('YYYY-MM-DD'); // Add days to test1 and assign to test2
@@ -799,8 +855,8 @@ export class NuevaOPComponent implements OnInit {
   }
 
   CalcularPosicion(x, i, n) {
-    let hoy = moment().format('yyyy-MM-DD');
-    let fin = moment(this.medidas[x].fases[i].fecha);
+    const hoy = moment().format('yyyy-MM-DD');
+    const fin = moment(this.medidas[x].fases[i].fecha);
 
     // console.log(hoy,'-',fin)
 
@@ -813,8 +869,8 @@ export class NuevaOPComponent implements OnInit {
 
   formatearFecha(fecha) {
     moment.locale('es');
-    let Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
-    let feriado = Calendario.dias.find(
+    const Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
+    const feriado = Calendario.dias.find(
       (x) => x.month === Number(moment(fecha).format('M')) - 1 && x.day === Number(moment(fecha).format('D')),
     );
 
@@ -827,14 +883,14 @@ export class NuevaOPComponent implements OnInit {
 
   formatearFecha_(fecha) {
     moment.locale('es');
-    let Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
-    let feriado = Calendario.dias.find(
+    const Calendario = this.horarios.calendario.find((x) => x.year === Number(moment(fecha).format('yyyy')));
+    const feriado = Calendario.dias.find(
       (x) => x.month === Number(moment(fecha).format('M')) - 1 && x.day === Number(moment(fecha).format('D')),
     );
 
     if (feriado) {
-      let hoy = moment().format('yyyy-MM-DD');
-      let fin = moment(fecha);
+      const hoy = moment().format('yyyy-MM-DD');
+      const fin = moment(fecha);
 
       this.feriados.push(fin.diff(hoy, 'days'));
 
@@ -854,7 +910,7 @@ export class NuevaOPComponent implements OnInit {
 
   DropMaquina(maquina, fase: number, maquina_?) {
     // Clonar profundamente el objeto que se pasa
-    let maquinaToAdd = JSON.parse(JSON.stringify(maquina_));
+    const maquinaToAdd = JSON.parse(JSON.stringify(maquina_));
 
     // Crear un nuevo array con solo la fase específica
     maquinaToAdd.fases = [maquinaToAdd.fases[fase]];
@@ -871,7 +927,7 @@ export class NuevaOPComponent implements OnInit {
   }
 
   ExtraerMedida(medida) {
-    let numero: number = parseFloat(medida.match(/\d+/)[0]);
+    const numero: number = parseFloat(medida.match(/\d+/)[0]);
     return numero / 110;
   }
 
@@ -904,7 +960,7 @@ export class NuevaOPComponent implements OnInit {
   }
 
   GuardarTrabajo = async () => {
-    console.log(this.OP);
+    this.guardando = true;
     this.OP.fases = [];
     this.OP.fases = this.medidas;
 
@@ -914,7 +970,7 @@ export class NuevaOPComponent implements OnInit {
       }
     }
 
-    let requisicion = {
+    const requisicion = {
       status: 'Por Asignar',
       materiales: [
         {
@@ -940,6 +996,7 @@ export class NuevaOPComponent implements OnInit {
 
     await this.api.guardarOrdenProduccion(this.OP, requisicion);
 
+    this.guardando = false;
     this.OP = {
       cliente: '',
       oc: '',
@@ -984,7 +1041,7 @@ export class NuevaOPComponent implements OnInit {
   }
 
   NoCaeFeriado(n) {
-    let Feriado = this.feriados.find((dia) => dia === n);
+    const Feriado = this.feriados.find((dia) => dia === n);
     // console.log(Feriado);
     if (!Feriado && Feriado !== 0) {
       // para manejar el caso cuando Feriado es 0

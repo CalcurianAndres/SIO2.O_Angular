@@ -2,7 +2,9 @@
   <div class="modal-background"></div>
   <div class="modal-card" style="width: 90%">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">Registro</p>
+      <p class="modal-card-title fuente">
+        <i class="fas fa-history mr-2"></i> Registro
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="registro_ = false; Inventario = true"></button>
     </div>
     <div class="modal-card-body">
@@ -31,6 +33,9 @@
         </tbody>
       </table>
     </div>
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem;">
+      <button class="button" (click)="registro_ = false; Inventario = true">Cerrar</button>
+    </footer>
   </div>
 </div>
 
@@ -38,88 +43,105 @@
   <div class="modal-background"></div>
   <div class="modal-card long animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">Inventario</p>
+      <p class="modal-card-title fuente">
+        <i class="fas fa-archive mr-2"></i> Inventario
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body">
-      <div *ngFor="let material_ of agrupadoMateriales; index as n">
-        <div class="card">
-          <div class="card-header dark">
-            <div class="card-header-title">
-              <span class="icon" style="color: rgb(83, 167, 224); cursor: pointer" (click)="buscarRegistro(material_)"
-                ><i class="fas fa-info-circle"></i
-              ></span>
-              {{ material_.nombre }} - Total: {{ totalizarPorNombre(material_) }}
-              {{ material_.materialesPorId[0].unidad }}(s)
-              <span class="angle_icon_span" (click)="showInfo__(n)" [ngClass]="{ clicked: clicked__[n] }"
-                ><i class="fas fa-angle-down"></i
-              ></span>
+      <ng-container *ngIf="!agrupadoMateriales || agrupadoMateriales.length === 0">
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fas fa-archive"></i></div>
+          <div class="empty-title">Sin inventario</div>
+          <div class="empty-hint">No hay materiales registrados para este grupo</div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="agrupadoMateriales && agrupadoMateriales.length > 0">
+        <div class="order-card" *ngFor="let material_ of agrupadoMateriales; index as n">
+          <div class="card-header" (click)="showInfo__(n)">
+            <div class="order-header-info">
+              <span class="order-provider">{{ material_.nombre }}</span>
+              <span class="order-number">
+                Total: {{ totalizarPorNombre(material_) }} {{ material_.materialesPorId[0].unidad }}(s)
+              </span>
+            </div>
+            <div class="order-header-actions">
+              <button class="button is-small is-ghost" style="margin-right: 0.25rem;" (click)="buscarRegistro(material_); $event.stopPropagation()" title="Ver registro">
+                <span class="icon"><i class="fas fa-info-circle" style="color: var(--accent-blue)"></i></span>
+              </button>
+              <span class="chevron-btn" [ngClass]="clicked__[n] ? 'rotate-up' : 'rotate-down'">
+                <i class="fas fa-chevron-down"></i>
+              </span>
             </div>
           </div>
-          <div class="card-content" [ngClass]="{ hidden: !clicked__[n], show: clicked__[n] }">
-            <div *ngFor="let material of material_.materialesPorId; index as i">
-              <div class="card">
-                <div class="card-header dark">
-                  <div class="card-header-title">
-                    {{ material.nombre }} ({{ material.marca }}): {{ material.netoTotal }} {{ material.unidad }}(s)
-                    <span class="angle_icon_span" (click)="showInfo_(i)" [ngClass]="{ clicked: clicked_[i] }"
-                      ><i class="fas fa-angle-down"></i
-                    ></span>
-                  </div>
+          <div class="order-details" [ngClass]="{ active: clicked__[n] }">
+            <div class="order-card" *ngFor="let material of material_.materialesPorId; index as i" style="margin-bottom: 0.5rem;">
+              <div class="card-header" style="background: var(--bg-card); padding: 0.4rem 0.75rem; min-height: 36px;" (click)="showInfo_(i)">
+                <div class="order-header-info">
+                  <span class="order-number"><strong>{{ material.nombre }} ({{ material.marca }})</strong></span>
+                  <span class="order-number">{{ material.netoTotal }} {{ material.unidad }}(s)</span>
                 </div>
-                <div class="card-content" [ngClass]="{ hidden: !clicked_[i], show: clicked_[i] }">
-                  <table class="table is-fullwidth">
-                    <thead>
-                      <tr>
-                        <th>Lote</th>
-                        <th>Total ({{ material.unidad }})</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <ng-container *ngFor="let lote of material.lotes | keyvalue; index as index">
-                        <tr>
-                          <th>{{ lote.key }}</th>
-                          <td>{{ totalizar(lote.value) }}</td>
-                          <span
-                            class="angle_icon_span"
-                            (click)="showInfo(index)"
-                            [ngClass]="{ clicked: clicked[index] }"
-                            ><i class="fas fa-angle-down"></i
-                          ></span>
-                        </tr>
-
-                        <tr>
-                          <td colspan="2" [ngClass]="{ hidden: !clicked[index], show: clicked[index] }">
-                            <table class="table is-fullwidth">
-                              <thead>
-                                <tr>
-                                  <th>Código</th>
-                                  <th>Presentación</th>
-                                  <th>Neto ({{ material.unidad }})</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let mat of lote.value">
-                                  <td>{{ mat.codigo }}</td>
-                                  <td>{{ mat.presentacion }}</td>
-                                  <td>{{ mat.neto }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      </ng-container>
-                      <br /><br />
-                    </tbody>
-                  </table>
+                <div class="order-header-actions">
+                  <span class="chevron-btn" style="width: 24px; height: 24px; font-size: 0.85rem;"
+                    [ngClass]="clicked_[i] ? 'rotate-up' : 'rotate-down'">
+                    <i class="fas fa-chevron-down"></i>
+                  </span>
                 </div>
               </div>
-              <br />
+              <div class="order-details" [ngClass]="{ active: clicked_[i] }">
+                <table class="table is-fullwidth">
+                  <thead>
+                    <tr>
+                      <th>Lote</th>
+                      <th>Total ({{ material.unidad }})</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let lote of material.lotes | keyvalue; index as idx">
+                      <tr>
+                        <th style="font-family: monospace;">{{ lote.key }}</th>
+                        <td>{{ totalizar(lote.value) }}</td>
+                        <td style="text-align: right;">
+                          <span class="chevron-btn" style="width: 24px; height: 24px; font-size: 0.85rem; display: inline-flex;"
+                            (click)="showInfo(idx); $event.stopPropagation()"
+                            [ngClass]="clicked[idx] ? 'rotate-up' : 'rotate-down'">
+                            <i class="fas fa-chevron-down"></i>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr *ngIf="clicked[idx]">
+                        <td colspan="3">
+                          <table class="table is-fullwidth">
+                            <thead>
+                              <tr>
+                                <th>Código</th>
+                                <th>Presentación</th>
+                                <th>Neto ({{ material.unidad }})</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let mat of lote.value">
+                                <td>{{ mat.codigo }}</td>
+                                <td>{{ mat.presentacion }}</td>
+                                <td>{{ mat.neto }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-        <br />
-      </div>
+      </ng-container>
     </div>
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem;">
+      <button class="button" (click)="cerrar()">Cerrar</button>
+    </footer>
   </div>
 </div>

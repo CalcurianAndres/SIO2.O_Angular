@@ -1,0 +1,72 @@
+/* Modal body padding */
+.modal-card-body {
+  padding: 1.25rem;
+}
+
+/* Detail grid for min/nom/max values */
+.detail-grid {
+  width: 100%;
+}
+.detail-grid th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+.detail-grid td {
+  font-size: 0.9rem;
+  padding: 2px 0;
+  color: var(--text-heading);
+}
+
+/* Section labels */
+.section-label {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.section-label i {
+  font-size: 0.75rem;
+}
+
+/* Value blocks */
+.detail-item {
+  margin-bottom: 0.5rem;
+}
+.detail-item .label-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+.detail-item .value-text {
+  font-size: 0.9rem;
+  color: var(--text-heading);
+  padding-left: 1.2rem;
+}
+
+/* Red dot icon */
+.detail-item .red,
+.detail-grid .red {
+  color: var(--accent-red);
+  font-size: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Divider */
+.modal-card-body hr {
+  margin: 0.75rem 0;
+  opacity: 0.2;
+}

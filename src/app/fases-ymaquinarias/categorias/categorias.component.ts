@@ -9,13 +9,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./categorias.component.scss'],
 })
 export class CategoriasComponent {
-  constructor(public api: CategoriasService) {}
+  constructor(public api: CategoriasService) {
+    setTimeout(() => (this.cargando = false), 1200);
+  }
 
-  public data = {
-    nombre: '',
-  };
+  public data = { nombre: '' };
   public nueva: boolean = false;
   public editar: boolean = false;
+  public cargando: boolean = true;
 
   nuevaCategoria() {
     this.nueva = true;
@@ -24,9 +25,7 @@ export class CategoriasComponent {
   cerrar() {
     this.nueva = false;
     this.editar = false;
-    this.data = {
-      nombre: '',
-    };
+    this.data = { nombre: '' };
     setTimeout(() => {
       Swal.fire({
         icon: this.api.mensaje.icon,
@@ -40,19 +39,34 @@ export class CategoriasComponent {
     }, 1000);
   }
 
-  filas() {
-    return Math.ceil(this.api.categorias.length / 3);
+  cerrarSimple() {
+    this.nueva = false;
+    this.editar = false;
+    this.data = { nombre: '' };
   }
 
-  verInfo(categoria) {}
+  filas() {
+    return Math.ceil(this.api.categorias.length / 5);
+  }
 
   editarInfo(categoria) {
     this.editar = true;
     this.data = categoria;
   }
 
-  eliminarCategori(categoria) {
-    this.api.EliminarCategoria(categoria._id);
-    this.cerrar();
+  borrarCategoria(id: string) {
+    Swal.fire({
+      title: '¿Eliminar esta categoría?',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonColor: '#48c78e',
+      confirmButtonText: 'Eliminar',
+      denyButtonText: 'No Eliminar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.EliminarCategoria(id);
+        this.cerrar();
+      }
+    });
   }
 }

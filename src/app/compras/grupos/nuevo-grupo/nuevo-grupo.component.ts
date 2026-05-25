@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import Swal from 'sweetalert2';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-nuevo-grupo',
@@ -7,54 +6,55 @@ import Swal from 'sweetalert2';
   templateUrl: './nuevo-grupo.component.html',
   styleUrls: ['./nuevo-grupo.component.scss'],
 })
-export class NuevoGrupoComponent implements OnInit {
+export class NuevoGrupoComponent implements OnChanges {
   @Input() api: any;
   @Input() nuevo: any;
   @Input() editar: any;
   @Input() data: any;
   @Input() cargando!: boolean;
-  @Input() trato;
-  @Input() otro;
+  @Input() trato: any;
+  @Input() otro: any;
   @Output() onCloseModal = new EventEmitter();
   @Output() onCloseModal_ = new EventEmitter();
-  @Output() onLoading = new EventEmitter();
 
   nombre = '';
-  parcial = 'false';
-  icono = '';
+  parcial = false;
+  guardando = false;
 
-  public iconos_gallery = false;
-  public iconos_gallery_ = false;
-
-  ngOnInit(): void {
-    var phrases = ['Casi termina...'];
-
-    // Function to change the random phrase
-    function changeRandomPhrase() {
-      var randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      document.getElementById('random-phrases')!.textContent = randomPhrase;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['nuevo']?.currentValue || changes['editar']?.currentValue) {
+      this.guardando = false;
     }
-
-    // Call the function every 1 second
-    setInterval(changeRandomPhrase, 2000);
   }
 
-  public nuevoGrupo = async () => {
-    this.onCloseModal.emit();
-    let data = {
+  nuevoGrupo() {
+    this.guardando = true;
+    const data = {
       nombre: this.nombre,
       parcial: this.parcial,
-      icono: this.icono,
+      icono: 'fa-cube',
       trato: this.trato,
       otro: this.otro,
     };
-    await this.api.GuardarGrupo(data);
-
+    this.api.GuardarGrupo(data);
     this.nombre = '';
-    this.parcial = 'false';
-    this.icono = '';
+    this.parcial = false;
     this.trato = false;
-  };
+    this.otro = false;
+    this.onCloseModal.emit();
+  }
+
+  cerrar() {
+    this.nombre = '';
+    this.parcial = false;
+    this.onCloseModal.emit();
+  }
+
+  cerrar_() {
+    this.nombre = '';
+    this.parcial = false;
+    this.onCloseModal_.emit();
+  }
 
   verTrato(e: any) {
     this.trato = e.checked;
@@ -64,38 +64,11 @@ export class NuevoGrupoComponent implements OnInit {
     this.otro = e.checked;
   }
 
-  cerrar() {
-    this.nombre = '';
-    this.parcial = 'false';
-    this.icono = '';
-
-    this.onCloseModal.emit();
-  }
-
-  cerrar_() {
-    this.nombre = '';
-    this.parcial = 'false';
-    this.icono = '';
-
-    this.onCloseModal_.emit();
-  }
-
   EditarGrupo() {
+    this.guardando = true;
     this.data.otro = this.otro;
     this.data.trato = this.trato;
     this.api.EditarGrupo(this.data);
     this.onCloseModal.emit();
-  }
-
-  selectIcon(clase) {
-    this.icono = clase;
-    this.nuevo = true;
-    this.iconos_gallery = false;
-  }
-
-  selectIcon_(clase) {
-    this.data.icono = clase;
-    this.editar = true;
-    this.iconos_gallery_ = false;
   }
 }

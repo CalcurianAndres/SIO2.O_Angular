@@ -50,7 +50,7 @@ export class DepartamentosService {
   }
 
   buscarSubUnidad(departamento_id) {
-    let departamento_ = this.departamentos.find((x: any) => x._id === departamento_id);
+    const departamento_ = this.departamentos.find((x: any) => x._id === departamento_id);
     return this.subunidad.filter((x: any) => x.departamento === departamento_.nombre);
   }
 }

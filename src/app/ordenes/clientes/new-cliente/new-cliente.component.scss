@@ -1,89 +1,49 @@
-.red {
+/* ── Tags list ── */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+.tag-sub {
+  font-weight: 400;
+  opacity: 0.75;
+}
+.tag-delete {
+  margin-left: 0.4rem;
   cursor: pointer;
+  opacity: 0.5;
+  font-size: 0.8rem;
 }
-.added {
-  box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px -1px 5px 0px rgba(0, 0, 0, 0.75);
-  background-color: aqua;
-}
-
-.modal .modal-card .bg {
-  background-color: rgb(38, 52, 61);
-  color: white;
+.tag-delete:hover {
+  opacity: 1;
+  color: var(--status-danger);
 }
 
-.modal .modal-card strong {
-  color: white;
-}
-
-table tr td {
-  background-color: rgb(38, 52, 61);
-  color: white;
-}
-
-.red {
-  cursor: pointer;
-}
-
-.loader-container {
+/* ── Section label ── */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  gap: 0.35rem;
 }
 
-.loader {
-  border: 4px solid #ccc;
-  border-top: 4px solid #999;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 10px;
+/* ── Modal divider ── */
+hr.modal-divider {
+  margin: 0.75rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+/* ── Textarea icon fix ── */
+.control.has-icons-left .icon.is-left {
+  pointer-events: none;
 }
-
-#loading-text {
-  font-size: 16px;
-}
-
-#random-phrases {
-  font-size: 20px;
-  margin-top: 20px;
-  position: relative;
-}
-
-#random-phrases::after {
-  content: '...';
-  animation: ellipsis 1.5s infinite;
-}
-
-@keyframes ellipsis {
-  0% {
-    content: '';
-  }
-  33% {
-    content: '.';
-  }
-  66% {
-    content: '..';
-  }
-  100% {
-    content: '...';
-  }
-}
-
-.black b {
-  display: block;
-  font-family: 'Gilroy';
-  color: var(--text-heading);
+.control.has-icons-left textarea ~ .icon.is-left {
+  align-items: flex-start;
+  padding-top: 0.75rem;
 }

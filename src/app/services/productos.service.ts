@@ -48,10 +48,7 @@ export class ProductosService {
   }
 
   buscarPorClientes(cliente) {
-    return this.producto.filter((x) => {
-      console.log(x.identificacion.cliente._id === cliente);
-      return x.identificacion.cliente._id === cliente;
-    });
+    return this.producto.filter((x) => x.identificacion?.cliente?._id === cliente);
   }
 
   buscarHistorialPorProducto(producto) {

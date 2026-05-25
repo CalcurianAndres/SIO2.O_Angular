@@ -11,61 +11,177 @@
   <app-section-header
     title="Clientes"
     description="Administración de clientes"
-    icon="fa-file-invoice-dollar"
+    icon="fa-users"
     color="blue"
-    color="green"
   ></app-section-header>
+
+  <!-- Top bar -->
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-info" (click)="cliente = true">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Nuevo Cliente</span>
+      </button>
+    </div>
+  </div>
+
   <br />
-  <button class="button is-info" (click)="cliente = true">
-    <span class="icon"><i class="fas fa-plus-circle"></i></span>
-    <span>Cliente</span>
-  </button>
-  <br />
-  <br />
-  <div class="columns">
-    <div class="column">
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && !api.clientes?.length" class="skeleton-list">
+    <div *ngFor="let _ of [].constructor(4)" class="skeleton-row">
+      <div class="skeleton-line" style="width: 60%"></div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!cargando && (!api.clientes || api.clientes.length === 0)" class="empty-state">
+    <i class="fas fa-users empty-icon"></i>
+    <p class="empty-title">No hay clientes registrados</p>
+    <p class="empty-hint">Haz clic en "Nuevo Cliente" para agregar el primero</p>
+  </div>
+
+  <!-- Master-detail -->
+  <div *ngIf="api.clientes?.length > 0" class="columns is-variable is-4">
+    <!-- Left: list -->
+    <div class="column is-6">
       <div class="card">
         <div class="card-content">
-          <table class="table is-fullwidth">
+          <!-- Search -->
+          <div class="field">
+            <div class="control has-icons-left">
+              <input
+                class="input"
+                type="text"
+                placeholder="Buscar cliente…"
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()"
+              />
+              <span class="icon is-left"><i class="fas fa-search"></i></span>
+            </div>
+          </div>
+          <table class="table is-fullwidth is-hoverable clientes-table">
             <thead>
               <tr>
-                <th>Clientes</th>
+                <th>Cliente</th>
+                <th>RIF</th>
+                <th>Código</th>
+                <th class="has-text-centered"><i class="fas fa-address-book"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let clientes of api.clientes; index as i">
-                <td
-                  class="clientes_hover"
-                  (click)="BuscarCliente(clientes._id, i)"
-                  [ngClass]="{ 'is-selected': seleccion[i] }"
-                >
-                  {{ clientes.nombre }}
+              <tr
+                *ngFor="let c of paginatedClientes; index as i"
+                class="cliente-row"
+                [ngClass]="{ 'is-selected': seleccion[i] }"
+                (click)="BuscarCliente(c._id, i)"
+              >
+                <td class="has-text-weight-semibold">{{ c.nombre }}</td>
+                <td class="is-family-code is-size-7">{{ c.rif }}</td>
+                <td class="is-size-7">{{ c.codigo }}</td>
+                <td class="has-text-centered">
+                  <span class="tag is-rounded is-info is-light">{{ c.contactos?.length || 0 }}</span>
                 </td>
+              </tr>
+              <tr *ngIf="filteredClientes.length === 0">
+                <td colspan="4" class="has-text-centered has-text-grey is-size-7">Sin resultados</td>
               </tr>
             </tbody>
           </table>
+          <!-- Pagination -->
+          <div class="pagination-bar" *ngIf="totalPages > 1">
+            <span class="pagination-info is-size-7 has-text-grey">
+              {{ filteredClientes.length }} cliente(s) — Pág {{ currentPage }} de {{ totalPages }}
+            </span>
+            <div class="pagination-controls">
+              <div class="select is-small">
+                <select [(ngModel)]="pageSize" (change)="currentPage = 1">
+                  <option [value]="10">10</option>
+                  <option [value]="25">25</option>
+                  <option [value]="50">50</option>
+                </select>
+              </div>
+              <button class="button is-small" [disabled]="currentPage <= 1" (click)="goToPage(currentPage - 1)">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button
+                class="button is-small"
+                *ngFor="let p of [].constructor(totalPages); let i = index"
+                [ngClass]="{ 'is-info': currentPage === i + 1 }"
+                (click)="goToPage(i + 1)"
+              >
+                {{ i + 1 }}
+              </button>
+              <button
+                class="button is-small"
+                [disabled]="currentPage >= totalPages"
+                (click)="goToPage(currentPage + 1)"
+              >
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="column">
-      <div class="card" *ngIf="cliente_seleccionado.direccion">
+
+    <!-- Right: detail -->
+    <div class="column is-6">
+      <div *ngIf="!cliente_seleccionado" class="empty-state is-small">
+        <i class="fas fa-hand-pointer empty-icon is-small"></i>
+        <p class="empty-title is-size-6">Selecciona un cliente</p>
+        <p class="empty-hint is-size-7">Haz clic en un cliente de la lista para ver sus datos</p>
+      </div>
+
+      <div *ngIf="cliente_seleccionado" class="card">
         <div class="card-content">
-          <b>Dirección:</b> <br />
-          {{ cliente_seleccionado.direccion }} <br />
-          <b>Rif:</b> {{ cliente_seleccionado.rif }}
-          <hr />
-          <b>Contactos:</b> <br />
-          <span *ngFor="let contactos of cliente_seleccionado.contactos">
-            {{ contactos.titulo }} {{ contactos.nombre }} - {{ contactos.cargo }} <br />
-            <i class="fas fa-phone"></i> {{ contactos.telefono }} / <i class="fas fa-at"></i> {{ contactos.correo }}
-          </span>
-          <hr />
-          <b>Almacenes:</b> <br />
-          <span *ngFor="let almacenes of cliente_seleccionado.almacenes"> {{ almacenes.nombre }} <br /> </span>
-          <hr />
+          <div class="detail-header">
+            <i class="fas fa-user-tie detail-icon"></i>
+            <div>
+              <span class="detail-name">{{ cliente_seleccionado.nombre }}</span>
+              <span class="detail-sub has-text-grey is-size-7">{{ cliente_seleccionado.codigo }}</span>
+            </div>
+          </div>
+
+          <hr class="modal-divider" />
+          <span class="section-label"><i class="fas fa-id-card"></i> Datos generales</span>
+          <div class="detail-row">
+            <span class="detail-label"><i class="fas fa-file-invoice"></i> RIF</span>
+            <span class="detail-value">{{ cliente_seleccionado.rif }}</span>
+          </div>
+          <div class="detail-row" *ngIf="cliente_seleccionado.direccion">
+            <span class="detail-label"><i class="fas fa-map-pin"></i> Dirección</span>
+            <span class="detail-value">{{ cliente_seleccionado.direccion }}</span>
+          </div>
+
+          <hr class="modal-divider" />
+          <span class="section-label"><i class="fas fa-address-book"></i> Contactos</span>
+          <div *ngIf="!cliente_seleccionado.contactos?.length" class="has-text-grey is-size-7">
+            Sin contactos registrados
+          </div>
+          <div class="tags-list">
+            <span *ngFor="let contacto of cliente_seleccionado.contactos" class="tag is-info is-light is-medium">
+              <i class="fas fa-user-tie mr-1"></i>
+              <span>{{ contacto.titulo || '' }} {{ contacto.nombre }}</span>
+              <span class="tag-sub" *ngIf="contacto.cargo"> — {{ contacto.cargo }}</span>
+            </span>
+          </div>
+
+          <hr class="modal-divider" />
+          <span class="section-label"><i class="fas fa-warehouse"></i> Almacenes</span>
+          <div *ngIf="!cliente_seleccionado.almacenes?.length" class="has-text-grey is-size-7">
+            Sin almacenes registrados
+          </div>
+          <div class="tags-list">
+            <span *ngFor="let almacen of cliente_seleccionado.almacenes" class="tag is-warning is-light is-medium">
+              <i class="fas fa-warehouse mr-1"></i> {{ almacen.nombre }}
+            </span>
+          </div>
+
+          <hr class="modal-divider" />
           <button class="button is-success" (click)="EditarCliente(cliente_seleccionado)">
             <span class="icon"><i class="fas fa-edit"></i></span>
-            <span>Editar</span>
+            <span>Editar Cliente</span>
           </button>
         </div>
       </div>

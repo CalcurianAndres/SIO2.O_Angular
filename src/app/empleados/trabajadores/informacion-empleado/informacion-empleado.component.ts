@@ -66,7 +66,7 @@ export class InformacionEmpleadoComponent {
     );
 
     async function GenerarPDF() {
-      let fecha_nacimiento = moment(informacion.datos_personales.fecha_nac).add(1, 'day').format('DD/MM/yyyy');
+      const fecha_nacimiento = moment(informacion.datos_personales.fecha_nac).add(1, 'day').format('DD/MM/yyyy');
 
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdfFonts);

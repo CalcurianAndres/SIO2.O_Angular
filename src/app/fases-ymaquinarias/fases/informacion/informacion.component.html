@@ -2,20 +2,29 @@
   <div class="modal-background"></div>
   <div class="modal-card animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">
-        {{ informacion.nombre }}
-      </p>
+      <p class="modal-card-title fuente"><i class="fas fa-info-circle"></i>&nbsp;{{ informacion.nombre }}</p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body light">
-      <p>
-        {{ informacion.descripcion }}
-      </p>
-      <hr />
-      <strong>Maquinas que gestionan esta fase:</strong> <br />
-      <ng-container *ngFor="let maquina of maquines">
-             <i class="fas fa-circle red"></i> {{ maquina.nombre }} {{ maquina.marca }} {{ maquina.modelo }}<br />
-      </ng-container>
+      <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-tag"></i> Nombre</span>
+        <span class="detail-value">{{ informacion.nombre }}</span>
+      </div>
+      <div class="detail-row" *ngIf="informacion.descripcion">
+        <span class="detail-label"><i class="fas fa-align-left"></i> Descripción</span>
+        <span class="detail-value">{{ informacion.descripcion }}</span>
+      </div>
+
+      <hr class="modal-divider" />
+      <div class="section-label"><i class="fas fa-industry"></i> Máquinas que gestionan esta fase</div>
+      <div class="tags" *ngIf="maquines && maquines.length > 0; else noMachines">
+        <span class="tag is-info is-light" *ngFor="let maquina of maquines">
+          <i class="fas fa-cog"></i>&nbsp;{{ maquina.nombre }} {{ maquina.marca }} {{ maquina.modelo }}
+        </span>
+      </div>
+      <ng-template #noMachines>
+        <p class="empty-section">Sin máquinas asignadas</p>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MaquinasService } from 'src/app/services/maquinas.service';
+import { FasesService } from 'src/app/services/fases.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -9,12 +10,18 @@ import Swal from 'sweetalert2';
   styleUrls: ['./maquinas.component.scss'],
 })
 export class MaquinasComponent {
-  constructor(public api: MaquinasService) {}
+  constructor(
+    public api: MaquinasService,
+    public fases: FasesService,
+  ) {
+    setTimeout(() => (this.cargando = false), 1200);
+  }
 
   public nueva: boolean = false;
   public info: boolean = false;
   public editar: boolean = false;
   public selectedFases: any = [];
+  public cargando: boolean = true;
 
   public data = {
     nombre: '',
@@ -27,6 +34,28 @@ export class MaquinasComponent {
     modelo: '',
     ano: '',
   };
+
+  filas() {
+    return Math.ceil(this.api.maquinas.length / 5);
+  }
+
+  seleccion(i: number) {
+    this.info = true;
+    this.data = this.api.maquinas[i];
+  }
+
+  Editar(i: number) {
+    this.editar = true;
+    this.data = this.api.maquinas[i];
+    const ids: any = [];
+    this.selectedFases = this.data.fases;
+    for (let i = 0; i < this.selectedFases.length; i++) {
+      ids.push(this.selectedFases[i]._id);
+      if (i === this.selectedFases.length - 1) {
+        this.data.fases = ids;
+      }
+    }
+  }
 
   nuevaMaquina() {
     this.nueva = true;
@@ -76,40 +105,17 @@ export class MaquinasComponent {
     }, 1000);
   }
 
-  filas() {
-    return Math.ceil(this.api.maquinas.length / 5);
-  }
-
-  MostrarInformacion(i) {
-    this.info = true;
-    this.data = this.api.maquinas[i];
-  }
-
-  EditarMaquina(i) {
-    this.editar = true;
-    this.data = this.api.maquinas[i];
-    let ids: any = [];
-    this.selectedFases = this.data.fases;
-    for (let i = 0; i < this.selectedFases.length; i++) {
-      ids.push(this.selectedFases[i]._id);
-      if (i === this.selectedFases.length - 1) {
-        this.data.fases = ids;
-      }
-    }
-  }
-
-  eliminarMaquina(i) {
+  borrarMaquina(id: string) {
     Swal.fire({
-      title: '¿Quieres eliminar esta máquina?',
+      title: '¿Eliminar esta máquina?',
       showDenyButton: true,
       showCancelButton: false,
       confirmButtonColor: '#48c78e',
       confirmButtonText: 'Eliminar',
-      denyButtonText: `No Eliminar`,
+      denyButtonText: 'No Eliminar',
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.api.eliminarMaquina(this.api.maquinas[i]._id);
+        this.api.eliminarMaquina(id);
         this.cerrar();
       }
     });

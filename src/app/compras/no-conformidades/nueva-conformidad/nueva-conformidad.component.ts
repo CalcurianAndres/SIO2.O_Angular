@@ -20,7 +20,7 @@ export class NuevaConformidadComponent {
   public observacion;
 
   Guardar() {
-    let data = {
+    const data = {
       observacion: this.noConformidad.observacion,
       recepcion: this.recepcion.recepciones[this.recepcion_selected],
       index_producto: this.noConformidad.index_producto,

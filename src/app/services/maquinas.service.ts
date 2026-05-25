@@ -34,7 +34,7 @@ export class MaquinasService {
   }
 
   BuscarPinzas(maquina) {
-    let maquinas_filtradas = this.maquinas.find((Impresora) => Impresora.nombre === maquina);
+    const maquinas_filtradas = this.maquinas.find((Impresora) => Impresora.nombre === maquina);
     return maquinas_filtradas.pinzas;
   }
 

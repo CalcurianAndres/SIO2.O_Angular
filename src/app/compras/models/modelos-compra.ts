@@ -36,6 +36,7 @@ export class Fabricante_populated {
     public origenes: Array<Origenes>,
     public grupo: Array<Grupo>,
     public _id?: string,
+    public proveedor?: boolean,
   ) {}
 }
 
@@ -375,6 +376,7 @@ export class Producto_ {
 }
 
 export class Producto {
+  public _id?: string;
   constructor(
     public cliente: string,
     public producto: string,

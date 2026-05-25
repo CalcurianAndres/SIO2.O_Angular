@@ -12,11 +12,13 @@
   [Esp_otro]="Esp_otro"
   [Editable]="especificacion_para_editar"
   (onCloseModal)="cerrarNuevo()"
-  (onActualizar)="actualizarEspecificaciones()"
->
+  (onActualizar)="actualizarEspecificaciones()">
 </app-nueva-especificacion>
 
-<app-detalles-especificacion [Detalle]="Detalle" (onCloseModal)="Detalle = false" [Especificacion]="Especificacion">
+<app-detalles-especificacion
+  [Detalle]="Detalle"
+  (onCloseModal)="Detalle = false"
+  [Especificacion]="Especificacion">
 </app-detalles-especificacion>
 
 <app-page-layout>
@@ -24,83 +26,153 @@
     title="Especificaciones"
     description="Parámetros y normas de calidad"
     icon="fa-flask"
-    color="red"
-  ></app-section-header>
-  <br />
-  <br />
-  <div class="card">
-    <div class="card-content">
-      <span class="title">Grupos de materiales</span>
-      <hr />
-      <div class="Departamentos">
-        <ng-container *ngFor="let grupo of grupos.grupos; index as i">
-          <div class="card dep" *ngIf="!grupo.otro">
-            <div
-              class="card animate__animated animate__fadeInUp"
-              [ngClass]="{ isSelected: grupoSelected === grupo.nombre }"
-            >
-              <div class="card-header">
-                <div class="div card-header-title">
-                  <div class="subtitle">
-                    <div class="columns">
-                      <div class="column is-1">
-                        <i class="{{ grupo.icono }}"></i>
-                      </div>
-                      <div class="column grupo" (click)="randomise(grupo.nombre, grupo._id)">
-                        {{ grupo.nombre }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    color="red">
+  </app-section-header>
+
+  <button class="button is-info" routerLink="/compras/grupos">
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Nuevo Grupo</span>
+  </button>
+  <br /><br />
+
+  <!-- KPI cards -->
+  <div class="columns is-variable is-2">
+    <div class="column">
+      <div class="kpi-card kpi-orange">
+        <div class="kpi-number">{{ totalGrupos }}</div>
+        <div class="kpi-label">Total <strong>Grupos</strong></div>
+        <div class="kpi-period">registrados</div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="kpi-card kpi-green">
+        <div class="kpi-number">{{ totalConEspecificacion }}</div>
+        <div class="kpi-label">Con <strong>Especificación</strong></div>
+        <div class="kpi-period">materiales</div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-number">{{ totalSinEspecificacion }}</div>
+        <div class="kpi-label">Sin <strong>Especificación</strong></div>
+        <div class="kpi-period">por definir</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="cargando && grupos.grupos?.length === 0" class="grupo-grid">
+    <div *ngFor="let _ of [].constructor(5)" class="card skeleton-card">
+      <div class="card-header skeleton-header"></div>
+      <div class="card-content">
+        <div class="skeleton-line skeleton-line-short"></div>
+      </div>
+      <div class="card-footer skeleton-footer"></div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!cargando && grupos.grupos?.length === 0" class="empty-state">
+    <i class="fas fa-cubes empty-icon"></i>
+    <p class="empty-title">No hay grupos de materiales</p>
+    <p class="empty-hint">Crea grupos desde el módulo de Compras</p>
+  </div>
+
+  <!-- Group cards + materials table -->
+  <ng-container *ngIf="hayGrupos">
+    <div class="grupo-grid">
+      <div
+        *ngFor="let grupo of grupos.grupos"
+        class="card grupo-card animate__animated animate__fadeInUp"
+        [ngClass]="{ 'card-active': grupoSelected === grupo.nombre }"
+        (click)="seleccionarGrupo(grupo)">
+        <div class="card-header">
+          <div class="card-header-title">
+            <i class="{{ grupo.icono || 'fas fa-cube' }} grupo-icon"></i>
+            <span class="grupo-nombre">{{ grupo.nombre }}</span>
+            <span *ngIf="grupo.parcial" class="badge parcial-badge">
+              <i class="fas fa-glass-whiskey"></i> Parcial
+            </span>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item" title="Nueva especificación" (click)="$event.stopPropagation(); nueva_especificacion(grupo._id)">
+            <i class="fas fa-plus-circle"></i>
+          </a>
+        </footer>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="card">
+      <div class="card-content">
+        <span class="title is-5"><i class="fas fa-clipboard-list"></i> Especificaciones {{ grupoSelected }}</span>
+        <hr />
+
+        <ng-container *ngIf="filteredMateriales.length === 0">
+          <div class="empty-state" style="padding: 1.5rem">
+            <i class="fas fa-file-alt empty-icon" style="font-size: 2rem"></i>
+            <p class="empty-title" style="font-size: 0.95rem">Sin materiales con especificación</p>
+            <p class="empty-hint">Haz clic en el icono <i class="fas fa-plus-circle"></i> del grupo para agregar</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="filteredMateriales.length > 0">
+          <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Fabricante</th>
+                <th>Serie</th>
+                <th>Origen</th>
+                <th class="has-text-centered">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of paginatedMateriales">
+                <td>
+                  {{ item.nombre }}
+                  <ng-container *ngIf="item.gramaje">
+                    <br /><span class="is-size-7" style="color: var(--text-muted)">
+                      {{ item.gramaje }}g · Calibre {{ item.calibre }}pt
+                    </span>
+                  </ng-container>
+                </td>
+                <td>{{ item.fabricante?.alias || '—' }}</td>
+                <td>{{ item.serie || '—' }}</td>
+                <td>{{ item.origen || '—' }}</td>
+                <td class="has-text-centered">
+                  <i class="fas fa-info-circle icon-action" (click)="Detallar(item)" title="Ver detalle"></i>
+                  <i class="fas fa-edit icon-action" (click)="Editar(item)" title="Editar"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="columns is-vcentered mt-3" *ngIf="totalPages > 1">
+            <div class="column is-narrow">
+              <div class="select is-small">
+                <select (change)="changePageSize($event)">
+                  <option *ngFor="let s of pageSizes" [value]="s" [selected]="s === pageSize">{{ s }}/pág</option>
+                </select>
               </div>
-              <footer class="card-footer footer_">
-                <a class="card-footer-item">
-                  <i class="fas fa-plus-circle" style="cursor: pointer" (click)="nueva_especificacion(grupo._id)"></i>
-                </a>
-              </footer>
+            </div>
+            <div class="column">
+              <nav class="pagination is-small is-right">
+                <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">Anterior</a>
+                <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Siguiente</a>
+                <ul class="pagination-list">
+                  <li *ngFor="let p of pages">
+                    <a class="pagination-link" [class.is-current]="currentPage === p" (click)="goToPage(p)">{{ p }}</a>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </ng-container>
       </div>
     </div>
-  </div>
-  <br />
-  <div class="card">
-    <div class="card-content">
-      <div class="lista">
-        <span class="title">Especificaciones {{ grupoSelected }}</span>
-        <hr />
-        <table class="table is-fullwidth is-striped">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Fabricante</th>
-              <th>Serie</th>
-              <th>Origen</th>
-              <th>Detalles</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let item of materialesEspecificados; let i = index">
-              <tr>
-                <td>
-                  {{ item.nombre }}
-                  <ng-container *ngIf="item.gramaje"> {{ item.gramaje }}g Calibre {{ item.calibre }} </ng-container>
-                </td>
-                <td>{{ item.fabricante.alias }}</td>
-                <td>{{ item.serie }}</td>
-                <td>{{ item.origen }}</td>
-                <td>
-                  <i class="fas fa-info-circle blue_" style="cursor: pointer" (click)="Detallar(item)"></i> 
-                  <i class="fas fa-edit green" style="cursor: pointer" (click)="Editar(item)"></i>
-                </td>
-                <td></td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 </app-page-layout>

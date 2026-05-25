@@ -9,7 +9,12 @@
 <app-info-gestion [info]="info" [cargo]="cargo" (onCloseModal)="info = false; cargo = { nombre: '', funcion: '' }">
 </app-info-gestion>
 <app-page-layout>
-  <app-section-header title="Cargos" description="Gestión de cargos y puestos" icon="fa-users" color="teal"></app-section-header>
+  <app-section-header
+    title="Cargos"
+    description="Gestión de cargos y puestos"
+    icon="fa-users"
+    color="teal"
+  ></app-section-header>
   <br />
   <button class="button is-info" (click)="nueva = true">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>

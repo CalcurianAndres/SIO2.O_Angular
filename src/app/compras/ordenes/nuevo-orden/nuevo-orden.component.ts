@@ -25,35 +25,45 @@ export class NuevoOrdenComponent {
   @Output() onCloseModal = new EventEmitter();
   @Output() onChangeProv = new EventEmitter();
 
+  cerrar() {
+    this.onCloseModal.emit();
+  }
+
   public fabricantesIDs;
   public proveedor = '';
   public material__ = '';
   public loading = false;
   public Fabricant_Sustrato;
+  public Sustratos: any[] = [];
+  public Sustrato_Material = '';
 
   proveedores_(e) {
     this.onChangeProv.emit();
     setTimeout(() => {
-      this.Orden.proveedor = this.proveedores.proveedores[e.value]._id;
-      this.fabricantesIDs = this.proveedores.proveedores[e.value].fabricantes.map((fabricante) => fabricante._id);
+      const proveedor = this.proveedores.proveedores.find((p) => String(p._id) === e.value);
+      if (!proveedor) return;
+      this.Orden.proveedor = proveedor._id;
+      this.fabricantesIDs = proveedor.fabricantes.map((fabricante) => fabricante._id);
     }, 500);
   }
 
   condiciones(e: any) {
-    let grupo = this.fabricantes.buscarFabricantesPorId(e.value)[0].grupo;
+    const fabricante = this.fabricantes.buscarFabricantesPorId(e.value);
+    if (!fabricante || !fabricante[0]) return;
+    const grupo = fabricante[0].grupo;
     const tieneTrato = grupo.some((item) => item.trato === true);
-
-    if (tieneTrato) {
-      this.Fabricant_Sustrato = true;
-    } else {
-      this.Fabricant_Sustrato = false;
-    }
+    this.Sustratos =
+      tieneTrato && this.materiales.materiales
+        ? this.materiales.materiales.filter((m: any) => String(m.fabricante._id) === e.value)
+        : [];
   }
 
-  llenarMaterial(e) {
-    let material_nombre = e.value.split('&');
-    this.material.material = material_nombre[0];
-    this.material.nombre = material_nombre[1];
+  onMaterialChange(id: any) {
+    if (!id) return;
+    const material = this.Sustratos.find((s) => s._id === id || String(s._id) === String(id));
+    if (!material) return;
+    this.material.nombre = material.nombre;
+    this.material.unidad = this.material.unidad || 'Und';
   }
 
   addMaterial() {

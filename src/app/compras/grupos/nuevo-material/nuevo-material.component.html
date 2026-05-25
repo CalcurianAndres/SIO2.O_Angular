@@ -1,145 +1,69 @@
-<div class="modal" [ngClass]="{ 'is-active': cargando }">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <div class="box has-text-centered">
-      <div class="loader-container">
-        <div class="loader"></div>
-        <div id="loading-text">Cargando...</div>
-      </div>
-      <div id="random-phrases"></div>
-    </div>
-  </div>
-</div>
-
+<!-- Nuevo material modal -->
 <div class="modal" [ngClass]="{ 'is-active': nuevo_material }">
   <div class="modal-background"></div>
   <div class="modal-card animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">Nuevo Material</p>
+      <p class="modal-card-title fuente"><i class="fas fa-box"></i> Nuevo Material</p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar_()"></button>
     </div>
-    <div class="modal-card-body light">
+    <div class="modal-card-body">
       <div class="field">
         <label class="label">Grupo</label>
         <div class="control">
           <div class="select">
-            <select name="" id="" (change)="buscarFabricante($event.target)" [(ngModel)]="grupo">
-              <option value="">Grupo</option>
-              <option value="{{ i }}" *ngFor="let grupo of grupos.grupos; index as i">{{ grupo.nombre }}</option>
+            <select [(ngModel)]="grupo" (change)="buscarFabricante($event.target)">
+              <option value="">Seleccionar grupo</option>
+              <option *ngFor="let grupo of grupos.grupos; index as i" [value]="i">
+                {{ grupo.nombre }}
+              </option>
             </select>
           </div>
         </div>
       </div>
-      <hr />
-      <div class="field is-grouped" *ngIf="selected_envases">
+
+      <div class="field">
+        <label class="label">Nombre del material</label>
         <div class="control">
-          <label class="label">Capacidad de envase (kg)</label>
-          <input type="number" class="input" style="width: 70px" [(ngModel)]="capacidad" />
+          <input type="text" class="input" placeholder="Ej: Bond 75g" [(ngModel)]="nombre" />
         </div>
-      </div>
-      <div class="field is-grouped" *ngIf="selected_cajas">
-        <div class="control">
-          <label for="" class="label">Cantidad de cinta para sellar (M)</label>
-          <input type="number" class="input" style="width: 70px" [(ngModel)]="cinta" />
-        </div>
-      </div>
-      <div class="columns" *ngIf="selected_sustrato">
-        <div class="column">
-          <div class="field">
-            <label for="" class="label">Gramaje (g/m²)</label>
-            <div class="control">
-              <input type="text" class="input" [(ngModel)]="gramaje" />
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="field">
-            <label for="" class="label">Calibre (pt)</label>
-            <div class="control">
-              <input type="text" class="input" [(ngModel)]="calibre" />
-            </div>
-          </div>
-        </div>
-        <div class="column"></div>
-        <div class="column"></div>
       </div>
 
-      <div class="columns" *ngIf="selected_tinta">
-        <div class="column is-3">
+      <div class="columns">
+        <div class="column">
           <div class="field">
-            <label for="" class="label">Color</label>
+            <label class="label">Fabricante</label>
             <div class="control">
               <div class="select">
-                <select name="" id="" (change)="select_color($event.target)" [(ngModel)]="color">
-                  <option value="A">Amarillo</option>
-                  <option value="C">Cyan</option>
-                  <option value="M">Magenta</option>
-                  <option value="K">Negro</option>
-                  <option value="P">Pantone</option>
+                <select [(ngModel)]="Fabricante">
+                  <option value="">Seleccionar</option>
+                  <option *ngFor="let fab of Fabricantes; index as i" [value]="i">{{ fab.alias }}</option>
                 </select>
               </div>
             </div>
           </div>
         </div>
-        <div class="column is-4" *ngIf="selected_pantone">
-          <div class="field is-grouped">
-            <div class="control" width="50%">
-              <label for="" class="label">Código</label>
-              <input type="text" class="input" [(ngModel)]="codigo" />
-            </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Serie</label>
             <div class="control">
-              <label for="" class="label tooltip">Coordenadas RGB</label>
-              <input type="color" class="input" [(ngModel)]="rgb" />
+              <input type="text" class="input" placeholder="Ej: A-1" [(ngModel)]="serie" />
             </div>
           </div>
         </div>
       </div>
-      <hr />
-      <div class="columns">
-        <div class="column is-2">
-          <div class="field">
-            <label for="" class="label">Fabricante</label>
-            <div class="select">
-              <select name="" id="" [(ngModel)]="Fabricante" (change)="SeleccionarFabricante($event.target)">
-                <option value="{{ i }}" *ngFor="let fabricante of Fabricantes; index as i">
-                  {{ fabricante.alias }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="column is-3" *ngIf="selected_sustrato">
-          <div class="field">
-            <label for="" class="label">Origen</label>
-            <div class="select">
-              <select name="" id="" [(ngModel)]="origen">
-                <option value="{{ origen.pais }}({{ origen.estado }})" *ngFor="let origen of origenes">
-                  {{ origen.pais }}({{ origen.estado }})
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="column is-3">
-          <label for="" class="label">Serie</label>
-          <div class="control">
-            <input type="text" class="input" [(ngModel)]="serie" />
-          </div>
-        </div>
-      </div>
-      <div class="field is-grouped">
+
+      <div class="field">
+        <label class="label">Código de proveedor</label>
         <div class="control">
-          <label for="" class="label">Material</label>
-          <input type="text" class="input" [(ngModel)]="nombre" />
-        </div>
-        <div class="control">
-          <label class="label">Código proveedor</label>
-          <input type="text" class="input" [(ngModel)]="modelo" />
+          <input type="text" class="input" placeholder="Ej: PROV-001" [(ngModel)]="codigo" />
         </div>
       </div>
-      <button class="button is-success" (click)="guardarMaterial()">
-        <span class="icon"><i class="fas fa-save"></i></span>
-        <span>Guardar</span>
+
+      <br />
+      <button class="button is-success" [disabled]="guardando" (click)="guardarMaterial()">
+        <span class="icon" *ngIf="guardando"><i class="fas fa-spinner fa-pulse"></i></span>
+        <span class="icon" *ngIf="!guardando"><i class="fas fa-save"></i></span>
+        <span>{{ guardando ? 'Guardando...' : 'Guardar' }}</span>
       </button>
     </div>
   </div>

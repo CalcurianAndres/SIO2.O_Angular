@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FabricantesService } from 'src/app/services/fabricantes.service';
 import { Proveedores } from '../../models/modelos-compra';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-proveedor',
@@ -9,7 +8,7 @@ import Swal from 'sweetalert2';
   templateUrl: './nuevo-proveedor.component.html',
   styleUrls: ['./nuevo-proveedor.component.scss'],
 })
-export class NuevoProveedorComponent implements OnInit {
+export class NuevoProveedorComponent implements OnChanges {
   @Input() nuevo!: boolean;
   @Input() editar!: boolean;
   @Input() proveedor!: Proveedores;
@@ -18,7 +17,6 @@ export class NuevoProveedorComponent implements OnInit {
   @Output() onCloseModal = new EventEmitter();
   @Output() onCloseModal_ = new EventEmitter();
 
-  public proveedor_directo: any = false;
   public nombre: string = '';
   public direccion: string = '';
   public rif: string = '';
@@ -29,29 +27,14 @@ export class NuevoProveedorComponent implements OnInit {
   public contactos: any = [];
   public fabricantes_array: any = [];
   public fabricantes_array_name: any = [];
+  public guardando: boolean = false;
 
   constructor(public fabricantes: FabricantesService) {}
 
-  public editar_contacto: boolean[] = [];
-
-  ngOnInit(): void {
-    var phrases = [
-      'Arreglando código de programación',
-      'Ajustando colores',
-      'Descargando la información',
-      'Buscando errores',
-      'Programando la respuesta que quieres',
-      'Ya casi terminamos',
-    ];
-
-    // Function to change the random phrase
-    function changeRandomPhrase() {
-      var randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      document.getElementById('random-phrases')!.textContent = randomPhrase;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['nuevo']?.currentValue || changes['editar']?.currentValue) {
+      this.guardando = false;
     }
-
-    // Call the function every 1 second
-    setInterval(changeRandomPhrase, 2000);
   }
 
   cerrar() {
@@ -59,6 +42,8 @@ export class NuevoProveedorComponent implements OnInit {
     this.direccion = '';
     this.rif = '';
     this.contactos = [];
+    this.fabricantes_array = [];
+    this.fabricantes_array_name = [];
     this.onCloseModal.emit();
   }
 
@@ -67,6 +52,8 @@ export class NuevoProveedorComponent implements OnInit {
     this.direccion = '';
     this.rif = '';
     this.contactos = [];
+    this.fabricantes_array = [];
+    this.fabricantes_array_name = [];
     this.onCloseModal_.emit();
   }
 
@@ -75,31 +62,20 @@ export class NuevoProveedorComponent implements OnInit {
   }
 
   formatRif(event: any) {
-    const regex = /^[JVGC]-?\d{0,8}-?\d{0,1}$/; // Expresión regular actualizada
+    const regex = /^[JVGC]-?\d{0,8}-?\d{0,1}$/;
     const newValue = event.target.value.toUpperCase();
-
     if (!regex.test(newValue)) {
       this.rif = newValue.substring(0, newValue.length - 1);
     } else {
-      // Agregar guiones automáticamente
-      let formattedValue = newValue.replace(/(\d{0})(\d{8})(\d{1})/, '$1-$2-$3');
-      this.rif = formattedValue; // Establecer el valor formateado n el campo de input
+      const formattedValue = newValue.replace(/(\d{0})(\d{8})(\d{1})/, '$1-$2-$3');
+      this.rif = formattedValue;
     }
   }
 
   isValidEmail(email: string): boolean {
+    if (!email) return false;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
-  }
-
-  checkProveedor() {
-    if (!this.proveedor_directo) {
-      this.nombre = this.fabricantes.fabricantes[this.fabricante].nombre;
-      (<HTMLInputElement>document.getElementById('nombre')).disabled = true;
-    } else {
-      this.nombre = '';
-      (<HTMLInputElement>document.getElementById('nombre')).disabled = false;
-    }
   }
 
   addFabricante() {
@@ -109,12 +85,14 @@ export class NuevoProveedorComponent implements OnInit {
       this.fabricante = '';
     }
   }
+
   addFabricante_() {
     if (!this.proveedor.fabricantes.includes(this.fabricantes.fabricantes[this.fabricante])) {
       this.proveedor.fabricantes.push(this.fabricantes.fabricantes[this.fabricante]);
       this.fabricante = '';
     }
   }
+
   EliminarFabricante(i: number) {
     this.fabricantes_array.splice(i, 1);
     this.fabricantes_array_name.splice(i, 1);
@@ -124,6 +102,10 @@ export class NuevoProveedorComponent implements OnInit {
     if (e.value != '#') {
       this.fabricante = e.value;
     }
+  }
+
+  getFabricanteNames(fabricantes: any[]): string[] {
+    return fabricantes?.map((f: any) => f.alias || f.nombre) || [];
   }
 
   NuevoContacto() {
@@ -149,19 +131,20 @@ export class NuevoProveedorComponent implements OnInit {
   }
 
   GuardarProveedor() {
-    let data: Proveedores = {
+    this.guardando = true;
+    const data: Proveedores = {
       fabricantes: this.fabricantes_array,
       nombre: this.nombre,
       direccion: this.direccion,
       rif: this.rif,
       contactos: this.contactos,
     };
-
     this.api.nuevoProveedor(data);
     this.cerrar();
   }
 
   EditarProveedor() {
+    this.guardando = true;
     this.proveedor.fabricantes = this.proveedor.fabricantes.map((e: any) => e._id);
     this.api.editarProveedores(this.proveedor);
     this.cerrar();

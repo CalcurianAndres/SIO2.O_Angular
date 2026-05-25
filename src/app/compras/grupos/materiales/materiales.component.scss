@@ -1,6 +1,29 @@
 .full {
   width: 80%;
 }
+
 i {
   cursor: pointer;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.modal-card-body {
+  .table {
+    font-size: 0.85rem;
+    th {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      padding: 8px 10px;
+      border-bottom-width: 2px;
+    }
+    td {
+      padding: 6px 10px;
+      vertical-align: middle;
+    }
+  }
 }

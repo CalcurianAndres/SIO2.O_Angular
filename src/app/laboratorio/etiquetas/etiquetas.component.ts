@@ -102,9 +102,9 @@ export class EtiquetasComponent {
 
     const logo = await this.getBase64Image('../../../assets/poli_cintillo.png');
 
-    var nombreMaterial = this.informacion[0].material.nombre;
-    var NumLetra = 10;
-    var margenes: number | [number, number] | [number, number, number, number] = [0, 4.5, 0, 0];
+    let nombreMaterial = this.informacion[0].material.nombre;
+    let NumLetra = 10;
+    let margenes: number | [number, number] | [number, number, number, number] = [0, 4.5, 0, 0];
 
     if (this.informacion[0].material.gramaje) {
       nombreMaterial = `${this.informacion[0].material.nombre} ${this.informacion[0].material.serie} ${this.informacion[0].material.gramaje}g/m2 ${this.informacion[0].material.gramaje}pt (${this.informacion[0].material.origen})`;

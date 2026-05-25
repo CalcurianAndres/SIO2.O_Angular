@@ -25,12 +25,19 @@ export class NuevaRecepcionComponent implements OnChanges {
   }
 
   public opcionesProveedor;
+  public guardando: boolean = false;
+
+  public infoTexto: string = '';
+  public sobranteTexto: string = '';
 
   ngOnChanges(): void {
     this.opcionesProveedor = [
       ...this.proveedores.proveedores.map((p) => ({ ...p, tipo: 'proveedor' })),
       ...this.bobinas.convertidora.map((c) => ({ ...c, tipo: 'convertidora' })),
     ];
+    this.guardando = false;
+    this.infoTexto = '';
+    this.sobranteTexto = '';
   }
 
   constructor(
@@ -214,19 +221,8 @@ export class NuevaRecepcionComponent implements OnChanges {
       if (this.Listado_.length > dataObj.length) {
         this.Listado_.splice(dataObj.length);
       }
-      const infoElement = document.getElementById('info');
-      if (infoElement) {
-        infoElement.textContent = '';
-      } else {
-        console.error('Element with ID "info" not found.');
-      }
-
-      const sobrante__ = document.getElementById('sobrante');
-      if (sobrante__) {
-        sobrante__.innerHTML = this.contarPresentaciones(this.Listado_);
-      } else {
-        console.error('Element with ID "sobrante" not found.');
-      }
+      this.infoTexto = '';
+      this.sobranteTexto = this.contarPresentaciones(this.Listado_);
     };
 
     reader.readAsArrayBuffer(file);
@@ -235,7 +231,7 @@ export class NuevaRecepcionComponent implements OnChanges {
   addMaterial() {
     let leyenda = '';
     let sobrante = '';
-    let resultado = this.calcularLatasYSobrante(this.cantidad_, this.neto_);
+    const resultado = this.calcularLatasYSobrante(this.cantidad_, this.neto_);
     if (!this.conversion) {
       if (resultado.sobrante > 0) {
         sobrante = `1 ${this.presentacion_} de ${resultado.sobrante.toFixed(2)} ${this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad}`;
@@ -252,20 +248,8 @@ export class NuevaRecepcionComponent implements OnChanges {
       }
     }
 
-    // Update the 'info' span element with the 'leyenda' text
-    const infoElement = document.getElementById('info');
-    if (infoElement) {
-      infoElement.textContent = leyenda;
-    } else {
-      console.error('Element with ID "info" not found.');
-    }
-
-    const sobrante__ = document.getElementById('sobrante');
-    if (sobrante__) {
-      sobrante__.textContent = sobrante;
-    } else {
-      console.error('Element with ID "sobrante" not found.');
-    }
+    this.infoTexto = leyenda;
+    this.sobranteTexto = sobrante;
     this.done = true;
   }
 
@@ -426,7 +410,7 @@ export class NuevaRecepcionComponent implements OnChanges {
   }
 
   NuevoGuardarRegistro = async () => {
-    let data = {
+    const data = {
       proveedor: this.proveedor_,
       documento: `${this.tipo_documento}${this.documento_}`,
       control: this.control,
@@ -451,13 +435,16 @@ export class NuevaRecepcionComponent implements OnChanges {
       }),
     };
 
-    proveedor: this.proveedor_, (this.tipo_documento = 'F - ');
+    this.proveedor_ = '';
+    this.tipo_documento = 'F - ';
     this.documento_ = '';
     this.control = '';
     this.textoSinFormato = '';
     this.f_recepcion = '';
     this.transportista_ = '';
+    this.guardando = true;
     await this.api.GuardarRecepcion(data);
+    this.guardando = false;
     this.onCloseModal.emit();
 
     setTimeout(() => {
@@ -508,14 +495,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.presentacion_ = '';
     this.neto_ = 0;
     this.revisado = false;
-
-    const sobrante__ = document.getElementById('sobrante');
-    if (sobrante__) {
-      sobrante__.textContent = '';
-    } else {
-      console.error('Element with ID "sobrante" not found.');
-    }
-
+    this.sobranteTexto = '';
     this.done = false;
   }
 
@@ -600,21 +580,8 @@ export class NuevaRecepcionComponent implements OnChanges {
 
     this.cantidad_ = this.Listado_.reduce((acc, material) => acc + parseFloat(material.neto), 0);
     this.cantidad_ = Number(this.cantidad_.toFixed(2));
-
-    const infoElement = document.getElementById('info');
-    if (infoElement) {
-      infoElement.textContent = '';
-    } else {
-      console.error('Element with ID "info" not found.');
-    }
-
-    const sobrante__ = document.getElementById('sobrante');
-    if (sobrante__) {
-      sobrante__.innerHTML = this.contarPresentaciones(this.Listado_);
-    } else {
-      console.error('Element with ID "sobrante" not found.');
-    }
-
+    this.infoTexto = '';
+    this.sobranteTexto = this.contarPresentaciones(this.Listado_);
     this.revisado = true;
   }
 
@@ -632,7 +599,7 @@ export class NuevaRecepcionComponent implements OnChanges {
   };
 
   buscarmMateriales = async (e: any) => {
-    let grupos = this.fabricante[e.value].grupo.map((fabricante: any) => fabricante._id);
+    const grupos = this.fabricante[e.value].grupo.map((fabricante: any) => fabricante._id);
     this.material = this.materiales.filtrarPorGrupos(grupos);
   };
 
@@ -641,7 +608,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.ParaAlmacenar = [];
     this.netoEspecifico = [];
     this.totalizacion = [];
-    let resto = this.cantidad % this.neto;
+    const resto = this.cantidad % this.neto;
     const cantidadLatas = Math.floor(this.cantidad / this.neto);
     if (resto > 0) {
       this.ParaAlmacenar.push({

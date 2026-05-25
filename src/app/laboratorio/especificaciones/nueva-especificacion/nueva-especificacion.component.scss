@@ -1,0 +1,46 @@
+/* Modal body padding */
+.modal-card-body {
+  padding: 1.25rem;
+}
+
+/* Section dividers */
+.modal-card-body hr {
+  margin: 1rem 0;
+  opacity: 0.2;
+}
+
+/* Section headers (th elements serve as section labels in this template) */
+.modal-card-body .table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 0.5rem 0.4rem;
+}
+
+/* Form labels inside modal */
+.modal-card-body .label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+/* Full-width select (material picker) */
+.modal-card-body .select.is-fullwidth {
+  width: 100%;
+}
+.modal-card-body .select.is-fullwidth select {
+  width: 100%;
+}
+
+/* Material select label + control inline */
+.modal-card-body .columns .field {
+  margin-bottom: 0;
+}
+
+/* Save button area */
+.modal-card-body > .button.is-success {
+  margin-top: 0.5rem;
+}

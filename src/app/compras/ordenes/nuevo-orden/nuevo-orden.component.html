@@ -1,187 +1,194 @@
 <div class="modal" [ngClass]="{ 'is-active': nueva }">
-  <div class="modal-background"></div>
-  <div class="modal-card long animate__animated animate__fadeInUp longer">
-    <div class="modal-card-head">
-      <p class="modal-card-title fuente">Nueva orden de compra</p>
-      <button class="delete red_cross" aria-label="close" (click)="onCloseModal.emit()"></button>
-    </div>
-    <div class="modal-card-body">
-      <div class="field is-grouped">
-        <div class="control">
-          <label for="" class="label">Proveedor</label>
-          <div class="select">
-            <select (change)="proveedores_($event.target)" [(ngModel)]="proveedor">
-              <option value="{{ i }}" *ngFor="let proveedor of proveedores.proveedores; index as i">
-                {{ proveedor.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="control" *ngIf="Orden.proveedor">
-          <label class="label">Fabricante</label>
-          <div class="select">
-            <select [(ngModel)]="Orden.fabricante" (change)="condiciones($event.target)">
-              <option
-                value="{{ fabricante._id }}"
-                *ngFor="let fabricante of fabricantes.buscarFabricantesPorId(fabricantesIDs)"
-              >
-                {{ fabricante.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="control short" *ngIf="Orden.fabricante">
-          <label class="label">% I.V.A.</label>
-          <input type="number" class="input" [(ngModel)]="Orden.iva" />
-        </div>
-      </div>
-      <div class="field is-grouped">
-        <div class="control" *ngIf="Orden.fabricante">
-          <label class="label">Material</label>
-          <div class="select">
-            <select (change)="llenarMaterial($event.target)" [(ngModel)]="material__">
-              <option
-                value="{{ material._id }}&{{ material.nombre }}({{ material.fabricante.alias }})"
-                *ngFor="let material of materiales.filtrarPorFabricante(Orden.fabricante)"
-              >
-                {{ material.nombre }}
-                <ng-container *ngIf="material.gramaje"> {{ material.gramaje }}g {{ material.calibre }}pt </ng-container>
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="control" *ngIf="material.nombre">
-          <label class="label">Unidad</label>
-          <div class="select">
-            <select [(ngModel)]="material.unidad">
-              <option value="kg">kg</option>
-              <option value="L">L</option>
-              <option value="Und">Und</option>
-              <option value="t">t</option>
-            </select>
-          </div>
-        </div>
-        <div class="control" *ngIf="material.unidad">
-          <label class="label">Cantidad</label>
-          <input type="number" name="" id="" class="input" [(ngModel)]="material.cantidad" min="1" />
-        </div>
-        <div class="control short_" *ngIf="material.cantidad && Number_(material.cantidad) > 0">
-          <label class="label">Costo Unitario (USD)</label>
-          <input type="number" name="" id="" class="input" [(ngModel)]="material.precio" min="0" />
-        </div>
-        <div class="control" *ngIf="material.precio && !Fabricant_Sustrato && Number_(material.precio) > 0">
-          <label for="" class="label"> </label>
-          <button class="button is-info" (click)="addMaterial()">
-            <span class="icon">
-              <i class="fas fa-plus"></i>
-            </span>
-          </button>
-        </div>
-      </div>
-      <div class="field is-grouped" *ngIf="Fabricant_Sustrato">
-        <div class="control" *ngIf="material.unidad === 't' && material.cantidad && Number_(material.cantidad) > 0">
-          <label for="" class="label">.</label>
-          <input type="checkbox" name="" id="" class="checkbox" [(ngModel)]="material.bobina" /> Bobina
-        </div>
-        <div class="control" *ngIf="material.precio && Number_(material.precio) > 0">
-          <label for="" class="label">Ancho (cm)</label>
-          <input type="number" class="input" [(ngModel)]="material.ancho" />
-        </div>
-        <div class="control" *ngIf="material.ancho && !material.bobina">
-          <label for="" class="label">Alto (cm)</label>
-          <input type="number" class="input" [(ngModel)]="material.alto" />
-        </div>
-        <div class="control" *ngIf="material.ancho">
-          <label for="" class="label"> </label>
-          <button class="button is-info" (click)="addMaterial()">
-            <span class="icon">
-              <i class="fas fa-plus"></i>
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-card animate__animated animate__fadeInUp longer" *ngIf="Orden.pedido.length > 0">
-    <div class="modal-card-body bg">
-      <table class="table is-fullwidth">
-        <thead>
-          <tr>
-            <th>Descripción</th>
-            <th>Cantidad</th>
-            <th>Costo Unit. (USD)</th>
-            <th>Neto (USD)</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let pedido of Orden.pedido; index as i">
-            <td>{{ pedido.nombre }}</td>
-            <td>{{ pedido.cantidad | number: '2.2-2' }}{{ pedido.unidad }}</td>
-            <td>{{ Number_(pedido.precio) | number: '2.2-2' }}</td>
-            <td>{{ Number_((pedido.precio * pedido.cantidad).toFixed(2)) | number: '2.2-2' }}</td>
-            <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="borrar(i)"></i></td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>Sub-total:</th>
-            <th colspan="2">{{ Number_(calcularTotalNeto(Orden).toFixed(2)) | number: '2.2-2' }}</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>I.V.A:</th>
-            <th colspan="2">{{ Number_(calcularTotalIva(Orden).toFixed(2)) | number: '2.2-2' }}</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>Total:</th>
-            <th colspan="2">
-              {{ Number_((calcularTotalNeto(Orden) + calcularTotalIva(Orden)).toFixed(2)) | number: '2.2-2' }}
-            </th>
-          </tr>
-        </tfoot>
-      </table>
-      <hr />
-      <div class="field is-grouped">
-        <div class="control">
-          <label class="label white">Condic. pago</label>
-          <div class="select" [(ngModel)]="Orden.pago">
-            <select>
-              <option value="Contado">Contado</option>
-              <option value="Credito">Crédito</option>
-            </select>
-          </div>
-        </div>
-        <div class="control">
-          <label class="label white">Fecha entrega</label>
-          <input type="date" name="" id="" class="input" [(ngModel)]="Orden.entrega" [min]="getToday()" />
-        </div>
-      </div>
+  <div class="modal-background" (click)="cerrar()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        <i class="fas fa-shopping-cart" style="margin-right: 0.5rem"></i> Nueva Orden de Compra
+      </p>
+      <button class="delete" (click)="cerrar()" aria-label="close"></button>
+    </header>
+
+    <section class="modal-card-body">
+      <!-- STEP 1: Proveedor -->
       <div class="field">
+        <label class="label">Proveedor</label>
         <div class="control">
-          <label class="label white">Descripción</label>
-          <textarea
-            class="textarea"
-            rows="2"
-            placeholder="Agrega una descripción"
-            [(ngModel)]="Orden.descripcion"
-          ></textarea>
+          <div class="select is-fullwidth">
+            <select [(ngModel)]="Orden.proveedor" (change)="proveedores_($event.target)">
+              <option value="">— Seleccionar proveedor —</option>
+              <option *ngFor="let p of proveedores.proveedores" [value]="p._id">{{ p.nombre }}</option>
+            </select>
+          </div>
         </div>
       </div>
+
+      <!-- STEP 2: Fabricante + Material -->
+      <div *ngIf="Orden.proveedor">
+        <div class="field">
+          <label class="label">Fabricante</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select [(ngModel)]="Fabricant_Sustrato" (change)="condiciones($event.target)">
+                <option value="">— Seleccionar fabricante —</option>
+                <option *ngFor="let f of fabricantes.fabricantes" [value]="f._id">{{ f.alias }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" *ngIf="Fabricant_Sustrato && Sustratos.length > 0">
+          <label class="label">Material</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select [(ngModel)]="material.material" (ngModelChange)="onMaterialChange($event)">
+                <option [ngValue]="null">— Seleccionar material —</option>
+                <option *ngFor="let s of Sustratos" [ngValue]="s._id">
+                  {{ s.nombre }} — {{ s.gramaje }}g {{ s.calibre }}pt
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="columns is-multiline is-variable is-2" *ngIf="Fabricant_Sustrato">
+          <div class="column is-2">
+            <label class="label">Cantidad</label>
+            <input type="number" class="input" [(ngModel)]="material.cantidad" />
+          </div>
+          <div class="column is-narrow">
+            <label class="label">Unidad</label>
+            <div class="select">
+              <select [(ngModel)]="material.unidad">
+                <option value="Und">Und</option>
+                <option value="kg">kg</option>
+                <option value="L">L</option>
+                <option value="t">t</option>
+              </select>
+            </div>
+          </div>
+          <div class="column is-2">
+            <label class="label">Precio USD</label>
+            <input type="number" class="input" [(ngModel)]="material.precio" />
+          </div>
+          <div
+            class="column is-narrow"
+            *ngIf="material.unidad === 't' && material.cantidad && Number_(material.cantidad) > 0"
+          >
+            <label class="label"> </label>
+            <label class="checkbox"> <input type="checkbox" [(ngModel)]="material.bobina" /> Bobina </label>
+          </div>
+          <div class="column is-2" *ngIf="material.precio && Number_(material.precio) > 0">
+            <label class="label">Ancho (cm)</label>
+            <input type="number" class="input" [(ngModel)]="material.ancho" />
+          </div>
+          <div class="column is-2" *ngIf="material.ancho && !material.bobina">
+            <label class="label">Alto (cm)</label>
+            <input type="number" class="input" [(ngModel)]="material.alto" />
+          </div>
+          <div class="column is-narrow" *ngIf="material.ancho">
+            <label class="label"> </label>
+            <button class="button is-info" (click)="addMaterial()">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Order summary -->
+      <div *ngIf="Orden.pedido.length > 0">
+        <hr />
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Costo Unit. (USD)</th>
+              <th>Neto (USD)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pedido of Orden.pedido; index as i">
+              <td>{{ pedido.nombre }}</td>
+              <td>{{ pedido.cantidad | number: '2.2-2' }}{{ pedido.unidad }}</td>
+              <td>{{ Number_(pedido.precio) | number: '2.2-2' }}</td>
+              <td>{{ Number_((pedido.precio * pedido.cantidad).toFixed(2)) | number: '2.2-2' }}</td>
+              <td>
+                <i
+                  class="fas fa-trash-alt"
+                  style="cursor: pointer; color: var(--status-danger)"
+                  (click)="borrar(i)"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th></th>
+              <th>Sub-total:</th>
+              <th colspan="2">{{ Number_(calcularTotalNeto(Orden).toFixed(2)) | number: '2.2-2' }}</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th>I.V.A:</th>
+              <th colspan="2">{{ Number_(calcularTotalIva(Orden).toFixed(2)) | number: '2.2-2' }}</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th>Total:</th>
+              <th colspan="2">
+                {{ Number_((calcularTotalNeto(Orden) + calcularTotalIva(Orden)).toFixed(2)) | number: '2.2-2' }}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+
+        <hr />
+
+        <div class="field is-grouped">
+          <div class="control">
+            <label class="label">Condic. pago</label>
+            <div class="select" [(ngModel)]="Orden.pago">
+              <select>
+                <option value="Contado">Contado</option>
+                <option value="Credito">Crédito</option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <label class="label">Fecha entrega</label>
+            <input type="date" class="input" [(ngModel)]="Orden.entrega" [min]="getToday()" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Descripción</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              rows="2"
+              placeholder="Agrega una descripción"
+              [(ngModel)]="Orden.descripcion"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="modal-card-foot" *ngIf="Orden.pedido.length > 0">
       <button
         class="button is-success"
-        *ngIf="Orden.entrega && Orden.descripcion"
         [ngClass]="{ 'is-loading': loading }"
+        [disabled]="loading || !Orden.entrega || !Orden.descripcion"
         (click)="guardar()"
       >
-        <span class="icon"></span>
-        <span>Guardar</span>
+        <span class="icon"><i class="fas fa-save"></i></span>
+        <span>{{ loading ? 'Guardando...' : 'Guardar' }}</span>
       </button>
-    </div>
+      <button class="button" (click)="cerrar()">Cancelar</button>
+    </footer>
   </div>
 </div>

@@ -65,7 +65,7 @@ export class CambiosComponent {
         return this.categoria.buscarCategoria(str).nombre;
 
       case prefix === 'materia_prima_':
-        let material = this.material.buscarMaterialPorId(str);
+        const material = this.material.buscarMaterialPorId(str);
         return `${material.nombre} (${material.fabricante.alias})`;
 
       default:
@@ -74,10 +74,10 @@ export class CambiosComponent {
   }
 
   compararJsons(json1: any, json2: any, key: any): string {
-    let cambios: string[] = [];
-    let categoria = this.categoria;
-    let material_ = this.material;
-    let maquina = this.maquina;
+    const cambios: string[] = [];
+    const categoria = this.categoria;
+    const material_ = this.material;
+    const maquina = this.maquina;
 
     function esObjectId(id) {
       id = id.replace(/ /g, '');
@@ -93,7 +93,7 @@ export class CambiosComponent {
             return categoria.buscarCategoria(str).nombre;
 
           case prefix === 'materia_prima_':
-            let material = material_.buscarMaterialPorId(str);
+            const material = material_.buscarMaterialPorId(str);
             return `${material.nombre} (${material.fabricante.alias})`;
 
           default:
