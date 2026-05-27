@@ -86,129 +86,120 @@
   font-weight: 600;
 }
 
-/* ── Carrusel ── */
-.carousel-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.carousel-arrow {
-  border: none;
-  background: var(--bg-secondary);
-  color: var(--text-muted);
-  min-width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.carousel-arrow:hover:not([disabled]) {
-  color: var(--text-primary);
-  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
-}
-.carousel-arrow[disabled] {
-  opacity: 0.3;
-  cursor: not-allowed;
+/* ── Tabla de OPs ── */
+.ops-table {
+  th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 0.6rem 0.75rem;
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+  }
+  tbody tr {
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  tbody tr:hover {
+    background: color-mix(in srgb, var(--accent-purple) 6%, transparent);
+  }
 }
 
-.carousel-preview {
-  padding: 0.5rem 0;
+.op-number-col {
+  width: 130px;
 }
-.carousel-preview .heading {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
+.actions-col {
+  width: 200px;
 }
 
-/* Step indicator dentro del carrusel */
-.step-indicator {
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-  flex: 1;
-  padding: 0.5rem 0;
-}
-.step-dot-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-  min-width: 60px;
-}
-.step-dot-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 18px;
-  left: 50%;
-  width: 100%;
-  height: 2px;
-  background: var(--border-color);
-  z-index: 0;
-}
-.step-dot-wrapper:last-child::after {
-  display: none;
-}
-.step-dot-wrapper.completed::after {
-  background: var(--status-success);
-}
-.step-dot-wrapper.active::after {
-  background: var(--accent-purple);
-}
-
-.step-dot {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
-  color: var(--text-muted);
-  z-index: 1;
-  transition: all 0.25s;
-  font-size: 0.85rem;
-}
-.step-dot-wrapper.completed .step-dot {
-  background: var(--status-success);
-  border-color: var(--status-success);
-  color: #fff;
-}
-.step-dot-wrapper.active .step-dot {
-  background: var(--accent-purple);
-  border-color: var(--accent-purple);
-  color: #fff;
-  transform: scale(1.1);
-}
-.step-label {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  margin-top: 0.3rem;
-  text-align: center;
-  white-space: nowrap;
-}
-.step-dot-wrapper.active .step-label {
+.op-number-cell strong {
+  font-size: 0.95rem;
   color: var(--accent-purple);
-  font-weight: 600;
-}
-.step-dot-wrapper.completed .step-label {
-  color: var(--status-success);
 }
 
-/* Tabla sincronizada */
+.actions-cell .buttons {
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+  gap: 2px;
+}
+.actions-cell .button {
+  border: none;
+  background: transparent;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+}
+.actions-cell .button:hover {
+  background: var(--hover-bg);
+}
+
 tr.is-selected {
   background: color-mix(in srgb, var(--accent-purple) 12%, transparent) !important;
 }
 tr.is-selected:hover {
   background: color-mix(in srgb, var(--accent-purple) 18%, transparent) !important;
+}
+
+/* ── Paginación ── */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-color);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.pagination-controls .field {
+  margin-bottom: 0;
+}
+
+.pagination-controls .button.is-small {
+  min-width: 28px;
+  height: 28px;
+  font-size: 0.75rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.pagination-controls .button.is-small:hover:not([disabled]) {
+  background: var(--hover-bg);
+}
+.pagination-controls .button.is-small.is-info {
+  background: var(--accent-purple);
+  border-color: var(--accent-purple);
+  color: #fff;
+}
+
+.pagination-size .field {
+  margin-bottom: 0;
+}
+.pagination-size .button.is-small {
+  min-width: 28px;
+  height: 28px;
+  font-size: 0.7rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-muted);
+}
+.pagination-size .button.is-small:hover {
+  background: var(--hover-bg);
+}
+.pagination-size .button.is-small.is-info {
+  background: var(--accent-purple);
+  border-color: var(--accent-purple);
+  color: #fff;
 }
 
 .progress-container {

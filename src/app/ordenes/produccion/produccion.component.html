@@ -657,79 +657,128 @@
 
   <br />
 
-  <!-- Carrusel de OPs -->
+  <!-- Tabla de OPs -->
   <div class="card mb-4">
-    <div class="card-content">
-      <div class="carousel-container" *ngIf="ordenesFiltradas.length > 0">
-        <button class="button carousel-arrow" (click)="carouselPrev()" [disabled]="currentIndex === 0">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="step-indicator">
-          <div
-            class="step-dot-wrapper"
-            *ngFor="let orden of ordenesFiltradas; index as i"
-            (click)="goToCarousel(i)"
-            [ngClass]="{ active: currentIndex === i, completed: i < currentIndex }"
-          >
-            <div class="step-dot"><i class="fas fa-industry"></i></div>
-            <span class="step-label">{{ orden.numero_op }}</span>
-          </div>
-        </div>
-        <button
-          class="button carousel-arrow"
-          (click)="carouselNext()"
-          [disabled]="currentIndex === ordenesFiltradas.length - 1"
-        >
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-
-      <div class="carousel-preview" *ngIf="currentOp">
-        <hr class="modal-divider" />
-        <div class="columns is-vcentered is-mobile">
-          <div class="column">
-            <span class="heading">OP {{ currentOp.numero_op }}</span>
-            <span class="title is-4">{{ currentOp.producto[0].identificacion.producto }}</span>
-            <br />
-            <span class="subtitle is-6"><i class="fas fa-building mr-1"></i> {{ currentOp.cliente.nombre }}</span>
-            <span class="subtitle is-6 ml-4"
-              ><i class="fas fa-calendar-alt mr-1"></i> {{ currentOp.solicitud | date: 'dd/MM/yyyy' }}</span
+    <div class="card-content" style="padding: 0">
+      <div *ngIf="paginatedOrdenes.length > 0; else emptyOps">
+        <table class="table is-fullwidth is-striped is-hoverable ops-table">
+          <thead>
+            <tr>
+              <th class="op-number-col">OP</th>
+              <th>Producto</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th class="actions-col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let orden of paginatedOrdenes"
+              [ngClass]="{ 'is-selected': op === orden }"
+              (click)="op = orden"
             >
+              <td class="op-number-cell">
+                <strong>{{ orden.numero_op }}</strong>
+              </td>
+              <td>{{ orden.producto?.[0]?.identificacion?.producto || '—' }}</td>
+              <td>{{ orden.cliente?.nombre || '—' }}</td>
+              <td>{{ orden.solicitud | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <span
+                  class="tag"
+                  [ngClass]="orden.status === 'cerrada' ? 'is-light' : 'is-info is-light'"
+                >
+                  {{ orden.status === 'cerrada' ? 'Cerrada' : 'Activa' }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <div class="buttons are-small" (click)="$event.stopPropagation()">
+                  <button class="button" (click)="informacion = true; op = orden; obtenerDatos(orden)" title="Info">
+                    <span class="icon"><i class="fas fa-info-circle blue_"></i></span>
+                  </button>
+                  <button class="button" (click)="Gestiones(orden)" title="Gestiones">
+                    <span class="icon"><i class="fas fa-tasks"></i></span>
+                  </button>
+                  <button class="button" (click)="devolucion = true; op = orden" title="Devolución">
+                    <span class="icon"><i class="fas fa-undo"></i></span>
+                  </button>
+                  <button class="button" (click)="solicitudes = true; op = orden; se_prendio()" title="Solicitudes">
+                    <span class="icon"><i class="fas fa-shopping-cart"></i></span>
+                  </button>
+                  <button class="button" (click)="Despacho = true; op_seleccionada = orden" title="Despacho">
+                    <span class="icon"><i class="fa-solid fa-truck"></i></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="pagination-container" *ngIf="totalPages > 1">
+          <div class="pagination-info">
+            Mostrando {{ ((currentPage - 1) * pageSize) + 1 }}–{{ Math.min(currentPage * pageSize, ordenesFiltradas.length) }} de {{ ordenesFiltradas.length }}
           </div>
-          <div class="column is-narrow">
-            <div class="buttons are-small">
-              <button class="button" (click)="informacion = true; op = currentOp; obtenerDatos(currentOp)">
-                <span class="icon"><i class="fas fa-info-circle blue_"></i></span>
-                <span>Info</span>
-              </button>
-              <button class="button" (click)="Gestiones(currentOp)">
-                <span class="icon"><i class="fas fa-tasks"></i></span>
-                <span>Gestiones</span>
-              </button>
-              <button class="button" (click)="devolucion = true; op = currentOp">
-                <span class="icon"><i class="fas fa-undo"></i></span>
-                <span>Devolución</span>
-              </button>
-              <button class="button" (click)="solicitudes = true; op = currentOp; se_prendio()">
-                <span class="icon"><i class="fas fa-shopping-cart"></i></span>
-                <span>Solicitudes</span>
-              </button>
-              <button class="button" (click)="Despacho = true; op_seleccionada = currentOp">
-                <span class="icon"><i class="fa-solid fa-truck"></i></span>
-                <span>Despacho</span>
-              </button>
+          <div class="pagination-controls">
+            <div class="field has-addons">
+              <div class="control">
+                <button class="button is-small" (click)="goToPage(1)" [disabled]="currentPage === 1">
+                  <i class="fas fa-angle-double-left"></i>
+                </button>
+              </div>
+              <div class="control">
+                <button class="button is-small" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+              </div>
+              <div class="control" *ngFor="let p of getPageRange()">
+                <button
+                  class="button is-small"
+                  [ngClass]="{ 'is-info': p === currentPage }"
+                  (click)="goToPage(p)"
+                >
+                  {{ p }}
+                </button>
+              </div>
+              <div class="control">
+                <button class="button is-small" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="control">
+                <button class="button is-small" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">
+                  <i class="fas fa-angle-double-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="pagination-size">
+            <div class="field has-addons">
+              <div class="control">
+                <button
+                  class="button is-small"
+                  *ngFor="let size of [10, 25, 50, 100]"
+                  [ngClass]="{ 'is-info': pageSize === size }"
+                  (click)="pageSize = size; currentPage = 1"
+                >
+                  {{ size }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="has-text-centered p-5" *ngIf="ordenesFiltradas.length === 0 && api.orden">
-        <span class="icon is-large has-text-grey-lighter">
-          <i class="fas fa-industry fa-3x"></i>
-        </span>
-        <p class="title is-5 has-text-grey-light mt-3">No hay órdenes de producción</p>
-        <p class="has-text-grey-light">Haz clic en "Orden" para crear la primera</p>
-      </div>
+      <ng-template #emptyOps>
+        <div class="has-text-centered p-5" *ngIf="api.orden">
+          <span class="icon is-large has-text-grey-lighter">
+            <i class="fas fa-industry fa-3x"></i>
+          </span>
+          <p class="title is-5 has-text-grey-light mt-3">No hay órdenes de producción</p>
+          <p class="has-text-grey-light">Haz clic en "Orden" para crear la primera</p>
+        </div>
+      </ng-template>
     </div>
   </div>
 </app-page-layout>

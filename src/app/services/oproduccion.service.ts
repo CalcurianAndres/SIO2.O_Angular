@@ -116,6 +116,10 @@ export class OproduccionService {
     this.socket.io.emit('CLIENTE:NuevoTicketRojo', data);
   }
 
+  certificarOP(id: string) {
+    this.socket.io.emit('CLIENTE:CertificarOP', { _id: id });
+  }
+
   etiquetarProducto(data) {
     this.socket.io.emit('CLIENTE:NuevoProductoTerminado', data);
   }

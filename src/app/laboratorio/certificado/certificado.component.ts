@@ -4,6 +4,7 @@ import { PdfMakeWrapper, Txt, Table, Cell } from 'pdfmake-wrapper';
 import pdfFonts from '../../../assets/fonts/custom';
 import { InspectionLevel, IsoService } from 'src/app/services/iso.service';
 import { OproduccionService } from 'src/app/services/oproduccion.service';
+import { AnalisisService } from 'src/app/services/analisis.service';
 
 @Component({
   selector: 'app-certificado',
@@ -15,6 +16,7 @@ export class CertificadoComponent implements OnInit {
     private isoService: IsoService,
     public api: OproduccionService,
     private route: ActivatedRoute,
+    private analisisService: AnalisisService,
   ) {}
 
   ngOnInit() {
@@ -40,21 +42,22 @@ export class CertificadoComponent implements OnInit {
   pageSizes = [10, 25, 50, 100];
   showModal = false;
   selectedOp: any = null;
+  analisisMateriales: any[] = [];
 
   get items() {
-    return this.api.orden || [];
+    return (this.api.orden || []).filter((op: any) => !op.certificado);
   }
 
   get kpiTotalOPs() {
-    return this.items.length;
+    return (this.api.orden || []).length;
   }
 
   get kpiPorMuestrear() {
-    return this.items.filter((op: any) => !op.certificado).length;
+    return this.items.length;
   }
 
   get kpiEmitidos() {
-    return this.items.filter((op: any) => op.certificado).length;
+    return (this.api.orden || []).filter((op: any) => op.certificado).length;
   }
 
   get filteredItems(): any[] {
@@ -62,9 +65,9 @@ export class CertificadoComponent implements OnInit {
     const term = this.searchTerm.toLowerCase();
     return this.items.filter(
       (op: any) =>
-        (op.opNumero || '').toLowerCase().includes(term) ||
+        (op.numero_op || '').toLowerCase().includes(term) ||
         (op.nombre || '').toLowerCase().includes(term) ||
-        (op.producto || '').toLowerCase().includes(term),
+        (op.producto?.[0]?.identificacion?.producto || '').toLowerCase().includes(term),
     );
   }
 
@@ -99,9 +102,26 @@ export class CertificadoComponent implements OnInit {
   iniciarMuestreo(op: any) {
     this.selectedOp = op;
     this.lotSize = op.cantidad || 0;
+    this.analisisMateriales = [];
+    this.inkAnalysisList = (op.tinta || []).map(t => ({
+      name: (t.tinta && (t.tinta.nombre || t.tinta.color)) || 'Tinta',
+      visualInspection: true
+    }));
+    if (op._id) {
+      this.analisisService.buscarAnalisisMateriaPrimaOP(op._id).then(data => {
+        this.analisisMateriales = data;
+      });
+    }
     this.limpiarMuestreo();
     this.showModal = true;
     setTimeout(() => this.calculate(), 50);
+  }
+
+  finalizarMuestreo() {
+    if (this.selectedOp?._id) {
+      this.api.certificarOP(this.selectedOp._id);
+    }
+    this.showModal = false;
   }
 
   private limpiarMuestreo() {
@@ -136,13 +156,7 @@ export class CertificadoComponent implements OnInit {
       imgTextoNA: false,
       corteNA: false,
     };
-    this.inkAnalysisList = [
-      { name: 'Negro (K)', visualInspection: true },
-      { name: 'Cyan (C)', visualInspection: true },
-      { name: 'Magenta (M)', visualInspection: true },
-      { name: 'Pantone 109', visualInspection: true },
-      { name: 'Pantone 2035', visualInspection: true },
-    ];
+    this.inkAnalysisList = this.inkAnalysisList.length ? this.inkAnalysisList : [];
   }
 
   calculate() {
@@ -205,13 +219,7 @@ export class CertificadoComponent implements OnInit {
     imgTextoNA: false,
     corteNA: false,
   };
-  inkAnalysisList = [
-    { name: 'Negro (K)', visualInspection: true },
-    { name: 'Cyan (C)', visualInspection: true },
-    { name: 'Magenta (M)', visualInspection: true },
-    { name: 'Pantone 109', visualInspection: true },
-    { name: 'Pantone 2035', visualInspection: true },
-  ];
+  inkAnalysisList: { name: string; visualInspection: boolean }[] = [];
 
   onColorStatusChange(index: number) {
     const colorAfectado = this.inkAnalysisList[index];

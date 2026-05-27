@@ -38,11 +38,8 @@ export class ProduccionComponent implements OnInit, OnChanges {
 
   setFilter(status: string) {
     this.filterStatus = status;
-    this.currentIndex = 0;
+    this.currentPage = 1;
   }
-
-  // Carrusel
-  public currentIndex = 0;
 
   get ordenesFiltradas(): any[] {
     const base = this.resultados.length > 0 ? this.resultados : this.api.orden || [];
@@ -57,10 +54,6 @@ export class ProduccionComponent implements OnInit, OnChanges {
       return base.filter((o: any) => new Date(o.createdAt).getFullYear() === year);
     }
     return base;
-  }
-
-  get currentOp(): any {
-    return this.ordenesFiltradas[this.currentIndex];
   }
 
   get ordenesActivas(): number {
@@ -81,22 +74,38 @@ export class ProduccionComponent implements OnInit, OnChanges {
     return this.api.orden.filter((o: any) => o.status === 'cerrada').length;
   }
 
-  carouselNext() {
-    if (this.currentIndex < this.ordenesFiltradas.length - 1) {
-      this.currentIndex++;
+  // Paginación
+  public Math = Math;
+  public pageSize: number = 10;
+  public currentPage: number = 1;
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.ordenesFiltradas.length / this.pageSize));
+  }
+
+  get paginatedOrdenes(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.ordenesFiltradas.slice(start, start + this.pageSize);
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
     }
   }
 
-  carouselPrev() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
+  getPageRange(): number[] {
+    const range: number[] = [];
+    const total = this.totalPages;
+    const current = this.currentPage;
+    let start = Math.max(1, current - 2);
+    let end = Math.min(total, current + 2);
+    if (end - start < 4) {
+      if (start === 1) end = Math.min(total, start + 4);
+      else start = Math.max(1, end - 4);
     }
-  }
-
-  goToCarousel(index: number) {
-    if (index >= 0 && index < this.ordenesFiltradas.length) {
-      this.currentIndex = index;
-    }
+    for (let i = start; i <= end; i++) range.push(i);
+    return range;
   }
 
   public anoActual: any;

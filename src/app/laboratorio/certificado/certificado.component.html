@@ -5,12 +5,51 @@
     <header class="modal-card-head">
       <p class="modal-card-title">
         <i class="fas fa-microscope mr-2"></i>
-        Muestreo: OP {{ selectedOp?.opNumero || '—' }} — {{ selectedOp?.nombre || selectedOp?.producto || '—' }}
+        Muestreo: OP {{ selectedOp?.numero_op || '—' }} — {{ selectedOp?.nombre || selectedOp?.producto?.[0]?.identificacion?.producto || '—' }}
       </p>
       <button class="delete" aria-label="close" (click)="showModal = false"></button>
     </header>
 
     <section class="modal-card-body">
+      <!-- Análisis de materia prima -->
+      <div class="card mb-4" *ngIf="analisisMateriales.length > 0" style="background: var(--card-bg, #fff); border: 1px solid var(--border-color, #ddd); border-radius: 6px;">
+        <div class="card-content" style="padding: 0.75rem 1rem;">
+          <div class="is-flex is-align-items-center mb-2">
+            <i class="fas fa-flask mr-2" style="color: var(--text-muted);"></i>
+            <span class="has-text-weight-bold is-size-7" style="color: var(--text-muted);">Análisis de materia prima</span>
+          </div>
+          <div class="table-container">
+            <table class="table is-fullwidth is-narrow is-size-7" style="margin-bottom: 0;">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Lote</th>
+                  <th>Análisis</th>
+                  <th>Resultado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let am of analisisMateriales">
+                  <td class="has-text-weight-semibold">{{ am.material?.nombre || am.material?.color || '—' }}</td>
+                  <td><span class="tag is-light is-small">{{ am.lote || '—' }}</span></td>
+                  <td>
+                    <span *ngIf="am.analisisId; else noAnalisis" class="tag is-info is-light is-small" style="font-family: monospace;">
+                      {{ am.analisisId?.slice?.(-6) || am.analisisId?.substring?.(0, 8) || am.analisisId }}
+                    </span>
+                    <ng-template #noAnalisis><span class="tag is-light is-small">—</span></ng-template>
+                  </td>
+                  <td>
+                    <span *ngIf="am.resultado === 'APROBADO'" class="tag is-success is-light is-small"><i class="fas fa-check mr-1"></i>Aprobado</span>
+                    <span *ngIf="am.resultado === 'RECHAZADO'" class="tag is-danger is-light is-small"><i class="fas fa-times mr-1"></i>Rechazado</span>
+                    <span *ngIf="am.resultado === 'Sin análisis'" class="tag is-warning is-light is-small"><i class="fas fa-clock mr-1"></i>Sin análisis</span>
+                    <span *ngIf="am.resultado === 'Sin resultado' && am.resultado !== 'Sin análisis'" class="tag is-warning is-light is-small">Pendiente</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
       <div class="iso-dashboard">
         <div class="iso-panel">
           <div class="panel-header">
@@ -413,7 +452,7 @@
     </section>
 
     <footer class="modal-card-foot is-justify-content-flex-end">
-      <button class="button is-success" (click)="showModal = false" [disabled]="currentProgress < samplingPlan?.sampleSize">
+      <button class="button is-success" (click)="finalizarMuestreo()" [disabled]="currentProgress < samplingPlan?.sampleSize">
         <i class="fas fa-save mr-1"></i> Finalizar y Guardar
       </button>
       <button class="button" (click)="showModal = false">Cerrar</button>
@@ -513,10 +552,10 @@
             <tbody>
               <tr *ngFor="let op of paginatedItems">
                 <td class="pl-4">
-                  <span class="op-number">{{ op.opNumero || op.numero }}</span>
+                  <span class="op-number">{{ op.numero_op }}</span>
                 </td>
                 <td>
-                  <span class="product-label">{{ op.nombre || op.producto || '—' }}</span>
+                  <span class="product-label">{{ op.nombre || op.producto?.[0]?.identificacion?.producto || '—' }}</span>
                 </td>
                 <td class="has-text-centered">
                   <span class="qty-badge">{{ (op.cantidad || 0) | number }}</span>

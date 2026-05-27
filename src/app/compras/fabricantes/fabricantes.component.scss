@@ -61,8 +61,10 @@
   .card-header-title {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     padding: 0;
+    overflow: hidden;
+    min-width: 0;
   }
   .card-footer {
     font-size: 0.9rem;
@@ -161,16 +163,21 @@
 
 .grupo-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  overflow: hidden;
 }
 @media (min-width: 768px) {
   .grupo-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 @media (min-width: 1024px) {
   .grupo-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
+}
+
+.card.grupo-card {
+  min-width: 0;
 }

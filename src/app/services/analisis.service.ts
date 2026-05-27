@@ -434,6 +434,16 @@ export class AnalisisService {
     this.socket.io.emit('CLIENTE:AnalisisOtros', Data);
   }
 
+  buscarAnalisisMateriaPrimaOP(opId: string): Promise<any[]> {
+    return new Promise((resolve) => {
+      this.socket.io.emit('CLIENTE:BuscarAnalisisMateriaPrimaOP', { opId });
+      this.socket.io.once('SERVER:AnalisisMateriaPrimaOP', (data) => {
+        resolve(data || []);
+      });
+      setTimeout(() => resolve([]), 10000);
+    });
+  }
+
   buscarAnalisisPorFechas(desde: any, hasta: any) {
     console.log(desde, '-', hasta);
 
