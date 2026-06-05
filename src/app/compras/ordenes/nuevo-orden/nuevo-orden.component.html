@@ -117,7 +117,13 @@
           </thead>
           <tbody>
             <tr *ngFor="let pedido of Orden.pedido; index as i">
-              <td>{{ pedido.nombre }}</td>
+              <td>
+                {{ pedido.nombre }}
+                <span *ngIf="pedido.ancho">
+                  <br /><span class="tag is-light is-small">{{ pedido.ancho }}cm<ng-container *ngIf="pedido.alto && !pedido.bobina"> x {{ pedido.alto }}cm</ng-container></span>
+                </span>
+                <span *ngIf="pedido.bobina" class="tag is-info is-small" style="margin-left: 4px">Bobina</span>
+              </td>
               <td>{{ pedido.cantidad | number: '2.2-2' }}{{ pedido.unidad }}</td>
               <td>{{ Number_(pedido.precio) | number: '2.2-2' }}</td>
               <td>{{ Number_((pedido.precio * pedido.cantidad).toFixed(2)) | number: '2.2-2' }}</td>
