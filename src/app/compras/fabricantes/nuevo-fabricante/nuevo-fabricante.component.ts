@@ -165,9 +165,12 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   onPaisChange() {
     this.estado = '';
     this.estados = [];
-    if (!this.pais) return;
+    const pais = this.pais;
+    if (!pais) return;
     this.cargandoEstados = true;
-    this.paisesService.getEstados(this.pais).pipe(take(1)).subscribe((states) => {
+    const paisObj = this.listaPaises.find((p) => p.nombre === pais);
+    const paisApi = paisObj?.nombreEn || pais;
+    this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
       this.estados = states;
       this.cargandoEstados = false;
     });
@@ -176,9 +179,12 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   onPaisChange_() {
     this.estado = '';
     this.estados = [];
-    if (!this.pais) return;
+    const pais = this.pais;
+    if (!pais) return;
     this.cargandoEstados = true;
-    this.paisesService.getEstados(this.pais).pipe(take(1)).subscribe((states) => {
+    const paisObj = this.listaPaises.find((p) => p.nombre === pais);
+    const paisApi = paisObj?.nombreEn || pais;
+    this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
       this.estados = states;
       this.cargandoEstados = false;
     });
