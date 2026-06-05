@@ -34,6 +34,10 @@
 .modal-card-body .select.is-fullwidth select {
   width: 100%;
 }
+.modal-card-body .select.is-medium select {
+  font-size: 0.9rem;
+  height: 2.5em;
+}
 
 /* Material select label + control inline */
 .modal-card-body .columns .field {
