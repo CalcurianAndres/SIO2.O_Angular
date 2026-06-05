@@ -117,7 +117,7 @@
       <p class="help is-danger" *ngIf="(cliente_temporal.nombre || cliente_temporal.cargo || cliente_temporal.correo || cliente_temporal.telefono) && data.contactos.length === 0">
         <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
       </p>
-      <div class="tags-list mb-3" *ngIf="data.contactos?.length">
+      <div class="tags-list contact-grid mb-3" *ngIf="data.contactos?.length">
         <div *ngFor="let contacto of data.contactos; index as i" class="contact-card">
           <div class="contact-card__head">
             <i class="fas fa-user-tie mr-1"></i>

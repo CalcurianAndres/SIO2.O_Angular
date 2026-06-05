@@ -137,6 +137,12 @@
   margin-top: 0.4rem;
 }
 
+/* ── Contact grid: 2 columns ── */
+.tags-list.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
 /* ── Contact card (replaces tag badges) ── */
 .contact-card {
   background: color-mix(in srgb, var(--bg-secondary) 90%, var(--accent-blue) 5%);
@@ -144,8 +150,6 @@
   border-radius: 8px;
   padding: 0.45rem 0.7rem;
   min-width: 0;
-  flex: 1 1 180px;
-  max-width: 320px;
 
   &__head {
     display: flex;
