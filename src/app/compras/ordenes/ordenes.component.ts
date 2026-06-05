@@ -70,6 +70,19 @@ export class OrdenesComponent {
     return [...new Set(this.api.orden.map((o) => o.proveedor?.nombre).filter(Boolean))] as string[];
   }
 
+  get fabricantesUnicas(): string[] {
+    if (!this.api.orden) return [];
+    const nombres = new Set<string>();
+    this.api.orden.forEach((o) => {
+      if (!o.pedido) return;
+      o.pedido.forEach((p: any) => {
+        const alias = p.material?.fabricante?.alias || p.material?.fabricante?.nombre;
+        if (alias) nombres.add(alias);
+      });
+    });
+    return [...nombres];
+  }
+
   get ordenesVisibles(): any[] {
     if (this.filtrados.length > 0) return this.filtrados;
     return this.api.orden || [];
@@ -126,6 +139,21 @@ export class OrdenesComponent {
       return;
     }
     this.filtrados = this.api.orden.filter((orden) => orden.proveedor?.nombre === valor);
+  }
+
+  filtrarPorFabricante(target) {
+    const valor = target.value;
+    if (!valor) {
+      this.filtrados = [];
+      return;
+    }
+    this.filtrados = this.api.orden.filter((orden) => {
+      if (!orden.pedido) return false;
+      return orden.pedido.some(
+        (p: any) =>
+          (p.material?.fabricante?.alias || p.material?.fabricante?.nombre) === valor,
+      );
+    });
   }
 
   public PorClientes: any = [];

@@ -61,6 +61,9 @@
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'client' }" (click)="setFilter('client')">
       <i class="fas fa-users"></i> Por proveedor
     </button>
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'fabricante' }" (click)="setFilter('fabricante')">
+      <i class="fas fa-industry"></i> Por fabricante
+    </button>
   </div>
 
   <!-- Filter panels -->
@@ -106,6 +109,20 @@
           <select (change)="filtrarPorProveedor($event.target)">
             <option value="">— Todos —</option>
             <option *ngFor="let p of proveedoresUnicas" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-panel" *ngIf="filterMode === 'fabricante'">
+    <div class="field is-grouped">
+      <div class="control is-expanded">
+        <label class="label">Fabricante</label>
+        <div class="select is-fullwidth">
+          <select (change)="filtrarPorFabricante($event.target)">
+            <option value="">— Todos —</option>
+            <option *ngFor="let f of fabricantesUnicas" [value]="f">{{ f }}</option>
           </select>
         </div>
       </div>

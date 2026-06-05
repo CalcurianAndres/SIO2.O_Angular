@@ -70,6 +70,14 @@
             <label class="label">Precio USD</label>
             <input type="number" class="input" [(ngModel)]="material.precio" />
           </div>
+          <div class="column is-2" *ngIf="material.gramaje">
+            <label class="label">Gramaje (g/m²)</label>
+            <input type="number" class="input" [(ngModel)]="material.gramaje" />
+          </div>
+          <div class="column is-2" *ngIf="material.calibre">
+            <label class="label">Calibre (pt)</label>
+            <input type="number" class="input" [(ngModel)]="material.calibre" />
+          </div>
           <div
             class="column is-narrow"
             *ngIf="material.unidad === 't' && material.cantidad && Number_(material.cantidad) > 0"

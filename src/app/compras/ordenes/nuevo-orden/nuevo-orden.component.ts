@@ -63,7 +63,12 @@ export class NuevoOrdenComponent {
     const material = this.Sustratos.find((s) => s._id === id || String(s._id) === String(id));
     if (!material) return;
     this.material.nombre = material.nombre;
+    this.material.gramaje = material.gramaje || '';
+    this.material.calibre = material.calibre || '';
     this.material.unidad = this.material.unidad || 'Und';
+    this.material.alto = material.alto || '';
+    this.material.ancho = material.ancho || '';
+    this.material.bobina = material.bobina || false;
   }
 
   addMaterial() {
