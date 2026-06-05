@@ -25,325 +25,131 @@
         </div>
       </div>
       <br />
-      <table class="table is-fullwidth is-striped" *ngIf="Edicion_sustrato || Material_selected != '#'">
-        <tbody>
-          <tr>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Gramaje (g/m²)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.gramaje"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.min" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.min" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.nom" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.nom" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.gramaje.max" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.gramaje.max" [disabled]="SustratoNA.gramaje" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Calibre
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.calibre"> N/A</label>
-            </th>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">   </div>
-                <div class="column">Mínimo</div>
-                <div class="column">Nominal</div>
-                <div class="column">Máximo</div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column">(mm)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.mm.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-              <div class="columns" *ngIf="Edicion_sustrato">
-                <div class="column">(mm)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.mm.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>
-              <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column">(pt)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.pt.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-              <div class="columns" *ngIf="Edicion_sustrato">
-                <div class="column">(pt)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.pt.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>
-              <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column">(μm)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.calibre.um.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-              <div class="columns" *ngIf="Edicion_sustrato">
-                <div class="column">(μm)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.min" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.nom" [disabled]="SustratoNA.calibre" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.calibre.um.max" [disabled]="SustratoNA.calibre" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Cobb 60" (g/m²)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.cobb"> N/A</label>
-            </th>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">   </div>
-                <div class="column">Mínimo</div>
-                <div class="column">Nominal</div>
-                <div class="column">Máximo</div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column">(TOP)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.min" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.nom" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.top.max" [disabled]="SustratoNA.cobb" />
-                </div>
-              </div>
-              <div class="columns" *ngIf="Edicion_sustrato">
-                <div class="column">(TOP)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.min" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.nom" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.top.max" [disabled]="SustratoNA.cobb" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>
-              <div class="columns" *ngIf="!Edicion_sustrato">
-                <div class="column">(BACK)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.min" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.nom" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.cobb.back.max" [disabled]="SustratoNA.cobb" />
-                </div>
-              </div>
-              <div class="columns" *ngIf="Edicion_sustrato">
-                <div class="column">(BACK)</div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.min" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.nom" [disabled]="SustratoNA.cobb" />
-                </div>
-                <div class="column">
-                  <input type="number" class="input is-small" [(ngModel)]="Editable.cobb.back.max" [disabled]="SustratoNA.cobb" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Curling (s)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.curling"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.min" [disabled]="SustratoNA.curling" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.min" [disabled]="SustratoNA.curling" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.nom" [disabled]="SustratoNA.curling" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.nom" [disabled]="SustratoNA.curling" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.curling.max" [disabled]="SustratoNA.curling" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.curling.max" [disabled]="SustratoNA.curling" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Grado de blancura (%)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.blancura"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.min" [disabled]="SustratoNA.blancura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.min" [disabled]="SustratoNA.blancura" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.nom" [disabled]="SustratoNA.blancura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.nom" [disabled]="SustratoNA.blancura" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionSustrato.blancura.max" [disabled]="SustratoNA.blancura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion_sustrato">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.blancura.max" [disabled]="SustratoNA.blancura" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="spec-group" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <div class="spec-group-title">
+          Gramaje (g/m²)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.gramaje"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">Mín</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.gramaje.min" [disabled]="SustratoNA.gramaje" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.gramaje.min" [disabled]="SustratoNA.gramaje" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Nom</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.gramaje.nom" [disabled]="SustratoNA.gramaje" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.gramaje.nom" [disabled]="SustratoNA.gramaje" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Máx</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.gramaje.max" [disabled]="SustratoNA.gramaje" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.gramaje.max" [disabled]="SustratoNA.gramaje" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <div class="spec-group-title">
+          Calibre
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.calibre"> N/A</label>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">(mm)</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.mm.min" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.mm.min" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.mm.nom" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.mm.nom" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.mm.max" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.mm.max" [disabled]="SustratoNA.calibre" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">(pt)</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.pt.min" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.pt.min" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.pt.nom" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.pt.nom" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.pt.max" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.pt.max" [disabled]="SustratoNA.calibre" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">(μm)</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.um.min" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.um.min" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.um.nom" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.um.nom" [disabled]="SustratoNA.calibre" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.calibre.um.max" [disabled]="SustratoNA.calibre" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.calibre.um.max" [disabled]="SustratoNA.calibre" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <div class="spec-group-title">
+          Cobb 60" (g/m²)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.cobb"> N/A</label>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">(TOP)</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.top.min" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.top.min" [disabled]="SustratoNA.cobb" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.top.nom" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.top.nom" [disabled]="SustratoNA.cobb" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.top.max" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.top.max" [disabled]="SustratoNA.cobb" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">(BACK)</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.back.min" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.back.min" [disabled]="SustratoNA.cobb" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.back.nom" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.back.nom" [disabled]="SustratoNA.cobb" /></div>
+            <div class="column"><input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.cobb.back.max" [disabled]="SustratoNA.cobb" /><input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.cobb.back.max" [disabled]="SustratoNA.cobb" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <div class="spec-group-title">
+          Curling (s)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.curling"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">Mín</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.curling.min" [disabled]="SustratoNA.curling" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.curling.min" [disabled]="SustratoNA.curling" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Nom</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.curling.nom" [disabled]="SustratoNA.curling" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.curling.nom" [disabled]="SustratoNA.curling" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Máx</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.curling.max" [disabled]="SustratoNA.curling" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.curling.max" [disabled]="SustratoNA.curling" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Edicion_sustrato || Material_selected != '#'">
+        <div class="spec-group-title">
+          Grado de blancura (%)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="SustratoNA.blancura"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">Mín</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.blancura.min" [disabled]="SustratoNA.blancura" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.blancura.min" [disabled]="SustratoNA.blancura" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Nom</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.blancura.nom" [disabled]="SustratoNA.blancura" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.blancura.nom" [disabled]="SustratoNA.blancura" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Máx</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion_sustrato" [(ngModel)]="EspecificacionSustrato.blancura.max" [disabled]="SustratoNA.blancura" />
+            <input type="number" class="input is-small" *ngIf="Edicion_sustrato" [(ngModel)]="Editable.blancura.max" [disabled]="SustratoNA.blancura" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-card-foot">
       <button class="button is-success" (click)="guardar_sustrato()" *ngIf="!Edicion_sustrato" [disabled]="!formValido">
@@ -386,269 +192,125 @@
         </div>
       </div>
       <br />
-      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
-        <tbody>
-          <tr>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Viscosidad
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.viscosidad"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Min:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.min" [disabled]="TintaNA.viscosidad" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input
-                        type="number"
-                        name=""
-                        value=""
-                        class="input is-small"
-                        [(ngModel)]="Editable.viscosidad.min"
-                        [disabled]="TintaNA.viscosidad"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Max:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.max" [disabled]="TintaNA.viscosidad" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input
-                        type="number"
-                        name="viscosidadMax"
-                        class="input is-small"
-                        [(ngModel)]="Editable.viscosidad.max"
-                        [disabled]="TintaNA.viscosidad"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-5">
-                  <div class="columns">
-                    <div class="column">und / cond:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.viscosidad.con" [disabled]="TintaNA.viscosidad" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input
-                        type="text"
-                        name="ViscocidadCon"
-                        class="input is-small"
-                        [(ngModel)]="Editable.viscosidad.con"
-                        [disabled]="TintaNA.viscosidad"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Rígidez
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.rigidez"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Min:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.min" [disabled]="TintaNA.rigidez" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input
-                        type="number"
-                        name="RigidezMIn"
-                        class="input is-small"
-                        [(ngModel)]="Editable.rigidez.min"
-                        [disabled]="TintaNA.rigidez"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Max:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.max" [disabled]="TintaNA.rigidez" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input
-                        type="number"
-                        name="RigidezMax"
-                        class="input is-small"
-                        [(ngModel)]="Editable.rigidez.max"
-                        [disabled]="TintaNA.rigidez"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-5">
-                  <div class="columns">
-                    <div class="column">und / cond:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.rigidez.con" [disabled]="TintaNA.rigidez" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="text" name="RigidezCOn" class="input is-small" [(ngModel)]="Editable.rigidez.con" [disabled]="TintaNA.rigidez" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Inko o Tack
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.tack"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Min:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.min" [disabled]="TintaNA.tack" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" name="TAckMIn" class="input is-small" [(ngModel)]="Editable.tack.min" [disabled]="TintaNA.tack" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Max:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.max" [disabled]="TintaNA.tack" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" name="TackMAx" class="input is-small" [(ngModel)]="Editable.tack.max" [disabled]="TintaNA.tack" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-5">
-                  <div class="columns">
-                    <div class="column">und / cond:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.tack.con" [disabled]="TintaNA.tack" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="text" name="TackCon" class="input is-small" [(ngModel)]="Editable.tack.con" [disabled]="TintaNA.tack" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Dispersión o Finura
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.finura"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Min:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.min" [disabled]="TintaNA.finura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.finura.min" [disabled]="TintaNA.finura" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Max:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.max" [disabled]="TintaNA.finura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.finura.max" [disabled]="TintaNA.finura" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-5">
-                  <div class="columns">
-                    <div class="column">und / cond:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.finura.con" [disabled]="TintaNA.finura" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="Editable.finura.con" [disabled]="TintaNA.finura" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Secado en capas finas
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.secado"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Min:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.min" [disabled]="TintaNA.secado" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.secado.min" [disabled]="TintaNA.secado" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-3">
-                  <div class="columns">
-                    <div class="column is-3">Max:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.max" [disabled]="TintaNA.secado" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="number" class="input is-small" [(ngModel)]="Editable.secado.max" [disabled]="TintaNA.secado" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column is-5">
-                  <div class="columns">
-                    <div class="column">und / cond:</div>
-                    <div class="column" *ngIf="!Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="EspecificacionTinta.secado.con" [disabled]="TintaNA.secado" />
-                    </div>
-                    <div class="column" *ngIf="Edicion">
-                      <input type="text" class="input is-small" [(ngModel)]="Editable.secado.con" [disabled]="TintaNA.secado" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Viscosidad
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.viscosidad"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column is-3">
+            <span class="spec-sublabel">Min</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.viscosidad.min" [disabled]="TintaNA.viscosidad" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.viscosidad.min" [disabled]="TintaNA.viscosidad" />
+          </div>
+          <div class="column is-3">
+            <span class="spec-sublabel">Max</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.viscosidad.max" [disabled]="TintaNA.viscosidad" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.viscosidad.max" [disabled]="TintaNA.viscosidad" />
+          </div>
+          <div class="column is-6">
+            <span class="spec-sublabel">Und / Cond</span>
+            <input type="text" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.viscosidad.con" [disabled]="TintaNA.viscosidad" />
+            <input type="text" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.viscosidad.con" [disabled]="TintaNA.viscosidad" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Rígidez
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.rigidez"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column is-3">
+            <span class="spec-sublabel">Min</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.rigidez.min" [disabled]="TintaNA.rigidez" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.rigidez.min" [disabled]="TintaNA.rigidez" />
+          </div>
+          <div class="column is-3">
+            <span class="spec-sublabel">Max</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.rigidez.max" [disabled]="TintaNA.rigidez" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.rigidez.max" [disabled]="TintaNA.rigidez" />
+          </div>
+          <div class="column is-6">
+            <span class="spec-sublabel">Und / Cond</span>
+            <input type="text" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.rigidez.con" [disabled]="TintaNA.rigidez" />
+            <input type="text" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.rigidez.con" [disabled]="TintaNA.rigidez" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Inko o Tack
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.tack"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column is-3">
+            <span class="spec-sublabel">Min</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.tack.min" [disabled]="TintaNA.tack" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.tack.min" [disabled]="TintaNA.tack" />
+          </div>
+          <div class="column is-3">
+            <span class="spec-sublabel">Max</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.tack.max" [disabled]="TintaNA.tack" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.tack.max" [disabled]="TintaNA.tack" />
+          </div>
+          <div class="column is-6">
+            <span class="spec-sublabel">Und / Cond</span>
+            <input type="text" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.tack.con" [disabled]="TintaNA.tack" />
+            <input type="text" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.tack.con" [disabled]="TintaNA.tack" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Dispersión o Finura
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.finura"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column is-3">
+            <span class="spec-sublabel">Min</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.finura.min" [disabled]="TintaNA.finura" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.finura.min" [disabled]="TintaNA.finura" />
+          </div>
+          <div class="column is-3">
+            <span class="spec-sublabel">Max</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.finura.max" [disabled]="TintaNA.finura" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.finura.max" [disabled]="TintaNA.finura" />
+          </div>
+          <div class="column is-6">
+            <span class="spec-sublabel">Und / Cond</span>
+            <input type="text" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.finura.con" [disabled]="TintaNA.finura" />
+            <input type="text" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.finura.con" [disabled]="TintaNA.finura" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Secado en capas finas
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="TintaNA.secado"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column is-3">
+            <span class="spec-sublabel">Min</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.secado.min" [disabled]="TintaNA.secado" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.secado.min" [disabled]="TintaNA.secado" />
+          </div>
+          <div class="column is-3">
+            <span class="spec-sublabel">Max</span>
+            <input type="number" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.secado.max" [disabled]="TintaNA.secado" />
+            <input type="number" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.secado.max" [disabled]="TintaNA.secado" />
+          </div>
+          <div class="column is-6">
+            <span class="spec-sublabel">Und / Cond</span>
+            <input type="text" class="input is-small" *ngIf="!Edicion" [(ngModel)]="EspecificacionTinta.secado.con" [disabled]="TintaNA.secado" />
+            <input type="text" class="input is-small" *ngIf="Edicion" [(ngModel)]="Editable.secado.con" [disabled]="TintaNA.secado" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-card-foot">
       <button class="button is-success" (click)="guardar()" *ngIf="!Editable" [disabled]="!formValido">
@@ -691,262 +353,88 @@
         </div>
       </div>
       <br />
-      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion_cajas">
-        <tbody></tbody>
-        <tbody>
-          <tr>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Longitud interna (cm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.li"> N/A</label>
-            </th>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>Largo:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_min" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_nom" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_max" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Ancho:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_min" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_nom" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_max" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Alto:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_min" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_nom" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_max" [disabled]="CajasNA.li" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Longitud externa (cm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.le"> N/A</label>
-            </th>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td>Largo:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_min" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_nom" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_max" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Ancho:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_min" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_nom" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_max" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Alto:</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_min" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nominal:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_nom" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column" *ngIf="!Edicion_sustrato">
-                      <input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_max" [disabled]="CajasNA.le" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Espesor (mm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.espesor"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" [disabled]="CajasNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nóminal:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" [disabled]="CajasNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" [disabled]="CajasNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion_cajas">
+        <div class="spec-group-title">
+          Longitud interna (cm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.li"> N/A</label>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Largo</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_min" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_nom" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_largo_max" [disabled]="CajasNA.li" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Ancho</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_min" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_nom" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_ancho_max" [disabled]="CajasNA.li" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Alto</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_min" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_nom" [disabled]="CajasNA.li" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.li_alto_max" [disabled]="CajasNA.li" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion_cajas">
+        <div class="spec-group-title">
+          Longitud externa (cm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.le"> N/A</label>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Largo</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_min" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_nom" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_largo_max" [disabled]="CajasNA.le" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Ancho</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_min" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_nom" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_ancho_max" [disabled]="CajasNA.le" /></div>
+          </div>
+        </div>
+        <div class="spec-subgroup">
+          <div class="spec-subgroup-label">Alto</div>
+          <div class="columns is-variable is-2">
+            <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_min" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_nom" [disabled]="CajasNA.le" /></div>
+            <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input is-small" [(ngModel)]="Esp_otro.le_alto_max" [disabled]="CajasNA.le" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion_cajas">
+        <div class="spec-group-title">
+          Espesor (mm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="CajasNA.espesor"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">Mín</span>
+            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" [disabled]="CajasNA.espesor" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Nom</span>
+            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" [disabled]="CajasNA.espesor" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Máx</span>
+            <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" [disabled]="CajasNA.espesor" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-card-foot">
       <button class="button is-success" (click)="GuardarOtro()" [disabled]="!formValido">
@@ -985,157 +473,53 @@
         </div>
       </div>
       <br />
-      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || Edicion">
-        <tbody>
-          <tr>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Largo (cm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.largo"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_min" [disabled]="PadsNA.largo" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nóminal:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_nom" [disabled]="PadsNA.largo" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.largo_max" [disabled]="PadsNA.largo" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Ancho (cm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.ancho"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_min" [disabled]="PadsNA.ancho" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nóminal:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_nom" [disabled]="PadsNA.ancho" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.ancho_max" [disabled]="PadsNA.ancho" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Distancia signado (cm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.signado"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_min" [disabled]="PadsNA.signado" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nóminal:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_nom" [disabled]="PadsNA.signado" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.signado_max" [disabled]="PadsNA.signado" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Espesor (mm)
-              <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.espesor"> N/A</label>
-            </th>
-          </tr>
-          <tr>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Mínimo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" [disabled]="PadsNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Nóminal:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" [disabled]="PadsNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="columns">
-                    <div class="column">Máximo:</div>
-                    <div class="column">
-                      <input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" [disabled]="PadsNA.espesor" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Largo (cm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.largo"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input" [(ngModel)]="Esp_otro.largo_min" [disabled]="PadsNA.largo" /></div>
+          <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input" [(ngModel)]="Esp_otro.largo_nom" [disabled]="PadsNA.largo" /></div>
+          <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input" [(ngModel)]="Esp_otro.largo_max" [disabled]="PadsNA.largo" /></div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Ancho (cm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.ancho"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input" [(ngModel)]="Esp_otro.ancho_min" [disabled]="PadsNA.ancho" /></div>
+          <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input" [(ngModel)]="Esp_otro.ancho_nom" [disabled]="PadsNA.ancho" /></div>
+          <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input" [(ngModel)]="Esp_otro.ancho_max" [disabled]="PadsNA.ancho" /></div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Distancia signado (cm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.signado"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input" [(ngModel)]="Esp_otro.signado_min" [disabled]="PadsNA.signado" /></div>
+          <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input" [(ngModel)]="Esp_otro.signado_nom" [disabled]="PadsNA.signado" /></div>
+          <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input" [(ngModel)]="Esp_otro.signado_max" [disabled]="PadsNA.signado" /></div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || Edicion">
+        <div class="spec-group-title">
+          Espesor (mm)
+          <label class="na-toggle"><input type="checkbox" [(ngModel)]="PadsNA.espesor"> N/A</label>
+        </div>
+        <div class="columns is-variable is-2">
+          <div class="column"><span class="spec-sublabel">Mín</span><input type="text" class="input" [(ngModel)]="Esp_otro.espesor_min" [disabled]="PadsNA.espesor" /></div>
+          <div class="column"><span class="spec-sublabel">Nom</span><input type="text" class="input" [(ngModel)]="Esp_otro.espesor_nom" [disabled]="PadsNA.espesor" /></div>
+          <div class="column"><span class="spec-sublabel">Máx</span><input type="text" class="input" [(ngModel)]="Esp_otro.espesor_max" [disabled]="PadsNA.espesor" /></div>
+        </div>
+      </div>
     </div>
     <div class="modal-card-foot">
       <button class="button is-success" (click)="GuardarOtro()" [disabled]="!formValido">
@@ -1174,72 +558,43 @@
         </div>
       </div>
       <br />
-      <table class="table is-fullwidth is-striped" *ngIf="Material_selected != '#' || EDITAR_OTROS">
-        <tbody>
-          <tr></tr>
-          <tr>
-            <th colspan="2">Variable cualitativa</th>
-          </tr>
-          <tr>
-            <th>Apariencia:</th>
-            <td>
-              <div class="field">
-                <label clas="label">Especificación</label>
-                <div class="control">
-                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.apariencia" />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th colspan="2">Variable cuantitativa</th>
-          </tr>
-          <tr>
-            <th>pH:</th>
-            <td>
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label clas="label">Mínimo</label>
-                    <div class="control">
-                      <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_m" />
-                    </div>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="field">
-                    <label clas="label">Máximo</label>
-                    <div class="control">
-                      <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_M" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th colspan="2">Otra variable</th>
-          </tr>
-          <tr>
-            <th>
-              <div class="field">
-                <label clas="label">Evaluación</label>
-                <div class="control">
-                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey" />
-                </div>
-              </div>
-            </th>
-            <td>
-              <div class="field">
-                <label clas="label">Especificación</label>
-                <div class="control">
-                  <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey_Value" />
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="spec-group" *ngIf="Material_selected != '#' || EDITAR_OTROS">
+        <div class="spec-group-title">Variable cualitativa</div>
+        <div class="field">
+          <span class="spec-sublabel">Apariencia</span>
+          <div class="control">
+            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.apariencia" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || EDITAR_OTROS">
+        <div class="spec-group-title">Variable cuantitativa</div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">pH mínimo</span>
+            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_m" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">pH máximo</span>
+            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="Esp_otro.ph_M" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-group" *ngIf="Material_selected != '#' || EDITAR_OTROS">
+        <div class="spec-group-title">Otra variable</div>
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <span class="spec-sublabel">Evaluación</span>
+            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey" />
+          </div>
+          <div class="column">
+            <span class="spec-sublabel">Especificación</span>
+            <input type="text" class="input" placeholder="Especificación" [(ngModel)]="newKey_Value" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-card-foot">
       <button class="button is-success" (click)="GuardarOtro()" [disabled]="!formValido">

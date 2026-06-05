@@ -1,33 +1,24 @@
-/* Modal body padding */
 .modal-card-body {
   padding: 1.25rem;
 }
-
-/* Section dividers */
 .modal-card-body hr {
   margin: 1rem 0;
   opacity: 0.2;
 }
-
-/* Section headers (th elements serve as section labels in this template) */
-.modal-card-body .table th {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.75rem 0.5rem 0.4rem;
+.modal-card-body .columns .field {
+  margin-bottom: 0;
 }
-
-/* Form labels inside modal */
-.modal-card-body .label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
+.modal-card-body > .button.is-success {
+  margin-top: 0.5rem;
 }
-
-/* Full-width material select */
+.modal-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
 .modal-card-body .select.material-select {
   width: 100%;
   min-width: 100%;
@@ -41,38 +32,55 @@
   height: 2.5em;
 }
 
-/* Material select label + control inline */
-.modal-card-body .columns .field {
+.spec-group {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--bg-secondary) 50%, transparent);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+.spec-group:last-child {
   margin-bottom: 0;
 }
-
-/* Save button area */
-.modal-card-body > .button.is-success {
-  margin-top: 0.5rem;
-}
-
-/* Modal footer (Receta 15) */
-.modal-card-foot {
+.spec-group-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   gap: 0.5rem;
-  padding: 1rem 1.25rem;
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-secondary);
 }
-
-/* N/A toggle inline with section header */
-.na-toggle {
+.spec-group-title .na-toggle {
   font-weight: 400;
   font-size: 0.65rem;
-  text-transform: none;
-  letter-spacing: normal;
-  margin-left: 0.5rem;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
 }
-.na-toggle input[type="checkbox"] {
+.spec-group-title .na-toggle input[type="checkbox"] {
   margin-right: 2px;
   vertical-align: middle;
+}
+
+.spec-subgroup {
+  margin-top: 0.25rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--border-color);
+}
+.spec-subgroup + .spec-subgroup {
+  margin-top: 0.35rem;
+}
+.spec-subgroup-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.spec-sublabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.15rem;
 }
