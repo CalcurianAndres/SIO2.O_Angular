@@ -39,6 +39,13 @@
       </div>
     </div>
     <div class="column">
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-number">{{ totalMaterialesGrupo }}</div>
+        <div class="kpi-label">Materiales del <strong>Grupo</strong></div>
+        <div class="kpi-period">{{ grupoSelected }}</div>
+      </div>
+    </div>
+    <div class="column">
       <div class="kpi-card kpi-green">
         <div class="kpi-number">{{ totalConEspecificacion }}</div>
         <div class="kpi-label">Con <strong>Especificación</strong></div>
@@ -46,7 +53,7 @@
       </div>
     </div>
     <div class="column">
-      <div class="kpi-card kpi-blue">
+      <div class="kpi-card kpi-red">
         <div class="kpi-number">{{ totalSinEspecificacion }}</div>
         <div class="kpi-label">Sin <strong>Especificación</strong></div>
         <div class="kpi-period">por definir</div>
@@ -76,7 +83,7 @@
   <ng-container *ngIf="hayGrupos">
     <div class="grupo-grid">
       <div
-        *ngFor="let grupo of grupos.grupos"
+        *ngFor="let grupo of gruposVisibles"
         class="card grupo-card animate__animated animate__fadeInUp"
         [ngClass]="{ 'card-active': grupoSelected === grupo.nombre }"
         (click)="seleccionarGrupo(grupo)"
@@ -90,7 +97,7 @@
             </span>
           </div>
         </div>
-        <footer class="card-footer">
+        <footer class="card-footer" *ngIf="material.filtrarPorGrupoSinEspecificacion(grupo._id).length > 0">
           <a
             class="card-footer-item"
             title="Nueva especificación"

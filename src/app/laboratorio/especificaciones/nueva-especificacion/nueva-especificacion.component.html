@@ -12,13 +12,11 @@
           <div class="field">
             <label class="label">Material</label>
             <div class="control">
-              <div class="select">
+              <div class="select is-fullwidth">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
-                    {{ material.nombre }} {{ material.gramaje }}g Calibre: {{ material.calibre }} ({{
-                      material.origen
-                    }}) - Serie: {{ material.serie }}
+                    {{ material.nombre }}{{ material.gramaje ? ' (' + material.gramaje + 'g)' : '' }} — {{ material.fabricante?.alias || material.origen || '' }}
                   </option>
                 </select>
               </div>

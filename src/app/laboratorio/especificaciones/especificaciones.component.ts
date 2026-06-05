@@ -58,18 +58,31 @@ export class EspecificacionesComponent implements DoCheck {
     return (this.grupos.grupos?.length ?? 0) > 0;
   }
 
+  get gruposVisibles(): any[] {
+    return (this.grupos.grupos || []).filter((g: any) => !g.otro);
+  }
+
   get totalGrupos(): number {
     return this.grupos.grupos?.length || 0;
   }
 
+  get grupoSelectedId(): string | null {
+    const g = this.grupos.grupos?.find((x: any) => x.nombre === this.grupoSelected);
+    return g?._id || null;
+  }
+
+  get totalMaterialesGrupo(): number {
+    const id = this.grupoSelectedId;
+    if (!this.material.materiales || !id) return 0;
+    return this.material.materiales.filter((m: any) => m.grupo === id).length;
+  }
+
   get totalConEspecificacion(): number {
-    if (!this.material.materiales) return 0;
-    return this.material.materiales.filter((m: any) => m.especificacion || m.especificacion2).length;
+    return this.filteredMateriales.length;
   }
 
   get totalSinEspecificacion(): number {
-    if (!this.material.materiales) return 0;
-    return this.material.materiales.filter((m: any) => !m.especificacion && !m.especificacion2).length;
+    return this.totalMaterialesGrupo - this.totalConEspecificacion;
   }
 
   get filteredMateriales(): any[] {
@@ -121,6 +134,7 @@ export class EspecificacionesComponent implements DoCheck {
   }
 
   seleccionarGrupo(grupo: any) {
+    if (grupo.otro) return;
     this.grupoSelected = grupo.nombre;
     this.materialesEspecificados = this.material.filtrarPorGrupoConEspecificacion(grupo._id);
     this.currentPage = 1;

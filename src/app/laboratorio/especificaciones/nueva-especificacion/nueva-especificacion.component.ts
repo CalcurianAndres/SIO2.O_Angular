@@ -137,14 +137,16 @@ export class NuevaEspecificacionComponent {
   public PadsNA = { largo: false, ancho: false, signado: false, espesor: false };
 
   get modalTitle(): string {
-    if (this.NUEVO_SUSTRATO) return 'Nueva especificación - Sustrato';
+    const nombreMaterial = this.Materiales?.[this.Material_selected]?.nombre || '';
+    const sufijo = nombreMaterial ? ` — ${nombreMaterial}` : '';
+    if (this.NUEVO_SUSTRATO) return 'Nueva especificación - Sustrato' + sufijo;
     if (this.Edicion_sustrato) return 'Editar especificación - Sustrato';
-    if (this.NUEVA_ESPECIFICACION) return 'Nueva especificación';
+    if (this.NUEVA_ESPECIFICACION) return 'Nueva especificación' + sufijo;
     if (this.Edicion) return 'Editar especificación';
-    if (this.NUEVA_CAJA) return 'Nueva especificación - Caja';
+    if (this.NUEVA_CAJA) return 'Nueva especificación - Caja' + sufijo;
     if (this.Edicion_cajas) return 'Editar especificación - Caja';
     if (this.NUEVO_PADS) return 'Nueva especificación - Pads';
-    if (this.NUEVO_OTROS) return 'Nueva especificación';
+    if (this.NUEVO_OTROS) return 'Nueva especificación' + sufijo;
     if (this.EDITAR_OTROS) return 'Editar especificación';
     return 'Especificación';
   }
