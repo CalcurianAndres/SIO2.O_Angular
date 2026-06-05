@@ -109,9 +109,6 @@
 .kpi-blue::before {
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue));
 }
-.kpi-red::before {
-  background: linear-gradient(135deg, var(--accent-red, #f03a5f), var(--accent-red, #f03a5f));
-}
 .kpi-number {
   font-size: 2rem;
   font-weight: 700;
@@ -126,9 +123,6 @@
 }
 .kpi-blue .kpi-number {
   color: var(--accent-blue);
-}
-.kpi-red .kpi-number {
-  color: var(--accent-red, #f03a5f);
 }
 .kpi-label {
   font-size: 0.85rem;

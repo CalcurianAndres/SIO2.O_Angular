@@ -66,23 +66,14 @@ export class EspecificacionesComponent implements DoCheck {
     return this.grupos.grupos?.length || 0;
   }
 
-  get grupoSelectedId(): string | null {
-    const g = this.grupos.grupos?.find((x: any) => x.nombre === this.grupoSelected);
-    return g?._id || null;
-  }
-
-  get totalMaterialesGrupo(): number {
-    const id = this.grupoSelectedId;
-    if (!this.material.materiales || !id) return 0;
-    return this.material.materiales.filter((m: any) => m.grupo === id).length;
-  }
-
   get totalConEspecificacion(): number {
-    return this.filteredMateriales.length;
+    if (!this.material.materiales) return 0;
+    return this.material.materiales.filter((m: any) => m.especificacion || m.especificacion2).length;
   }
 
   get totalSinEspecificacion(): number {
-    return this.totalMaterialesGrupo - this.totalConEspecificacion;
+    if (!this.material.materiales) return 0;
+    return this.material.materiales.filter((m: any) => !m.especificacion && !m.especificacion2).length;
   }
 
   get filteredMateriales(): any[] {
