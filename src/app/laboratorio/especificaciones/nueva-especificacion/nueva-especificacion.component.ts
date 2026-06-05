@@ -136,17 +136,21 @@ export class NuevaEspecificacionComponent {
   public CajasNA = { li: false, le: false, espesor: false };
   public PadsNA = { largo: false, ancho: false, signado: false, espesor: false };
 
+  get materialSeleccionadoTexto(): string {
+    const m = this.Materiales?.[this.Material_selected];
+    if (!m) return '';
+    const marca = m.fabricante?.alias || m.origen || '';
+    const serie = m.serie ? ` — Serie: ${m.serie}` : '';
+    return `${m.nombre}${marca ? ` (${marca})` : ''}${serie}`;
+  }
+
   get modalTitle(): string {
-    const nombreMaterial = this.Materiales?.[this.Material_selected]?.nombre || '';
-    if (this.Edicion_sustrato) return 'Editar especificación - Sustrato';
-    if (this.Edicion) return 'Editar especificación';
-    if (this.Edicion_cajas) return 'Editar especificación - Caja';
-    if (this.EDITAR_OTROS) return 'Editar especificación';
-    if (this.NUEVO_SUSTRATO) return nombreMaterial || 'Nuevo sustrato';
-    if (this.NUEVA_ESPECIFICACION) return nombreMaterial || 'Nueva especificación';
-    if (this.NUEVA_CAJA) return nombreMaterial || 'Nueva caja';
-    if (this.NUEVO_PADS) return nombreMaterial || 'Nuevo soporte';
-    if (this.NUEVO_OTROS) return nombreMaterial || 'Nueva especificación';
+    const texto = this.materialSeleccionadoTexto || 'Nuevo material';
+    if (this.Edicion_sustrato) return `Editar — ${texto}`;
+    if (this.Edicion) return `Editar — ${texto}`;
+    if (this.Edicion_cajas) return `Editar — ${texto}`;
+    if (this.EDITAR_OTROS) return `Editar — ${texto}`;
+    if (this.NUEVO_SUSTRATO || this.NUEVA_ESPECIFICACION || this.NUEVA_CAJA || this.NUEVO_PADS || this.NUEVO_OTROS) return texto;
     return 'Especificación';
   }
 
