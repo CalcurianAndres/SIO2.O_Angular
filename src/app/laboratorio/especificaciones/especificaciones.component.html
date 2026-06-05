@@ -89,16 +89,17 @@
               <i class="fas fa-glass-whiskey"></i> Parcial
             </span>
           </div>
+          <div class="card-header-actions">
+            <a
+              class="plus-icon"
+              [class.is-disabled]="material.filtrarPorGrupoSinEspecificacion(grupo._id).length === 0"
+              title="Nueva especificación"
+              (click)="$event.stopPropagation(); nueva_especificacion(grupo._id)"
+            >
+              <i class="fas fa-plus-circle"></i>
+            </a>
+          </div>
         </div>
-        <footer class="card-footer" *ngIf="material.filtrarPorGrupoSinEspecificacion(grupo._id).length > 0">
-          <a
-            class="card-footer-item"
-            title="Nueva especificación"
-            (click)="$event.stopPropagation(); nueva_especificacion(grupo._id)"
-          >
-            <i class="fas fa-plus-circle"></i>
-          </a>
-        </footer>
       </div>
     </div>
 

@@ -279,6 +279,8 @@ export class GruposComponent {
     this.nuevo = false;
     this.editar = false;
     this.nuevo_material = false;
+    this.editar_material = false;
+    this.material_data = null;
   }
 
   NuevoMaterial() {

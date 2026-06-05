@@ -27,12 +27,14 @@
   color: var(--text-muted);
 }
 
-/* Full-width select (material picker) */
-.modal-card-body .select.is-fullwidth {
+/* Full-width material select */
+.modal-card-body .select.material-select {
   width: 100%;
+  min-width: 100%;
 }
-.modal-card-body .select.is-fullwidth select {
+.modal-card-body .select.material-select select {
   width: 100%;
+  min-width: 100%;
 }
 .modal-card-body .select.is-medium select {
   font-size: 0.9rem;

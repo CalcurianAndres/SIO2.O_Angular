@@ -8,11 +8,11 @@
     </div>
     <div class="modal-card-body">
       <div class="columns" *ngIf="!Edicion_sustrato">
-        <div class="column is-6">
+        <div class="column">
           <div class="field">
             <label class="label">Material</label>
             <div class="control">
-              <div class="select is-fullwidth is-medium">
+              <div class="select is-medium material-select">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
@@ -369,11 +369,11 @@
     </div>
     <div class="modal-card-body">
       <div class="columns" *ngIf="!Edicion">
-        <div class="column is-3">
+        <div class="column">
           <div class="field">
             <label for="" class="label">Material</label>
             <div class="control">
-              <div class="select">
+              <div class="select is-medium material-select">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
@@ -674,11 +674,11 @@
     </div>
     <div class="modal-card-body">
       <div class="columns" *ngIf="!Edicion && !Edicion_cajas">
-        <div class="column is-3">
+        <div class="column">
           <div class="field">
             <label for="" class="label">Material</label>
             <div class="control">
-              <div class="select">
+              <div class="select is-medium material-select">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
@@ -968,11 +968,11 @@
     </div>
     <div class="modal-card-body">
       <div class="columns" *ngIf="!Edicion_sustrato">
-        <div class="column is-3">
+        <div class="column">
           <div class="field">
             <label for="" class="label">Material</label>
             <div class="control">
-              <div class="select">
+              <div class="select is-medium material-select">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
@@ -1157,11 +1157,11 @@
     </div>
     <div class="modal-card-body">
       <div class="columns" *ngIf="!Edicion_sustrato && !EDITAR_OTROS">
-        <div class="column is-3">
+        <div class="column">
           <div class="field">
             <label class="label">Material</label>
             <div class="control">
-              <div class="select">
+              <div class="select is-medium material-select">
                 <select name="" id="" [(ngModel)]="Material_selected">
                   <option value="#">Selecciona un material</option>
                   <option value="{{ i }}" *ngFor="let material of Materiales; index as i">
