@@ -188,10 +188,16 @@
           <tbody>
             <tr *ngFor="let material of orden.pedido">
               <td>
-                {{ material.material.nombre }} ({{ material.material.fabricante.alias }})
-                <span *ngIf="material.material.gramaje">
-                  — {{ material.material.gramaje }}g {{ material.material.calibre }}pt</span
-                >
+                <div><strong>{{ material.material.nombre }}</strong> ({{ material.material.fabricante.alias }})</div>
+                <div style="margin-top: 2px">
+                  <span *ngIf="material.ancho" class="tag is-light is-small">
+                    {{ material.ancho }}cm<ng-container *ngIf="material.alto && !material.bobina"> x {{ material.alto }}cm</ng-container>
+                  </span>
+                  <span *ngIf="material.bobina" class="tag is-info is-small" style="margin-left: 4px">Bobina</span>
+                  <span *ngIf="material.material.gramaje && !material.ancho" class="tag is-light is-small">
+                    {{ material.material.gramaje }}g {{ material.material.calibre }}pt
+                  </span>
+                </div>
               </td>
               <td>{{ material.material.modelo }}</td>
               <td>{{ material.cantidad | number: '1.0-2' }}{{ material.unidad }}</td>
