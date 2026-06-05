@@ -26,6 +26,7 @@ export class Fabricante {
     public grupo: any,
     public _id: string,
     public proveedor: boolean,
+    public identificacion_fiscal?: string,
   ) {}
 }
 
@@ -37,6 +38,7 @@ export class Fabricante_populated {
     public grupo: Array<Grupo>,
     public _id?: string,
     public proveedor?: boolean,
+    public identificacion_fiscal?: string,
   ) {}
 }
 
@@ -51,6 +53,7 @@ export class Materiales {
     public grupo: string,
     public origen: string,
     public serie: string,
+    public cinta?: string,
   ) {}
 }
 
@@ -65,8 +68,12 @@ export class Proveedores {
         nombre: string;
         email: string;
         numero: string;
+        cargo?: string;
       },
     ],
+    public pais?: string,
+    public identificacion_fiscal?: string,
+    public estado?: string,
   ) {}
 }
 

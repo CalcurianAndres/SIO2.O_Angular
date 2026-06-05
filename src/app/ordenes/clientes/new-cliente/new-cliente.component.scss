@@ -2,22 +2,51 @@
 .tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.5rem;
   margin-top: 0.4rem;
 }
-.tag-sub {
-  font-weight: 400;
-  opacity: 0.75;
-}
-.tag-delete {
-  margin-left: 0.4rem;
-  cursor: pointer;
-  opacity: 0.5;
-  font-size: 0.8rem;
-}
-.tag-delete:hover {
-  opacity: 1;
-  color: var(--status-danger);
+
+/* ── Contact card (replaces tag badges) ── */
+.contact-card {
+  background: color-mix(in srgb, var(--bg-secondary) 90%, var(--accent-blue) 5%);
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+  flex: 1 1 180px;
+  max-width: 320px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+
+    strong {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    .delete {
+      flex-shrink: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  &__row {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    opacity: 0.75;
+    word-break: break-all;
+    line-height: 1.4;
+  }
 }
 
 /* ── Section label ── */
@@ -46,4 +75,27 @@ hr.modal-divider {
 .control.has-icons-left textarea ~ .icon.is-left {
   align-items: flex-start;
   padding-top: 0.75rem;
+}
+
+/* ── Mapa Leaflet ── */
+.mapa-wrapper {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.mapa-wrapper[hidden] {
+  display: none;
+}
+.mapa-leaflet {
+  height: 280px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  z-index: 1;
+}
+.has-coords {
+  border-left: 3px solid var(--status-success) !important;
+}
+.coord-indicator {
+  font-size: 0.7rem;
+  margin-left: 0.2rem;
 }

@@ -15,9 +15,21 @@ export class ProveedoresComponent {
   public cargando: boolean = true;
   public detalle: boolean = false;
   public proveedor_selected!: Proveedores;
+  public searchTerm: string = '';
 
   constructor(public api: ProveedoresService) {
     setTimeout(() => (this.cargando = false), 1200);
+  }
+
+  get filteredProveedores(): any[] {
+    if (!this.searchTerm) return this.api.proveedores;
+    const term = this.searchTerm.toLowerCase();
+    return this.api.proveedores.filter(
+      (p: any) =>
+        p.nombre?.toLowerCase().includes(term) ||
+        p.rif?.toLowerCase().includes(term) ||
+        p.pais?.toLowerCase().includes(term),
+    );
   }
 
   cerrar() {
@@ -44,14 +56,14 @@ export class ProveedoresComponent {
     this.editar = false;
   }
 
-  VerProveedor(i: number) {
-    this.proveedor_selected = this.api.proveedores[i];
+  VerProveedor(prov: any) {
+    this.proveedor_selected = prov;
     this.detalle = true;
   }
 
-  EditarProveedor(i: number) {
+  EditarProveedor(prov: any) {
     this.editar = true;
-    this.proveedor_selected = this.api.proveedores[i];
+    this.proveedor_selected = prov;
   }
 
   borrarFabricante(id: string) {

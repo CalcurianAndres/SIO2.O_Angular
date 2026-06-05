@@ -32,6 +32,10 @@ export class NavbarComponent implements OnInit {
     this.menuAbierto = this.menuAbierto === seccion ? '' : seccion;
   }
 
+  showDashboard() {
+    this.menuAbierto = 'dashboard';
+  }
+
   showCompras() {
     this.toggleMenu('compras');
   }
@@ -112,7 +116,8 @@ export class NavbarComponent implements OnInit {
       this._isCollapsed = false;
     }
     const url = this.router.url;
-    if (url.includes('compras')) this.menuAbierto = 'compras';
+    if (url === '/dashboard') this.menuAbierto = 'dashboard';
+    else if (url.includes('compras')) this.menuAbierto = 'compras';
     else if (url.includes('ventas')) this.menuAbierto = 'ventas';
     else if (url.includes('almacen')) this.menuAbierto = 'inventario';
     this.notificacion.subscribeToPushNotifications();

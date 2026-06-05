@@ -558,16 +558,13 @@ export class AnalisisComponent {
 
   verificarSiSerealizoAnalisis(material) {
     if (material[0].analisis) {
-      if (
-        material[0].material.grupo.nombre === 'Tintas' ||
-        material[0].material.grupo.nombre === 'Barniz s/impresión'
-      ) {
+      if (material[0].material.grupo.nombre === 'Tintas' || material[0].material.grupo.nombre === 'Barniz de aceite') {
         if (this.analisis.buscarAnalisisPorID(material[0].analisis).resultado.validado.usuario != '') {
           return false;
         } else {
           return true;
         }
-      } else if (material[0].material.grupo.nombre === 'Cajas Corrugadas') {
+      } else if (material[0].material.grupo.nombre === 'Cajas de embalaje') {
         if (this.analisis.buscarAnalisisCajasPorID(material[0].analisis).resultado.validado.usuario != '') {
           return false;
         } else {
@@ -626,7 +623,7 @@ export class AnalisisComponent {
       return;
     } else if (
       material[0].material.grupo.nombre === 'Tintas' ||
-      material[0].material.grupo.nombre === 'Barniz s/impresión'
+      material[0].material.grupo.nombre === 'Barniz de aceite'
     ) {
       this.Tinta = true;
       this.Recepcion_selected = recepcion;
@@ -639,7 +636,7 @@ export class AnalisisComponent {
           this.Analisis.resultado.pendiente = undefined;
         }
       }
-    } else if (material[0].material.grupo.nombre === 'Cajas Corrugadas') {
+    } else if (material[0].material.grupo.nombre === 'Cajas de embalaje') {
       this.Caja = true;
       this.Recepcion_selected = recepcion;
       this.Material_selected = material;

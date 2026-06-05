@@ -225,15 +225,39 @@ export class ProductosComponent implements OnInit {
 
   nuevoProducto() {
     this.producto = {
-      cliente: '', producto: '', codigo: '', codigo_cliente: '',
-      tamano_desplegado: [], tamano_cerrado: [], diseno: '',
-      sustrato: [], tintas: [], barnices: [],
-      archivo_diseno: '', archivo_montaje: [], tipo_plancha: '', tiempo_exposicion: '',
-      maquinas: [], tamano_sustrato_imprimir: [], area_efectiva: [], fuente: [],
-      troqueladora: [], guillotina: [], pegadora: [], pegamento: [], embalaje: '',
-      caja: [], unidades_por_caja: 0, cantidad_por_paquetes: 0,
-      vista_aerea: '', vista_3d: '', tipo_paleta: '', tamano_paleta: '',
-      cantidad_estibas: 0, peso_cajas: '', paletizado: '',
+      cliente: '',
+      producto: '',
+      codigo: '',
+      codigo_cliente: '',
+      tamano_desplegado: [],
+      tamano_cerrado: [],
+      diseno: '',
+      sustrato: [],
+      tintas: [],
+      barnices: [],
+      archivo_diseno: '',
+      archivo_montaje: [],
+      tipo_plancha: '',
+      tiempo_exposicion: '',
+      maquinas: [],
+      tamano_sustrato_imprimir: [],
+      area_efectiva: [],
+      fuente: [],
+      troqueladora: [],
+      guillotina: [],
+      pegadora: [],
+      pegamento: [],
+      embalaje: '',
+      caja: [],
+      unidades_por_caja: 0,
+      cantidad_por_paquetes: 0,
+      vista_aerea: '',
+      vista_3d: '',
+      tipo_paleta: '',
+      tamano_paleta: '',
+      cantidad_estibas: 0,
+      peso_cajas: '',
+      paletizado: '',
     };
     this.nuevo = true;
   }
@@ -247,12 +271,26 @@ export class ProductosComponent implements OnInit {
       producto: n.identificacion?.producto || '',
       codigo: n.identificacion?.codigo || '',
       codigo_cliente: n.identificacion?.codigo_cliente || '',
-      tamano_desplegado: n.dimensiones?.desplegado ? [n.dimensiones.desplegado.ancho, n.dimensiones.desplegado.largo, n.dimensiones.desplegado.tolerancia].filter(Boolean).map(Number) : [],
-      tamano_cerrado: n.dimensiones?.cerrado ? [n.dimensiones.cerrado.ancho, n.dimensiones.cerrado.largo, n.dimensiones.cerrado.tolerancia].filter(Boolean).map(Number) : [],
+      tamano_desplegado: n.dimensiones?.desplegado
+        ? [n.dimensiones.desplegado.ancho, n.dimensiones.desplegado.largo, n.dimensiones.desplegado.tolerancia]
+            .filter(Boolean)
+            .map(Number)
+        : [],
+      tamano_cerrado: n.dimensiones?.cerrado
+        ? [n.dimensiones.cerrado.ancho, n.dimensiones.cerrado.largo, n.dimensiones.cerrado.tolerancia]
+            .filter(Boolean)
+            .map(Number)
+        : [],
       diseno: n.dimensiones?.diseno || '',
       sustrato: arrId(n.materia_prima?.sustrato),
-      tintas: (n.materia_prima?.tintas || []).map((t: any) => ({ tinta: id(t.tinta), cantidad: Number(t.cantidad) || 0 })),
-      barnices: (n.materia_prima?.barnices || []).map((b: any) => ({ barniz: id(b.barniz), cantidad: Number(b.cantidad) || 0 })),
+      tintas: (n.materia_prima?.tintas || []).map((t: any) => ({
+        tinta: id(t.tinta),
+        cantidad: Number(t.cantidad) || 0,
+      })),
+      barnices: (n.materia_prima?.barnices || []).map((b: any) => ({
+        barniz: id(b.barniz),
+        cantidad: Number(b.cantidad) || 0,
+      })),
       archivo_diseno: n.pre_impresion?.diseno || '',
       archivo_montaje: n.pre_impresion?.nombre_montajes || [],
       tipo_plancha: n.pre_impresion?.plancha?.tipo || '',
@@ -261,8 +299,12 @@ export class ProductosComponent implements OnInit {
       tamano_sustrato_imprimir: (() => {
         const m = n.pre_impresion?.tamano_sustrato?.montajes || [];
         const r: number[] = [];
-        if (m[0]) { r.push(Number(m[0].ancho) || 0, Number(m[0].largo) || 0, Number(m[0].ejemplares) || 0); }
-        if (m[1]?.ancho) { r.push(Number(m[1].ancho) || 0, Number(m[1].largo) || 0, Number(m[1].ejemplares) || 0); }
+        if (m[0]) {
+          r.push(Number(m[0].ancho) || 0, Number(m[0].largo) || 0, Number(m[0].ejemplares) || 0);
+        }
+        if (m[1]?.ancho) {
+          r.push(Number(m[1].ancho) || 0, Number(m[1].largo) || 0, Number(m[1].ejemplares) || 0);
+        }
         return r;
       })(),
       area_efectiva: n.pre_impresion?.area_efectiva || [],
@@ -270,7 +312,10 @@ export class ProductosComponent implements OnInit {
       troqueladora: arrId(n.post_impresion?.troqueladora),
       guillotina: arrId(n.post_impresion?.guillotina),
       pegadora: arrId(n.post_impresion?.pegadora),
-      pegamento: (n.post_impresion?.pegamento || []).map((p: any) => ({ pega: id(p.pega), cantidad: p.cantidad || '' })),
+      pegamento: (n.post_impresion?.pegamento || []).map((p: any) => ({
+        pega: id(p.pega),
+        cantidad: p.cantidad || '',
+      })),
       embalaje: n.post_impresion?.embalaje || '',
       caja: n.post_impresion?.caja?.nombre ? [n.post_impresion.caja.nombre] : [],
       unidades_por_caja: Number(n.post_impresion?.caja?.cabida?.[0]) || 0,

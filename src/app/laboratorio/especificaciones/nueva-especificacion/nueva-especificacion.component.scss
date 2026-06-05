@@ -44,3 +44,29 @@
 .modal-card-body > .button.is-success {
   margin-top: 0.5rem;
 }
+
+/* Modal footer (Receta 15) */
+.modal-card-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+/* N/A toggle inline with section header */
+.na-toggle {
+  font-weight: 400;
+  font-size: 0.65rem;
+  text-transform: none;
+  letter-spacing: normal;
+  margin-left: 0.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.na-toggle input[type="checkbox"] {
+  margin-right: 2px;
+  vertical-align: middle;
+}

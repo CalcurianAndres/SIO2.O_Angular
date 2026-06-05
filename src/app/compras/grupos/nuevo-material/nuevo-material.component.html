@@ -1,13 +1,16 @@
 <!-- Nuevo material modal -->
-<div class="modal" [ngClass]="{ 'is-active': nuevo_material }">
+<div class="modal" [ngClass]="{ 'is-active': nuevo_material || editar_material }">
   <div class="modal-background"></div>
   <div class="modal-card animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente"><i class="fas fa-box"></i> Nuevo Material</p>
+      <p class="modal-card-title fuente">
+        <i class="fas fa-box"></i>
+        {{ editar_material ? 'Editar Material' : 'Nuevo Material' }}
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar_()"></button>
     </div>
     <div class="modal-card-body">
-      <div class="field">
+      <div class="field" *ngIf="!selectedGrupo">
         <label class="label">Grupo</label>
         <div class="control">
           <div class="select">
@@ -18,6 +21,12 @@
               </option>
             </select>
           </div>
+        </div>
+      </div>
+      <div class="field" *ngIf="selectedGrupo">
+        <label class="label">Grupo</label>
+        <div class="control">
+          <input type="text" class="input" [value]="selectedGrupo.nombre" disabled />
         </div>
       </div>
 
@@ -53,17 +62,71 @@
       </div>
 
       <div class="field">
-        <label class="label">Código de proveedor</label>
+        <label class="label">Código material</label>
         <div class="control">
           <input type="text" class="input" placeholder="Ej: PROV-001" [(ngModel)]="codigo" />
         </div>
       </div>
 
+      <!-- Sustrato: calibre y gramaje -->
+      <ng-container *ngIf="esSustrato">
+        <hr class="modal-divider" />
+        <label class="label section-label"><i class="fas fa-ruler"></i> Especificaciones de sustrato</label>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Calibre (pt)</label>
+              <div class="control">
+                <input type="text" class="input" placeholder="Ej: 12 pt" [(ngModel)]="calibre" />
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="field">
+              <label class="label">Gramaje (g/m²)</label>
+              <div class="control">
+                <input type="text" class="input" placeholder="Ej: 75 g/m²" [(ngModel)]="gramaje" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Tintas: color -->
+      <ng-container *ngIf="esTinta">
+        <hr class="modal-divider" />
+        <label class="label section-label"><i class="fas fa-palette"></i> Especificaciones de tinta</label>
+        <div class="field">
+          <label class="label">Color</label>
+          <div class="control color-radios">
+            <label class="radio" *ngFor="let opt of colores">
+              <input type="radio" name="tintaColor" [value]="opt" [(ngModel)]="color" (change)="onColorChange()" />
+              {{ opt }}
+            </label>
+          </div>
+          <div class="control" *ngIf="esPantone" style="margin-top: 0.5rem">
+            <input type="text" class="input" placeholder="Ej: 185C, 298U..." [(ngModel)]="pantoneCode" />
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Cajas de embalaje: metros de cinta -->
+      <ng-container *ngIf="esCaja">
+        <hr class="modal-divider" />
+        <label class="label section-label"><i class="fas fa-tape"></i> Especificaciones de caja</label>
+        <div class="field">
+          <label class="label">Cantidad de cinta por caja (metros)</label>
+          <div class="control">
+            <input type="number" class="input" placeholder="Ej: 50" [(ngModel)]="cinta" />
+          </div>
+        </div>
+      </ng-container>
+
       <br />
-      <button class="button is-success" [disabled]="guardando" (click)="guardarMaterial()">
+      <button class="button is-success" [disabled]="!formValido" (click)="guardarMaterial()">
         <span class="icon" *ngIf="guardando"><i class="fas fa-spinner fa-pulse"></i></span>
         <span class="icon" *ngIf="!guardando"><i class="fas fa-save"></i></span>
-        <span>{{ guardando ? 'Guardando...' : 'Guardar' }}</span>
+        <span>{{ guardando ? 'Guardando...' : editar_material ? 'Guardar cambios' : 'Guardar' }}</span>
       </button>
     </div>
   </div>

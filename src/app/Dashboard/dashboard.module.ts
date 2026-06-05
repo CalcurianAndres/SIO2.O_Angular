@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
+import { DashboardInicioComponent } from './inicio/dashboard-inicio.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NavbarModule } from '../shared/navbar/navbar.module';
 import { SharedModule } from '../shared/shared.module';
@@ -10,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
 @NgModule({
-  declarations: [DashboardComponent, UsuariosComponent],
+  declarations: [DashboardComponent, DashboardInicioComponent, UsuariosComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

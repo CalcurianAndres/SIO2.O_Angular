@@ -265,10 +265,10 @@ export class AnalisisPendientesComponent {
     if (!grupo) return true;
 
     const id = material[0].analisis;
-    if (grupo.nombre === 'Tintas' || grupo.nombre === 'Barniz s/impresión') {
+    if (grupo.nombre === 'Tintas' || grupo.nombre === 'Barniz de aceite') {
       return !this.analisis.buscarAnalisisPorID(id)?.resultado?.validado?.usuario;
     }
-    if (grupo.nombre === 'Cajas Corrugadas') {
+    if (grupo.nombre === 'Cajas de embalaje') {
       return !this.analisis.buscarAnalisisCajasPorID(id)?.resultado?.validado?.usuario;
     }
     if (grupo.nombre === 'Soportes de Embalaje') {
@@ -282,13 +282,38 @@ export class AnalisisPendientesComponent {
 
   get statsRows() {
     const items = [
-      { label: 'Sustrato', icon: 'fa-scroll', approved: this.analisis.SustratoAprobado || 0, rejected: this.analisis.SustratoRechazado || 0 },
-      { label: 'Tinta', icon: 'fa-palette', approved: this.analisis.TintasAprobadas || 0, rejected: this.analisis.TintasRechazadas || 0 },
-      { label: 'Cajas', icon: 'fa-box', approved: this.analisis.CajasAceptadas || 0, rejected: this.analisis.CajasRechazadas || 0 },
-      { label: 'Pads', icon: 'fa-square', approved: this.analisis.PadsAprobados || 0, rejected: this.analisis.PadsRechazados || 0 },
-      { label: 'Otros', icon: 'fa-flask', approved: this.analisis.OtrosAprobados || 0, rejected: this.analisis.OtrosRechazados || 0 },
+      {
+        label: 'Sustrato',
+        icon: 'fa-scroll',
+        approved: this.analisis.SustratoAprobado || 0,
+        rejected: this.analisis.SustratoRechazado || 0,
+      },
+      {
+        label: 'Tinta',
+        icon: 'fa-palette',
+        approved: this.analisis.TintasAprobadas || 0,
+        rejected: this.analisis.TintasRechazadas || 0,
+      },
+      {
+        label: 'Cajas',
+        icon: 'fa-box',
+        approved: this.analisis.CajasAceptadas || 0,
+        rejected: this.analisis.CajasRechazadas || 0,
+      },
+      {
+        label: 'Pads',
+        icon: 'fa-square',
+        approved: this.analisis.PadsAprobados || 0,
+        rejected: this.analisis.PadsRechazados || 0,
+      },
+      {
+        label: 'Otros',
+        icon: 'fa-flask',
+        approved: this.analisis.OtrosAprobados || 0,
+        rejected: this.analisis.OtrosRechazados || 0,
+      },
     ];
-    return items.map(r => {
+    return items.map((r) => {
       const total = r.approved + r.rejected;
       return { ...r, total, pct: total > 0 ? Math.round((r.approved / total) * 100) : 0 };
     });
@@ -339,7 +364,7 @@ export class AnalisisPendientesComponent {
           this.analisisSustrato.resultado.pendiente = undefined;
         }
       }
-    } else if (grupo.nombre === 'Tintas' || grupo.nombre === 'Barniz s/impresión') {
+    } else if (grupo.nombre === 'Tintas' || grupo.nombre === 'Barniz de aceite') {
       this.Tinta = true;
       this.Recepcion_selected = recepcion;
       this.Material_selected = material;
@@ -350,7 +375,7 @@ export class AnalisisPendientesComponent {
           this.Analisis.resultado.pendiente = undefined;
         }
       }
-    } else if (grupo.nombre === 'Cajas Corrugadas') {
+    } else if (grupo.nombre === 'Cajas de embalaje') {
       this.Caja = true;
       this.Recepcion_selected = recepcion;
       this.Material_selected = material;

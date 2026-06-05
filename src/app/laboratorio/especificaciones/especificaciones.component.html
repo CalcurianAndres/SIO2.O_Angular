@@ -12,21 +12,15 @@
   [Esp_otro]="Esp_otro"
   [Editable]="especificacion_para_editar"
   (onCloseModal)="cerrarNuevo()"
-  (onActualizar)="actualizarEspecificaciones()">
+  (onActualizar)="actualizarEspecificaciones()"
+>
 </app-nueva-especificacion>
 
-<app-detalles-especificacion
-  [Detalle]="Detalle"
-  (onCloseModal)="Detalle = false"
-  [Especificacion]="Especificacion">
+<app-detalles-especificacion [Detalle]="Detalle" (onCloseModal)="Detalle = false" [Especificacion]="Especificacion">
 </app-detalles-especificacion>
 
 <app-page-layout>
-  <app-section-header
-    title="Especificaciones"
-    description="Parámetros y normas de calidad"
-    icon="fa-flask"
-    color="red">
+  <app-section-header title="Especificaciones" description="Parámetros y normas de calidad" icon="fa-flask" color="red">
   </app-section-header>
 
   <button class="button is-info" routerLink="/compras/grupos">
@@ -85,7 +79,8 @@
         *ngFor="let grupo of grupos.grupos"
         class="card grupo-card animate__animated animate__fadeInUp"
         [ngClass]="{ 'card-active': grupoSelected === grupo.nombre }"
-        (click)="seleccionarGrupo(grupo)">
+        (click)="seleccionarGrupo(grupo)"
+      >
         <div class="card-header">
           <div class="card-header-title">
             <i class="{{ grupo.icono || 'fas fa-cube' }} grupo-icon"></i>
@@ -96,7 +91,11 @@
           </div>
         </div>
         <footer class="card-footer">
-          <a class="card-footer-item" title="Nueva especificación" (click)="$event.stopPropagation(); nueva_especificacion(grupo._id)">
+          <a
+            class="card-footer-item"
+            title="Nueva especificación"
+            (click)="$event.stopPropagation(); nueva_especificacion(grupo._id)"
+          >
             <i class="fas fa-plus-circle"></i>
           </a>
         </footer>
@@ -111,9 +110,9 @@
         <hr />
 
         <ng-container *ngIf="filteredMateriales.length === 0">
-          <div class="empty-state" style="padding: 1.5rem">
-            <i class="fas fa-file-alt empty-icon" style="font-size: 2rem"></i>
-            <p class="empty-title" style="font-size: 0.95rem">Sin materiales con especificación</p>
+          <div class="empty-state">
+            <i class="fas fa-file-alt empty-icon"></i>
+            <p class="empty-title">Sin materiales con especificación</p>
             <p class="empty-hint">Haz clic en el icono <i class="fas fa-plus-circle"></i> del grupo para agregar</p>
           </div>
         </ng-container>
@@ -122,10 +121,22 @@
           <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Fabricante</th>
-                <th>Serie</th>
-                <th>Origen</th>
+                <th class="is-clickable" (click)="toggleSort('nombre')">
+                  Nombre
+                  <i class="fas" [ngClass]="sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th class="is-clickable" (click)="toggleSort('fabricante')">
+                  Fabricante
+                  <i class="fas" [ngClass]="sortColumn === 'fabricante' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th class="is-clickable" (click)="toggleSort('serie')">
+                  Serie
+                  <i class="fas" [ngClass]="sortColumn === 'serie' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th class="is-clickable" (click)="toggleSort('origen')">
+                  Origen
+                  <i class="fas" [ngClass]="sortColumn === 'origen' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
                 <th class="has-text-centered">Acciones</th>
               </tr>
             </thead>
@@ -141,33 +152,33 @@
                 </td>
                 <td>{{ item.fabricante?.alias || '—' }}</td>
                 <td>{{ item.serie || '—' }}</td>
-                <td>{{ item.origen || '—' }}</td>
+                <td>{{ item.fabricante?.origen || item.origen || '—' }}</td>
                 <td class="has-text-centered">
-                  <i class="fas fa-info-circle icon-action" (click)="Detallar(item)" title="Ver detalle"></i>
-                  <i class="fas fa-edit icon-action" (click)="Editar(item)" title="Editar"></i>
+                  <i class="fas fa-info-circle icon-action blue" (click)="Detallar(item)" title="Ver detalle"></i>
+                  <i class="far fa-edit icon-action green" (click)="Editar(item)" title="Editar"></i>
                 </td>
               </tr>
             </tbody>
           </table>
 
           <!-- Pagination -->
-          <div class="columns is-vcentered mt-3" *ngIf="totalPages > 1">
-            <div class="column is-narrow">
+          <div class="level is-flex is-align-items-center mt-3" *ngIf="totalPages > 1">
+            <div class="level-left">
               <div class="select is-small">
                 <select (change)="changePageSize($event)">
                   <option *ngFor="let s of pageSizes" [value]="s" [selected]="s === pageSize">{{ s }}/pág</option>
                 </select>
               </div>
             </div>
-            <div class="column">
-              <nav class="pagination is-small is-right">
-                <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">Anterior</a>
-                <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">Siguiente</a>
-                <ul class="pagination-list">
-                  <li *ngFor="let p of pages">
-                    <a class="pagination-link" [class.is-current]="currentPage === p" (click)="goToPage(p)">{{ p }}</a>
-                  </li>
-                </ul>
+            <div class="level-right">
+              <nav class="pagination is-small" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                  <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
+                </a>
+                <span class="mx-3 is-size-7 has-text-weight-medium">Pág {{ currentPage }} de {{ totalPages }}</span>
+                <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                  <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
+                </a>
               </nav>
             </div>
           </div>

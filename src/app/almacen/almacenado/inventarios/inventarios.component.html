@@ -2,9 +2,7 @@
   <div class="modal-background"></div>
   <div class="modal-card" style="width: 90%">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">
-        <i class="fas fa-history mr-2"></i> Registro
-      </p>
+      <p class="modal-card-title fuente"><i class="fas fa-history mr-2"></i> Registro</p>
       <button class="delete red_cross" aria-label="close" (click)="registro_ = false; Inventario = true"></button>
     </div>
     <div class="modal-card-body">
@@ -33,7 +31,7 @@
         </tbody>
       </table>
     </div>
-    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem;">
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem">
       <button class="button" (click)="registro_ = false; Inventario = true">Cerrar</button>
     </footer>
   </div>
@@ -43,9 +41,7 @@
   <div class="modal-background"></div>
   <div class="modal-card long animate__animated animate__fadeInUp">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">
-        <i class="fas fa-archive mr-2"></i> Inventario
-      </p>
+      <p class="modal-card-title fuente"><i class="fas fa-archive mr-2"></i> Inventario</p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body">
@@ -67,7 +63,12 @@
               </span>
             </div>
             <div class="order-header-actions">
-              <button class="button is-small is-ghost" style="margin-right: 0.25rem;" (click)="buscarRegistro(material_); $event.stopPropagation()" title="Ver registro">
+              <button
+                class="button is-small is-ghost"
+                style="margin-right: 0.25rem"
+                (click)="buscarRegistro(material_); $event.stopPropagation()"
+                title="Ver registro"
+              >
                 <span class="icon"><i class="fas fa-info-circle" style="color: var(--accent-blue)"></i></span>
               </button>
               <span class="chevron-btn" [ngClass]="clicked__[n] ? 'rotate-up' : 'rotate-down'">
@@ -76,15 +77,28 @@
             </div>
           </div>
           <div class="order-details" [ngClass]="{ active: clicked__[n] }">
-            <div class="order-card" *ngFor="let material of material_.materialesPorId; index as i" style="margin-bottom: 0.5rem;">
-              <div class="card-header" style="background: var(--bg-card); padding: 0.4rem 0.75rem; min-height: 36px;" (click)="showInfo_(i)">
+            <div
+              class="order-card"
+              *ngFor="let material of material_.materialesPorId; index as i"
+              style="margin-bottom: 0.5rem"
+            >
+              <div
+                class="card-header"
+                style="background: var(--bg-card); padding: 0.4rem 0.75rem; min-height: 36px"
+                (click)="showInfo_(i)"
+              >
                 <div class="order-header-info">
-                  <span class="order-number"><strong>{{ material.nombre }} ({{ material.marca }})</strong></span>
+                  <span class="order-number"
+                    ><strong>{{ material.nombre }} ({{ material.marca }})</strong></span
+                  >
                   <span class="order-number">{{ material.netoTotal }} {{ material.unidad }}(s)</span>
                 </div>
                 <div class="order-header-actions">
-                  <span class="chevron-btn" style="width: 24px; height: 24px; font-size: 0.85rem;"
-                    [ngClass]="clicked_[i] ? 'rotate-up' : 'rotate-down'">
+                  <span
+                    class="chevron-btn"
+                    style="width: 24px; height: 24px; font-size: 0.85rem"
+                    [ngClass]="clicked_[i] ? 'rotate-up' : 'rotate-down'"
+                  >
                     <i class="fas fa-chevron-down"></i>
                   </span>
                 </div>
@@ -101,12 +115,15 @@
                   <tbody>
                     <ng-container *ngFor="let lote of material.lotes | keyvalue; index as idx">
                       <tr>
-                        <th style="font-family: monospace;">{{ lote.key }}</th>
+                        <th style="font-family: monospace">{{ lote.key }}</th>
                         <td>{{ totalizar(lote.value) }}</td>
-                        <td style="text-align: right;">
-                          <span class="chevron-btn" style="width: 24px; height: 24px; font-size: 0.85rem; display: inline-flex;"
+                        <td style="text-align: right">
+                          <span
+                            class="chevron-btn"
+                            style="width: 24px; height: 24px; font-size: 0.85rem; display: inline-flex"
                             (click)="showInfo(idx); $event.stopPropagation()"
-                            [ngClass]="clicked[idx] ? 'rotate-up' : 'rotate-down'">
+                            [ngClass]="clicked[idx] ? 'rotate-up' : 'rotate-down'"
+                          >
                             <i class="fas fa-chevron-down"></i>
                           </span>
                         </td>
@@ -140,7 +157,7 @@
         </div>
       </ng-container>
     </div>
-    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem;">
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem">
       <button class="button" (click)="cerrar()">Cerrar</button>
     </footer>
   </div>

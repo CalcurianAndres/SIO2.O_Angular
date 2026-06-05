@@ -13,6 +13,7 @@ export class MaterialesComponent implements OnInit {
   @Input() material_selected: any;
   @Output() onCloseModal = new EventEmitter();
   @Output() onAgregarMaterial = new EventEmitter();
+  @Output() onEditarMaterial = new EventEmitter();
 
   pageSize: number = 10;
   currentPage: number = 1;
@@ -53,6 +54,10 @@ export class MaterialesComponent implements OnInit {
 
   agregarMaterial() {
     this.onAgregarMaterial.emit();
+  }
+
+  editarMaterial(mat: any) {
+    this.onEditarMaterial.emit(mat);
   }
 
   eliminarMaterial(id: any) {

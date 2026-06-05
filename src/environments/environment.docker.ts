@@ -1,7 +1,5 @@
 const getBaseUrl = () => {
-  if (typeof window === 'undefined') return 'https://192.168.0.22';
-  const port = window.location.port;
-  if (port === '4200') return 'https://192.168.0.22';
+  if (typeof window === 'undefined') return '';
   return '';
 };
 

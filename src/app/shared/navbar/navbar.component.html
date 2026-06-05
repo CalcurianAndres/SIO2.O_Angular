@@ -26,6 +26,24 @@
   <hr class="menu-divider" />
 
   <aside class="menu">
+    <ul
+      class="menu-list-wrapper"
+      [class.is-expanded]="menuAbierto === 'dashboard' || router.url.includes('/dashboard')"
+    >
+      <li>
+        <a
+          class="parent-link"
+          (click)="showDashboard()"
+          [ngClass]="{ 'is-active': router.url === '/dashboard' }"
+          title="Dashboard"
+          routerLink="/dashboard"
+        >
+          <i class="fas fa-chart-pie"></i>
+          <span class="nav-label">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+
     <ul class="menu-list-wrapper" [class.is-expanded]="menuAbierto === 'compras' || router.url.includes('/compras')">
       <li>
         <a
@@ -40,8 +58,9 @@
         </a>
         <ul class="submenu">
           <li><a routerLink="/compras/grupos" routerLinkActive="sub-active">Grupos</a></li>
-          <li><a routerLink="/compras/fabricantes" routerLinkActive="sub-active">Fabricantes</a></li>
-          <li><a routerLink="/compras/proveedores" routerLinkActive="sub-active">Proveedores</a></li>
+          <li>
+            <a routerLink="/compras/fabricantes-proveedores" routerLinkActive="sub-active">Fabricantes y Proveedores</a>
+          </li>
           <li><a routerLink="/compras/ordenes" routerLinkActive="sub-active">Ordenes</a></li>
         </ul>
       </li>

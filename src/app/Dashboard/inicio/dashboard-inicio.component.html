@@ -1,0 +1,210 @@
+<app-page-layout>
+  <div class="dashboard">
+    <!-- Welcome Bar -->
+    <div class="welcome-bar">
+      <div class="welcome-text">
+        <h1 class="welcome-title"><i class="fas fa-home"></i> Bienvenido, {{ login.usuario.Nombre || 'Usuario' }}</h1>
+        <p class="welcome-date">
+          <i class="far fa-calendar-alt"></i>
+          {{ currentDate | date: "EEEE, d 'de' MMMM 'de' yyyy, h:mm a" }}
+        </p>
+      </div>
+      <div class="welcome-actions">
+        <span class="notification-badge" *ngIf="notificaciones.notificaciones?.length > 0">
+          <i class="fas fa-bell"></i>
+          {{ notificaciones.notificaciones.length }} notificaciones
+        </span>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="columns is-variable is-2">
+      <div class="column">
+        <div class="kpi-card kpi-orange">
+          <div class="kpi-icon"><i class="fas fa-industry"></i></div>
+          <div class="kpi-number">{{ totalOP }}</div>
+          <div class="kpi-label">Órdenes de <strong>Producción</strong></div>
+          <div class="kpi-period"><i class="far fa-clock"></i> Activas</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="kpi-card kpi-green">
+          <div class="kpi-icon"><i class="fas fa-flask"></i></div>
+          <div class="kpi-number">{{ totalAnalisisMes }}</div>
+          <div class="kpi-label">Análisis este <strong>Mes</strong></div>
+          <div class="kpi-period"><i class="fas fa-check-circle"></i> {{ tasaAprobacion }}% Aprobación</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="kpi-card kpi-blue">
+          <div class="kpi-icon"><i class="fas fa-cubes"></i></div>
+          <div class="kpi-number">{{ totalMateriales }}</div>
+          <div class="kpi-label">Materiales en <strong>Almacén</strong></div>
+          <div class="kpi-period"><i class="fas fa-boxes"></i> Registrados</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="kpi-card kpi-navy">
+          <div class="kpi-icon"><i class="fas fa-handshake"></i></div>
+          <div class="kpi-number">{{ totalProveedores }}</div>
+          <div class="kpi-label"><strong>Proveedores</strong></div>
+          <div class="kpi-period"><i class="fas fa-users"></i> Registrados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visualizations Row -->
+    <div class="columns is-variable is-2">
+      <div class="column is-7">
+        <div class="card dashboard-card">
+          <div class="card-header dark">
+            <div class="card-header-title"><i class="fas fa-chart-bar"></i> Análisis por Categoría</div>
+          </div>
+          <div class="card-content">
+            <div *ngIf="noAnalysisData" class="empty-chart">
+              <i class="fas fa-chart-simple"></i>
+              <p>No hay datos de análisis disponibles</p>
+            </div>
+            <div *ngFor="let cat of analysisCategories" class="bar-row">
+              <div class="bar-label">
+                <span>{{ cat.name }}</span>
+                <span class="bar-counts">{{ cat.aprobados }}/{{ cat.rechazados }}</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-ok" [style.width]="cat.aprobadosPct" *ngIf="cat.aprobados > 0"></div>
+                <div class="bar-fill bar-ko" [style.width]="cat.rechazadosPct" *ngIf="cat.rechazados > 0"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column is-5">
+        <div class="card dashboard-card">
+          <div class="card-header dark">
+            <div class="card-header-title">
+              <i class="fas fa-chart-pie"></i> Calidad General {{ currentDate | date: 'yyyy' }}
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="quality-ring-wrapper">
+              <div class="quality-ring">
+                <svg viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border-color)" stroke-width="8" />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    fill="none"
+                    stroke="var(--status-success)"
+                    stroke-width="8"
+                    [attr.stroke-dasharray]="ringDashArray"
+                    [attr.stroke-dashoffset]="ringDashOffset"
+                    stroke-linecap="round"
+                    transform="rotate(-90 60 60)"
+                  />
+                </svg>
+                <div class="quality-ring-text">
+                  <span class="quality-pct">{{ tasaAprobacion }}%</span>
+                  <span class="quality-label">Aprobación</span>
+                </div>
+              </div>
+              <div class="quality-legend">
+                <span class="legend-item ok"><i class="fas fa-check-circle"></i> {{ totalAprobados }} Aprobados</span>
+                <span class="legend-item ko"><i class="fas fa-times-circle"></i> {{ totalRechazados }} Rechazados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Widgets -->
+    <div class="columns is-variable is-2">
+      <div class="column is-4">
+        <div class="card dashboard-card">
+          <div class="card-header dark">
+            <div class="card-header-title"><i class="fas fa-bolt"></i> Actividad Reciente</div>
+          </div>
+          <div class="card-content widget-body">
+            <div *ngIf="recentNotifications.length === 0" class="empty-state">
+              <i class="fas fa-inbox"></i>
+              <p>Sin actividad reciente</p>
+            </div>
+            <div *ngFor="let notif of recentNotifications" class="activity-item">
+              <span class="activity-dot"></span>
+              <div class="activity-content">
+                <p class="activity-text">{{ notif.titulo || notif.mensaje }}</p>
+                <span class="activity-time">{{ notif.fecha | date: 'short' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card dashboard-card">
+          <div class="card-header dark">
+            <div class="card-header-title"><i class="fas fa-layer-group"></i> Inventario por Grupo</div>
+          </div>
+          <div class="card-content widget-body">
+            <div *ngIf="inventoryByGroup.length === 0" class="empty-state">
+              <i class="fas fa-box-open"></i>
+              <p>Sin datos de inventario</p>
+            </div>
+            <div *ngFor="let group of inventoryByGroup" class="inv-row">
+              <span class="inv-name">{{ group.nombre }}</span>
+              <div class="inv-bar-track">
+                <div class="inv-bar-fill" [style.width]="group.widthPct"></div>
+              </div>
+              <span class="inv-count">{{ group.count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card dashboard-card">
+          <div class="card-header dark">
+            <div class="card-header-title"><i class="fas fa-compass"></i> Accesos Rápidos</div>
+          </div>
+          <div class="card-content widget-body quick-links">
+            <a class="quick-link-item" (click)="router.navigateByUrl('/compras/ordenes')">
+              <span class="ql-icon" style="background: rgba(72, 199, 142, 0.15); color: var(--status-success)">
+                <i class="fas fa-file-invoice"></i>
+              </span>
+              <span class="ql-text">Órdenes de Compra</span>
+            </a>
+            <a class="quick-link-item" (click)="router.navigateByUrl('/ventas/produccion')">
+              <span class="ql-icon" style="background: rgba(156, 39, 176, 0.15); color: #9c27b0">
+                <i class="fas fa-industry"></i>
+              </span>
+              <span class="ql-text">Órdenes de Producción</span>
+            </a>
+            <a class="quick-link-item" (click)="router.navigateByUrl('/almacen/inventario')">
+              <span class="ql-icon" style="background: rgba(255, 152, 0, 0.15); color: var(--status-warning)">
+                <i class="fas fa-warehouse"></i>
+              </span>
+              <span class="ql-text">Inventario</span>
+            </a>
+            <a class="quick-link-item" (click)="router.navigateByUrl('/laboratorio/analisis-pendientes')">
+              <span class="ql-icon" style="background: rgba(244, 67, 54, 0.15); color: var(--accent-red)">
+                <i class="fas fa-flask"></i>
+              </span>
+              <span class="ql-text">Laboratorio</span>
+            </a>
+            <a class="quick-link-item" (click)="router.navigateByUrl('/empresa/empleados')">
+              <span class="ql-icon" style="background: rgba(0, 150, 136, 0.15); color: #009688">
+                <i class="fas fa-users"></i>
+              </span>
+              <span class="ql-text">Empleados</span>
+            </a>
+            <a class="quick-link-item" (click)="router.navigateByUrl('/compras/grupos')">
+              <span class="ql-icon" style="background: rgba(33, 150, 243, 0.15); color: var(--accent-blue)">
+                <i class="fas fa-tags"></i>
+              </span>
+              <span class="ql-text">Grupos de Materiales</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

@@ -21,6 +21,7 @@ export interface Contacto {
   nombre: string;
   email: string;
   numero: string;
+  cargo?: string;
 }
 
 export interface Proveedor {
@@ -30,6 +31,9 @@ export interface Proveedor {
   rif: string;
   fabricantes: any[];
   contactos: Contacto[];
+  pais?: string;
+  estado?: string;
+  identificacion_fiscal?: string;
 }
 
 export interface Orden {
@@ -63,6 +67,7 @@ export interface Material {
   grupo: any;
   origen: string;
   serie: string;
+  cinta?: string;
 }
 
 export interface Maquina {
@@ -115,4 +120,5 @@ export interface Fabricante {
   origenes: any[];
   grupo: any;
   proveedor: boolean;
+  identificacion_fiscal?: string;
 }

@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 import { Fabricante, Fabricante_populated, Grupo, Origenes, Proveedores } from '../../models/modelos-compra';
 import { FabricantesService } from 'src/app/services/fabricantes.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
+import { PaisesService } from 'src/app/services/paises.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nuevo-fabricante',
@@ -20,8 +22,11 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
 
   nombre: string = '';
   alias: string = '';
+  identificacion_fiscal: string = '';
   pais: string = '';
   estado: string = '';
+  estados: string[] = [];
+  cargandoEstados: boolean = false;
   grupo: string = '';
   proveedor_directo: boolean = false;
 
@@ -32,6 +37,7 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   p_direccion: string = '';
   p_rif: string = '';
   p_cargo: string = '';
+  p_telefono_pais_detectado: any = null;
 
   proveedor_directo_selected: any;
   proveedor_directo_abierto: boolean = false;
@@ -44,10 +50,37 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
 
   public edicionGrupo: boolean[] = [];
 
+  get formValido(): boolean {
+    if (this.guardando) return false;
+    if (this.nuevo) {
+      if (!this.nombre || !this.alias) return false;
+      if (this.origenes.length === 0) return false;
+      if (this.grupos.length === 0) return false;
+      if (this.proveedor_directo) {
+        if (!this.p_direccion || !this.p_rif) return false;
+        if (this.p_contacto.length === 0) return false;
+      }
+    } else {
+      if (!this.data?.nombre || !this.data?.alias) return false;
+      if (!this.data?.origenes || this.data.origenes.length === 0) return false;
+      if (!this.data?.grupo || this.data.grupo.length === 0) return false;
+      if (this.proveedor_directo_abierto && this.proveedor_directo_selected?.[0]) {
+        const p = this.proveedor_directo_selected[0];
+        if (!p.direccion || !p.rif) return false;
+        if (!p.contactos || p.contactos.length === 0) return false;
+      }
+    }
+    return true;
+  }
+
   constructor(
     public api: FabricantesService,
     public proveedor_service: ProveedoresService,
+    private paisesService: PaisesService,
   ) {}
+
+  public listaPaises: { nombre: string; nombreEn: string }[] = [];
+  public cargandoPaises: boolean = true;
 
   public paises: string[] = [
     'Afganistán',
@@ -293,6 +326,34 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
     this.onCloseModal_.emit();
   }
 
+  onPaisChange() {
+    this.estado = '';
+    this.estados = [];
+    if (!this.pais) return;
+    this.cargandoEstados = true;
+    this.paisesService.getEstados(this.pais).pipe(take(1)).subscribe((states) => {
+      this.estados = states;
+      this.cargandoEstados = false;
+    });
+  }
+
+  onPaisChange_() {
+    this.estado = '';
+    this.estados = [];
+    if (!this.pais) return;
+    this.cargandoEstados = true;
+    this.paisesService.getEstados(this.pais).pipe(take(1)).subscribe((states) => {
+      this.estados = states;
+      this.cargandoEstados = false;
+    });
+  }
+
+  onTelefonoInput() {
+    this.paisesService.detectarPaisPorPrefijo(this.p_telefono).pipe(take(1)).subscribe((detected) => {
+      this.p_telefono_pais_detectado = detected;
+    });
+  }
+
   addOrigen() {
     const busqueda = this.origenes.find((x) => x.pais === this.pais && x.estado === this.estado);
     if (!busqueda) {
@@ -363,7 +424,7 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   guardarFabricante(): void {
     this.guardando = true;
 
-    const { nombre, alias, origenes, grupos } = this;
+    const { nombre, alias, origenes, grupos, identificacion_fiscal } = this;
     const nuevoFabricante: Fabricante = {
       nombre,
       alias,
@@ -371,18 +432,20 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
       proveedor: this.proveedor_directo,
       grupo: grupos.map((grupo) => grupo._id),
       _id: '',
+      identificacion_fiscal: identificacion_fiscal || undefined,
     };
     this.api.agregarFabricante(nuevoFabricante);
 
     if (this.proveedor_directo) {
       setTimeout(() => {
-        const { nombre, p_contacto, p_direccion, p_rif } = this;
+        const { nombre, p_contacto, p_direccion, p_rif, identificacion_fiscal } = this;
         const proveedor: Proveedores = {
           fabricantes: '',
           nombre,
           contactos: p_contacto,
           direccion: p_direccion,
           rif: p_rif,
+          identificacion_fiscal: identificacion_fiscal || undefined,
         };
         this.proveedor_service.nuevoProveedor(proveedor);
         this.onCloseModal.emit();
@@ -417,6 +480,7 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   private limpiarFormulario() {
     this.nombre = '';
     this.alias = '';
+    this.identificacion_fiscal = '';
     this.pais = '';
     this.estado = '';
     this.grupo = '';

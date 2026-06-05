@@ -18,6 +18,21 @@
         <span class="detail-value">{{ proveedor.rif || '—' }}</span>
       </div>
 
+      <div class="detail-row" *ngIf="proveedor.pais">
+        <span class="detail-label"><i class="fas fa-globe-americas"></i> País</span>
+        <span class="detail-value">{{ proveedor.pais }}</span>
+      </div>
+
+      <div class="detail-row" *ngIf="proveedor.estado">
+        <span class="detail-label"><i class="fas fa-map-pin"></i> Estado</span>
+        <span class="detail-value">{{ proveedor.estado }}</span>
+      </div>
+
+      <div class="detail-row" *ngIf="proveedor.identificacion_fiscal">
+        <span class="detail-label"><i class="fas fa-id-card"></i> Identificación fiscal</span>
+        <span class="detail-value">{{ proveedor.identificacion_fiscal }}</span>
+      </div>
+
       <!-- Contactos -->
       <hr class="modal-divider" />
       <label class="section-label"><i class="fas fa-address-card"></i> Contactos</label>
@@ -26,6 +41,7 @@
           <i class="fas fa-user"></i> {{ c.nombre }}
           <span class="contact-detail" *ngIf="c.numero"><i class="fas fa-phone"></i> {{ c.numero }}</span>
           <span class="contact-detail" *ngIf="c.email"><i class="fas fa-at"></i> {{ c.email }}</span>
+          <span class="contact-detail" *ngIf="c.cargo"><i class="fas fa-briefcase"></i> {{ c.cargo }}</span>
         </span>
       </div>
       <p class="empty-hint" *ngIf="!proveedor.contactos || proveedor.contactos.length === 0">

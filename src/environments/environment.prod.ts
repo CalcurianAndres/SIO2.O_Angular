@@ -1,9 +1,7 @@
 const getBaseUrl = () => {
-  if (typeof window === 'undefined') return 'http://localhost:3000';
-  const hostname = window.location.hostname;
+  if (typeof window === 'undefined') return 'https://192.168.0.22';
   const port = window.location.port;
-  if (port === '4200') return 'http://localhost:3000';
-  if (hostname === '192.168.0.22') return 'https://192.168.0.22';
+  if (port === '4200') return 'https://192.168.0.22';
   return '';
 };
 

@@ -6,25 +6,22 @@
 }
 
 .grupo-icon {
-  font-size: 1.3rem;
-  width: 32px;
-  height: 32px;
+  font-size: 1.1rem;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--hover-bg);
   color: var(--text-primary);
   flex-shrink: 0;
 }
 
 .grupo-nombre {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-heading);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .parcial-badge {
@@ -37,36 +34,37 @@
   border-radius: 999px;
   background: var(--status-warning);
   color: #fff;
-  margin-left: 4px;
   i {
     font-size: 0.65rem;
   }
 }
 
-.card.grupo-card {
-  .card-header {
-    height: auto;
-    padding: 10px 12px;
-    min-height: 48px;
-  }
-  .card-header-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0;
-  }
-  .card-footer {
-    font-size: 0.9rem;
-  }
-  .card-footer-item {
-    padding: 8px 0;
-    i {
-      font-size: 1rem;
-    }
+.total-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--status-success);
+  color: #fff;
+  i {
+    font-size: 0.65rem;
   }
 }
 
-/* Empty state */
+.action-icon {
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: opacity 0.15s;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* ── Empty state ── */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -109,60 +107,230 @@
   }
 }
 
-/* Skeleton */
-.skeleton-card {
-  .card-header {
-    height: 48px;
-  }
-  .card-content {
-    padding: 12px;
-  }
+/* ── Skeleton (OCP style) ── */
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
-.skeleton-header {
-  height: 100%;
-  background: linear-gradient(90deg, var(--hover-bg) 25%, var(--border-color) 50%, var(--hover-bg) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+.skeleton-card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+.skeleton-card .card-header {
+  padding: 1rem;
+  background: var(--bg-secondary);
+}
+.skeleton-card .card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 .skeleton-line {
   height: 14px;
   border-radius: 4px;
-  background: linear-gradient(90deg, var(--hover-bg) 25%, var(--border-color) 50%, var(--hover-bg) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
-.skeleton-line-short {
-  width: 60%;
-}
-.skeleton-footer {
-  height: 40px;
-  background: linear-gradient(90deg, var(--hover-bg) 25%, var(--border-color) 50%, var(--hover-bg) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
+@keyframes skeleton-pulse {
+  0%,
   100% {
-    background-position: -200% 0;
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
   }
 }
 
-/* Native grid fallback (redundante con Tailwind, garantiza funcionamiento) */
-.grupo-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+/* ── Group Cards (OCP style) ── */
+.grupo-card {
+  margin-bottom: 0.75rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
 }
-@media (min-width: 768px) {
-  .grupo-grid {
-    grid-template-columns: repeat(3, 1fr);
+
+.grupo-card .card-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  min-height: 52px;
+}
+
+.grupo-card .card-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.grupo-card .card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent-blue);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.chevron-btn {
+  font-size: 1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform 0.3s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chevron-btn.rotate-down {
+  transform: rotate(0deg);
+}
+.chevron-btn.rotate-up {
+  transform: rotate(180deg);
+}
+
+/* ── Card body (expandable) ── */
+.card-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  transition:
+    max-height 0.4s ease,
+    padding 0.3s ease;
+}
+.card-content.active {
+  max-height: 3000px;
+  padding: 1rem;
+}
+
+/* ── Nested accordion ── */
+.nested-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Level 1: Name cards */
+.name-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.name-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  transition: background 0.15s;
+  font-size: 0.88rem;
+  &:hover {
+    background: var(--hover-bg);
+  }
+  i {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    width: 12px;
   }
 }
-@media (min-width: 1024px) {
-  .grupo-grid {
-    grid-template-columns: repeat(5, 1fr);
+
+.name-label {
+  font-weight: 600;
+  color: var(--text-heading);
+  flex: 1;
+}
+
+/* Level 2: Brand cards */
+.brands-container {
+  border-top: 1px solid var(--border-color);
+  padding: 0.35rem 0.5rem 0.35rem 1.5rem;
+  background: var(--bg-tertiary, var(--hover-bg));
+}
+
+.brand-card {
+  border-left: 3px solid var(--accent-blue);
+  margin-bottom: 0.3rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  transition: background 0.15s;
+  font-size: 0.84rem;
+  &:hover {
+    background: var(--hover-bg);
   }
+  i {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    width: 10px;
+  }
+}
+
+.brand-label {
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+/* Level 3: Detail table */
+.detail-container {
+  border-top: 1px solid var(--border-color);
+  padding: 0.5rem;
+  background: var(--bg-tertiary, var(--hover-bg));
+}
+
+.sub-table {
+  margin-bottom: 0;
+  th {
+    font-family: inherit;
+    font-size: 0.75rem;
+    text-transform: none;
+    letter-spacing: normal;
+    color: inherit;
+    padding: 0.5em 0.75em;
+    border-bottom: 2px solid var(--border-color);
+  }
+  td {
+    font-size: 0.82rem;
+    padding: 0.5em 0.75em;
+    vertical-align: middle;
+  }
+}
+
+/* ── Card Footer ── */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.6rem 1rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  gap: 0.5rem;
 }

@@ -8,6 +8,7 @@ import { FabricantesComponent } from './fabricantes/fabricantes.component';
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import { NoConformidadesComponent } from './no-conformidades/no-conformidades.component';
+import { FabricantesProveedoresComponent } from './fabricantes-proveedores/fabricantes-proveedores.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
       {
         path: 'ncc',
         component: NoConformidadesComponent,
+      },
+      {
+        path: 'fabricantes-proveedores',
+        component: FabricantesProveedoresComponent,
       },
     ],
   },

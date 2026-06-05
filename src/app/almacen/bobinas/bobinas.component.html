@@ -60,7 +60,11 @@
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'home' }" (click)="setFilter('home')">
       <i class="fas fa-list"></i> Todas
     </button>
-    <button class="filter-tab" [ngClass]="{ active: filterMode === 'convertidora' }" (click)="setFilter('convertidora')">
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: filterMode === 'convertidora' }"
+      (click)="setFilter('convertidora')"
+    >
       <i class="fas fa-industry"></i> Por convertidora
     </button>
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'fecha' }" (click)="setFilter('fecha')">
@@ -145,11 +149,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let conv of paginatedConversiones">
-                <td><span class="tag is-success">{{ conv.status }}</span></td>
+                <td>
+                  <span class="tag is-success">{{ conv.status }}</span>
+                </td>
                 <td>{{ conv.lote }}</td>
                 <td>
-                  {{ conv.material.nombre }} ({{ conv.ancho }}x{{ conv.largo }})
-                  {{ conv.material.gramaje }}g/m² - {{ conv.material.calibre }}pt
+                  {{ conv.material.nombre }} ({{ conv.ancho }}x{{ conv.largo }}) {{ conv.material.gramaje }}g/m² -
+                  {{ conv.material.calibre }}pt
                 </td>
                 <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
                 <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
@@ -172,11 +178,26 @@
           </div>
           <div class="column">
             <nav class="pagination is-small is-right">
-              <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="currentPage > 1 && pageChanged(currentPage - 1)">Anterior</a>
-              <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="currentPage < totalPages && pageChanged(currentPage + 1)">Siguiente</a>
+              <a
+                class="pagination-previous"
+                [class.is-disabled]="currentPage === 1"
+                (click)="currentPage > 1 && pageChanged(currentPage - 1)"
+                >Anterior</a
+              >
+              <a
+                class="pagination-next"
+                [class.is-disabled]="currentPage === totalPages"
+                (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
+                >Siguiente</a
+              >
               <ul class="pagination-list">
                 <li *ngFor="let p of [].constructor(Math.min(totalPages, 10)); let idx = index">
-                  <a class="pagination-link" [class.is-current]="currentPage === idx + 1" (click)="pageChanged(idx + 1)">{{ idx + 1 }}</a>
+                  <a
+                    class="pagination-link"
+                    [class.is-current]="currentPage === idx + 1"
+                    (click)="pageChanged(idx + 1)"
+                    >{{ idx + 1 }}</a
+                  >
                 </li>
               </ul>
             </nav>
@@ -196,7 +217,10 @@
           <span class="order-provider"><i class="fas fa-industry"></i> {{ conv.nombre }}</span>
         </div>
         <div class="card-header-icon">
-          <i class="fas fa-chevron-up chevron-btn" [ngClass]="{ 'rotate-down': !clicked[i], 'rotate-up': clicked[i] }"></i>
+          <i
+            class="fas fa-chevron-up chevron-btn"
+            [ngClass]="{ 'rotate-down': !clicked[i], 'rotate-up': clicked[i] }"
+          ></i>
         </div>
       </div>
       <div class="card-content order-details" [ngClass]="{ active: clicked[i] }">

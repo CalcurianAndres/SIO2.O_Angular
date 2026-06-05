@@ -16,6 +16,11 @@
         <span class="detail-value">{{ fabricante.alias }}</span>
       </div>
 
+      <div class="detail-row" *ngIf="fabricante.identificacion_fiscal">
+        <span class="detail-label"><i class="fas fa-id-card"></i> Identificación fiscal</span>
+        <span class="detail-value">{{ fabricante.identificacion_fiscal }}</span>
+      </div>
+
       <hr class="modal-divider" />
 
       <!-- Orígenes -->

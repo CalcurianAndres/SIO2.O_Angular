@@ -60,13 +60,25 @@
               <span class="icon is-left"><i class="fas fa-search"></i></span>
             </div>
           </div>
-          <table class="table is-fullwidth is-hoverable clientes-table">
+          <table class="table is-fullwidth is-striped is-hoverable clientes-table">
             <thead>
               <tr>
-                <th>Cliente</th>
-                <th>RIF</th>
-                <th>Código</th>
-                <th class="has-text-centered"><i class="fas fa-address-book"></i></th>
+                <th (click)="toggleSort('nombre')" class="sortable" style="cursor: pointer">
+                  Cliente
+                  <i class="fas" [ngClass]="sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th (click)="toggleSort('rif')" class="sortable" style="cursor: pointer">
+                  RIF
+                  <i class="fas" [ngClass]="sortColumn === 'rif' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th (click)="toggleSort('codigo')" class="sortable" style="cursor: pointer">
+                  Código
+                  <i class="fas" [ngClass]="sortColumn === 'codigo' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
+                <th (click)="toggleSort('contactos')" class="has-text-centered sortable" style="cursor: pointer">
+                  <i class="fas fa-address-book"></i>
+                  <i class="fas" [ngClass]="sortColumn === 'contactos' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -139,7 +151,7 @@
             <i class="fas fa-user-tie detail-icon"></i>
             <div>
               <span class="detail-name">{{ cliente_seleccionado.nombre }}</span>
-              <span class="detail-sub has-text-grey is-size-7">{{ cliente_seleccionado.codigo }}</span>
+              <span class="detail-sub has-text-grey is-size-7 is-family-code">{{ cliente_seleccionado.codigo }}</span>
             </div>
           </div>
 
@@ -147,7 +159,7 @@
           <span class="section-label"><i class="fas fa-id-card"></i> Datos generales</span>
           <div class="detail-row">
             <span class="detail-label"><i class="fas fa-file-invoice"></i> RIF</span>
-            <span class="detail-value">{{ cliente_seleccionado.rif }}</span>
+            <span class="detail-value is-family-code">{{ cliente_seleccionado.rif }}</span>
           </div>
           <div class="detail-row" *ngIf="cliente_seleccionado.direccion">
             <span class="detail-label"><i class="fas fa-map-pin"></i> Dirección</span>
@@ -160,11 +172,17 @@
             Sin contactos registrados
           </div>
           <div class="tags-list">
-            <span *ngFor="let contacto of cliente_seleccionado.contactos" class="tag is-info is-light is-medium">
-              <i class="fas fa-user-tie mr-1"></i>
-              <span>{{ contacto.titulo || '' }} {{ contacto.nombre }}</span>
-              <span class="tag-sub" *ngIf="contacto.cargo"> — {{ contacto.cargo }}</span>
-            </span>
+            <div *ngFor="let contacto of cliente_seleccionado.contactos" class="contact-card">
+              <div class="contact-card__head">
+                <i class="fas fa-user-tie mr-1"></i>
+                <strong>{{ contacto.titulo || '' }} {{ contacto.nombre }}</strong>
+              </div>
+              <div class="contact-card__body">
+                <div class="contact-card__row" *ngIf="contacto.cargo">📌 {{ contacto.cargo }}</div>
+                <div class="contact-card__row" *ngIf="contacto.correo">📧 {{ contacto.correo }}</div>
+                <div class="contact-card__row" *ngIf="contacto.telefono">📞 {{ contacto.telefono }}</div>
+              </div>
+            </div>
           </div>
 
           <hr class="modal-divider" />
@@ -176,6 +194,13 @@
             <span *ngFor="let almacen of cliente_seleccionado.almacenes" class="tag is-warning is-light is-medium">
               <i class="fas fa-warehouse mr-1"></i> {{ almacen.nombre }}
             </span>
+          </div>
+
+          <!-- Mapa de almacenes -->
+          <div [hidden]="!clienteTieneMapa" class="mapa-detalle-wrapper">
+            <hr class="modal-divider" />
+            <span class="section-label"><i class="fas fa-map-marked-alt"></i> Almacenes</span>
+            <div id="mapa-detalle-cliente" class="mapa-leaflet-detalle"></div>
           </div>
 
           <hr class="modal-divider" />

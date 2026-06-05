@@ -5,7 +5,7 @@
       <p class="modal-card-title fuente">Condiciones del material</p>
     </div>
     <div class="modal-card-body" *ngIf="condicion">
-      <ng-container *ngIf="!trato && grupo != 'Cajas corrugadas'">
+      <ng-container *ngIf="!trato && grupo != 'Cajas de embalaje'">
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.calidad" /> Certificado de calidad <br />
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.identificacion" /> Identificación de lote <br />
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.cajas_buen_estado" /> Cajas en buen estado <br />
@@ -13,7 +13,7 @@
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.envases_cerrados" /> Envases cerrados
         herméticamente
       </ng-container>
-      <ng-container *ngIf="trato && grupo != 'Cajas corrugadas'">
+      <ng-container *ngIf="trato && grupo != 'Cajas de embalaje'">
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.calidad" /> Certificado de calidad <br />
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.identificacion" /> Identificación de lote <br />
         <input type="checkbox" name="" id="" [(ngModel)]="condicion__.paleta_en_buen_estado" /> Paletas en buen estado

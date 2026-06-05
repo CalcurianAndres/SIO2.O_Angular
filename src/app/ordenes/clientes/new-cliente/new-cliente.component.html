@@ -114,24 +114,34 @@
           </div>
         </div>
       </div>
+      <p class="help is-danger" *ngIf="(cliente_temporal.nombre || cliente_temporal.cargo || cliente_temporal.correo || cliente_temporal.telefono) && data.contactos.length === 0">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
+      </p>
       <div class="tags-list mb-3" *ngIf="data.contactos?.length">
-        <span *ngFor="let contacto of data.contactos; index as i" class="tag is-info is-light is-medium">
-          <i class="fas fa-user-tie mr-1"></i>
-          {{ contacto.titulo || '' }} {{ contacto.nombre }}
-          <span class="tag-sub" *ngIf="contacto.cargo"> — {{ contacto.cargo }}</span>
-          <i class="fas fa-times tag-delete" (click)="confirmarEliminarContacto(i)"></i>
-        </span>
+        <div *ngFor="let contacto of data.contactos; index as i" class="contact-card">
+          <div class="contact-card__head">
+            <i class="fas fa-user-tie mr-1"></i>
+            <strong>{{ contacto.titulo || '' }} {{ contacto.nombre }}</strong>
+            <button class="delete is-small" (click)="eliminarContacto(i)"></button>
+          </div>
+          <div class="contact-card__body">
+            <div class="contact-card__row" *ngIf="contacto.cargo">📌 {{ contacto.cargo }}</div>
+            <div class="contact-card__row" *ngIf="contacto.correo">📧 {{ contacto.correo }}</div>
+            <div class="contact-card__row" *ngIf="contacto.telefono">📞 {{ contacto.telefono }}</div>
+          </div>
+        </div>
       </div>
 
       <!-- Almacenes -->
       <span class="section-label"><i class="fas fa-warehouse"></i> Almacenes</span>
       <hr class="modal-divider" />
+
       <div class="columns is-multiline">
         <div class="column is-6">
           <div class="field">
             <label class="label">Nombre del almacén</label>
             <div class="control has-icons-left">
-              <input class="input" type="text" placeholder="Ej: Caracas" [(ngModel)]="Almacene_temporal.nombre" />
+              <input class="input" type="text" placeholder="Ej: Caracas, Valencia" [(ngModel)]="Almacene_temporal.nombre" (input)="onAlmacenNombreChange()" />
               <span class="icon is-small is-left"><i class="fas fa-warehouse"></i></span>
             </div>
           </div>
@@ -139,8 +149,12 @@
         <div class="column is-3 is-flex is-align-items-flex-end">
           <div class="field">
             <label class="label">&nbsp;</label>
-            <div class="control">
-              <button class="button is-info" (click)="aceptarAlmacen()" [disabled]="!Almacene_temporal.nombre?.trim()">
+            <div class="buttons">
+              <button class="button is-info" (click)="buscarEnMapa()" [disabled]="!Almacene_temporal.nombre?.trim() || buscandoDireccion" title="Buscar en el mapa">
+                <span class="icon" *ngIf="buscandoDireccion"><i class="fas fa-spinner fa-pulse"></i></span>
+                <span class="icon" *ngIf="!buscandoDireccion"><i class="fas fa-search-location"></i></span>
+              </button>
+              <button class="button is-success" (click)="aceptarAlmacen()" [disabled]="!Almacene_temporal.nombre?.trim()">
                 <span class="icon"><i class="fas fa-plus"></i></span>
                 <span>Agregar</span>
               </button>
@@ -148,10 +162,32 @@
           </div>
         </div>
       </div>
+
+      <!-- Mapa Leaflet -->
+      <div class="mapa-wrapper" [hidden]="!Almacene_temporal.nombre">
+        <div id="mapa-almacen" class="mapa-leaflet"></div>
+        <p class="help" *ngIf="Almacene_temporal.lat">
+          <i class="fas fa-map-pin"></i> Pin en {{ Almacene_temporal.lat }}, {{ Almacene_temporal.lng }}
+        </p>
+        <p class="help" *ngIf="!Almacene_temporal.lat">
+          <i class="fas fa-info-circle"></i> Escribe el nombre y presiona el buscador, o haz clic en el mapa para soltar un pin
+        </p>
+      </div>
+
+      <p class="help is-danger" *ngIf="Almacene_temporal.nombre && data.almacenes.length === 0">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el almacén
+      </p>
       <div class="tags-list mb-3" *ngIf="data.almacenes?.length">
-        <span *ngFor="let almacen of data.almacenes; index as i" class="tag is-warning is-light is-medium">
-          <i class="fas fa-warehouse mr-1"></i> {{ almacen.nombre }}
-          <i class="fas fa-times tag-delete" (click)="confirmarEliminarAlmacen(i)"></i>
+        <span
+          *ngFor="let almacen of data.almacenes; index as i"
+          class="tag is-warning is-light is-medium is-clickable"
+          [ngClass]="{ 'has-coords': almacen.lat && almacen.lng }"
+          (click)="seleccionarAlmacenParaEditar(almacen)"
+        >
+          <i class="fas" [ngClass]="almacen.lat && almacen.lng ? 'fa-map-marker-alt' : 'fa-warehouse'"></i>
+          {{ almacen.nombre }}
+          <span class="coord-indicator" *ngIf="almacen.lat && almacen.lng">📍</span>
+          <button class="delete is-small" (click)="eliminarAlmacen(i); $event.stopPropagation()"></button>
         </span>
       </div>
 

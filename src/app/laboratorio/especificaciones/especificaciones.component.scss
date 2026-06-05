@@ -1,4 +1,6 @@
-.detail { overflow: hidden; }
+.detail {
+  overflow: hidden;
+}
 
 /* ── Grupo card grid ── */
 .grupo-grid {
@@ -8,28 +10,34 @@
   margin-bottom: 8px;
 }
 @media (min-width: 768px) {
-  .grupo-grid { grid-template-columns: repeat(3, 1fr); }
+  .grupo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 @media (min-width: 1024px) {
-  .grupo-grid { grid-template-columns: repeat(5, 1fr); }
+  .grupo-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .grupo-card {
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: 2px solid transparent;
 }
 .grupo-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 .grupo-card.card-active {
-  border-color: var(--accent, #d5234d);
+  border-color: var(--accent-blue);
 }
 .grupo-icon {
   font-size: 1.4rem;
   margin-right: 8px;
-  color: var(--accent, #d5234d);
+  color: var(--accent-blue);
 }
 .grupo-nombre {
   font-size: 0.85rem;
@@ -53,7 +61,30 @@
   margin: 0 4px;
   transition: color 0.2s;
 }
-.icon-action:hover { color: var(--accent, #d5234d); }
+.icon-action:hover {
+  color: var(--accent-blue);
+}
+.icon-action.blue {
+  color: var(--accent-blue);
+}
+.icon-action.blue:hover {
+  color: var(--accent-blue);
+  filter: brightness(1.2);
+}
+.icon-action.green {
+  color: var(--status-success);
+}
+.icon-action.green:hover {
+  color: var(--status-success);
+  filter: brightness(1.2);
+}
+.icon-action.red {
+  color: var(--accent);
+}
+.icon-action.red:hover {
+  color: var(--accent);
+  filter: brightness(1.2);
+}
 
 /* ── KPI cards (gradient overlay) ── */
 .kpi-card {
@@ -70,13 +101,13 @@
   opacity: 0.08;
 }
 .kpi-orange::before {
-  background: linear-gradient(135deg, var(--status-warning), #ff8c00);
+  background: linear-gradient(135deg, var(--status-warning), var(--status-warning));
 }
 .kpi-green::before {
-  background: linear-gradient(135deg, var(--status-success), #00c853);
+  background: linear-gradient(135deg, var(--status-success), var(--status-success));
 }
 .kpi-blue::before {
-  background: linear-gradient(135deg, var(--accent-blue), #2979ff);
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue));
 }
 .kpi-number {
   font-size: 2rem;
@@ -84,9 +115,15 @@
   line-height: 1;
   letter-spacing: -0.02em;
 }
-.kpi-orange .kpi-number { color: var(--status-warning); }
-.kpi-green .kpi-number { color: var(--status-success); }
-.kpi-blue .kpi-number { color: var(--accent-blue); }
+.kpi-orange .kpi-number {
+  color: var(--status-warning);
+}
+.kpi-green .kpi-number {
+  color: var(--status-success);
+}
+.kpi-blue .kpi-number {
+  color: var(--accent-blue);
+}
 .kpi-label {
   font-size: 0.85rem;
   color: var(--text-muted);
@@ -113,13 +150,26 @@
   height: 14px;
   border-radius: 4px;
   background: color-mix(in srgb, var(--text-primary) 8%, transparent);
-  animation: skeleton-pulse 1.4s ease-in-out infinite;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--text-primary) 15%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
 }
-.skeleton-line-short { width: 60%; }
+.skeleton-line-short {
+  width: 60%;
+}
 
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ── Empty state ── */
@@ -145,4 +195,23 @@
 }
 
 /* ── Pagination tweaks ── */
-.pagination-list li { margin: 0 2px; }
+.pagination-list li {
+  margin: 0 2px;
+}
+
+/* ── Table header (Gilroy, uppercase, Receta 1) ── */
+::ng-deep .table th {
+  font-family: 'Gilroy', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom-width: 2px;
+  color: var(--text-muted);
+}
+::ng-deep .table th .is-clickable {
+  cursor: pointer;
+  user-select: none;
+}
+::ng-deep .table th .is-clickable:hover {
+  color: var(--accent-blue);
+}

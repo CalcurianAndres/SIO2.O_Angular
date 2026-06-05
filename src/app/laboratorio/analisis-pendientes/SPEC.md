@@ -46,8 +46,8 @@
 ## Acción "Analizar"
 - Según `material[0].material.grupo`:
   - `trato === true` → `AnalisisSustratoComponent`
-  - `'Tintas'` o `'Barniz s/impresión'` → `AnalisisTintaComponent`
-  - `'Cajas Corrugadas'` → `AnalisisCajasComponent`
+  - `'Tintas'` o `'Barniz de aceite'` → `AnalisisTintaComponent`
+  - `'Cajas de embalaje'` → `AnalisisCajasComponent`
   - `'Soportes de Embalaje'` → `AnalisisPadsComponent`
   - Otro → `AnalisisOtrosComponent`
 - Soporta `PreparacionesTinta()` con su propio flujo

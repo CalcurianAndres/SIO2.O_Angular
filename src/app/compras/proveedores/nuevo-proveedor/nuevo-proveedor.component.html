@@ -51,6 +51,66 @@
         </div>
       </div>
 
+      <!-- Identificación fiscal -->
+      <div class="field">
+        <label class="label">Identificación fiscal</label>
+        <div class="control">
+          <input type="text" class="input" placeholder="Opcional" [(ngModel)]="identificacion_fiscal" *ngIf="nuevo" />
+          <input type="text" class="input" [(ngModel)]="proveedor.identificacion_fiscal" *ngIf="editar" />
+        </div>
+      </div>
+
+      <!-- País -->
+      <div class="field">
+        <label class="label">País</label>
+        <div class="control">
+          <p class="help" *ngIf="cargandoPaises"><i class="fas fa-spinner fa-pulse"></i> Cargando países…</p>
+          <div class="select is-fullwidth" *ngIf="!cargandoPaises">
+            <select [(ngModel)]="pais" (change)="onPaisChange()" *ngIf="nuevo">
+              <option value="">— Seleccionar país —</option>
+              <option *ngFor="let p of listaPaises" [value]="p.nombre">{{ p.nombre }}</option>
+            </select>
+            <select [(ngModel)]="proveedor.pais" (change)="onPaisChange()" *ngIf="editar">
+              <option value="">— Seleccionar país —</option>
+              <option *ngFor="let p of listaPaises" [value]="p.nombre">{{ p.nombre }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado -->
+      <div class="field" *ngIf="pais || proveedor?.pais">
+        <label class="label">Estado / Provincia</label>
+        <div class="control">
+          <div class="select is-fullwidth" *ngIf="estados.length > 0">
+            <select [(ngModel)]="estado" *ngIf="nuevo">
+              <option value="">— Seleccionar estado —</option>
+              <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+            </select>
+            <select [(ngModel)]="proveedor.estado" *ngIf="editar">
+              <option value="">— Seleccionar estado —</option>
+              <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+            </select>
+          </div>
+          <input
+            type="text"
+            class="input"
+            placeholder="Estado / Provincia"
+            [(ngModel)]="estado"
+            *ngIf="estados.length === 0 && !cargandoEstados && nuevo"
+          />
+          <input
+            type="text"
+            class="input"
+            [(ngModel)]="proveedor.estado"
+            *ngIf="estados.length === 0 && !cargandoEstados && editar"
+          />
+          <p class="help" *ngIf="cargandoEstados">
+            <i class="fas fa-spinner fa-pulse"></i> Cargando estados…
+          </p>
+        </div>
+      </div>
+
       <!-- Sección: Contactos -->
       <hr class="modal-divider" />
       <label class="section-label"><i class="fas fa-address-card"></i> Contactos</label>
@@ -60,10 +120,22 @@
           <input type="text" class="input" placeholder="Nombre" [(ngModel)]="contacto_nombre" />
         </div>
         <div class="column">
-          <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="contacto_numero" />
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="contacto_numero" (input)="onTelefonoInput()" />
+            </div>
+            <div class="control" *ngIf="contacto_pais_detectado">
+              <span class="button is-static" title="{{ contacto_pais_detectado.nombre }} ({{ contacto_pais_detectado.codigo }})">
+                {{ contacto_pais_detectado.bandera }}
+              </span>
+            </div>
+          </div>
         </div>
         <div class="column">
           <input type="email" class="input" placeholder="Correo" [(ngModel)]="contacto_email" />
+        </div>
+        <div class="column">
+          <input type="text" class="input" placeholder="Cargo" [(ngModel)]="contacto_cargo" />
         </div>
         <div class="column is-narrow">
           <button
@@ -75,14 +147,17 @@
           </button>
         </div>
       </div>
+      <p class="help is-danger" *ngIf="(contacto_nombre || contacto_numero || contacto_email || contacto_cargo) && nuevo ? contactos.length === 0 : false">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
+      </p>
 
       <!-- Tags: contactos -->
       <div class="tags-list" *ngIf="(nuevo ? contactos : proveedor?.contactos)?.length > 0">
-        <span class="tag is-info is-light" *ngFor="let c of nuevo ? contactos : proveedor.contactos; index as i">
+        <span class="tag is-info is-light" *ngFor="let c of nuevo ? contactos : proveedor?.contactos || []; index as i">
           <i class="fas fa-user"></i> {{ c.nombre }} – {{ c.numero }}
           <button
             class="delete is-small"
-            (click)="nuevo ? EliminarContacto(i) : proveedor.contactos.splice(i, 1)"
+            (click)="nuevo ? EliminarContacto(i) : proveedor?.contactos?.splice(i, 1)"
           ></button>
         </span>
       </div>
@@ -108,17 +183,23 @@
           </button>
         </div>
       </div>
+      <p class="help is-danger" *ngIf="fabricante !== undefined && fabricante !== '' && fabricante !== '#' && nuevo ? fabricantes_array.length === 0 : false">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el fabricante
+      </p>
 
       <!-- Tags: fabricantes -->
       <div class="tags-list" *ngIf="(nuevo ? fabricantes_array_name : proveedor?.fabricantes)?.length > 0">
         <span
           class="tag is-info is-light"
-          *ngFor="let f of nuevo ? fabricantes_array_name : getFabricanteNames(proveedor.fabricantes); index as i"
+          *ngFor="
+            let f of nuevo ? fabricantes_array_name : getFabricanteNames(proveedor?.fabricantes || []);
+            index as i
+          "
         >
           <i class="fas fa-industry"></i> {{ f }}
           <button
             class="delete is-small"
-            (click)="nuevo ? EliminarFabricante(i) : proveedor.fabricantes.splice(i, 1)"
+            (click)="nuevo ? EliminarFabricante(i) : proveedor?.fabricantes?.splice(i, 1)"
           ></button>
         </span>
       </div>
@@ -129,7 +210,7 @@
         <div class="control">
           <button
             class="button is-success"
-            [disabled]="guardando"
+            [disabled]="!formValido"
             (click)="nuevo ? GuardarProveedor() : EditarProveedor()"
           >
             <span class="icon" *ngIf="guardando"><i class="fas fa-spinner fa-pulse"></i></span>

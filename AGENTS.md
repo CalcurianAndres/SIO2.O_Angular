@@ -97,7 +97,7 @@ Enable full product lifecycle: create/edit/PDF products with nested schema, seed
 - **`productos.service.ts`**: safe navigation (`?.`) in `buscarPorClientes()`.
 
 ### Data seeded (MongoDB)
-- **Grupos**: Tintas, Barniz S/Impresión, Barniz Acuoso, Solución de fuentes, Pega, Cajas Corrugadas.
+- **Grupos**: Tintas, Barniz de aceite, Barniz Acuoso, Solución de fuentes, Pega, Cajas de embalaje.
 - **Fases**: Impresión, Troquelado, Cortado, Pegado.
 - **Fabricantes**: Kodak Venezuela, BASF Química, Cartones Nacionales, Sun Chemical.
 - **Maquinas**: Impresora 1, Troqueladora 1, Guillotina 1, Pegadora 1.
@@ -105,3 +105,59 @@ Enable full product lifecycle: create/edit/PDF products with nested schema, seed
 - **Productos**: 4 (Cajita, Caja Chocolates 30x20, Folder tamaño carta, Cajita Feliz Genérica).
 - **Órdenes de Compra**: 4 (OC-001/002/003/004-2026), cada una con pedido a un producto y cliente.
 - **Fix**: All `ObjectId` references converted from strings to proper ObjectId across ocompras, productos, materials, maquinas.
+
+## Session Log — 2026-05-29
+
+### Goal
+Standardize accordion sub-table with Bulma (OC-style), add Excel sorting to sub-table, reformat sustrato display, unify badge delete button, update documentation.
+
+### Code changes
+- **`grupos.component.scss`**: Removed custom Gilroy/uppercase overrides from `.sub-table th` — reset to Bulma defaults (`font-family: inherit`, `text-transform: none`, `letter-spacing: normal`, `color: inherit`) matching órdenes de compra style.
+- **`grupos.component.ts`**: Added `matSortColumn`, `matSortDirection`, `matToggleSort()`. Updated `getPaginatedMateriales()` to sort by nombre, serie, fabricante, codigo, or product count before paginating.
+- **`grupos.component.html`**: Made Serie header sortable (is-clickable + fa-sort icons). Changed material name cell for sustratos (`grupo.trato === true`) to display: `nombre marca calibrept gramajeg/m²`.
+- **`clientes.component.html`**: Added `.is-striped` class for zebra rows (DESIGN_SPEC compliance).
+- **`fabricantes-proveedores.component.html`**: Sorting columns (Excel-style).
+- **`clientes.component.ts`**: Sorting columns (Excel-style).
+- **`new-cliente.component.html`**: Badge delete button changed to Bulma `.delete is-small`.
+- **Files `Bugs`, `Bugs.txt`, `Correcciones.txt`**: Updated with date stamp, reviewed tags, and new entries.
+
+### Key decisions
+- Sub-table headers reset to Bulma defaults (no custom font/uppercase) to match OC product table style.
+- Serie column now sortable via `matToggleSort('serie')` with localeCompare.
+- Sustrato material display: "nombre alias calibrept gramajeg/m²" when `grupo.trato && mat.calibre`.
+- Bugs.txt old items tagged `[REVISADO]`, new items marked `[CORREGIDO]` only.
+
+### Created
+- `avance.md`, `changelog.md`, `task.md` in `/home/poligrafica/Work/SIO/`.
+
+## Session Log — 2026-06-05
+
+### Goal
+Complete restructure of grupos from table+stacks to cards+3-level nested accordion; 4 smaller UI tasks; update documentation and commit.
+
+### Code changes
+- **`grupos.component.ts`**: Removed `getStacks()`, `getPaginatedStacks()`, `getStackTotalPages()`, `getPaginatedMateriales()`, `getProductCount()`, `expandedStackKey`, `materialGoToPage()`, `materialChangePageSize()`. Added `getNameGroups(grupoId)`, `toggleName(key)`, `toggleBrand(nameKey, alias)`, `getSortedItems(items)`, `expandedNameKey`, `expandedBrandKey`. Grouping key now includes `fabricante.alias`.
+- **`grupos.component.html`**: Replaced `<table>` with `<div class="card grupo-card">` — card-header (clickable), card-content (max-height transition), card-footer (Agregar Material). 3-level nested accordion: name-card → brand-card → sortable sub-table.
+- **`grupos.component.scss`**: OCP-style card design, nested mini-cards with border-left color accents, chevron rotations, max-height transitions.
+- **`nuevo-material.component.ts`**: Added `pantoneCode`, `colores` enum, `esPantone` getter, `onColorChange()` reset logic.
+- **`nuevo-material.component.html`**: 5 radio buttons (Cyan/Magenta/Amarillo/Negro/Pantone) replace free-text color input. Pantone input shown conditionally. Caja label → "Cantidad de cinta por caja (metros)".
+- **`nuevo-material.component.scss`**: `.color-radios` flex layout.
+- **`SPEC.md`**: Full rewrite — cards + 3-level accordion instead of table + stacks.
+- **`grupos/materiales/materiales.component.ts`**: `selectedGrupo` property added for modal context.
+- **`grupos/materiales/materiales.component.html`**: Minor alignment for modal context.
+
+### SIO_CEREBRO documentation
+- **MAP.md**: Created — root index with links to all vault modules.
+- **004-Diagramas/Diagramas.md**: Created — ASCII flow diagrams for all modules (CRUD, navigation, states).
+- **005-Arquitectura/README.md**: Created — stack overview, modules, Socket.io pattern, deployment.
+- **CHANGELOG.md**: Centralized bitácora created.
+- **workspace.json**: Cleaned dead references from `lastOpenFiles`.
+- **Pendiente por cambios.md**: Content merged into Por implementar.md, marked obsolete.
+- **001-Proyecto/Grupos.md**: Synced with SPEC.md (cards + 3-level accordion).
+
+### Key decisions
+- Cards instead of table rows: each group is a distinct Bulma `.card` matching OCP style.
+- 3-level nested accordion replaces single-level stacks: Level 1 (nombre) → Level 2 (marca) → Level 3 (sortable detail).
+- Column "Productos" removed entirely ("no es un almacén").
+- Tinta color uses 5 radios (C/M/A/N/Pantone) instead of free text; Pantone opens secondary text input.
+- All stack/page/material pagination removed — detail table renders all items flat from a brand group.

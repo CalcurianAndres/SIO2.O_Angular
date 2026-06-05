@@ -17,6 +17,7 @@ export class FabricantesComponent {
   public selected!: any;
   public data: any = [];
   public cargando: boolean = true;
+  public searchTerm: string = '';
 
   constructor(
     public api: FabricantesService,
@@ -25,17 +26,25 @@ export class FabricantesComponent {
     setTimeout(() => (this.cargando = false), 1200);
   }
 
+  get filteredFabricantes(): any[] {
+    if (!this.searchTerm) return this.api.fabricantes;
+    const term = this.searchTerm.toLowerCase();
+    return this.api.fabricantes.filter(
+      (f: any) => f.nombre?.toLowerCase().includes(term) || f.alias?.toLowerCase().includes(term),
+    );
+  }
+
   filas() {
     return Math.ceil((this.api.fabricantes.length + 1) / 5);
   }
 
-  seleccion(i: number) {
-    this.selected = this.api.fabricantes[i];
+  seleccion(fab: any) {
+    this.selected = fab;
     this.detalle = true;
   }
 
-  Editar(i: number) {
-    this.data = this.api.fabricantes[i];
+  Editar(fab: any) {
+    this.data = fab;
     this.editar = true;
     console.log(this.data);
   }

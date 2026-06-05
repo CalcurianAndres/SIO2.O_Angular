@@ -199,7 +199,7 @@
                     <option
                       value="{{ barniz._id }}&{{ barniz.nombre }}({{ barniz.fabricante.alias }})"
                       *ngIf="
-                        barniz.grupo.nombre === 'Barniz S/Impresión' ||
+                        barniz.grupo.nombre === 'Barniz de aceite' ||
                         barniz.grupo.nombre === 'Barniz Acuoso' ||
                         barniz.grupo.nombre === 'Barniz'
                       "
@@ -1069,7 +1069,7 @@
                   <ng-container *ngFor="let cajas of materiales.materiales">
                     <option
                       value="{{ cajas._id }}&{{ cajas.nombre }}({{ cajas.fabricante.alias }})"
-                      *ngIf="cajas.grupo.nombre === 'Cajas Corrugadas'"
+                      *ngIf="cajas.grupo.nombre === 'Cajas de embalaje'"
                     >
                       {{ cajas.nombre }}({{ cajas.fabricante.alias }})
                     </option>

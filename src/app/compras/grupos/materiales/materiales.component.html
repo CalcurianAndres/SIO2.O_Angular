@@ -27,7 +27,7 @@
                 <th>Material</th>
                 <th>Serie</th>
                 <th>Fabricante</th>
-                <th>Cód. Proveedor</th>
+                <th>Cód. Material</th>
                 <th class="has-text-centered">Acciones</th>
               </tr>
             </thead>
@@ -38,7 +38,7 @@
                 <td>{{ material.fabricante?.alias || '-' }}</td>
                 <td>{{ material.codigo || '-' }}</td>
                 <td class="has-text-centered">
-                  <i class="far fa-edit green mr-2" title="Editar"></i>
+                  <i class="far fa-edit green mr-2" title="Editar" (click)="editarMaterial(material)"></i>
                   <i class="fas fa-trash-alt red" (click)="eliminarMaterial(material._id)" title="Eliminar"></i>
                 </td>
               </tr>

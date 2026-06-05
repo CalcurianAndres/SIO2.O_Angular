@@ -130,6 +130,32 @@ export class NuevaEspecificacionComponent {
 
   public Material_selected: any = '#';
 
+  // NA toggles for each section per form type
+  public SustratoNA = { gramaje: false, calibre: false, cobb: false, curling: false, blancura: false };
+  public TintaNA = { viscosidad: false, rigidez: false, tack: false, finura: false, secado: false };
+  public CajasNA = { li: false, le: false, espesor: false };
+  public PadsNA = { largo: false, ancho: false, signado: false, espesor: false };
+
+  get modalTitle(): string {
+    if (this.NUEVO_SUSTRATO) return 'Nueva especificación - Sustrato';
+    if (this.Edicion_sustrato) return 'Editar especificación - Sustrato';
+    if (this.NUEVA_ESPECIFICACION) return 'Nueva especificación';
+    if (this.Edicion) return 'Editar especificación';
+    if (this.NUEVA_CAJA) return 'Nueva especificación - Caja';
+    if (this.Edicion_cajas) return 'Editar especificación - Caja';
+    if (this.NUEVO_PADS) return 'Nueva especificación - Pads';
+    if (this.NUEVO_OTROS) return 'Nueva especificación';
+    if (this.EDITAR_OTROS) return 'Editar especificación';
+    return 'Especificación';
+  }
+
+  get formValido(): boolean {
+    if (this.NUEVO_SUSTRATO || this.NUEVA_ESPECIFICACION || this.NUEVA_CAJA || this.NUEVO_PADS || this.NUEVO_OTROS) {
+      return this.Material_selected !== '#';
+    }
+    return true;
+  }
+
   cerrar() {
     this.Material_selected = '#';
     // Código para establecer los valores min y max en 0
@@ -185,6 +211,11 @@ export class NuevaEspecificacionComponent {
         max: 0,
       },
     };
+
+    this.SustratoNA = { gramaje: false, calibre: false, cobb: false, curling: false, blancura: false };
+    this.TintaNA = { viscosidad: false, rigidez: false, tack: false, finura: false, secado: false };
+    this.CajasNA = { li: false, le: false, espesor: false };
+    this.PadsNA = { largo: false, ancho: false, signado: false, espesor: false };
 
     this.onCloseModal.emit();
   }

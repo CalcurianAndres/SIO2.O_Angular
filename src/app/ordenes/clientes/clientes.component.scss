@@ -133,12 +133,47 @@
 .tags-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.5rem;
   margin-top: 0.4rem;
 }
-.tag-sub {
-  font-weight: 400;
-  opacity: 0.75;
+
+/* ── Contact card (replaces tag badges) ── */
+.contact-card {
+  background: color-mix(in srgb, var(--bg-secondary) 90%, var(--accent-blue) 5%);
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+  flex: 1 1 180px;
+  max-width: 320px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+
+    strong {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  &__row {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    opacity: 0.75;
+    word-break: break-all;
+    line-height: 1.4;
+  }
 }
 .tag-delete {
   margin-left: 0.4rem;
@@ -173,4 +208,20 @@ hr.modal-divider {
 /* ── Card overrides ── */
 .card .card-content {
   padding: 1.25rem;
+}
+
+/* ── Mapa detalle cliente ── */
+.mapa-detalle-wrapper {
+  margin-top: 0.25rem;
+}
+.mapa-detalle-wrapper[hidden] {
+  display: none;
+}
+.mapa-leaflet-detalle {
+  height: 240px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-top: 0.4rem;
+  z-index: 1;
 }

@@ -101,7 +101,11 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   margin-bottom: 0.75rem;
-  a { color: var(--accent-blue); cursor: pointer; font-weight: 600; }
+  a {
+    color: var(--accent-blue);
+    cursor: pointer;
+    font-weight: 600;
+  }
 }
 
 /* ── Skeleton ── */
@@ -131,8 +135,13 @@
   animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
 @keyframes skeleton-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 /* ── Empty State ── */
@@ -191,7 +200,10 @@
     border: 1px solid var(--border-color);
     font-size: 0.75rem;
   }
-  &:hover .tooltiptext { visibility: visible; opacity: 1; }
+  &:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 /* ── Statistics rows (Detalles) ── */
@@ -262,11 +274,19 @@
 .stat-bar {
   height: 100%;
   border-radius: 4px;
-  background: linear-gradient(90deg, var(--status-success), color-mix(in srgb, var(--status-success) 60%, var(--status-danger)));
+  background: linear-gradient(
+    90deg,
+    var(--status-success),
+    color-mix(in srgb, var(--status-success) 60%, var(--status-danger))
+  );
   transition: width 0.4s ease;
 }
 .stat-bar.total-bar {
-  background: linear-gradient(90deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 60%, var(--status-warning)));
+  background: linear-gradient(
+    90deg,
+    var(--accent-blue),
+    color-mix(in srgb, var(--accent-blue) 60%, var(--status-warning))
+  );
 }
 .stat-pct {
   min-width: 36px;

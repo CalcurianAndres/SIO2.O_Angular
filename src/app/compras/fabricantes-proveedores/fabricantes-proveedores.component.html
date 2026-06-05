@@ -1,0 +1,256 @@
+<app-detalles [detalle]="fabDetalle" [fabricante]="fabSelected" (onClickClose)="cerrarFabDetalle()"></app-detalles>
+
+<app-detalles-proveedores [proveedor]="provSelected" [detalle]="provDetalle" (onCloseModal)="cerrarProvDetalle()">
+</app-detalles-proveedores>
+
+<app-nuevo-fabricante
+  [nuevo]="nuevoFab"
+  [editar]="editarFab"
+  [data]="fabData"
+  [cargando]="cargandoFab"
+  (onCloseModal)="cerrarFabModal()"
+  (onCloseModal_)="cerrarFabModal_()"
+>
+</app-nuevo-fabricante>
+
+<app-nuevo-proveedor
+  [nuevo]="nuevoProv"
+  [editar]="editarProv"
+  [api]="proveedoresApi"
+  [cargando]="cargandoProv"
+  [proveedor]="provData"
+  (onCloseModal)="cerrarProvModal()"
+  (onCloseModal_)="cerrarProvModal_()"
+>
+</app-nuevo-proveedor>
+
+<app-page-layout>
+  <app-section-header
+    title="Fabricantes y Proveedores"
+    description="Gestión unificada de fabricantes y proveedores"
+    icon="fa-shopping-cart"
+    color="green"
+  ></app-section-header>
+
+  <br />
+
+  <!-- Fabricantes section -->
+  <div class="section-label"><i class="fas fa-industry"></i> FABRICANTES</div>
+
+  <button class="button is-info mb-3" (click)="AgregarNuevoFabricante()">
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Nuevo Fabricante</span>
+  </button>
+
+  <div *ngIf="fabricantesApi.fabricantes.length === 0" class="empty-state-sm">
+    <i class="fas fa-industry empty-icon-sm"></i>
+    <p>No hay fabricantes registrados</p>
+  </div>
+
+  <div *ngIf="fabricantesApi.fabricantes.length > 0" class="table-container">
+    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+      <div class="control has-icons-left">
+        <input
+          class="input"
+          type="text"
+          placeholder="Buscar fabricante..."
+          [(ngModel)]="fabSearchTerm"
+          (input)="fabCurrentPage = 1"
+        />
+        <span class="icon is-left"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <table class="table is-fullwidth is-striped is-hoverable">
+      <thead>
+        <tr>
+          <th (click)="fabToggleSort('nombre')" class="sortable" style="cursor: pointer">
+            Nombre
+            <i class="fas" [ngClass]="fabSortColumn === 'nombre' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="fabToggleSort('alias')" class="sortable" style="cursor: pointer">
+            Alias
+            <i class="fas" [ngClass]="fabSortColumn === 'alias' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="fabToggleSort('identificacion_fiscal')" class="sortable" style="cursor: pointer">
+            Identificación fiscal
+            <i class="fas" [ngClass]="fabSortColumn === 'identificacion_fiscal' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="fabToggleSort('tipo')" class="has-text-centered sortable" style="cursor: pointer">
+            Tipo
+            <i class="fas" [ngClass]="fabSortColumn === 'tipo' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th class="has-text-centered">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fab of paginatedFabricantes">
+          <td>
+            <div class="is-flex is-align-items-center" style="gap: 8px">
+              <i class="fas fa-industry fab-icon"></i>
+              <span class="fab-nombre">{{ fab.nombre }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="fab-alias">{{ fab.alias || '-' }}</span>
+          </td>
+          <td>
+            <span class="fab-alias">{{ fab.identificacion_fiscal || '-' }}</span>
+          </td>
+          <td class="has-text-centered">
+            <span *ngIf="fab.proveedor" class="badge proveedor-badge-sm"> <i class="fas fa-truck"></i> Proveedor </span>
+            <span *ngIf="!fab.proveedor" class="badge fabricante-badge">
+              <i class="fas fa-industry"></i> Fabricante
+            </span>
+          </td>
+          <td class="has-text-centered action-cell">
+            <a (click)="EditarFabricante(fab)" title="Editar">
+              <i class="far fa-edit green"></i>
+            </a>
+            <a (click)="eliminarFabricante(fab._id)" title="Eliminar">
+              <i class="fas fa-trash-alt red"></i>
+            </a>
+            <a (click)="verFabDetalle(fab)" title="Ver detalles">
+              <i class="fas fa-info-circle blue_"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="is-flex is-align-items-center is-justify-content-space-between mt-3">
+      <div class="is-flex is-align-items-center">
+        <span class="mr-2 page-size-label">Filas por página:</span>
+        <div class="select" style="width: auto">
+          <select (change)="fabChangePageSize($event)" class="page-size-select">
+            <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === fabPageSize">{{ size }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="is-flex is-align-items-center" style="gap: 4px">
+        <button class="button is-small" [disabled]="fabCurrentPage === 1" (click)="fabGoToPage(fabCurrentPage - 1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="page-info">Pág {{ fabCurrentPage }} de {{ fabTotalPages }}</span>
+        <button
+          class="button is-small"
+          [disabled]="fabCurrentPage === fabTotalPages"
+          (click)="fabGoToPage(fabCurrentPage + 1)"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="modal-divider" />
+
+  <!-- Proveedores section -->
+  <div class="section-label"><i class="fas fa-truck"></i> PROVEEDORES</div>
+
+  <button class="button is-info mb-3" (click)="AgregarNuevoProveedor()">
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Nuevo Proveedor</span>
+  </button>
+
+  <div *ngIf="proveedoresApi.proveedores.length === 0" class="empty-state-sm">
+    <i class="fas fa-truck empty-icon-sm"></i>
+    <p>No hay proveedores registrados</p>
+  </div>
+
+  <div *ngIf="proveedoresApi.proveedores.length > 0" class="table-container">
+    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+      <div class="control has-icons-left">
+        <input
+          class="input"
+          type="text"
+          placeholder="Buscar proveedor..."
+          [(ngModel)]="provSearchTerm"
+          (input)="provCurrentPage = 1"
+        />
+        <span class="icon is-left"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <table class="table is-fullwidth is-striped is-hoverable">
+      <thead>
+        <tr>
+          <th (click)="provToggleSort('nombre')" class="sortable" style="cursor: pointer">
+            Nombre
+            <i class="fas" [ngClass]="provSortColumn === 'nombre' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="provToggleSort('rif')" class="sortable" style="cursor: pointer">
+            RIF
+            <i class="fas" [ngClass]="provSortColumn === 'rif' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="provToggleSort('pais')" class="sortable" style="cursor: pointer">
+            País
+            <i class="fas" [ngClass]="provSortColumn === 'pais' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th (click)="provToggleSort('contactos')" class="sortable" style="cursor: pointer">
+            Contactos
+            <i class="fas" [ngClass]="provSortColumn === 'contactos' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+          </th>
+          <th class="has-text-centered">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prov of paginatedProveedores">
+          <td>
+            <div class="is-flex is-align-items-center" style="gap: 8px">
+              <i class="fas fa-truck prov-icon"></i>
+              <span class="fab-nombre">{{ prov.nombre }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="fab-alias">{{ prov.rif || '-' }}</span>
+          </td>
+          <td>
+            <span class="fab-alias">{{ prov.pais || '-' }}</span>
+          </td>
+          <td>
+            <span *ngIf="prov.contactos && prov.contactos.length > 0" class="contact-count">
+              {{ prov.contactos.length }} contacto(s)
+            </span>
+            <span *ngIf="!prov.contactos || prov.contactos.length === 0" class="fab-alias">-</span>
+          </td>
+          <td class="has-text-centered action-cell">
+            <a (click)="EditarProveedor(prov)" title="Editar">
+              <i class="far fa-edit green"></i>
+            </a>
+            <a (click)="eliminarProveedor(prov._id)" title="Eliminar">
+              <i class="fas fa-trash-alt red"></i>
+            </a>
+            <a (click)="verProvDetalle(prov)" title="Ver detalles">
+              <i class="fas fa-info-circle blue_"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="is-flex is-align-items-center is-justify-content-space-between mt-3">
+      <div class="is-flex is-align-items-center">
+        <span class="mr-2 page-size-label">Filas por página:</span>
+        <div class="select" style="width: auto">
+          <select (change)="provChangePageSize($event)" class="page-size-select">
+            <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === provPageSize">{{ size }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="is-flex is-align-items-center" style="gap: 4px">
+        <button class="button is-small" [disabled]="provCurrentPage === 1" (click)="provGoToPage(provCurrentPage - 1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="page-info">Pág {{ provCurrentPage }} de {{ provTotalPages }}</span>
+        <button
+          class="button is-small"
+          [disabled]="provCurrentPage === provTotalPages"
+          (click)="provGoToPage(provCurrentPage + 1)"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

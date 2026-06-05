@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
         } else {
           console.log(resp);
           localStorage.setItem('TOKEN_SESSION', resp.token);
-          this.router.navigateByUrl('/compras');
+          this.router.navigateByUrl('/dashboard');
           // Handle successful login response here
         }
       });

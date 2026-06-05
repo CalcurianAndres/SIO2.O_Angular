@@ -563,7 +563,11 @@
 
   <!-- Filter Tabs — Búsqueda -->
   <div class="filter-tabs mb-3">
-    <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === '' }" (click)="parametro_busqueda = ''; resultados = []">
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: parametro_busqueda === '' }"
+      (click)="parametro_busqueda = ''; resultados = []"
+    >
       <i class="fas fa-times"></i> Sin filtro
     </button>
     <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === 'op' }" (click)="parametro_busqueda = 'op'">
@@ -572,13 +576,25 @@
     <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === 'oc' }" (click)="parametro_busqueda = 'oc'">
       <i class="fas fa-file-invoice"></i> OC
     </button>
-    <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === 'cliente' }" (click)="parametro_busqueda = 'cliente'">
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: parametro_busqueda === 'cliente' }"
+      (click)="parametro_busqueda = 'cliente'"
+    >
       <i class="fas fa-building"></i> Cliente
     </button>
-    <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === 'producto' }" (click)="parametro_busqueda = 'producto'">
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: parametro_busqueda === 'producto' }"
+      (click)="parametro_busqueda = 'producto'"
+    >
       <i class="fas fa-box"></i> Producto
     </button>
-    <button class="filter-tab" [ngClass]="{ active: parametro_busqueda === 'fecha' }" (click)="parametro_busqueda = 'fecha'">
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: parametro_busqueda === 'fecha' }"
+      (click)="parametro_busqueda = 'fecha'"
+    >
       <i class="fas fa-calendar-alt"></i> Fecha
     </button>
   </div>
@@ -590,11 +606,21 @@
         <ng-container [ngSwitch]="parametro_busqueda">
           <div class="column is-3" *ngSwitchCase="'op'">
             <label class="label is-small">Nº OP</label>
-            <input type="text" class="input is-small" placeholder="Ej: OP-2025-001" (input)="filtrarResultados($event.target)" />
+            <input
+              type="text"
+              class="input is-small"
+              placeholder="Ej: OP-2025-001"
+              (input)="filtrarResultados($event.target)"
+            />
           </div>
           <div class="column is-3" *ngSwitchCase="'oc'">
             <label class="label is-small">Nº OC</label>
-            <input type="text" class="input is-small" placeholder="Ej: OC-001" (input)="filtrarResultadosOC($event.target)" />
+            <input
+              type="text"
+              class="input is-small"
+              placeholder="Ej: OC-001"
+              (input)="filtrarResultadosOC($event.target)"
+            />
           </div>
           <ng-container *ngSwitchCase="'cliente'">
             <div class="column is-3">
@@ -673,11 +699,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="let orden of paginatedOrdenes"
-              [ngClass]="{ 'is-selected': op === orden }"
-              (click)="op = orden"
-            >
+            <tr *ngFor="let orden of paginatedOrdenes" [ngClass]="{ 'is-selected': op === orden }" (click)="op = orden">
               <td class="op-number-cell">
                 <strong>{{ orden.numero_op }}</strong>
               </td>
@@ -685,10 +707,7 @@
               <td>{{ orden.cliente?.nombre || '—' }}</td>
               <td>{{ orden.solicitud | date: 'dd/MM/yyyy' }}</td>
               <td>
-                <span
-                  class="tag"
-                  [ngClass]="orden.status === 'cerrada' ? 'is-light' : 'is-info is-light'"
-                >
+                <span class="tag" [ngClass]="orden.status === 'cerrada' ? 'is-light' : 'is-info is-light'">
                   {{ orden.status === 'cerrada' ? 'Cerrada' : 'Activa' }}
                 </span>
               </td>
@@ -718,7 +737,10 @@
         <!-- Paginación -->
         <div class="pagination-container" *ngIf="totalPages > 1">
           <div class="pagination-info">
-            Mostrando {{ ((currentPage - 1) * pageSize) + 1 }}–{{ Math.min(currentPage * pageSize, ordenesFiltradas.length) }} de {{ ordenesFiltradas.length }}
+            Mostrando {{ (currentPage - 1) * pageSize + 1 }}–{{
+              Math.min(currentPage * pageSize, ordenesFiltradas.length)
+            }}
+            de {{ ordenesFiltradas.length }}
           </div>
           <div class="pagination-controls">
             <div class="field has-addons">
@@ -733,16 +755,16 @@
                 </button>
               </div>
               <div class="control" *ngFor="let p of getPageRange()">
-                <button
-                  class="button is-small"
-                  [ngClass]="{ 'is-info': p === currentPage }"
-                  (click)="goToPage(p)"
-                >
+                <button class="button is-small" [ngClass]="{ 'is-info': p === currentPage }" (click)="goToPage(p)">
                   {{ p }}
                 </button>
               </div>
               <div class="control">
-                <button class="button is-small" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                <button
+                  class="button is-small"
+                  (click)="goToPage(currentPage + 1)"
+                  [disabled]="currentPage === totalPages"
+                >
                   <i class="fas fa-chevron-right"></i>
                 </button>
               </div>

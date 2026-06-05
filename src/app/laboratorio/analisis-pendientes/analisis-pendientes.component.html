@@ -6,7 +6,8 @@
   [Analisis]="Analisis"
   [Preparacion]="Preparacion"
   (onCloseModal)="Cerrar()"
-  (onCloseSencillo)="cerrarModal('Tinta')">
+  (onCloseSencillo)="cerrarModal('Tinta')"
+>
 </app-analisis-tinta>
 
 <app-analisis-cajas
@@ -16,7 +17,8 @@
   [Index]="index_material"
   [analisis]="AnalisisCajas"
   (onCloseModal)="cerrarModal('Caja')"
-  (onCloseMensaje)="cerrarConMensaje()">
+  (onCloseMensaje)="cerrarConMensaje()"
+>
 </app-analisis-cajas>
 
 <app-analisis-pads
@@ -26,7 +28,8 @@
   [Index]="index_material"
   [analisis]="analisisPads"
   (onCloseModal)="cerrarModal('pads')"
-  (onCloseMensaje)="cerrarConMensaje()">
+  (onCloseMensaje)="cerrarConMensaje()"
+>
 </app-analisis-pads>
 
 <app-analisis-otros
@@ -36,7 +39,8 @@
   [Index]="index_material"
   [analisis]="AnalisisOtro"
   (onCloseModal)="cerrarModal('otro')"
-  (onCloseMensaje)="cerrarConMensaje()">
+  (onCloseMensaje)="cerrarConMensaje()"
+>
 </app-analisis-otros>
 
 <app-analisis-sustrato
@@ -46,7 +50,8 @@
   [analisis]="analisisSustrato"
   [Index]="index_material"
   (onCloseSencillo)="cerrarModal('Sustrato')"
-  (onCloseModal)="Cerrar_tinta()">
+  (onCloseModal)="Cerrar_tinta()"
+>
 </app-analisis-sustrato>
 
 <app-busqueda
@@ -54,14 +59,16 @@
   [Resultadoas]="Materiales"
   [parametro]="parametro"
   (onCloseModal)="Busqueda = false"
-  (onBuscarParametro)="MostrarDesdeBusqueda($event)">
+  (onBuscarParametro)="MostrarDesdeBusqueda($event)"
+>
 </app-busqueda>
 
 <app-etiquetas-lab
   [mostrar]="mostrarEtiquetas"
   [recepcion]="recepcion_"
   [informacion]="informacion"
-  (cerrar)="mostrarEtiquetas = false">
+  (cerrar)="mostrarEtiquetas = false"
+>
 </app-etiquetas-lab>
 
 <app-page-layout>
@@ -69,7 +76,8 @@
     title="Análisis Pendientes"
     description="Materiales pendientes por analizar"
     icon="fa-flask"
-    color="red">
+    color="red"
+  >
   </app-section-header>
 
   <!-- Top bar: KPI cards -->
@@ -149,7 +157,9 @@
             <option value="">Todos los materiales</option>
             <option value="{{ material._id }}" *ngFor="let material of materiales.filtrarGrupos(grupo_selected)">
               {{ material.nombre }} {{ material.serie }} ({{ material.fabricante.alias }})
-              <ng-container *ngIf="material.grupo?.trato">{{ material.gramaje }}g {{ material.calibre }}pt</ng-container>
+              <ng-container *ngIf="material.grupo?.trato"
+                >{{ material.gramaje }}g {{ material.calibre }}pt</ng-container
+              >
             </option>
           </select>
         </div>
@@ -299,11 +309,23 @@
       </div>
       <div class="column">
         <nav class="pagination is-small is-right">
-          <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="currentPage > 1 && pageChanged(currentPage - 1)">Anterior</a>
-          <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="currentPage < totalPages && pageChanged(currentPage + 1)">Siguiente</a>
+          <a
+            class="pagination-previous"
+            [class.is-disabled]="currentPage === 1"
+            (click)="currentPage > 1 && pageChanged(currentPage - 1)"
+            >Anterior</a
+          >
+          <a
+            class="pagination-next"
+            [class.is-disabled]="currentPage === totalPages"
+            (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
+            >Siguiente</a
+          >
           <ul class="pagination-list">
             <li *ngFor="let p of [].constructor(Math.min(totalPages, 10)); let idx = index">
-              <a class="pagination-link" [class.is-current]="currentPage === idx + 1" (click)="pageChanged(idx + 1)">{{ idx + 1 }}</a>
+              <a class="pagination-link" [class.is-current]="currentPage === idx + 1" (click)="pageChanged(idx + 1)">{{
+                idx + 1
+              }}</a>
             </li>
           </ul>
         </nav>
@@ -358,10 +380,14 @@
           <div class="last-five-list" *ngIf="analisis.lastFives?.length > 0">
             <div class="last-five-card" *ngFor="let item of analisis.lastFives">
               <div class="lf-header">
-                <span class="tag" [ngClass]="{
-                  'is-success': item.resultado?.resultado === 'APROBADO',
-                  'is-danger': item.resultado?.resultado === 'RECHAZADO'
-                }">{{ item.resultado?.resultado || '—' }}</span>
+                <span
+                  class="tag"
+                  [ngClass]="{
+                    'is-success': item.resultado?.resultado === 'APROBADO',
+                    'is-danger': item.resultado?.resultado === 'RECHAZADO'
+                  }"
+                  >{{ item.resultado?.resultado || '—' }}</span
+                >
                 <span class="lf-date">{{ lastFiveInfo(item).date }}</span>
               </div>
               <div class="lf-body">

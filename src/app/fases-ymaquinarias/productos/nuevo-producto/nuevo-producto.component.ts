@@ -259,12 +259,20 @@ export class NuevoProductoComponent {
       },
       pre_impresion: {
         diseno: p.archivo_diseno || '',
-        montajes: (p.archivo_montaje?.[1]?.trim()) ? '2' : '1',
+        montajes: p.archivo_montaje?.[1]?.trim() ? '2' : '1',
         nombre_montajes: (p.archivo_montaje || []).filter((n) => n),
         tamano_sustrato: {
           montajes: [
-            { ancho: s(p.tamano_sustrato_imprimir?.[0]), largo: s(p.tamano_sustrato_imprimir?.[1]), ejemplares: s(p.tamano_sustrato_imprimir?.[2]) },
-            { ancho: s(p.tamano_sustrato_imprimir?.[3]), largo: s(p.tamano_sustrato_imprimir?.[4]), ejemplares: s(p.tamano_sustrato_imprimir?.[5]) },
+            {
+              ancho: s(p.tamano_sustrato_imprimir?.[0]),
+              largo: s(p.tamano_sustrato_imprimir?.[1]),
+              ejemplares: s(p.tamano_sustrato_imprimir?.[2]),
+            },
+            {
+              ancho: s(p.tamano_sustrato_imprimir?.[3]),
+              largo: s(p.tamano_sustrato_imprimir?.[4]),
+              ejemplares: s(p.tamano_sustrato_imprimir?.[5]),
+            },
           ],
           margenes: [
             { inferior: '', superior: '', izquierdo: '', derecho: '' },

@@ -15,7 +15,7 @@
         <label class="label">Razón social</label>
         <div class="control">
           <input type="text" class="input" placeholder="Ej: Papeles del Sur, C.A." [(ngModel)]="nombre" *ngIf="nuevo" />
-          <input type="text" class="input" [(ngModel)]="data.nombre" *ngIf="!nuevo" />
+          <input type="text" class="input" [(ngModel)]="data.nombre" *ngIf="editar" />
         </div>
       </div>
 
@@ -24,7 +24,16 @@
         <label class="label">Alias</label>
         <div class="control">
           <input type="text" class="input" placeholder="Ej: Papeles" [(ngModel)]="alias" *ngIf="nuevo" />
-          <input type="text" class="input" [(ngModel)]="data.alias" *ngIf="!nuevo" />
+          <input type="text" class="input" [(ngModel)]="data.alias" *ngIf="editar" />
+        </div>
+      </div>
+
+      <!-- Identificación fiscal -->
+      <div class="field">
+        <label class="label">Identificación fiscal</label>
+        <div class="control">
+          <input type="text" class="input" placeholder="Ej: 12345678A" [(ngModel)]="identificacion_fiscal" *ngIf="nuevo" />
+          <input type="text" class="input" [(ngModel)]="data.identificacion_fiscal" *ngIf="editar" />
         </div>
       </div>
 
@@ -34,15 +43,32 @@
 
       <div class="field is-grouped">
         <div class="control is-expanded">
-          <div class="select is-fullwidth">
-            <select name="pais" [(ngModel)]="pais">
+          <p class="help" *ngIf="cargandoPaises"><i class="fas fa-spinner fa-pulse"></i> Cargando países…</p>
+          <div class="select is-fullwidth" *ngIf="!cargandoPaises">
+            <select name="pais" [(ngModel)]="pais" (change)="nuevo ? onPaisChange() : onPaisChange_()">
               <option value="">— Seleccionar país —</option>
-              <option *ngFor="let p of paises" [value]="p">{{ p }}</option>
+              <option *ngFor="let p of listaPaises" [value]="p.nombre">{{ p.nombre }}</option>
             </select>
           </div>
         </div>
         <div class="control" *ngIf="pais">
-          <input type="text" class="input" placeholder="Estado / Región" [(ngModel)]="estado" />
+          <div class="select" *ngIf="estados.length > 0">
+            <select [(ngModel)]="estado">
+              <option value="">— Estado —</option>
+              <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+            </select>
+          </div>
+          <input
+            type="text"
+            class="input"
+            placeholder="Estado / Región"
+            [(ngModel)]="estado"
+            *ngIf="estados.length === 0 && !cargandoEstados"
+            style="max-width: 180px"
+          />
+          <p class="help" *ngIf="cargandoEstados">
+            <i class="fas fa-spinner fa-pulse"></i> Cargando…
+          </p>
         </div>
         <div class="control" *ngIf="pais && estado">
           <button class="button is-info" (click)="nuevo ? addOrigen() : addOrigen_()">
@@ -52,6 +78,9 @@
       </div>
 
       <!-- Tags: origenes added -->
+      <p class="help is-danger" *ngIf="pais && nuevo ? origenes.length === 0 : false">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el origen
+      </p>
       <div class="tags-list" *ngIf="nuevo ? origenes.length > 0 : (data?.origenes?.length ?? 0) > 0">
         <span class="tag is-info is-light" *ngFor="let o of nuevo ? origenes : data?.origenes || []; index as i">
           <i class="fas fa-flag"></i> {{ o.pais }} ({{ o.estado }})
@@ -78,6 +107,9 @@
           </button>
         </div>
       </div>
+      <p class="help is-danger" *ngIf="grupo && nuevo ? grupos.length === 0 : false">
+        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el grupo
+      </p>
 
       <!-- Tags: grupos added -->
       <div class="tags-list" *ngIf="nuevo ? grupos.length > 0 : (data?.grupo?.length ?? 0) > 0">
@@ -142,6 +174,14 @@
           </div>
         </div>
 
+        <div class="field">
+          <label class="label">Identificación fiscal</label>
+          <div class="control">
+            <input type="text" class="input" placeholder="Opcional" [(ngModel)]="identificacion_fiscal" *ngIf="nuevo" />
+            <input type="text" class="input" [(ngModel)]="proveedor_directo_selected[0].identificacion_fiscal" *ngIf="proveedor_directo_abierto && !nuevo" />
+          </div>
+        </div>
+
         <!-- Contacto form -->
         <label class="label section-label" style="font-size: 0.85rem; margin-top: 0.5rem">
           <i class="fas fa-address-card"></i> Contacto
@@ -151,7 +191,16 @@
             <input type="text" class="input" placeholder="Nombre" [(ngModel)]="p_nombre" />
           </div>
           <div class="column">
-            <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="p_telefono" />
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="p_telefono" (input)="onTelefonoInput()" />
+              </div>
+              <div class="control" *ngIf="p_telefono_pais_detectado">
+                <span class="button is-static" title="{{ p_telefono_pais_detectado.nombre }} ({{ p_telefono_pais_detectado.codigo }})">
+                  {{ p_telefono_pais_detectado.bandera }}
+                </span>
+              </div>
+            </div>
           </div>
           <div class="column">
             <input
@@ -175,6 +224,9 @@
             </button>
           </div>
         </div>
+        <p class="help is-danger" *ngIf="(p_nombre || p_telefono || p_correo || p_cargo) && nuevo ? p_contacto.length === 0 : false">
+          <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
+        </p>
         <p id="validationMessage" class="help is-danger" style="display: none"></p>
 
         <!-- Contactos table -->
@@ -192,7 +244,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let c of nuevo ? p_contacto : proveedor_directo_selected[0].contactos; index as i">
+            <tr *ngFor="let c of nuevo ? p_contacto : proveedor_directo_selected?.[0]?.contactos || []; index as i">
               <td>{{ c.nombre }}</td>
               <td>{{ c.numero || c.telefono }}</td>
               <td>{{ c.email || c.correo }}</td>
@@ -209,7 +261,7 @@
         <div class="control">
           <button
             class="button is-success"
-            [disabled]="guardando"
+            [disabled]="!formValido"
             (click)="nuevo ? guardarFabricante() : editarFabricante()"
           >
             <span class="icon" *ngIf="guardando"><i class="fas fa-spinner fa-pulse"></i></span>

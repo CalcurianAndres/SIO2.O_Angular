@@ -67,7 +67,11 @@
       <div class="card-content has-text-centered py-6">
         <i class="fas fa-warehouse" style="font-size: 2.5rem; color: var(--text-muted); opacity: 0.35"></i>
         <p class="mt-3" style="color: var(--text-muted); font-size: 1rem">
-          {{ searchTerm ? 'No hay productos que coincidan con "' + searchTerm + '"' : 'No hay productos terminados disponibles' }}
+          {{
+            searchTerm
+              ? 'No hay productos que coincidan con "' + searchTerm + '"'
+              : 'No hay productos terminados disponibles'
+          }}
         </p>
       </div>
     </div>
@@ -92,10 +96,7 @@
                 <tr>
                   <td class="pl-4">
                     <a class="product-name-link" (click)="toggleExpand(i)">
-                      <i
-                        class="fas fa-chevron-right expand-icon"
-                        [class.expanded]="expandedIndex === i"
-                      ></i>
+                      <i class="fas fa-chevron-right expand-icon" [class.expanded]="expandedIndex === i"></i>
                       <span>{{ item.nombre }}</span>
                     </a>
                   </td>
@@ -113,7 +114,11 @@
                       >
                         <i class="fas fa-flask"></i>
                       </a>
-                      <button class="button is-small is-ghost" (click)="notificarDespacho(item.nombre)" title="Notificar despacho">
+                      <button
+                        class="button is-small is-ghost"
+                        (click)="notificarDespacho(item.nombre)"
+                        title="Notificar despacho"
+                      >
                         <i class="fas fa-truck" style="color: var(--accent-blue)"></i>
                       </button>
                     </div>
@@ -137,11 +142,17 @@
                             <td class="has-text-centered">
                               <strong>{{ detalle.cantidad | number }}</strong>
                             </td>
-                            <td class="has-text-right has-text-grey">{{ detalle.fecha | date: 'EEE, d MMM, h:mm a' }}</td>
+                            <td class="has-text-right has-text-grey">
+                              {{ detalle.fecha | date: 'EEE, d MMM, h:mm a' }}
+                            </td>
                             <td class="has-text-centered">
                               <a
                                 routerLink="/laboratorio/certificado"
-                                [queryParams]="{ op: detalle.opNumero, producto: item.nombre, cantidad: detalle.cantidad }"
+                                [queryParams]="{
+                                  op: detalle.opNumero,
+                                  producto: item.nombre,
+                                  cantidad: detalle.cantidad
+                                }"
                                 class="button is-small is-link is-light"
                                 style="font-weight: 600; border-radius: 6px"
                               >

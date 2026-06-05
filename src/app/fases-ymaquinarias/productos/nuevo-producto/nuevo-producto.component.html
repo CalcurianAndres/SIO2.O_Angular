@@ -2,7 +2,9 @@
   <div class="modal-background" (click)="cerrar()"></div>
   <div class="modal-card product-modal">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente"><i class="fas fa-industry mr-2"></i> {{ editando ? 'Editar producto' : 'Nuevo producto' }}</p>
+      <p class="modal-card-title fuente">
+        <i class="fas fa-industry mr-2"></i> {{ editando ? 'Editar producto' : 'Nuevo producto' }}
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()" [disabled]="guardando"></button>
     </div>
     <div class="modal-card-body">
@@ -206,7 +208,7 @@
                   <ng-container *ngFor="let b of materiales.materiales">
                     <option
                       [value]="b._id"
-                      *ngIf="b.grupo?.nombre === 'Barniz S/Impresión' || b.grupo?.nombre === 'Barniz Acuoso'"
+                      *ngIf="b.grupo?.nombre === 'Barniz de aceite' || b.grupo?.nombre === 'Barniz Acuoso'"
                     >
                       {{ b.nombre }} ({{ b.fabricante?.alias }})
                     </option>

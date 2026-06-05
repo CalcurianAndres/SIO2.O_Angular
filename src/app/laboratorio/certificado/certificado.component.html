@@ -5,21 +5,28 @@
     <header class="modal-card-head">
       <p class="modal-card-title">
         <i class="fas fa-microscope mr-2"></i>
-        Muestreo: OP {{ selectedOp?.numero_op || '—' }} — {{ selectedOp?.nombre || selectedOp?.producto?.[0]?.identificacion?.producto || '—' }}
+        Muestreo: OP {{ selectedOp?.numero_op || '—' }} —
+        {{ selectedOp?.nombre || selectedOp?.producto?.[0]?.identificacion?.producto || '—' }}
       </p>
       <button class="delete" aria-label="close" (click)="showModal = false"></button>
     </header>
 
     <section class="modal-card-body">
       <!-- Análisis de materia prima -->
-      <div class="card mb-4" *ngIf="analisisMateriales.length > 0" style="background: var(--card-bg, #fff); border: 1px solid var(--border-color, #ddd); border-radius: 6px;">
-        <div class="card-content" style="padding: 0.75rem 1rem;">
+      <div
+        class="card mb-4"
+        *ngIf="analisisMateriales.length > 0"
+        style="background: var(--card-bg, #fff); border: 1px solid var(--border-color, #ddd); border-radius: 6px"
+      >
+        <div class="card-content" style="padding: 0.75rem 1rem">
           <div class="is-flex is-align-items-center mb-2">
-            <i class="fas fa-flask mr-2" style="color: var(--text-muted);"></i>
-            <span class="has-text-weight-bold is-size-7" style="color: var(--text-muted);">Análisis de materia prima</span>
+            <i class="fas fa-flask mr-2" style="color: var(--text-muted)"></i>
+            <span class="has-text-weight-bold is-size-7" style="color: var(--text-muted)"
+              >Análisis de materia prima</span
+            >
           </div>
           <div class="table-container">
-            <table class="table is-fullwidth is-narrow is-size-7" style="margin-bottom: 0;">
+            <table class="table is-fullwidth is-narrow is-size-7" style="margin-bottom: 0">
               <thead>
                 <tr>
                   <th>Material</th>
@@ -31,18 +38,34 @@
               <tbody>
                 <tr *ngFor="let am of analisisMateriales">
                   <td class="has-text-weight-semibold">{{ am.material?.nombre || am.material?.color || '—' }}</td>
-                  <td><span class="tag is-light is-small">{{ am.lote || '—' }}</span></td>
                   <td>
-                    <span *ngIf="am.analisisId; else noAnalisis" class="tag is-info is-light is-small" style="font-family: monospace;">
+                    <span class="tag is-light is-small">{{ am.lote || '—' }}</span>
+                  </td>
+                  <td>
+                    <span
+                      *ngIf="am.analisisId; else noAnalisis"
+                      class="tag is-info is-light is-small"
+                      style="font-family: monospace"
+                    >
                       {{ am.analisisId?.slice?.(-6) || am.analisisId?.substring?.(0, 8) || am.analisisId }}
                     </span>
                     <ng-template #noAnalisis><span class="tag is-light is-small">—</span></ng-template>
                   </td>
                   <td>
-                    <span *ngIf="am.resultado === 'APROBADO'" class="tag is-success is-light is-small"><i class="fas fa-check mr-1"></i>Aprobado</span>
-                    <span *ngIf="am.resultado === 'RECHAZADO'" class="tag is-danger is-light is-small"><i class="fas fa-times mr-1"></i>Rechazado</span>
-                    <span *ngIf="am.resultado === 'Sin análisis'" class="tag is-warning is-light is-small"><i class="fas fa-clock mr-1"></i>Sin análisis</span>
-                    <span *ngIf="am.resultado === 'Sin resultado' && am.resultado !== 'Sin análisis'" class="tag is-warning is-light is-small">Pendiente</span>
+                    <span *ngIf="am.resultado === 'APROBADO'" class="tag is-success is-light is-small"
+                      ><i class="fas fa-check mr-1"></i>Aprobado</span
+                    >
+                    <span *ngIf="am.resultado === 'RECHAZADO'" class="tag is-danger is-light is-small"
+                      ><i class="fas fa-times mr-1"></i>Rechazado</span
+                    >
+                    <span *ngIf="am.resultado === 'Sin análisis'" class="tag is-warning is-light is-small"
+                      ><i class="fas fa-clock mr-1"></i>Sin análisis</span
+                    >
+                    <span
+                      *ngIf="am.resultado === 'Sin resultado' && am.resultado !== 'Sin análisis'"
+                      class="tag is-warning is-light is-small"
+                      >Pendiente</span
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -59,7 +82,12 @@
                 <h2>Muestreo de producto terminado</h2>
               </div>
             </div>
-            <button class="button is-info is-light" (click)="downloadPdf()" *ngIf="samplingPlan">
+            <button
+              class="button is-info is-light"
+              (click)="downloadPdf()"
+              *ngIf="samplingPlan"
+              [disabled]="currentProgress < samplingPlan?.sampleSize"
+            >
               <i class="fas fa-file-pdf mr-1"></i> Descargar Certificado
             </button>
           </div>
@@ -69,7 +97,13 @@
               <div class="field">
                 <label class="label is-size-7">Tamaño del Lote</label>
                 <div class="control">
-                  <input class="input is-small" type="number" [(ngModel)]="lotSize" (input)="calculate()" placeholder="Cantidad total..." />
+                  <input
+                    class="input is-small"
+                    type="number"
+                    [(ngModel)]="lotSize"
+                    (input)="calculate()"
+                    placeholder="Cantidad total..."
+                  />
                 </div>
               </div>
             </div>
@@ -130,29 +164,39 @@
         <div class="progress-wrapper mb-5" style="position: relative">
           <div class="is-flex is-justify-content-space-between is-size-7 mb-1">
             <span>Progreso: {{ currentProgress }} de {{ samplingPlan.sampleSize }}</span>
-            <span class="has-text-weight-bold">{{ ((currentProgress / samplingPlan.sampleSize) * 100).toFixed(0) }}%</span>
+            <span class="has-text-weight-bold"
+              >{{ ((currentProgress / samplingPlan.sampleSize) * 100).toFixed(0) }}%</span
+            >
           </div>
-          <progress class="progress is-link custom-progress" [value]="currentProgress" [max]="samplingPlan.sampleSize"></progress>
+          <progress
+            class="progress is-link custom-progress"
+            [value]="currentProgress"
+            [max]="samplingPlan.sampleSize"
+          ></progress>
         </div>
 
         <hr class="modal-divider" />
 
-        <h4 class="title is-6 has-text-link mb-3">
-          <i class="fas fa-palette mr-2"></i>Inspección visual de color
-        </h4>
+        <h4 class="title is-6 has-text-link mb-3"><i class="fas fa-palette mr-2"></i>Inspección visual de color</h4>
         <div class="columns is-multiline is-variable is-2 mb-5">
           <div class="column is-4" *ngFor="let color of inkAnalysisList; let i = index">
             <div class="p-3 border-light shadow-sm color-card">
               <div class="is-flex is-justify-content-space-between is-align-items-center mb-2">
                 <span class="has-text-weight-bold is-size-7" style="letter-spacing: 0.5px">{{ color.name }}</span>
-                <span class="tag is-small has-text-weight-bold" [ngClass]="color.visualInspection ? 'is-success is-light' : 'is-danger is-light'">
+                <span
+                  class="tag is-small has-text-weight-bold"
+                  [ngClass]="color.visualInspection ? 'is-success is-light' : 'is-danger is-light'"
+                >
                   {{ color.visualInspection ? 'CONFORME' : 'NO CONFORME' }}
                 </span>
               </div>
               <div class="field mb-0">
                 <label class="label is-size-7 mb-1 has-text-grey">Inspección Visual</label>
                 <div class="control">
-                  <div class="select is-small is-fullwidth" [ngClass]="color.visualInspection ? 'is-success' : 'is-danger'">
+                  <div
+                    class="select is-small is-fullwidth"
+                    [ngClass]="color.visualInspection ? 'is-success' : 'is-danger'"
+                  >
                     <select [(ngModel)]="color.visualInspection" (change)="onColorStatusChange(i)">
                       <option [ngValue]="true">Cumple</option>
                       <option [ngValue]="false">No Cumple</option>
@@ -189,7 +233,13 @@
                         <input class="input is-small" type="number" [(ngModel)]="tempAlto" [disabled]="flags.altoNA" />
                       </p>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.altoNA ? 'is-warning' : 'is-light'" (click)="flags.altoNA = !flags.altoNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.altoNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.altoNA = !flags.altoNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -199,10 +249,21 @@
                     <label class="label is-size-7">Largo (894±1 cm)</label>
                     <div class="field has-addons">
                       <p class="control is-expanded">
-                        <input class="input is-small" type="number" [(ngModel)]="tempLargo" [disabled]="flags.largoNA" />
+                        <input
+                          class="input is-small"
+                          type="number"
+                          [(ngModel)]="tempLargo"
+                          [disabled]="flags.largoNA"
+                        />
                       </p>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.largoNA ? 'is-warning' : 'is-light'" (click)="flags.largoNA = !flags.largoNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.largoNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.largoNA = !flags.largoNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -214,10 +275,21 @@
                     <label class="label is-size-7">Ancho (cm)</label>
                     <div class="field has-addons">
                       <p class="control is-expanded">
-                        <input class="input is-small" type="number" [(ngModel)]="tempAncho" [disabled]="flags.anchoNA" />
+                        <input
+                          class="input is-small"
+                          type="number"
+                          [(ngModel)]="tempAncho"
+                          [disabled]="flags.anchoNA"
+                        />
                       </p>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.anchoNA ? 'is-warning' : 'is-light'" (click)="flags.anchoNA = !flags.anchoNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.anchoNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.anchoNA = !flags.anchoNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -227,10 +299,21 @@
                     <label class="label is-size-7">Barniz (15±1 cm)</label>
                     <div class="field has-addons">
                       <p class="control is-expanded">
-                        <input class="input is-small" type="number" [(ngModel)]="tempBarniz" [disabled]="flags.barnizNA" />
+                        <input
+                          class="input is-small"
+                          type="number"
+                          [(ngModel)]="tempBarniz"
+                          [disabled]="flags.barnizNA"
+                        />
                       </p>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.barnizNA ? 'is-warning' : 'is-light'" (click)="flags.barnizNA = !flags.barnizNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.barnizNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.barnizNA = !flags.barnizNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -250,7 +333,13 @@
                         </div>
                       </div>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.codBarrasNA ? 'is-warning' : 'is-light'" (click)="flags.codBarrasNA = !flags.codBarrasNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.codBarrasNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.codBarrasNA = !flags.codBarrasNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -268,7 +357,13 @@
                         </div>
                       </div>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.imgTextoNA ? 'is-warning' : 'is-light'" (click)="flags.imgTextoNA = !flags.imgTextoNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.imgTextoNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.imgTextoNA = !flags.imgTextoNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -286,13 +381,23 @@
                         </div>
                       </div>
                       <p class="control">
-                        <button class="button is-small" [ngClass]="flags.corteNA ? 'is-warning' : 'is-light'" (click)="flags.corteNA = !flags.corteNA">N/A</button>
+                        <button
+                          class="button is-small"
+                          [ngClass]="flags.corteNA ? 'is-warning' : 'is-light'"
+                          (click)="flags.corteNA = !flags.corteNA"
+                        >
+                          N/A
+                        </button>
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <button class="button is-link is-small is-fullwidth" (click)="addSampleBurst()" [disabled]="!burstQty || burstQty <= 0">
+              <button
+                class="button is-link is-small is-fullwidth"
+                (click)="addSampleBurst()"
+                [disabled]="!burstQty || burstQty <= 0"
+              >
                 <i class="fas fa-plus mr-2"></i> Registrar Medición de Muestra
               </button>
             </div>
@@ -310,13 +415,22 @@
                     <select [(ngModel)]="selectedDefect">
                       <option [ngValue]="null">-- Seleccione el hallazgo detectado --</option>
                       <optgroup label="Defectos Críticos">
-                        <option *ngFor="let d of defectos.criticos.defectos" [ngValue]="{ tipo: 'criticos', nombre: d }">⚠️ {{ d }}</option>
+                        <option
+                          *ngFor="let d of defectos.criticos.defectos"
+                          [ngValue]="{ tipo: 'criticos', nombre: d }"
+                        >
+                          ⚠️ {{ d }}
+                        </option>
                       </optgroup>
                       <optgroup label="Defectos Mayores">
-                        <option *ngFor="let d of defectos.mayores.defectos" [ngValue]="{ tipo: 'mayores', nombre: d }">🔸 {{ d }}</option>
+                        <option *ngFor="let d of defectos.mayores.defectos" [ngValue]="{ tipo: 'mayores', nombre: d }">
+                          🔸 {{ d }}
+                        </option>
                       </optgroup>
                       <optgroup label="Defectos Menores">
-                        <option *ngFor="let d of defectos.menores.defectos" [ngValue]="{ tipo: 'menores', nombre: d }">🔹 {{ d }}</option>
+                        <option *ngFor="let d of defectos.menores.defectos" [ngValue]="{ tipo: 'menores', nombre: d }">
+                          🔹 {{ d }}
+                        </option>
                       </optgroup>
                     </select>
                   </div>
@@ -327,7 +441,11 @@
                   <div class="field">
                     <label class="label is-size-7">Cant. Defectuosa</label>
                     <div class="control">
-                      <input class="input is-small is-danger has-text-weight-bold" type="number" [(ngModel)]="defectQty" />
+                      <input
+                        class="input is-small is-danger has-text-weight-bold"
+                        type="number"
+                        [(ngModel)]="defectQty"
+                      />
                     </div>
                   </div>
                 </div>
@@ -335,29 +453,47 @@
                   <div class="field">
                     <label class="label is-size-7">Observaciones / Detalles del Defecto</label>
                     <div class="control">
-                      <input class="input is-small" type="text" placeholder="Ej: El producto se encuentra roto" [(ngModel)]="tempShortDescription" />
+                      <input
+                        class="input is-small"
+                        type="text"
+                        placeholder="Ej: El producto se encuentra roto"
+                        [(ngModel)]="tempShortDescription"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-              <button class="button is-danger is-small is-fullwidth mb-3" (click)="addDefect()" [disabled]="!defectQty || !selectedDefect">
+              <button
+                class="button is-danger is-small is-fullwidth mb-3"
+                (click)="addDefect()"
+                [disabled]="!defectQty || !selectedDefect"
+              >
                 <i class="fas fa-bug mr-2"></i> Reportar Defecto Encontrado
               </button>
               <div class="columns is-mobile has-text-centered g-1 mt-2">
                 <div class="column p-1">
-                  <div class="notification p-2" [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'notif-badge'">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.criticos >= limits.criticos.re ? 'is-danger' : 'notif-badge'"
+                  >
                     <p class="is-size-7 mb-0">Crit.</p>
                     <p class="title is-6 mb-0">{{ stats.criticos }}/{{ limits.criticos.re }}</p>
                   </div>
                 </div>
                 <div class="column p-1">
-                  <div class="notification p-2" [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'notif-badge'">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.mayores >= limits.mayores.re ? 'is-danger' : 'notif-badge'"
+                  >
                     <p class="is-size-7 mb-0">May.</p>
                     <p class="title is-6 mb-0">{{ stats.mayores }}/{{ limits.mayores.re }}</p>
                   </div>
                 </div>
                 <div class="column p-1">
-                  <div class="notification p-2" [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'notif-badge'">
+                  <div
+                    class="notification p-2"
+                    [ngClass]="stats.menores >= limits.menores.re ? 'is-danger' : 'notif-badge'"
+                  >
                     <p class="is-size-7 mb-0">Men.</p>
                     <p class="title is-6 mb-0">{{ stats.menores }}/{{ limits.menores.re }}</p>
                   </div>
@@ -372,7 +508,10 @@
         <div class="columns mt-4">
           <div class="column is-12 is-7-desktop">
             <h5 class="title is-6 has-text-grey"><i class="fas fa-history mr-2"></i>Historial de Mediciones Físicas</h5>
-            <div class="table-container shadow-sm border-light" style="border-radius: 6px; max-height: 300px; overflow-y: auto">
+            <div
+              class="table-container shadow-sm border-light"
+              style="border-radius: 6px; max-height: 300px; overflow-y: auto"
+            >
               <table class="table is-fullwidth is-striped is-narrow is-size-7">
                 <thead class="has-background-link-dark">
                   <tr>
@@ -395,20 +534,36 @@
                     <td class="has-text-centered">{{ b.ancho }}</td>
                     <td class="has-text-centered">{{ b.barniz }}</td>
                     <td class="has-text-centered">
-                      <span class="tag is-xsmall" [ngClass]="b.vCod === 'C' ? 'is-success' : b.vCod === 'NC' ? 'is-danger' : 'is-warning'">{{ b.vCod }}</span>
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vCod === 'C' ? 'is-success' : b.vCod === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vCod }}</span
+                      >
                     </td>
                     <td class="has-text-centered">
-                      <span class="tag is-xsmall" [ngClass]="b.vImg === 'C' ? 'is-success' : b.vImg === 'NC' ? 'is-danger' : 'is-warning'">{{ b.vImg }}</span>
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vImg === 'C' ? 'is-success' : b.vImg === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vImg }}</span
+                      >
                     </td>
                     <td class="has-text-centered">
-                      <span class="tag is-xsmall" [ngClass]="b.vCor === 'C' ? 'is-success' : b.vCor === 'NC' ? 'is-danger' : 'is-warning'">{{ b.vCor }}</span>
+                      <span
+                        class="tag is-xsmall"
+                        [ngClass]="b.vCor === 'C' ? 'is-success' : b.vCor === 'NC' ? 'is-danger' : 'is-warning'"
+                        >{{ b.vCor }}</span
+                      >
                     </td>
                     <td class="has-text-centered">
-                      <button class="button is-danger is-small is-light p-1" (click)="removeBurst(i)"><i class="fas fa-trash-alt"></i></button>
+                      <button class="button is-danger is-small is-light p-1" (click)="removeBurst(i)">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
                     </td>
                   </tr>
                   <tr *ngIf="burstHistory.length === 0">
-                    <td colspan="9" class="has-text-centered has-text-grey-light py-4">No hay mediciones registradas en este lote.</td>
+                    <td colspan="9" class="has-text-centered has-text-grey-light py-4">
+                      No hay mediciones registradas en este lote.
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -416,7 +571,10 @@
           </div>
           <div class="column is-12 is-5-desktop">
             <h5 class="title is-6 has-text-grey"><i class="fas fa-bug mr-2"></i>Registro de Defectos en Muestra</h5>
-            <div class="table-container shadow-sm border-light" style="border-radius: 6px; max-height: 300px; overflow-y: auto">
+            <div
+              class="table-container shadow-sm border-light"
+              style="border-radius: 6px; max-height: 300px; overflow-y: auto"
+            >
               <table class="table is-fullwidth is-striped is-narrow is-size-7">
                 <thead class="has-background-danger-dark">
                   <tr>
@@ -434,14 +592,26 @@
                       <div class="is-size-7 has-text-grey">{{ d.descripcion }}</div>
                     </td>
                     <td class="has-text-centered">
-                      <span class="tag is-small is-uppercase" [ngClass]="{ 'is-danger': d.tipo === 'criticos', 'is-warning': d.tipo === 'mayores', 'is-info': d.tipo === 'menores' }">{{ d.tipo }}</span>
+                      <span
+                        class="tag is-small is-uppercase"
+                        [ngClass]="{
+                          'is-danger': d.tipo === 'criticos',
+                          'is-warning': d.tipo === 'mayores',
+                          'is-info': d.tipo === 'menores'
+                        }"
+                        >{{ d.tipo }}</span
+                      >
                     </td>
                     <td class="has-text-centered">
-                      <button class="button is-danger is-small is-light p-1" (click)="removeDefect(i)"><i class="fas fa-trash-alt"></i></button>
+                      <button class="button is-danger is-small is-light p-1" (click)="removeDefect(i)">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
                     </td>
                   </tr>
                   <tr *ngIf="defectHistory.length === 0">
-                    <td colspan="4" class="has-text-centered has-text-grey-light py-4">Sin novedades de defectos físicos reportados.</td>
+                    <td colspan="4" class="has-text-centered has-text-grey-light py-4">
+                      Sin novedades de defectos físicos reportados.
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -452,7 +622,11 @@
     </section>
 
     <footer class="modal-card-foot is-justify-content-flex-end">
-      <button class="button is-success" (click)="finalizarMuestreo()" [disabled]="currentProgress < samplingPlan?.sampleSize">
+      <button
+        class="button is-success"
+        (click)="finalizarMuestreo()"
+        [disabled]="currentProgress < samplingPlan?.sampleSize"
+      >
         <i class="fas fa-save mr-1"></i> Finalizar y Guardar
       </button>
       <button class="button" (click)="showModal = false">Cerrar</button>
@@ -529,7 +703,11 @@
       <div class="card-content has-text-centered py-6">
         <i class="fas fa-flask" style="font-size: 2.5rem; color: var(--text-muted); opacity: 0.35"></i>
         <p class="mt-3" style="color: var(--text-muted); font-size: 1rem">
-          {{ searchTerm ? 'No hay OPs que coincidan con "' + searchTerm + '"' : 'No hay órdenes de producción disponibles' }}
+          {{
+            searchTerm
+              ? 'No hay OPs que coincidan con "' + searchTerm + '"'
+              : 'No hay órdenes de producción disponibles'
+          }}
         </p>
       </div>
     </div>
@@ -555,13 +733,19 @@
                   <span class="op-number">{{ op.numero_op }}</span>
                 </td>
                 <td>
-                  <span class="product-label">{{ op.nombre || op.producto?.[0]?.identificacion?.producto || '—' }}</span>
+                  <span class="product-label">{{
+                    op.nombre || op.producto?.[0]?.identificacion?.producto || '—'
+                  }}</span>
                 </td>
                 <td class="has-text-centered">
-                  <span class="qty-badge">{{ (op.cantidad || 0) | number }}</span>
+                  <span class="qty-badge">{{ op.cantidad || 0 | number }}</span>
                 </td>
                 <td class="has-text-right pr-4">
-                  <button class="button is-link is-small is-light" style="font-weight: 600; border-radius: 8px" (click)="iniciarMuestreo(op)">
+                  <button
+                    class="button is-link is-small is-light"
+                    style="font-weight: 600; border-radius: 8px"
+                    (click)="iniciarMuestreo(op)"
+                  >
                     <span class="icon is-small"><i class="fas fa-play"></i></span>
                     <span>Iniciar Muestreo</span>
                   </button>
@@ -583,15 +767,29 @@
       <div class="column"></div>
       <div class="column is-narrow">
         <nav class="pagination is-small" role="navigation" aria-label="pagination">
-          <button class="pagination-previous button is-small" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+          <button
+            class="pagination-previous button is-small"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
             <i class="fas fa-chevron-left"></i>
           </button>
           <ul class="pagination-list">
             <li *ngFor="let p of pages">
-              <button class="pagination-link button is-small" [ngClass]="{ 'is-current': p === currentPage }" (click)="goToPage(p)">{{ p }}</button>
+              <button
+                class="pagination-link button is-small"
+                [ngClass]="{ 'is-current': p === currentPage }"
+                (click)="goToPage(p)"
+              >
+                {{ p }}
+              </button>
             </li>
           </ul>
-          <button class="pagination-next button is-small" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <button
+            class="pagination-next button is-small"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
             <i class="fas fa-chevron-right"></i>
           </button>
         </nav>

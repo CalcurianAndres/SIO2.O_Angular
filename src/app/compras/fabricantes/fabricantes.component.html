@@ -32,8 +32,22 @@
   </div>
 
   <!-- Card grid -->
-  <div *ngIf="api.fabricantes.length > 0" class="grupo-grid">
-    <div *ngFor="let fab of api.fabricantes; index as i" class="card grupo-card animate__animated animate__fadeInUp">
+  <div *ngIf="api.fabricantes.length > 0">
+    <!-- Search -->
+    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+      <div class="control has-icons-left">
+        <input
+          class="input"
+          type="text"
+          placeholder="Buscar fabricante..."
+          [(ngModel)]="searchTerm"
+        />
+        <span class="icon is-left"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <div class="grupo-grid">
+    <div *ngFor="let fab of filteredFabricantes; index as i" class="card grupo-card animate__animated animate__fadeInUp">
       <div class="card-header">
         <div class="card-header-title">
           <i class="fas fa-industry grupo-icon"></i>
@@ -43,10 +57,10 @@
         </div>
       </div>
       <footer class="card-footer">
-        <a class="card-footer-item" (click)="seleccion(i)" title="Ver detalles">
+        <a class="card-footer-item" (click)="seleccion(fab)" title="Ver detalles">
           <i class="fas fa-info-circle blue_"></i>
         </a>
-        <a class="card-footer-item" (click)="Editar(i)" title="Editar">
+        <a class="card-footer-item" (click)="Editar(fab)" title="Editar">
           <i class="far fa-edit green"></i>
         </a>
         <a class="card-footer-item" (click)="borrarFabricante(fab._id)" title="Eliminar">
@@ -54,6 +68,7 @@
         </a>
       </footer>
     </div>
+  </div>
   </div>
 </app-page-layout>
 

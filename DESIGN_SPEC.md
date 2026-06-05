@@ -408,6 +408,185 @@ ngOnChanges(changes: SimpleChanges) {
 - Preferir iconos descriptivos que acompañen al texto, no reemplazarlo
 - Mantener consistencia en la librería de iconos (Font Awesome)
 
+## Column sorting (Excel-style)
+
+Todas las tablas del sistema deben soportar ordenamiento por columna tipo Excel.
+
+### Estado (TS)
+
+```typescript
+sortColumn: string = '';          // columna activa, '' = sin orden
+sortDirection: 'asc' | 'desc' = 'asc';
+```
+
+### Método
+
+```typescript
+toggleSort(column: string) {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+  this.currentPage = 1;  // reset paginación
+}
+```
+
+### Pipeline
+
+```
+data → filtered → sorted → paginated
+```
+
+El getter `sortedXxx` clona el array filtrado y lo ordena:
+
+```typescript
+get sortedXxx(): any[] {
+  const list = [...this.filteredXxx];
+  if (!this.sortColumn) return list;
+  return list.sort((a, b) => {
+    let cmp = 0;
+    // comparar según sortColumn
+    if (col === 'nombre') cmp = a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase());
+    // ...
+    return this.sortDirection === 'asc' ? cmp : -cmp;
+  });
+}
+```
+
+### HTML (headers)
+
+```html
+<th (click)="toggleSort('columna')" class="sortable" style="cursor: pointer">
+  Nombre de columna
+  <i class="fas" [ngClass]="sortColumn === 'columna' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+</th>
+```
+
+- `fa-sort` = neutro (columna no activa)
+- `fa-sort-up` = ascendente
+- `fa-sort-down` = descendente
+
+## Accordion (inline expand)
+
+Para mostrar datos relacionados dentro de una fila de tabla sin abrir un modal.
+
+### Estructura HTML
+
+```html
+<ng-container *ngFor="let item of paginatedItems">
+  <tr class="grupo-row" [ngClass]="{ 'is-expanded': expandedId === item._id }">
+    <td>...</td>
+    <td class="has-text-centered">
+      <a (click)="toggleExpand(item._id); $event.stopPropagation()" class="expand-toggle">
+        <i class="fas" [ngClass]="expandedId === item._id ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        <span class="count-badge">{{ getChildCount(item._id) }}</span>
+      </a>
+    </td>
+    <td class="has-text-centered action-cell">...</td>
+  </tr>
+  <tr *ngIf="expandedId === item._id" class="expand-row">
+    <td colspan="4">
+      <div class="expand-panel">
+        <!-- Sub-table o contenido expandido -->
+      </div>
+    </td>
+  </tr>
+</ng-container>
+```
+
+### Estado (TS)
+
+```typescript
+expandedId: string | null = null;
+
+toggleExpand(id: string) {
+  this.expandedId = this.expandedId === id ? null : id;
+}
+```
+
+### Estilos SCSS
+
+```scss
+.grupo-row {
+  cursor: pointer;
+  &.is-expanded { background: var(--hover-bg); }
+}
+.expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  &:hover { color: var(--accent-blue); }
+}
+.count-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent-blue); color: #fff;
+  font-size: 0.7rem; font-weight: 600;
+}
+.expand-row td {
+  padding: 0 !important;
+  background: var(--bg-secondary);
+}
+.expand-panel {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+.sub-table {
+  th { font-size: 0.7rem; padding: 0.4rem 0.6rem; }
+  td { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
+}
+```
+
+### Consideraciones
+- Usar `<ng-container>` para agrupar fila principal y fila expandida dentro del mismo `*ngFor`
+- El colspan debe cubrir todas las columnas de la tabla
+- La sub-tabla tiene su propia paginación si aplica
+- Contador badge muestra la cantidad de ítems relacionados
+
+## Badge delete button
+
+Todos los badges con botón de eliminar deben usar el elemento nativo de Bulma.
+
+### HTML
+
+```html
+<span class="tag is-info is-light">
+  <i class="fas fa-icono"></i> Nombre
+  <button class="delete is-small" (click)="eliminar(i)"></button>
+</span>
+```
+
+### SCSS
+
+```scss
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    .delete {
+      margin-left: 4px;
+    }
+  }
+}
+```
+
+### Consideraciones
+- Usar `<button class="delete is-small">`, no `<i class="fas fa-times">`
+- El `.delete` de Bulma ya tiene hover/focus styling nativo
+- No necesita estilos adicionales de color ni opacidad
+- Consistente en fabricantes, proveedores y clientes
+
 ## Estados vacíos
 - Mensaje interactivo "No hay datos" con ícono
 

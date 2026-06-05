@@ -1,0 +1,136 @@
+.fab-icon,
+.prov-icon {
+  font-size: 1.1rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.fab-nombre {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.fab-alias {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.contact-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.proveedor-badge-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--status-success);
+  color: #fff;
+  i {
+    font-size: 0.65rem;
+  }
+}
+
+.fabricante-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-blue);
+  color: #fff;
+  i {
+    font-size: 0.65rem;
+  }
+}
+
+.action-cell {
+  white-space: nowrap;
+  a {
+    margin: 0 6px;
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  i {
+    font-size: 0.85rem;
+  }
+}
+
+:host ::ng-deep .table th {
+  font-family: 'Gilroy';
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+:host ::ng-deep .table td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+  font-size: 0.85rem;
+}
+
+.page-size-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.page-size-select {
+  font-size: 0.85rem;
+  padding: 2px 24px 2px 8px;
+}
+
+.page-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0 8px;
+}
+
+.empty-state-sm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  .empty-icon-sm {
+    font-size: 2rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    opacity: 0.4;
+  }
+  p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+}

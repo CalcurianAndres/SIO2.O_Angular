@@ -33,6 +33,9 @@ export class EspecificacionesComponent implements DoCheck {
   pageSize = 10;
   pageSizes = [10, 25, 50, 100];
 
+  sortColumn: string = 'nombre';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   constructor(
     public grupos: GruposService,
     public material: MaterialesService,
@@ -74,17 +77,38 @@ export class EspecificacionesComponent implements DoCheck {
     return this.materialesEspecificados;
   }
 
+  get sortedItems(): any[] {
+    const list = [...this.filteredMateriales];
+    if (!this.sortColumn || list.length === 0) return list;
+    return list.sort((a: any, b: any) => {
+      let valA = (a[this.sortColumn] || '').toString().toLowerCase();
+      let valB = (b[this.sortColumn] || '').toString().toLowerCase();
+      if (this.sortColumn === 'fabricante') {
+        valA = (a.fabricante?.alias || a.fabricante?.nombre || '').toString().toLowerCase();
+        valB = (b.fabricante?.alias || b.fabricante?.nombre || '').toString().toLowerCase();
+      }
+      const cmp = valA.localeCompare(valB);
+      return this.sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }
+
   get totalPages(): number {
-    return Math.ceil(this.filteredMateriales.length / this.pageSize) || 1;
+    return Math.ceil(this.sortedItems.length / this.pageSize) || 1;
   }
 
   get paginatedMateriales(): any[] {
     const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredMateriales.slice(start, start + this.pageSize);
+    return this.sortedItems.slice(start, start + this.pageSize);
   }
 
-  get pages(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  toggleSort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.currentPage = 1;
   }
 
   goToPage(p: number) {
@@ -121,9 +145,7 @@ export class EspecificacionesComponent implements DoCheck {
 
   Detallar(data: any) {
     this.Detalle = true;
-    this.Especificacion = data.especificacion2
-      ? data.especificacion2.especificacion
-      : data.especificacion;
+    this.Especificacion = data.especificacion2 ? data.especificacion2.especificacion : data.especificacion;
   }
 
   actualizarEspecificaciones() {
@@ -137,9 +159,9 @@ export class EspecificacionesComponent implements DoCheck {
     if (!Grupo) return;
     if (Grupo.trato) {
       this.NUEVO_SUSTRATO = true;
-    } else if (Grupo.nombre === 'Tintas' || Grupo.nombre === 'Barniz s/impresión') {
+    } else if (Grupo.nombre === 'Tintas' || Grupo.nombre === 'Barniz de aceite') {
       this.NUEVA_ESPECIFICACION = true;
-    } else if (Grupo.nombre === 'Cajas Corrugadas') {
+    } else if (Grupo.nombre === 'Cajas de embalaje') {
       this.NUEVA_CAJA = true;
     } else if (Grupo.nombre === 'Soportes de Embalaje') {
       this.NUEVO_PADS = true;
@@ -155,7 +177,7 @@ export class EspecificacionesComponent implements DoCheck {
       this.EDITAR_SUSTRATO = true;
     } else if (item.grupo.nombre === 'Tintas') {
       this.EDITAR_ESPECIFICACION = true;
-    } else if (item.grupo.nombre === 'Cajas Corrugadas') {
+    } else if (item.grupo.nombre === 'Cajas de embalaje') {
       this.EDITAR_CAJA = true;
     } else {
       this.EDITAR_OTROS = true;

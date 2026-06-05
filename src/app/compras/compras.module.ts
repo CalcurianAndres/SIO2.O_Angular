@@ -21,6 +21,7 @@ import { OrdenesComponent } from './ordenes/ordenes.component';
 import { NuevoOrdenComponent } from './ordenes/nuevo-orden/nuevo-orden.component';
 import { NoConformidadesComponent } from './no-conformidades/no-conformidades.component';
 import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/nueva-conformidad.component';
+import { FabricantesProveedoresComponent } from './fabricantes-proveedores/fabricantes-proveedores.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/
     NuevoOrdenComponent,
     NoConformidadesComponent,
     NuevaConformidadComponent,
+    FabricantesProveedoresComponent,
   ],
   imports: [
     CommonModule,

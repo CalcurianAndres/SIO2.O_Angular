@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ClientesService } from 'src/app/services/clientes.service';
 import Swal from 'sweetalert2';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-new-cliente',
@@ -8,7 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './new-cliente.component.html',
   styleUrls: ['./new-cliente.component.scss'],
 })
-export class NewClienteComponent {
+export class NewClienteComponent implements OnChanges, AfterViewInit {
   constructor(public api: ClientesService) {}
 
   @Input() data: any;
@@ -18,19 +19,103 @@ export class NewClienteComponent {
   @Output() onGuardarCliente = new EventEmitter();
 
   public guardando = false;
+  public mapa: L.Map | null = null;
+  public marcador: L.Marker | null = null;
+  public buscandoDireccion = false;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['cliente']?.currentValue === true || changes['editar']?.currentValue === true) {
       this.guardando = false;
+      setTimeout(() => this.initMap(), 600);
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => this.initMap(), 600);
+  }
+
+  onAlmacenNombreChange() {
+    if (this.Almacene_temporal.nombre?.trim()) {
+      setTimeout(() => {
+        if (!this.mapa) {
+          this.initMap();
+        } else {
+          this.mapa.invalidateSize();
+        }
+      }, 150);
+    }
+  }
+
+  private initMap() {
+    if (this.mapa) return;
+    const mapEl = document.getElementById('mapa-almacen');
+    if (!mapEl) return;
+    if (mapEl.clientWidth === 0 || mapEl.clientHeight === 0) {
+      setTimeout(() => this.initMap(), 300);
+      return;
+    }
+
+    this.mapa = L.map(mapEl, {
+      center: [10.4806, -66.9036],
+      zoom: 5,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    }).addTo(this.mapa);
+
+    this.mapa.on('click', (e: L.LeafletMouseEvent) => {
+      this.colocarPin(e.latlng.lat, e.latlng.lng);
+    });
+  }
+
+  private colocarPin(lat: number, lng: number) {
+    if (this.marcador) {
+      this.marcador.setLatLng([lat, lng]);
+    } else {
+      this.marcador = L.marker([lat, lng], { draggable: true }).addTo(this.mapa!);
+      this.marcador.on('dragend', () => {
+        const pos = this.marcador!.getLatLng();
+        this.Almacene_temporal.lat = parseFloat(pos.lat.toFixed(6));
+        this.Almacene_temporal.lng = parseFloat(pos.lng.toFixed(6));
+      });
+    }
+    this.Almacene_temporal.lat = parseFloat(lat.toFixed(6));
+    this.Almacene_temporal.lng = parseFloat(lng.toFixed(6));
+    this.mapa?.setView([lat, lng], this.mapa.getZoom() < 10 ? 10 : this.mapa.getZoom());
+  }
+
+  buscarEnMapa() {
+    if (!this.Almacene_temporal.nombre?.trim()) return;
+    this.buscandoDireccion = true;
+    const q = encodeURIComponent(this.Almacene_temporal.nombre + ', Venezuela');
+    fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=5`)
+      .then((r) => r.json())
+      .then((results) => {
+        if (results?.length > 0) {
+          const r = results[0];
+          this.colocarPin(parseFloat(r.lat), parseFloat(r.lon));
+        }
+      })
+      .catch(() => {})
+      .finally(() => (this.buscandoDireccion = false));
+  }
+
   public cliente_temporal: any = { nombre: '', titulo: '', cargo: '', correo: '', telefono: '' };
-  public Almacene_temporal: any = { nombre: '' };
+  public Almacene_temporal: any = { nombre: '', lat: null, lng: null };
 
   cerrar() {
     if (this.guardando) return;
+    this.destruirMapa();
     this.onCloseModal.emit();
+  }
+
+  private destruirMapa() {
+    if (this.mapa) {
+      this.mapa.remove();
+      this.mapa = null;
+      this.marcador = null;
+    }
   }
 
   addGuion() {
@@ -48,57 +133,27 @@ export class NewClienteComponent {
   aceptarAlmacen() {
     if (!this.Almacene_temporal.nombre?.trim()) return;
     this.data.almacenes.push({ ...this.Almacene_temporal });
-    this.Almacene_temporal = { nombre: '' };
+    this.Almacene_temporal = { nombre: '', lat: null, lng: null };
+    if (this.marcador) {
+      this.marcador.remove();
+      this.marcador = null;
+    }
   }
 
-  confirmarEliminarContacto(index: number) {
-    const contacto = this.data.contactos[index];
-    Swal.fire({
-      title: '¿Eliminar contacto?',
-      text: `${contacto.titulo || ''} ${contacto.nombre || ''}`.trim() || 'Este contacto',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-      reverseButtons: true,
-    }).then((r) => {
-      if (r.isConfirmed) {
-        this.data.contactos.splice(index, 1);
-        Swal.fire({
-          toast: true,
-          timer: 2000,
-          icon: 'success',
-          text: 'Contacto eliminado',
-          showConfirmButton: false,
-          position: 'top-end',
-        });
-      }
-    });
+  eliminarContacto(index: number) {
+    this.data.contactos.splice(index, 1);
   }
 
-  confirmarEliminarAlmacen(index: number) {
-    const almacen = this.data.almacenes[index];
-    Swal.fire({
-      title: '¿Eliminar almacén?',
-      text: almacen?.nombre || 'Este almacén',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-      reverseButtons: true,
-    }).then((r) => {
-      if (r.isConfirmed) {
-        this.data.almacenes.splice(index, 1);
-        Swal.fire({
-          toast: true,
-          timer: 2000,
-          icon: 'success',
-          text: 'Almacén eliminado',
-          showConfirmButton: false,
-          position: 'top-end',
-        });
-      }
-    });
+  eliminarAlmacen(index: number) {
+    this.data.almacenes.splice(index, 1);
+  }
+
+  seleccionarAlmacenParaEditar(almacen: any) {
+    this.Almacene_temporal = { ...almacen };
+    setTimeout(() => this.onAlmacenNombreChange(), 50);
+    if (almacen.lat && almacen.lng) {
+      setTimeout(() => this.colocarPin(almacen.lat, almacen.lng), 600);
+    }
   }
 
   guardar() {

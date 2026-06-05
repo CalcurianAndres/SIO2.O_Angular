@@ -2,6 +2,7 @@
 
 // Import a Google Font
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+@import 'leaflet/dist/leaflet.css';
 
 @font-face {
   font-family: 'Gilroy';
@@ -865,6 +866,11 @@ input[type='checkbox'].checkbox:disabled:checked {
 }
 .border-top-info {
   border-top: 4px solid var(--status-info);
+}
+
+// ─── SweetAlert2 z-index (above modals: 10000) ───
+.swal2-container {
+  z-index: 20000 !important;
 }
 
 // ─── Global transition ───
