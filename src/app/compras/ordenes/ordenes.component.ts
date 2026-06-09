@@ -254,6 +254,48 @@ export class OrdenesComponent {
       pdf.pageOrientation('portrait');
       pdf.pageSize('A4');
 
+
+      pdf.add(
+        new Table([
+         [
+            new Cell(await new Img('../../../assets/poli_cintillo.png').width(90).build())
+              .alignment('left').end,
+            new Cell(
+              new Txt(`ORDEN DE COMPRA
+                        PURCHASE ORDER`).alignment('right').end
+            ).end
+         ]
+        ]).widths(['50%','50%']).end
+      )
+
+      pdf.add(
+          new Table([
+         [
+            new Cell(
+              new Txt('Calle Pantin Galpon N29, Urb, Chacao, Edo Mirandda, Venezuela').end
+            ).alignment('left').end,
+            new Cell(
+              new Txt(`OCP-2600028`).alignment('right').end
+            ).end
+         ]
+        ]).widths(['44%','56%']).end
+      )
+
+      pdf.add('\n')
+
+      pdf.add(
+      new Table([
+         [
+            new Cell(
+              new Txt('Calle Pantin Galpon N29, Urb, Chacao, Edo Mirandda, Venezuela').end
+            ).alignment('left').end,
+            new Cell(
+              new Txt(`OCP-2600028`).alignment('right').end
+            ).end
+         ]
+        ]).widths(['44%','56%']).end
+      )
+
       pdf.add(
         new Table([
           [
@@ -261,8 +303,8 @@ export class OrdenesComponent {
               .alignment('center')
               .rowSpan(4).end,
             new Cell(
-              new Txt(` 
-            ORDEN DE COMPRA 
+              new Txt(`
+            ORDEN DE COMPRA
             `).bold().end,
             )
               .alignment('center')
