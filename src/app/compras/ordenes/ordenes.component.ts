@@ -695,27 +695,32 @@ export class OrdenesComponent {
         ]).widths(['75%', '25%']).end,
       );
 
-      // ═══════════ 5. FOOTER ═══════════
-      pdf.footer((currentPage, pageCount) => {
-        return new Stack([
-          new Table([
-            [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
-          ]).widths(['100%']).end,
-          new Txt(' ').fontSize(3).end,
-          new Table([
-            [
-              new Cell(new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end).border([false]).alignment('left').end,
-              new Cell(new Txt('FCP-001').fontSize(7).end).border([false]).alignment('right').end,
-            ],
-            [
-              new Cell(new Txt('').end).border([false]).end,
-              new Cell(new Txt(`N° de Revisión:1 / Fecha: ${hoy}`).fontSize(6.5).end).border([false]).alignment('right').end,
-            ],
-          ]).widths(['50%', '50%']).end,
-          new Txt(' ').fontSize(2).end,
-          new Txt('Escaneado con CamScanner').fontSize(6).color('#666666').italics().alignment('right').end,
-        ]).end;
-      });
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      pdf.add(
+        new Table([
+          [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
+        ]).widths(['100%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(3).end);
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('Página 1 / 1').fontSize(7).end).border([false]).alignment('left').end,
+            new Cell(new Txt('FCP-001').fontSize(7).end).border([false]).alignment('right').end,
+          ],
+          [
+            new Cell(new Txt('').end).border([false]).end,
+            new Cell(new Txt(`N° de Revisión:1 / Fecha: ${hoy}`).fontSize(6.5).end).border([false]).alignment('right').end,
+          ],
+        ]).widths(['50%', '50%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(2).end);
+
+      pdf.add(new Txt('Escaneado con CamScanner').fontSize(6).color('#666666').italics().alignment('right').end);
 
       pdf.create().download(`OCP-${N_orden}.pdf`);
     }
