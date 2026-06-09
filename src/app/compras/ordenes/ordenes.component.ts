@@ -659,7 +659,7 @@ export class OrdenesComponent {
         itemsBody.push([
           new Cell(new Txt((index + 1).toString()).fontSize(8).end).alignment('center').end,
           new Cell(new Txt(cantidad).fontSize(8).end).alignment('center').end,
-          new Cell(new Stack(descLines)).fontSize(8).end,
+          new Cell(new Stack(descLines).end).fontSize(8).end,
           new Cell(new Txt('$').fontSize(8).end).alignment('center').end,
           new Cell(new Txt(precio.toFixed(2)).fontSize(8).end).alignment('center').end,
           new Cell(new Txt(total.toFixed(2)).fontSize(8).end).alignment('center').end,
