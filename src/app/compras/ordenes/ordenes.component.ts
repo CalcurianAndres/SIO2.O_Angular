@@ -555,34 +555,37 @@ export class OrdenesComponent {
             new Cell(
               new Stack([
                 logo,
-                new Txt(' ').fontSize(3).end,
-                new Txt('Calle Pantin, Galpón N°29 Urb. Chacao, Edo. Miranda Venezuela.').fontSize(7).end,
+                // new Txt(' ').fontSize(3).end,
               ]).end,
             ).border([false]).alignment('left').end,
             new Cell(
               new Stack([
+                new Txt(' ').fontSize(4).end,
                 new Txt('ORDEN DE COMPRA').fontSize(20).bold().color('#1a1a1a').alignment('right').end,
                 new Txt('PURCHASE ORDER').fontSize(10).bold().color('#333333').alignment('right').end,
-                new Txt(' ').fontSize(4).end,
-                new Table([
-                  [
-                    new Cell(new Txt(`  OCP-${N_orden}  `).fontSize(14).bold().color('white').alignment('center').end)
-                      .fillColor('#117A65').alignment('center').margin([6, 4, 6, 4]).end,
-                  ],
-                ]).widths(['auto']).alignment('right').end,
+                // new Table([ [
+                //     new Cell(new Txt(`  OCP-${N_orden}  `).fontSize(14).bold().color('white').alignment('center').end)
+                //       .fillColor('#117A65').alignment('center').margin([6, 4, 6, 4]).end,
+                //   ],
+                // ]).widths(['auto']).alignment('right').end,
               ]).end,
             ).border([false]).alignment('right').end,
           ],
         ]).widths(['60%', '40%']).end,
       );
 
+
       pdf.add(
         new Table([
-          [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
-        ]).widths(['100%']).end,
-      );
+          [new Cell(new Txt(`Calle Pantín, Galpón N°29 Urb. Chacao,
+Edo. Miranda Venezuela.`).end).border([false, true, false, false]).fontSize(10).end,
+           new Cell(new Txt('OCP-2600028').fontSize(15).end).border([false, true, false, false]).fillColor('#117A65').end]
+        ]).widths(['60%', '40%']).end
+      )
 
-      pdf.add(new Txt(' ').fontSize(6).end);
+      pdf.add(
+        '\n'
+      )
 
       // ═══════════ 2. PROVEEDOR / CONDICIONES ═══════════
       pdf.add(
@@ -590,6 +593,7 @@ export class OrdenesComponent {
           [
             new Cell(new Txt('PROVEEDOR / SUPPLIER').bold().fontSize(8).color('white').end)
               .fillColor('#4A9B8C').alignment('center').end,
+            new Cell(new Txt('').end).end,
             new Cell(new Txt('CONDICIONES / TERMS').bold().fontSize(8).color('white').end)
               .fillColor('#4A9B8C').alignment('center').end,
           ],
@@ -606,6 +610,7 @@ export class OrdenesComponent {
                 ).fontSize(7.5).color('#0066CC').end,
               ]).end,
             ).fontSize(7.5).end,
+            new Cell(new Txt('').end).end,
             new Cell(
               new Stack([
                 new Txt(`Fecha de entrega / Shipping date: ${entrega}`).fontSize(7.5).end,
@@ -614,7 +619,7 @@ export class OrdenesComponent {
               ]).end,
             ).fontSize(7.5).end,
           ],
-        ]).widths(['50%', '50%']).end,
+        ]).layout('noBorders').widths(['40%','20%', '40%']).end,
       );
 
       pdf.add(new Txt(' ').fontSize(6).end);
@@ -660,13 +665,19 @@ export class OrdenesComponent {
           new Cell(new Txt((index + 1).toString()).fontSize(8).end).alignment('center').end,
           new Cell(new Txt(cantidad).fontSize(8).end).alignment('center').end,
           new Cell(new Stack(descLines).end).fontSize(8).end,
-          new Cell(new Txt('$').fontSize(8).end).alignment('center').end,
+          new Cell(new Txt('USD').fontSize(8).end).alignment('center').end,
           new Cell(new Txt(precio.toFixed(2)).fontSize(8).end).alignment('center').end,
           new Cell(new Txt(total.toFixed(2)).fontSize(8).end).alignment('center').end,
         ]);
       });
 
-      pdf.add(new Table(itemsBody).widths([35, 65, 255, 45, 85, 66]).fontSize(8).end);
+      pdf.add(new Table(itemsBody).widths(['5%', '10%', '50%', '7%', '13%', '15%']).layout({
+          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
+          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
+        })
+.fontSize(8).end);
 
       // ═══════════ 4. TOTALES ═══════════
       const netos = orden.pedido.reduce(
@@ -681,8 +692,8 @@ export class OrdenesComponent {
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('Total:').bold().fontSize(8).end).border([false]).alignment('right').end,
-            new Cell(new Txt(`${netos.toFixed(2)}`).bold().fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt('Total:').bold().fontSize(8).end).border([false,true,false,false]).alignment('right').end,
+            new Cell(new Txt(`${netos.toFixed(2)}`).bold().fontSize(8).end).border([false,true,false,false]).alignment('right').end,
           ],
           [
             new Cell(new Txt('Impuesto / Taxes:').bold().fontSize(8).end).border([false]).alignment('right').end,
@@ -697,11 +708,6 @@ export class OrdenesComponent {
 
       pdf.add(new Txt(' ').fontSize(6).end);
 
-      pdf.add(
-        new Table([
-          [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
-        ]).widths(['100%']).end,
-      );
 
       pdf.add(new Txt(' ').fontSize(3).end);
 
@@ -717,10 +723,6 @@ export class OrdenesComponent {
           ],
         ]).widths(['50%', '50%']).end,
       );
-
-      pdf.add(new Txt(' ').fontSize(2).end);
-
-      pdf.add(new Txt('Escaneado con CamScanner').fontSize(6).color('#666666').italics().alignment('right').end);
 
       pdf.create().download(`OCP-${N_orden}.pdf`);
     }
