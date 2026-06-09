@@ -208,6 +208,9 @@ export class OrdenesComponent {
     };
   }
 
+  /* ═══════════════════════════════════════════════════════════════
+     🔒 DescargarPDF original (FRP-007) — comentado el 09/06/2026
+     ═══════════════════════════════════════════════════════════════
   DescargarPDF(orden) {
     const materiales = [orden].map((orden) => orden.pedido.map((item) => item.material.nombre));
     const cantidades = [orden].map((orden) => orden.pedido.map((item) => item.cantidad));
@@ -520,6 +523,195 @@ export class OrdenesComponent {
         ]).widths(['14.95%', '14.95%', '0.1%', '40%', '0.1%', '10.95%', '18.95%']).end,
       );
       pdf.create().download();
+    }
+    generarOrden();
+  }
+  ═══════════════════════════════════════════════════════════════ */
+
+  // ✅ Nuevo DescargarPDF — formato FCP-001 (09/06/2026)
+  DescargarPDF(orden) {
+    const N_orden = this.addSlice(orden.numero);
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    const hoy = `${day}/${month}/${year}`;
+    const entrega = orden.entrega ? moment(orden.entrega).format('DD/MM/YYYY') : '';
+    const usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
+
+    async function generarOrden() {
+      const pdf = new PdfMakeWrapper();
+      PdfMakeWrapper.setFonts(pdfFonts);
+      pdf.pageOrientation('portrait');
+      pdf.pageSize('A4');
+      pdf.pageMargins([40, 40, 40, 40]);
+
+      const logo = await new Img('../../../assets/poli_cintillo.png').width(80).build();
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(logo).alignment('left').border([false]).end,
+            new Cell(
+              new Stack([
+                new Txt('POLIGRAFICA INDUSTRIAL, C.A.').bold().fontSize(12).end,
+                new Txt('Calle Pantin Galpón N°29, Urb. Chacao, Edo. Miranda, Venezuela').fontSize(8).end,
+                new Txt('Teléfono: 0212-264.03.23 / 0212-264.07.46').fontSize(8).end,
+              ]).end,
+            ).alignment('left').border([false]).end,
+            new Cell(
+              new Stack([
+                new Txt('ORDEN DE COMPRA').bold().fontSize(11).alignment('right').end,
+                new Txt('PURCHASE ORDER').fontSize(9).alignment('right').end,
+                new Txt('').end,
+                new Txt(`OCP-${N_orden}`).bold().fontSize(14).color('#1e3a5f').alignment('right').end,
+              ]).end,
+            ).alignment('right').border([false]).end,
+          ],
+        ]).widths(['18%', '52%', '30%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('PROVEEDOR').bold().fontSize(9).color('#ffffff').end)
+              .fillColor('#1e3a5f').alignment('center').end,
+            new Cell(new Txt('CONDICIONES').bold().fontSize(9).color('#ffffff').end)
+              .fillColor('#1e3a5f').alignment('center').end,
+          ],
+          [
+            new Cell(
+              new Stack([
+                new Txt(`Razón Social: ${orden.proveedor.nombre || ''}`).fontSize(8).end,
+                new Txt(`R.I.F: ${orden.proveedor.rif || ''}`).fontSize(8).end,
+                new Txt(`Dirección: ${orden.proveedor.direccion || ''}`).fontSize(8).end,
+                new Txt(`Teléfono: ${orden.proveedor.contactos?.[0]?.numero || ''}`).fontSize(8).end,
+              ]).end,
+            ).fontSize(8).end,
+            new Cell(
+              new Stack([
+                new Txt(`Fecha de Entrega: ${entrega}`).fontSize(8).end,
+                new Txt(`Condición de Pago: ${orden.pago || ''}`).fontSize(8).end,
+                new Txt(`Comprador: ${usuario}`).fontSize(8).end,
+                new Txt(`Fecha de Emisión: ${hoy}`).fontSize(8).end,
+              ]).end,
+            ).fontSize(8).end,
+          ],
+        ]).widths(['50%', '50%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      const headerRow = [
+        new Cell(new Txt('Item').bold().fontSize(8).color('#ffffff').end)
+          .fillColor('#1e3a5f').alignment('center').end,
+        new Cell(new Txt('Cantidad').bold().fontSize(8).color('#ffffff').end)
+          .fillColor('#1e3a5f').alignment('center').end,
+        new Cell(new Txt('Descripción').bold().fontSize(8).color('#ffffff').end)
+          .fillColor('#1e3a5f').alignment('center').end,
+        new Cell(new Txt('Precio USD').bold().fontSize(8).color('#ffffff').end)
+          .fillColor('#1e3a5f').alignment('center').end,
+        new Cell(new Txt('Total').bold().fontSize(8).color('#ffffff').end)
+          .fillColor('#1e3a5f').alignment('center').end,
+      ];
+
+      const bodyRows = [headerRow];
+
+      orden.pedido.forEach((item, index) => {
+        const num = index + 1;
+        const cant = `${item.cantidad} ${item.unidad || ''}`;
+        const medidas: string[] = [];
+        if (item.ancho) medidas.push(`${item.ancho}cm`);
+        if (item.alto) medidas.push(`${item.alto}cm`);
+        const medidasStr = medidas.length ? `${medidas.join(' x ')}` : '';
+        const gramajeStr = item.gramaje ? `Gramaje: ${item.gramaje}` : '';
+        const calibreStr = item.calibre ? `Calibre: ${item.calibre}` : '';
+        const bobinaStr = item.bobina ? 'Bobina: Sí' : '';
+        const extras = [gramajeStr, calibreStr, medidasStr, bobinaStr].filter(Boolean).join(' | ');
+        const precio = parseFloat(item.precio) || 0;
+        const total = precio * (parseFloat(item.cantidad) || 0);
+
+        bodyRows.push([
+          new Cell(new Txt(num.toString()).fontSize(8).end).alignment('center').end,
+          new Cell(new Txt(cant).fontSize(8).end).alignment('center').end,
+          new Cell(
+            new Stack([
+              new Txt(item.material?.nombre || '').bold().fontSize(8).end,
+              new Txt(extras).fontSize(7).color('#4a5568').end,
+            ]).end,
+          ).fontSize(8).end,
+          new Cell(new Txt(`$${precio.toFixed(2)}`).fontSize(8).end).alignment('right').end,
+          new Cell(new Txt(`$${total.toFixed(2)}`).fontSize(8).end).alignment('right').end,
+        ]);
+      });
+
+      pdf.add(new Table(bodyRows).widths(['8%', '12%', '45%', '17%', '18%']).fontSize(8).end);
+
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      const netos = orden.pedido.reduce(
+        (sum, item) => sum + (parseFloat(item.precio) || 0) * (parseFloat(item.cantidad) || 0),
+        0,
+      );
+      const ivaTotal = netos * ((orden.iva || 0) / 100);
+      const flete = 0;
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('').end).border([false]).end,
+            new Cell(new Txt('').end).border([false]).end,
+          ],
+          [
+            new Cell(new Txt('Sub-Total:').bold().fontSize(9).end)
+              .fillColor('#e8ecf0').alignment('right').end,
+            new Cell(new Txt(`$${netos.toFixed(2)}`).fontSize(9).end).alignment('right').end,
+          ],
+          [
+            new Cell(new Txt(`I.V.A (${orden.iva || 0}%):`).bold().fontSize(9).end)
+              .fillColor('#e8ecf0').alignment('right').end,
+            new Cell(new Txt(`$${ivaTotal.toFixed(2)}`).fontSize(9).end).alignment('right').end,
+          ],
+          [
+            new Cell(new Txt('Flete:').bold().fontSize(9).end)
+              .fillColor('#e8ecf0').alignment('right').end,
+            new Cell(new Txt(`$${flete.toFixed(2)}`).fontSize(9).end).alignment('right').end,
+          ],
+          [
+            new Cell(new Txt('Total:').bold().fontSize(11).color('#1e3a5f').end)
+              .fillColor('#e8ecf0').alignment('right').end,
+            new Cell(new Txt(`$${(netos + ivaTotal + flete).toFixed(2)}`).bold().fontSize(11).color('#1e3a5f').end)
+              .alignment('right').end,
+          ],
+        ]).widths(['75%', '25%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('OBSERVACIONES').bold().fontSize(9).color('#ffffff').end)
+              .fillColor('#1e3a5f').alignment('center').end,
+          ],
+          [new Cell(new Txt(orden.descripcion || '').fontSize(8).end).end],
+        ]).widths(['100%']).end,
+      );
+
+      pdf.add(new Txt(' ').fontSize(6).end);
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('FCP-001').fontSize(8).color('#718096').end).border([false]).alignment('left').end,
+            new Cell(new Txt('Página 1/1').fontSize(8).color('#718096').end).border([false]).alignment('right').end,
+          ],
+        ]).widths(['50%', '50%']).end,
+      );
+
+      pdf.create().download(`OCP-${N_orden}.pdf`);
     }
     generarOrden();
   }
