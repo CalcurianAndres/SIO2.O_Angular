@@ -528,7 +528,7 @@ export class OrdenesComponent {
   }
   ═══════════════════════════════════════════════════════════════ */
 
-  // ✅ Nuevo DescargarPDF — formato FCP-001 (09/06/2026)
+  // ✅ Nuevo DescargarPDF — formato FCP-001 exacto (09/06/2026)
   DescargarPDF(orden) {
     const N_orden = this.addSlice(orden.numero);
     const today = new Date();
@@ -544,113 +544,131 @@ export class OrdenesComponent {
       PdfMakeWrapper.setFonts(pdfFonts);
       pdf.pageOrientation('portrait');
       pdf.pageSize('A4');
-      pdf.pageMargins([40, 40, 40, 40]);
+      pdf.pageMargins([22, 18, 22, 25]);
 
-      const logo = await new Img('../../../assets/poli_cintillo.png').width(80).build();
+      const logo = await new Img('../../../assets/poli_cintillo.png').width(150).build();
 
+      // ═══════════ 1. ENCABEZADO SUPERIOR ═══════════
       pdf.add(
         new Table([
           [
-            new Cell(logo).alignment('left').border([false]).end,
             new Cell(
               new Stack([
-                new Txt('POLIGRAFICA INDUSTRIAL, C.A.').bold().fontSize(12).end,
-                new Txt('Calle Pantin Galpón N°29, Urb. Chacao, Edo. Miranda, Venezuela').fontSize(8).end,
-                new Txt('Teléfono: 0212-264.03.23 / 0212-264.07.46').fontSize(8).end,
+                logo,
+                new Txt(' ').fontSize(3).end,
+                new Txt('Calle Pantin, Galpón N°29 Urb. Chacao, Edo. Miranda Venezuela.').fontSize(7).end,
               ]).end,
-            ).alignment('left').border([false]).end,
+            ).border([false]).alignment('left').end,
             new Cell(
               new Stack([
-                new Txt('ORDEN DE COMPRA').bold().fontSize(11).alignment('right').end,
-                new Txt('PURCHASE ORDER').fontSize(9).alignment('right').end,
-                new Txt('').end,
-                new Txt(`OCP-${N_orden}`).bold().fontSize(14).color('#1e3a5f').alignment('right').end,
+                new Txt('ORDEN DE COMPRA').fontSize(20).bold().color('#1a1a1a').alignment('right').end,
+                new Txt('PURCHASE ORDER').fontSize(10).bold().color('#333333').alignment('right').end,
+                new Txt(' ').fontSize(4).end,
+                new Table([
+                  [
+                    new Cell(new Txt(`  OCP-${N_orden}  `).fontSize(14).bold().color('white').alignment('center').end)
+                      .fillColor('#117A65').alignment('center').margin([6, 4, 6, 4]).end,
+                  ],
+                ]).widths(['auto']).alignment('right').end,
               ]).end,
-            ).alignment('right').border([false]).end,
+            ).border([false]).alignment('right').end,
           ],
-        ]).widths(['18%', '52%', '30%']).end,
+        ]).widths(['60%', '40%']).end,
+      );
+
+      pdf.add(
+        new Table([
+          [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
+        ]).widths(['100%']).end,
       );
 
       pdf.add(new Txt(' ').fontSize(6).end);
 
+      // ═══════════ 2. PROVEEDOR / CONDICIONES ═══════════
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('PROVEEDOR').bold().fontSize(9).color('#ffffff').end)
-              .fillColor('#1e3a5f').alignment('center').end,
-            new Cell(new Txt('CONDICIONES').bold().fontSize(9).color('#ffffff').end)
-              .fillColor('#1e3a5f').alignment('center').end,
+            new Cell(new Txt('PROVEEDOR / SUPPLIER').bold().fontSize(8).color('white').end)
+              .fillColor('#4A9B8C').alignment('center').end,
+            new Cell(new Txt('CONDICIONES / TERMS').bold().fontSize(8).color('white').end)
+              .fillColor('#4A9B8C').alignment('center').end,
           ],
           [
             new Cell(
               new Stack([
-                new Txt(`Razón Social: ${orden.proveedor.nombre || ''}`).fontSize(8).end,
-                new Txt(`R.I.F: ${orden.proveedor.rif || ''}`).fontSize(8).end,
-                new Txt(`Dirección: ${orden.proveedor.direccion || ''}`).fontSize(8).end,
-                new Txt(`Teléfono: ${orden.proveedor.contactos?.[0]?.numero || ''}`).fontSize(8).end,
+                new Txt(orden.proveedor?.nombre || '').bold().fontSize(9).end,
+                new Txt(orden.proveedor?.direccion || '').fontSize(7.5).end,
+                new Txt(`RIF: ${orden.proveedor?.rif || ''}`).fontSize(7.5).end,
+                new Txt(`Atención Sr (a): ${orden.proveedor?.contactos?.[0]?.nombre || ''}`).fontSize(7.5).end,
+                new Txt(
+                  orden.proveedor?.contactos?.[0]?.email ||
+                  orden.proveedor?.contactos?.[0]?.numero || ''
+                ).fontSize(7.5).color('#0066CC').end,
               ]).end,
-            ).fontSize(8).end,
+            ).fontSize(7.5).end,
             new Cell(
               new Stack([
-                new Txt(`Fecha de Entrega: ${entrega}`).fontSize(8).end,
-                new Txt(`Condición de Pago: ${orden.pago || ''}`).fontSize(8).end,
-                new Txt(`Comprador: ${usuario}`).fontSize(8).end,
-                new Txt(`Fecha de Emisión: ${hoy}`).fontSize(8).end,
+                new Txt(`Fecha de entrega / Shipping date: ${entrega}`).fontSize(7.5).end,
+                new Txt(`Lugar de entrega / Delivery location: Poligráfica Industrial, C.A. Calle Pantin, Galpón N°29 Urb. Chacao, Edo. Miranda, Venezuela.`).fontSize(7.5).end,
+                new Txt(`Comprador / Purchaser: ${usuario}`).fontSize(7.5).end,
               ]).end,
-            ).fontSize(8).end,
+            ).fontSize(7.5).end,
           ],
         ]).widths(['50%', '50%']).end,
       );
 
       pdf.add(new Txt(' ').fontSize(6).end);
 
-      const headerRow = [
-        new Cell(new Txt('Item').bold().fontSize(8).color('#ffffff').end)
-          .fillColor('#1e3a5f').alignment('center').end,
-        new Cell(new Txt('Cantidad').bold().fontSize(8).color('#ffffff').end)
-          .fillColor('#1e3a5f').alignment('center').end,
-        new Cell(new Txt('Descripción').bold().fontSize(8).color('#ffffff').end)
-          .fillColor('#1e3a5f').alignment('center').end,
-        new Cell(new Txt('Precio USD').bold().fontSize(8).color('#ffffff').end)
-          .fillColor('#1e3a5f').alignment('center').end,
-        new Cell(new Txt('Total').bold().fontSize(8).color('#ffffff').end)
-          .fillColor('#1e3a5f').alignment('center').end,
+      // ═══════════ 3. TABLA PRINCIPAL DE ÍTEMES ═══════════
+      const itemsHeader = [
+        new Cell(new Txt('Pos.').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
+        new Cell(new Txt('CANTIDAD / QTY').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
+        new Cell(new Txt('DESCRIPCIÓN').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
+        new Cell(new Txt('MON. / CCY.').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
+        new Cell(new Txt('PRECIO UNITARIO / UNIT PRICE').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
+        new Cell(new Txt('TOTAL').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
       ];
 
-      const bodyRows = [headerRow];
+      const itemsBody = [itemsHeader];
 
       orden.pedido.forEach((item, index) => {
-        const num = index + 1;
-        const cant = `${item.cantidad} ${item.unidad || ''}`;
-        const medidas: string[] = [];
-        if (item.ancho) medidas.push(`${item.ancho}cm`);
-        if (item.alto) medidas.push(`${item.alto}cm`);
-        const medidasStr = medidas.length ? `${medidas.join(' x ')}` : '';
-        const gramajeStr = item.gramaje ? `Gramaje: ${item.gramaje}` : '';
-        const calibreStr = item.calibre ? `Calibre: ${item.calibre}` : '';
-        const bobinaStr = item.bobina ? 'Bobina: Sí' : '';
-        const extras = [gramajeStr, calibreStr, medidasStr, bobinaStr].filter(Boolean).join(' | ');
+        const cantidad = `${item.cantidad} ${item.unidad || ''}`;
         const precio = parseFloat(item.precio) || 0;
         const total = precio * (parseFloat(item.cantidad) || 0);
 
-        bodyRows.push([
-          new Cell(new Txt(num.toString()).fontSize(8).end).alignment('center').end,
-          new Cell(new Txt(cant).fontSize(8).end).alignment('center').end,
-          new Cell(
-            new Stack([
-              new Txt(item.material?.nombre || '').bold().fontSize(8).end,
-              new Txt(extras).fontSize(7).color('#4a5568').end,
-            ]).end,
-          ).fontSize(8).end,
-          new Cell(new Txt(`$${precio.toFixed(2)}`).fontSize(8).end).alignment('right').end,
-          new Cell(new Txt(`$${total.toFixed(2)}`).fontSize(8).end).alignment('right').end,
+        const descLines: any[] = [
+          new Txt(item.material?.nombre || '').bold().fontSize(8).end,
+          new Txt(`Col. ${item.material?.color || ''} / ${item.gramaje || ''}`).fontSize(8).end,
+        ];
+
+        if (index === 0) {
+          descLines.push(new Txt('* ').fontSize(8).end);
+        }
+
+        if (item.ancho && item.alto) {
+          descLines.push(new Txt(`Medidas: ${item.ancho} x ${item.alto} cm`).fontSize(8).end);
+        } else if (item.ancho) {
+          descLines.push(new Txt(`Medidas: ${item.ancho} cm`).fontSize(8).end);
+        } else if (item.alto) {
+          descLines.push(new Txt(`Medidas: ${item.alto} cm`).fontSize(8).end);
+        }
+
+        descLines.push(new Txt('Presentación:').fontSize(8).end);
+        descLines.push(new Txt(item.bobina ? 'Bobinas / Rolls' : 'Paletas / Skids').fontSize(8).end);
+
+        itemsBody.push([
+          new Cell(new Txt((index + 1).toString()).fontSize(8).end).alignment('center').end,
+          new Cell(new Txt(cantidad).fontSize(8).end).alignment('center').end,
+          new Cell(new Stack(descLines)).fontSize(8).end,
+          new Cell(new Txt('$').fontSize(8).end).alignment('center').end,
+          new Cell(new Txt(precio.toFixed(2)).fontSize(8).end).alignment('center').end,
+          new Cell(new Txt(total.toFixed(2)).fontSize(8).end).alignment('center').end,
         ]);
       });
 
-      pdf.add(new Table(bodyRows).widths(['8%', '12%', '45%', '17%', '18%']).fontSize(8).end);
+      pdf.add(new Table(itemsBody).widths([35, 65, 255, 45, 85, 66]).fontSize(8).end);
 
-      pdf.add(new Txt(' ').fontSize(6).end);
-
+      // ═══════════ 4. TOTALES ═══════════
       const netos = orden.pedido.reduce(
         (sum, item) => sum + (parseFloat(item.precio) || 0) * (parseFloat(item.cantidad) || 0),
         0,
@@ -658,58 +676,46 @@ export class OrdenesComponent {
       const ivaTotal = netos * ((orden.iva || 0) / 100);
       const flete = 0;
 
+      pdf.add(new Txt(' ').fontSize(6).end);
+
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('').end).border([false]).end,
-            new Cell(new Txt('').end).border([false]).end,
+            new Cell(new Txt('Total:').bold().fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt(`${netos.toFixed(2)}`).bold().fontSize(8).end).border([false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt('Sub-Total:').bold().fontSize(9).end)
-              .fillColor('#e8ecf0').alignment('right').end,
-            new Cell(new Txt(`$${netos.toFixed(2)}`).fontSize(9).end).alignment('right').end,
+            new Cell(new Txt('Impuesto / Taxes:').bold().fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt(`${ivaTotal.toFixed(2)}`).fontSize(8).end).border([false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt(`I.V.A (${orden.iva || 0}%):`).bold().fontSize(9).end)
-              .fillColor('#e8ecf0').alignment('right').end,
-            new Cell(new Txt(`$${ivaTotal.toFixed(2)}`).fontSize(9).end).alignment('right').end,
-          ],
-          [
-            new Cell(new Txt('Flete:').bold().fontSize(9).end)
-              .fillColor('#e8ecf0').alignment('right').end,
-            new Cell(new Txt(`$${flete.toFixed(2)}`).fontSize(9).end).alignment('right').end,
-          ],
-          [
-            new Cell(new Txt('Total:').bold().fontSize(11).color('#1e3a5f').end)
-              .fillColor('#e8ecf0').alignment('right').end,
-            new Cell(new Txt(`$${(netos + ivaTotal + flete).toFixed(2)}`).bold().fontSize(11).color('#1e3a5f').end)
-              .alignment('right').end,
+            new Cell(new Txt('Flete / freight:').bold().fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt(`${flete.toFixed(2)}`).fontSize(8).end).border([false]).alignment('right').end,
           ],
         ]).widths(['75%', '25%']).end,
       );
 
-      pdf.add(new Txt(' ').fontSize(6).end);
-
-      pdf.add(
-        new Table([
-          [
-            new Cell(new Txt('OBSERVACIONES').bold().fontSize(9).color('#ffffff').end)
-              .fillColor('#1e3a5f').alignment('center').end,
-          ],
-          [new Cell(new Txt(orden.descripcion || '').fontSize(8).end).end],
-        ]).widths(['100%']).end,
-      );
-
-      pdf.add(new Txt(' ').fontSize(6).end);
-
-      pdf.add(
-        new Table([
-          [
-            new Cell(new Txt('FCP-001').fontSize(8).color('#718096').end).border([false]).alignment('left').end,
-            new Cell(new Txt('Página 1/1').fontSize(8).color('#718096').end).border([false]).alignment('right').end,
-          ],
-        ]).widths(['50%', '50%']).end,
-      );
+      // ═══════════ 5. FOOTER ═══════════
+      pdf.footer((currentPage, pageCount) => {
+        return new Stack([
+          new Table([
+            [new Cell(new Txt('').end).border([false, false, false, true]).fontSize(1).end],
+          ]).widths(['100%']).end,
+          new Txt(' ').fontSize(3).end,
+          new Table([
+            [
+              new Cell(new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end).border([false]).alignment('left').end,
+              new Cell(new Txt('FCP-001').fontSize(7).end).border([false]).alignment('right').end,
+            ],
+            [
+              new Cell(new Txt('').end).border([false]).end,
+              new Cell(new Txt(`N° de Revisión:1 / Fecha: ${hoy}`).fontSize(6.5).end).border([false]).alignment('right').end,
+            ],
+          ]).widths(['50%', '50%']).end,
+          new Txt(' ').fontSize(2).end,
+          new Txt('Escaneado con CamScanner').fontSize(6).color('#666666').italics().alignment('right').end,
+        ]).end;
+      });
 
       pdf.create().download(`OCP-${N_orden}.pdf`);
     }
