@@ -4,14 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { PdfMakeWrapper, Table, Txt, Columns, Canvas, Line, ITable } from 'pdfmake-wrapper';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
-// Configuración de fuentes
 PdfMakeWrapper.setFonts(pdfFonts);
 
-interface LogisticaTarea {
-  fecha: string;
-  descripcion: string;
-  horas: number;
-}
+const STORAGE_KEY = '_mis_trabajos_';
 
 @Component({
   selector: 'app-recibos',
@@ -21,62 +16,103 @@ interface LogisticaTarea {
   imports: [CommonModule, FormsModule],
 })
 export class RecibosComponent {
-  hoy = new Date().toLocaleDateString('es-VE');
-
-  constructor() {
-    const guardado = localStorage.getItem('mis_tareas');
-    if (guardado) {
-      this.tareas = JSON.parse(guardado);
-    }
-  }
-
-  // Datos basados en tu actividad de marzo 2026 para el sistema PULSO / SIO
   tareas: any[] = JSON.parse(
-    localStorage.getItem('_mis_trabajos_') ||
+    localStorage.getItem(STORAGE_KEY) ||
       JSON.stringify([
-        { fecha: '05/05/2026', horas: 8, descripcion: 'Despacho de material' },
-        { fecha: '08/05/2026', horas: 8, descripcion: 'Certificado de calidad' },
+        { fecha: '25/05/2026', horas: 8, descripcion: 'Registro y configuración de productos en el sistema' },
+        { fecha: '26/05/2026', horas: 8, descripcion: ' organización del módulo de compras y proveedores' },
+        { fecha: '29/05/2026', horas: 8, descripcion: 'Mejoras en tablas y orden de información del sistema' },
+        { fecha: '05/06/2026', horas: 8, descripcion: 'Actualización de especificaciones técnicas y datos de clientes' },
+        { fecha: '05/06/2026', horas: 8, descripcion: 'Integración de países por API y mejoras en órdenes de compra' },
+        { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de órdenes de compra' },
+        { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en órdenes de compra' },
       ]),
   );
 
   nuevaTarea = { fecha: '', horas: 8, descripcion: '' };
-  tarifaHora = 8; // Costo acordado
+  tarifaHora = 8;
+
+  editandoIndex: number | null = null;
+  editandoDescripcion = '';
+  editandoHoras = 8;
+
+  mesSeleccionado = 'todos';
+
+  get mesesDisponibles(): string[] {
+    const meses = new Set<string>();
+    this.tareas.forEach((t: any) => {
+      const p = t.fecha.split('/');
+      if (p.length === 3) meses.add(`${p[2]}-${p[1]}`);
+    });
+    return Array.from(meses).sort();
+  }
+
+  formatearMes(m: string): string {
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const [y, mo] = m.split('-');
+    return `${meses[parseInt(mo) - 1]} ${y}`;
+  }
+
+  get tareasFiltradas(): any[] {
+    if (this.mesSeleccionado === 'todos') return this.tareas;
+    return this.tareas.filter((t: any) => {
+      const p = t.fecha.split('/');
+      return p.length === 3 && `${p[2]}-${p[1]}` === this.mesSeleccionado;
+    });
+  }
+
+  get nombreMesSel(): string {
+    if (this.mesSeleccionado === 'todos') return 'todas las tareas';
+    return this.formatearMes(this.mesSeleccionado).toLowerCase();
+  }
 
   agregarTarea() {
     if (this.nuevaTarea.fecha && this.nuevaTarea.descripcion) {
-      // 1. Capturamos la fecha del input (normalmente viene YYYY-MM-DD)
-      const partes = this.nuevaTarea.fecha.split('-'); // [yyyy, mm, dd]
-
-      // 2. Si la fecha viene en formato ISO (del input date), la reordenamos
+      const partes = this.nuevaTarea.fecha.split('-');
       if (partes.length === 3) {
         this.nuevaTarea.fecha = `${partes[2]}/${partes[1]}/${partes[0]}`;
       }
-
-      // 3. Ahora sí, agregamos al array con el formato dd/mm/yyyy
       this.tareas.push({ ...this.nuevaTarea });
-
-      // 4. Guardamos en el localStorage
       this.sincronizar();
-
-      // Limpiamos el formulario (reseteamos a horas 8 por defecto)
       this.nuevaTarea = { fecha: '', horas: 8, descripcion: '' };
+      this.mesSeleccionado = 'todos';
     }
   }
 
-  // Esta función es la que escribe en el "disco" del navegador
   private sincronizar() {
-    localStorage.setItem('_mis_trabajos_', JSON.stringify(this.tareas));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tareas));
   }
 
-  eliminarTarea(index: number) {
-    // 1. Lo borras del array en memoria
-    this.tareas.splice(index, 1);
-
-    this.sincronizar();
+  editarTarea(tarea: any) {
+    const idx = this.tareas.indexOf(tarea);
+    if (idx < 0) return;
+    if (this.editandoIndex === idx) {
+      this.tareas[idx].descripcion = this.editandoDescripcion;
+      this.tareas[idx].horas = this.editandoHoras;
+      this.sincronizar();
+      this.editandoIndex = null;
+    } else {
+      this.editandoIndex = idx;
+      this.editandoDescripcion = tarea.descripcion;
+      this.editandoHoras = tarea.horas;
+    }
   }
 
-  calcularTotalHoras(): number {
-    return this.tareas.reduce((sum, item) => sum + item.horas, 0);
+  cancelarEdicion() {
+    this.editandoIndex = null;
+  }
+
+  eliminarTarea(tarea: any) {
+    const idx = this.tareas.indexOf(tarea);
+    if (idx >= 0) {
+      this.tareas.splice(idx, 1);
+      if (this.editandoIndex === idx) this.editandoIndex = null;
+      this.sincronizar();
+    }
+  }
+
+  calcularTotalHoras(datos?: any[]): number {
+    return (datos ?? this.tareas).reduce((sum: number, item: any) => sum + item.horas, 0);
   }
 
   async generarPDF() {
@@ -88,7 +124,6 @@ export class RecibosComponent {
     pdf.pageSize('A4');
     pdf.pageMargins([40, 40, 40, 40]);
 
-    // Encabezado con fecha de hoy
     pdf.add(
       new Columns([
         new Txt('RECIBO DE SERVICIO').fontSize(18).bold().color('#2d3436').end,
@@ -99,7 +134,6 @@ export class RecibosComponent {
     pdf.add(new Canvas([new Line([0, 5], [520, 5]).lineColor('#0984e3').lineWidth(1).end]).end);
     pdf.add(pdf.ln(2));
 
-    // --- INFORMACIÓN DE LAS PARTES ---
     pdf.add(
       new Columns([
         [
@@ -130,7 +164,6 @@ export class RecibosComponent {
         .italics()
         .color('#636e72').end,
     );
-    // Aclaratoria de Costo por Hora
     pdf.add(
       new Txt([
         new Txt('Nota técnica: ').bold().end,
@@ -141,12 +174,9 @@ export class RecibosComponent {
         .margin([0, 0, 0, 10]).end,
     );
 
-    // Tabla de actividades [cite: 3]
     pdf.add(this.crearTablaActividades(this.tareas));
-
     pdf.add(pdf.ln(1));
 
-    // Totales y Pago [cite: 4, 5, 6]
     pdf.add(
       new Columns([
         [
@@ -177,7 +207,7 @@ export class RecibosComponent {
         new Txt('DESCRIPCIÓN').bold().color('white').end,
         new Txt('HRS').bold().alignment('center').color('white').end,
       ],
-      ...datos.map((item) => [item.fecha, item.descripcion, { text: item.horas.toString(), alignment: 'center' }]),
+      ...datos.map((item: any) => [item.fecha, item.descripcion, { text: item.horas.toString(), alignment: 'center' }]),
     ])
       .widths([70, '*', 40])
       .layout({

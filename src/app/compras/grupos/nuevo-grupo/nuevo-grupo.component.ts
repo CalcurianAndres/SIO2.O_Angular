@@ -32,7 +32,6 @@ export class NuevoGrupoComponent implements OnChanges {
     const data = {
       nombre: this.nombre,
       parcial: this.parcial,
-      icono: 'fa-cube',
       trato: this.trato,
       otro: this.otro,
     };

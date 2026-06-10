@@ -108,7 +108,6 @@ export interface Grupo {
   _id?: string;
   nombre: string;
   trato?: boolean;
-  icono?: string;
   parcial?: boolean;
   otro?: boolean;
 }

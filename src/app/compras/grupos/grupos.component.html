@@ -77,7 +77,7 @@
     <div *ngFor="let grupo of paginatedGrupos" class="card grupo-card animate__animated animate__fadeInUp">
       <div class="card-header" (click)="toggleExpand(grupo._id)">
         <div class="card-header-title">
-          <i class="{{ grupo.icono || 'fa-cube' }} grupo-icon"></i>
+          <i class="fas fa-shopping-cart grupo-icon"></i>
           <span class="grupo-nombre">{{ grupo.nombre }}</span>
           <span *ngIf="grupo.parcial" class="badge parcial-badge">
             <i class="fas fa-glass-whiskey"></i> Parcial

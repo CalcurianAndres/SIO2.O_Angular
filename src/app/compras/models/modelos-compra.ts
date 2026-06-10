@@ -11,7 +11,6 @@ export class Grupo {
   constructor(
     public nombre: string,
     public trato?: boolean,
-    public icono?: string,
     public parcial?: boolean,
     public otro?: boolean,
     public _id?: string,

@@ -27,8 +27,22 @@
         </div>
       </div>
 
+      <div class="columns is-vcentered mb-3">
+        <div class="column is-narrow">
+          <strong>Filtrar por mes:</strong>
+        </div>
+        <div class="column is-narrow">
+          <div class="select">
+            <select [(ngModel)]="mesSeleccionado">
+              <option value="todos">Todos</option>
+              <option *ngFor="let m of mesesDisponibles" [value]="m">{{ formatearMes(m) }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="table-container">
-        Dias trabajados ({{ tareas.length }})
+        Dias trabajados ({{ tareasFiltradas.length }})
         <hr />
         <table class="table is-fullwidth is-hoverable is-narrow">
           <thead>
@@ -40,30 +54,61 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let t of tareas; let i = index">
+            <tr *ngFor="let t of tareasFiltradas">
               <td>{{ t.fecha }}</td>
-              <td>{{ t.descripcion }}</td>
-              <td class="has-text-centered">
-                <strong>{{ t.horas }}</strong>
+              <td>
+                <input
+                  *ngIf="editandoIndex === tareas.indexOf(t)"
+                  class="input"
+                  type="text"
+                  [(ngModel)]="editandoDescripcion"
+                />
+                <span *ngIf="editandoIndex !== tareas.indexOf(t)">{{ t.descripcion }}</span>
               </td>
-              <td class="has-text-right">
-                <button (click)="eliminarTarea(i)" class="button is-danger is-small is-light">Eliminar</button>
+              <td class="has-text-centered">
+                <input
+                  *ngIf="editandoIndex === tareas.indexOf(t)"
+                  class="input has-text-centered"
+                  type="number"
+                  style="width: 80px; display: inline-block;"
+                  [(ngModel)]="editandoHoras"
+                />
+                <strong *ngIf="editandoIndex !== tareas.indexOf(t)">{{ t.horas }}</strong>
+              </td>
+              <td class="has-text-right" style="white-space: nowrap;">
+                <button
+                  *ngIf="editandoIndex !== tareas.indexOf(t)"
+                  (click)="editarTarea(t)"
+                  class="button is-info is-small is-light mr-1"
+                >Editar</button>
+                <button
+                  *ngIf="editandoIndex === tareas.indexOf(t)"
+                  (click)="editarTarea(t)"
+                  class="button is-success is-small is-light mr-1"
+                >Guardar</button>
+                <button
+                  *ngIf="editandoIndex === tareas.indexOf(t)"
+                  (click)="cancelarEdicion()"
+                  class="button is-light is-small mr-1"
+                >Cancelar</button>
+                <button (click)="eliminarTarea(t)" class="button is-danger is-small is-light">Eliminar</button>
               </td>
             </tr>
           </tbody>
           <tfoot>
             <tr class="is-selected">
               <th colspan="2">TOTAL ACUMULADO</th>
-              <th class="has-text-centered">{{ calcularTotalHoras() }} hrs</th>
-              <th class="has-text-right">${{ (calcularTotalHoras() * 8).toFixed(2) }}</th>
+              <th class="has-text-centered">{{ calcularTotalHoras(tareasFiltradas) }} hrs</th>
+              <th class="has-text-right">${{ (calcularTotalHoras(tareasFiltradas) * tarifaHora).toFixed(2) }}</th>
             </tr>
           </tfoot>
         </table>
       </div>
 
       <div class="mt-5">
-        <button (click)="generarPDF()" class="button is-link is-large is-fullwidth" [disabled]="tareas.length === 0">
-          Descargar Recibo Profesional
+        <button (click)="generarPDF()" class="button is-link is-large is-fullwidth" [disabled]="tareasFiltradas.length === 0">
+          <span class="icon"><i class="fas fa-file-pdf"></i></span>
+          <span>Descargar Recibo Profesional{{ mesSeleccionado !== 'todos' ? ' (' + nombreMesSel + ')' : '' }}</span>
         </button>
       </div>
     </div>

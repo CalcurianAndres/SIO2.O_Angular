@@ -5,6 +5,7 @@ import { Cell, Columns, Img, Ol, PdfMakeWrapper, Stack, Table, Txt, Ul } from 'p
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { LoginService } from 'src/app/services/login.service';
 import { OpoligraficaService } from 'src/app/services/opoligrafica.service';
+import pdffonts from '../../../assets/fonts/custom';
 
 @Component({
   selector: 'app-ordenes',
@@ -105,6 +106,7 @@ export class OrdenesComponent {
   buscarPorFecha(desde: string, hasta: string) {
     const inicio = new Date(desde + 'T00:00:00');
     const fin = new Date(hasta + 'T23:59:59');
+
     this.filtrados = this.api.orden.filter((orden) => {
       const fechaOrden = new Date(orden.createdAt);
       return fechaOrden >= inicio && fechaOrden <= fin;
@@ -530,7 +532,6 @@ export class OrdenesComponent {
 
   // ✅ Nuevo DescargarPDF — formato FCP-001 exacto (09/06/2026)
   DescargarPDF(orden) {
-    const N_orden = this.addSlice(orden.numero);
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -538,103 +539,146 @@ export class OrdenesComponent {
     const hoy = `${day}/${month}/${year}`;
     const entrega = orden.entrega ? moment(orden.entrega).format('DD/MM/YYYY') : '';
     const usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
+    const fmt = (n) => this.decimalPipe.transform(n || 0, '1.2-2', 'es') ?? '0,00';
 
     async function generarOrden() {
       const pdf = new PdfMakeWrapper();
-      PdfMakeWrapper.setFonts(pdfFonts);
-      pdf.pageOrientation('portrait');
-      pdf.pageSize('A4');
-      pdf.pageMargins([22, 18, 22, 25]);
+      PdfMakeWrapper.setFonts(pdffonts, {
+      Gilroy: {
+        normal: 'Gilroy-Light.otf',
+        bold: 'Gilroy-ExtraBold.otf',
+        italics: 'Gilroy-ExtraBold.otf',
+        bolditalics: 'Gilroy-ExtraBold.otf',
+      }
+    });
 
-      const logo = await new Img('../../../assets/poli_cintillo.png').width(150).build();
+    PdfMakeWrapper.useFont('Gilroy');
+      pdf.defaultStyle({ font: 'Gilroy' });
+      pdf.pageOrientation('portrait');
+      pdf.pageSize('LETTER');
+      pdf.pageMargins([22, 18, 22, 50]);
+
+      const logo = await new Img('../../../assets/poli_cintillo.png').width(120).build();
 
       // ═══════════ 1. ENCABEZADO SUPERIOR ═══════════
       pdf.add(
         new Table([
           [
-            new Cell(
-              new Stack([
-                logo,
-                // new Txt(' ').fontSize(3).end,
-              ]).end,
-            ).border([false]).alignment('left').end,
+            new Cell(logo).border([false]).alignment('left').end,
             new Cell(
               new Stack([
                 new Txt(' ').fontSize(4).end,
-                new Txt('ORDEN DE COMPRA').fontSize(20).bold().color('#1a1a1a').alignment('right').end,
-                new Txt('PURCHASE ORDER').fontSize(10).bold().color('#333333').alignment('right').end,
-                // new Table([ [
-                //     new Cell(new Txt(`  OCP-${N_orden}  `).fontSize(14).bold().color('white').alignment('center').end)
-                //       .fillColor('#117A65').alignment('center').margin([6, 4, 6, 4]).end,
-                //   ],
-                // ]).widths(['auto']).alignment('right').end,
+                new Txt('ORDEN DE COMPRA').fontSize(25).bold().color('#83929B').alignment('right').margin([0,0,0,0]).end,
+                new Txt('PURCHASE ORDER').fontSize(20).color('#83929B').alignment('right').end,
               ]).end,
             ).border([false]).alignment('right').end,
           ],
-        ]).widths(['60%', '40%']).end,
+        ]).widths(['50%', '50%']).end,
       );
-
 
       pdf.add(
         new Table([
-          [new Cell(new Txt(`Calle Pantín, Galpón N°29 Urb. Chacao,
-Edo. Miranda Venezuela.`).end).border([false, true, false, false]).fontSize(10).end,
-           new Cell(new Txt('OCP-2600028').fontSize(15).end).border([false, true, false, false]).fillColor('#117A65').end]
-        ]).widths(['60%', '40%']).end
-      )
+          [
+            new Cell(
+              new Txt('Calle Pantín, Galpón N°29, Urb. Chacao,\nEdo. Miranda. Venezuela.').fontSize(9).end
+            ).border([false, true, false, false]).alignment('left').end,
+            new Cell(
+              new Txt(`OCP-${orden.numero}`).fontSize(30).bold().color('white').end,
+            ).border([false, true, false, false]).fillColor('#83929B').alignment('center').end,
+          ],
+        ]).layout({
+            hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+            vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+            hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#83929B',
+            vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#83929B',
+          })
+.widths(['60%', '40%']).end,
+      );
 
-      pdf.add(
-        '\n'
-      )
-
+      pdf.add(new Txt(' ').fontSize(4).end);
+      pdf.add('\n')
+      pdf.add('\n')
       // ═══════════ 2. PROVEEDOR / CONDICIONES ═══════════
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('PROVEEDOR / SUPPLIER').bold().fontSize(8).color('white').end)
-              .fillColor('#4A9B8C').alignment('center').end,
+            new Cell(
+              new Txt([{ text: 'PROVEEDOR', fontSize: 10, bold:true },
+                      { text: ' SUPPLIER', bold: false, fontSize: 10 }]).alignment('left').color('white').end,
+            ).fillColor('#9db0ba').margin([10,0,0,0]).end,
             new Cell(new Txt('').end).end,
-            new Cell(new Txt('CONDICIONES / TERMS').bold().fontSize(8).color('white').end)
-              .fillColor('#4A9B8C').alignment('center').end,
+            new Cell(
+              new Txt([
+                {text:'CONDICIONES', fontSize: 10, bold:true},
+                {text:' TERMS', fontSize:10, bold:false}
+              ]).bold().fontSize(10).color('white').margin([0,0,10,0]).end,
+            ).fillColor('#9db0ba').alignment('right').end,
           ],
           [
             new Cell(
               new Stack([
-                new Txt(orden.proveedor?.nombre || '').bold().fontSize(9).end,
-                new Txt(orden.proveedor?.direccion || '').fontSize(7.5).end,
-                new Txt(`RIF: ${orden.proveedor?.rif || ''}`).fontSize(7.5).end,
-                new Txt(`Atención Sr (a): ${orden.proveedor?.contactos?.[0]?.nombre || ''}`).fontSize(7.5).end,
+                new Txt(orden.proveedor?.nombre || '').bold().fontSize(10).end,
+                new Txt(orden.proveedor?.direccion || '').fontSize(10).end,
+                new Txt(`RIF: ${orden.proveedor?.rif || ''}`).fontSize(10).end,
+                new Txt(`
+                Atención Sr (a):
+                ${orden.proveedor?.contactos?.[0]?.nombre || ''}`).fontSize(10).end,
                 new Txt(
                   orden.proveedor?.contactos?.[0]?.email ||
                   orden.proveedor?.contactos?.[0]?.numero || ''
-                ).fontSize(7.5).color('#0066CC').end,
+                ).fontSize(10).color('#0066CC').end,
               ]).end,
-            ).fontSize(7.5).end,
+            ).fontSize(9).end,
             new Cell(new Txt('').end).end,
             new Cell(
               new Stack([
-                new Txt(`Fecha de entrega / Shipping date: ${entrega}`).fontSize(7.5).end,
-                new Txt(`Lugar de entrega / Delivery location: Poligráfica Industrial, C.A. Calle Pantin, Galpón N°29 Urb. Chacao, Edo. Miranda, Venezuela.`).fontSize(7.5).end,
-                new Txt(`Comprador / Purchaser: ${usuario}`).fontSize(7.5).end,
+                new Txt(`Fecha de entrega / Shipping date:`).alignment('right').fontSize(10).end,
+                new Txt(entrega).fontSize(10).bold().alignment('right').end,
+                new Txt(`
+                Lugar de entrega / Delivery location:\n Poligráfica Industrial, C.A.\n Calle Pantín, Galpón N°29 Urb. Chacao,\n Edo. Miranda. Venezuela.`).alignment('right').fontSize(8).end,
+                new Txt(`
+                Comprador / Purchaser:\n ${usuario}`).fontSize(10).end,
               ]).end,
-            ).fontSize(7.5).end,
+            ).fontSize(0).alignment('right').end,
           ],
-        ]).layout('noBorders').widths(['40%','20%', '40%']).end,
+        ]).layout('noBorders').widths(['40%', '20%', '40%']).end,
       );
 
-      pdf.add(new Txt(' ').fontSize(6).end);
+      pdf.add(new Txt(' ').fontSize(4).end);
 
       // ═══════════ 3. TABLA PRINCIPAL DE ÍTEMES ═══════════
-      const itemsHeader = [
-        new Cell(new Txt('Pos.').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-        new Cell(new Txt('CANTIDAD / QTY').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-        new Cell(new Txt('DESCRIPCIÓN').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-        new Cell(new Txt('MON. / CCY.').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-        new Cell(new Txt('PRECIO UNITARIO / UNIT PRICE').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-        new Cell(new Txt('TOTAL').bold().fontSize(7.5).color('white').end).fillColor('#4A9B8C').alignment('center').end,
-      ];
+      // 1. Modificamos hCell para que acepte un marginTop opcional (por defecto 0)
+ const hCell = (txt, marginTop = 0) =>
+  new Cell(
+    new Txt(txt)
+      .bold()
+      .fontSize(9)
+      .color('white')
+      .alignment('center')
+      .margin([0, marginTop, 0, 0]) // <-- Aquí se aplica el margen dinámico
+      .end
+  ).fillColor('#9db0ba').alignment('center').end;
 
-      const itemsBody = [itemsHeader];
+// 2. Tu arreglo de itemsBody ya nivelado
+const itemsBody = [
+  [
+    hCell('POS.', 6),          // Con margen de 6 para nivelar
+    hCell([
+      {text:'CANTIDAD', bold:true},
+      {text:'\nQTY.', bold:false}
+    ]),                        // Sin margen (ya tiene 2 líneas)
+    hCell('DESCRIPCIÓN', 6),    // Con margen de 6 para nivelar
+    hCell([
+      {text:'MON.'},
+      {text:'\nCCY', bold:false}
+    ]),                        // Sin margen (ya tiene 2 líneas)
+    hCell([
+      {text:'PRECIO UNITARIO.'},
+      {text:'\nUNIT PRICE', bold:false}
+    ]),                        // Sin margen (ya tiene 2 líneas)
+    hCell('TOTAL', 6)          // Con margen de 6 para nivelar
+  ],
+];
 
       orden.pedido.forEach((item, index) => {
         const cantidad = `${item.cantidad} ${item.unidad || ''}`;
@@ -642,42 +686,42 @@ Edo. Miranda Venezuela.`).end).border([false, true, false, false]).fontSize(10).
         const total = precio * (parseFloat(item.cantidad) || 0);
 
         const descLines: any[] = [
-          new Txt(item.material?.nombre || '').bold().fontSize(8).end,
-          new Txt(`Col. ${item.material?.color || ''} / ${item.gramaje || ''}`).fontSize(8).end,
+          new Txt(item.material?.nombre || '').bold().fontSize(10).end,
+          new Txt(`Cal. ${item.calibre || item.material?.calibre || item.material?.color || ''} / ${item.gramaje || ''} g/m2`).fontSize(10).end,
         ];
 
-        if (index === 0) {
-          descLines.push(new Txt('* ').fontSize(8).end);
-        }
-
         if (item.ancho && item.alto) {
-          descLines.push(new Txt(`Medidas: ${item.ancho} x ${item.alto} cm`).fontSize(8).end);
+          descLines.push(new Txt(`Medidas: ${item.ancho} x ${item.alto} cm`).fontSize(10).end);
         } else if (item.ancho) {
-          descLines.push(new Txt(`Medidas: ${item.ancho} cm`).fontSize(8).end);
+          descLines.push(new Txt(`Medidas: ${item.ancho} cm`).fontSize(10).end);
         } else if (item.alto) {
-          descLines.push(new Txt(`Medidas: ${item.alto} cm`).fontSize(8).end);
+          descLines.push(new Txt(`Medidas: ${item.alto} cm`).fontSize(10).end);
         }
 
-        descLines.push(new Txt('Presentación:').fontSize(8).end);
-        descLines.push(new Txt(item.bobina ? 'Bobinas / Rolls' : 'Paletas / Skids').fontSize(8).end);
+        descLines.push(new Txt('Persentación:').fontSize(10).end);
+        descLines.push(new Txt(item.bobina ? 'Bobinas / Rolls' : 'Paletas / Skids').fontSize(10).end);
 
         itemsBody.push([
-          new Cell(new Txt((index + 1).toString()).fontSize(8).end).alignment('center').end,
-          new Cell(new Txt(cantidad).fontSize(8).end).alignment('center').end,
-          new Cell(new Stack(descLines).end).fontSize(8).end,
-          new Cell(new Txt('USD').fontSize(8).end).alignment('center').end,
-          new Cell(new Txt(precio.toFixed(2)).fontSize(8).end).alignment('center').end,
-          new Cell(new Txt(total.toFixed(2)).fontSize(8).end).alignment('center').end,
+          new Cell(new Txt((index + 1).toString()).fontSize(10).end).alignment('center').end,
+          new Cell(new Txt(cantidad).fontSize(10).end).alignment('center').end,
+          new Cell(new Stack(descLines).end).fontSize(10).end,
+          new Cell(new Txt('USD').fontSize(10).end).alignment('center').end,
+          new Cell(new Txt(fmt(precio)).fontSize(10).end).alignment('right').end,
+          new Cell(new Txt(fmt(total)).fontSize(10).end).alignment('right').end,
         ]);
       });
 
-      pdf.add(new Table(itemsBody).widths(['5%', '10%', '50%', '7%', '13%', '15%']).layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
-        })
-.fontSize(8).end);
+      pdf.add(
+        new Table(itemsBody)
+          .widths(['5%', '10%', '43%', '6%', '20%', '16%'])
+          .layout({
+            hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 4,
+            vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 4,
+            hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
+            vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#fff',
+          })
+          .fontSize(10).end,
+      );
 
       // ═══════════ 4. TOTALES ═══════════
       const netos = orden.pedido.reduce(
@@ -686,45 +730,63 @@ Edo. Miranda Venezuela.`).end).border([false, true, false, false]).fontSize(10).
       );
       const ivaTotal = netos * ((orden.iva || 0) / 100);
       const flete = 0;
+      const netoTotal = netos + ivaTotal + flete;
 
       pdf.add(new Txt(' ').fontSize(6).end);
 
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('Total:').bold().fontSize(8).end).border([false,true,false,false]).alignment('right').end,
-            new Cell(new Txt(`${netos.toFixed(2)}`).bold().fontSize(8).end).border([false,true,false,false]).alignment('right').end,
+            new Cell(new Txt('Subtotal:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+            new Cell(new Txt(fmt(netos)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt('Impuesto / Taxes:').bold().fontSize(8).end).border([false]).alignment('right').end,
-            new Cell(new Txt(`${ivaTotal.toFixed(2)}`).fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt('Impuesto / Taxes:').fontSize(10).end).border([false]).alignment('right').end,
+            new Cell(new Txt(fmt(ivaTotal)).fontSize(10).end).border([false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt('Flete / freight:').bold().fontSize(8).end).border([false]).alignment('right').end,
-            new Cell(new Txt(`${flete.toFixed(2)}`).fontSize(8).end).border([false]).alignment('right').end,
+            new Cell(new Txt('Flete / freight:').fontSize(10).end).border([false]).alignment('right').end,
+            new Cell(new Txt(fmt(flete)).fontSize(10).end).border([false]).alignment('right').end,
           ],
-        ]).widths(['75%', '25%']).end,
+          [
+            new Cell(new Txt('Neto:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+            new Cell(new Txt(fmt(netoTotal)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+          ],
+        ]).layout({
+            hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+            vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
+            hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#90b0ba',
+            vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#9db0ba',
+          }).widths(['75%', '25%']).end,
       );
 
-      pdf.add(new Txt(' ').fontSize(6).end);
-
-
-      pdf.add(new Txt(' ').fontSize(3).end);
-
-      pdf.add(
-        new Table([
-          [
-            new Cell(new Txt('Página 1 / 1').fontSize(7).end).border([false]).alignment('left').end,
-            new Cell(new Txt('FCP-001').fontSize(7).end).border([false]).alignment('right').end,
-          ],
-          [
-            new Cell(new Txt('').end).border([false]).end,
-            new Cell(new Txt(`N° de Revisión:1 / Fecha: ${hoy}`).fontSize(6.5).end).border([false]).alignment('right').end,
-          ],
-        ]).widths(['50%', '50%']).end,
-      );
-
-      pdf.create().download(`OCP-${N_orden}.pdf`);
+      // ═══════════ 5. FOOTER ═══════════
+      pdf.add(new Txt(' ').fontSize(4).end);
+      pdf.footer((currentPage, pageCount) => {
+      return new Table([
+        [
+          new Cell(
+        new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end
+      ).border([false, false, false, true]).alignment('right').end,
+    ],
+    [
+      new Cell(
+        new Txt('FCP-001').fontSize(7).end
+      ).border([false]).bold().alignment('right').end,
+    ],
+    [
+      new Cell(
+        new Txt(`N° de Revisión: 1 / Fecha: 03/05/2026`).fontSize(10).end
+      ).border([false]).fontSize(7).alignment('right').end,
+    ],
+  ]).layout({
+            hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
+            vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
+            hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
+            vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
+          }).widths(['100%']).margin([30,0,30,0]).end;
+});
+      pdf.create().download(`OCP-${orden.numero}.pdf`);
     }
     generarOrden();
   }

@@ -249,7 +249,6 @@ export class GruposComponent {
     this.data = {
       id: grupo._id,
       nombre: grupo.nombre,
-      icono: grupo.icono,
       parcial: grupo.parcial,
     };
     this.trato = grupo.trato;
