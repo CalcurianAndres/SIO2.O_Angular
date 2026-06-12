@@ -125,8 +125,8 @@
               <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="contacto_numero" (input)="onTelefonoInput()" />
             </div>
             <div class="control" *ngIf="contacto_pais_detectado">
-              <span class="button is-static" title="{{ contacto_pais_detectado.nombre }} ({{ contacto_pais_detectado.codigo }})">
-                {{ contacto_pais_detectado.bandera }}
+              <span class="button is-static" title="{{ contacto_pais_detectado.nombre }} ({{ contacto_pais_detectado.codigo })">
+                <img [src]="contacto_pais_detectado.bandera" class="flag-icon" />
               </span>
             </div>
           </div>

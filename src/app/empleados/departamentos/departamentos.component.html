@@ -34,21 +34,16 @@
   >  <br />
   <br />
 
-  <div class="Departamentos">
-    <div class="card dep" *ngFor="let dep of api.departamentos">
-      <div class="card-header">
-        <div class="card-header-title">
-          <div class="subtitle">
-            <div class="brillo" [style.background-color]="dep.color"></div>
-            {{ dep.nombre }}
-          </div>
-        </div>
-      </div>
-      <footer class="card-footer">
-        <a class="card-footer-item"><i class="fas fa-info-circle blue_" (click)="showAreas(dep)"></i></a>
-        <a class="card-footer-item"><i class="far fa-edit green" (click)="unidad = dep; Nuevo = true"></i></a>
-        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="eliminarDepartamento(dep)"></i></a>
-      </footer>
+  <div class="departamentos-list">
+    <div class="dep-item" *ngFor="let dep of api.departamentos">
+      <span class="dep-indicator" [style.background-color]="dep.color"></span>
+      <span class="dep-name">{{ dep.nombre }}</span>
+      <span class="tag is-light">{{ filtrarDepartamento(dep.nombre).length }} áreas</span>
+      <span class="dep-actions">
+        <i class="fas fa-info-circle blue_" (click)="showAreas(dep)" title="Ver áreas"></i>
+        <i class="far fa-edit green" (click)="unidad = dep; Nuevo = true" title="Editar"></i>
+        <i class="fas fa-trash-alt red" (click)="eliminarDepartamento(dep)" title="Eliminar"></i>
+      </span>
     </div>
   </div>
   <br />

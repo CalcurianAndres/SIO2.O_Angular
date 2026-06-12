@@ -753,7 +753,7 @@ const itemsBody = [
             new Cell(new Txt(fmt(flete)).fontSize(10).end).border([false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt('Neto:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+            new Cell(new Txt('Total:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
             new Cell(new Txt(fmt(netoTotal)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
           ],
         ]).layout({

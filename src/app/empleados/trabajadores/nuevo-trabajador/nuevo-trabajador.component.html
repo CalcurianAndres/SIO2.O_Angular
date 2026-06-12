@@ -133,12 +133,26 @@
               </div>
               <div class="control">
                 <label class="label">Teléfono</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.telefono" />
+                <div class="field has-addons">
+                  <div class="control is-expanded">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.telefono" (input)="onTelefonoInput()" />
+                  </div>
+                  <div class="control" *ngIf="telefono_pais_detectado">
+                    <span class="button is-static" title="{{ telefono_pais_detectado.nombre }} ({{ telefono_pais_detectado.codigo })"><img [src]="telefono_pais_detectado.bandera" class="flag-icon" /></span>
+                  </div>
+                </div>
               </div>
               <div class="control">
                 <label class="label">Teléfono Celular</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.celular" />
-              </div>
+                <div class="field has-addons">
+                  <div class="control is-expanded">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.celular" (input)="onCelularInput()" />
+                  </div>
+                  <div class="control" *ngIf="celular_pais_detectado">
+                    <span class="button is-static" title="{{ celular_pais_detectado.nombre }} ({{ celular_pais_detectado.codigo })"><img [src]="celular_pais_detectado.bandera" class="flag-icon" /></span>
+    </div>
+  </div>
+</div>
             </div>
           </div>
           <div class="column is-3">
@@ -172,7 +186,14 @@
           </div>
           <div class="control">
             <label class="label">Teléfono</label>
-            <input type="text" class="input" [(ngModel)]="REFERENCIA.telefono" />
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input type="text" class="input" [(ngModel)]="REFERENCIA.telefono" (input)="onRefTelefonoInput()" />
+              </div>
+              <div class="control" *ngIf="refTelefono_pais_detectado">
+                <span class="button is-static" title="{{ refTelefono_pais_detectado.nombre }} ({{ refTelefono_pais_detectado.codigo })"><img [src]="refTelefono_pais_detectado.bandera" class="flag-icon" /></span>
+              </div>
+            </div>
           </div>
           <div class="control">
             <label class="label">Ocupación</label>
@@ -265,7 +286,14 @@
           </div>
           <div class="control">
             <label class="label">Teléfono</label>
-            <input type="text" class="input" [(ngModel)]="EMERGENCIA.telefono" />
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input type="text" class="input" [(ngModel)]="EMERGENCIA.telefono" (input)="onEmergTelefonoInput()" />
+              </div>
+              <div class="control" *ngIf="emergTelefono_pais_detectado">
+                <span class="button is-static" title="{{ emergTelefono_pais_detectado.nombre }} ({{ emergTelefono_pais_detectado.codigo })"><img [src]="emergTelefono_pais_detectado.bandera" class="flag-icon" /></span>
+              </div>
+            </div>
           </div>
           <div class="control">
             <label class="label">.</label>

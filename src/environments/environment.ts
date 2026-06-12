@@ -6,11 +6,10 @@ const getBaseUrl = () => {
 };
 
 const base = getBaseUrl();
-const httpBase = 'http://192.168.0.22';
 
 export const environment = {
   production: false,
   apiUrl: base ? `${base}/api` : '/api',
-  imgUrl: httpBase ? `${httpBase}/api` : '/api',
+  imgUrl: base ? `${base}/api` : '/api',
   wsUrl: base,
 };

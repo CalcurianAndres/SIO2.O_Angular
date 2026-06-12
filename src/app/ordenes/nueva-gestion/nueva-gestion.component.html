@@ -485,7 +485,7 @@
               <img
                 class="is-rounded"
                 width="30px"
-                src="https://192.168.0.22/api/imagen/empleado/{{ trabajador.datos_personales.foto }}"
+                [src]="imgUrl + '/imagen/empleado/' + trabajador.datos_personales.foto"
               />
             </figure>
           </div>

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ClientesService } from 'src/app/services/clientes.service';
+import { PaisesService } from 'src/app/services/paises.service';
+import { take } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import * as L from 'leaflet';
 
@@ -18,7 +20,7 @@ L.Icon.Default.mergeOptions({
   styleUrls: ['./new-cliente.component.scss'],
 })
 export class NewClienteComponent implements OnChanges, AfterViewInit {
-  constructor(public api: ClientesService) {}
+  constructor(public api: ClientesService, public paisesService: PaisesService) {}
 
   @Input() data: any;
   @Input() cliente: any;
@@ -110,6 +112,13 @@ export class NewClienteComponent implements OnChanges, AfterViewInit {
   }
 
   public cliente_temporal: any = { nombre: '', titulo: '', cargo: '', correo: '', telefono: '' };
+  public telefono_pais_detectado: any = null;
+
+  onTelefonoInput() {
+    this.paisesService.detectarPaisPorPrefijo(this.cliente_temporal.telefono).pipe(take(1)).subscribe((detected) => {
+      this.telefono_pais_detectado = detected;
+    });
+  }
   public Almacene_temporal: any = { nombre: '', lat: null, lng: null };
 
   cerrar() {

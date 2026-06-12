@@ -161,3 +161,44 @@ Complete restructure of grupos from table+stacks to cards+3-level nested accordi
 - Column "Productos" removed entirely ("no es un almacén").
 - Tinta color uses 5 radios (C/M/A/N/Pantone) instead of free text; Pantone opens secondary text input.
 - All stack/page/material pagination removed — detail table renders all items flat from a brand group.
+
+## Session Log — 2026-06-12
+
+### Goal
+Create hierarchical org chart for employees, migrate carousel to step-wizard, fix photo display via HTTP. Afternoon: depuración de tareas, rediseño departamentos/cargos flat list, flag +58 en teléfonos.
+
+### Morning — Organigrama, step-wizard, fotos
+- **OrganigramaEmpleadosComponent**: Nueva vista jerárquica por departamentos + subunidades con cards y acordeón. Reemplazó `/empresa/empleados`.
+- **NuevoTrabajadorComponent**: Carrusel → step-wizard de 5 pasos usando `<app-step-wizard>` compartido con `[(currentStep)]`.
+- **Fotos**: `environment.imgUrl` con HTTP (`http://192.168.0.22/api/imagen/empleado/...`). Fallback visual con placeholder.
+- **Nuevos archivos**: `organigrama-empleados/` (ts, html, scss).
+- **Modificados**: environment.ts, router, module, nuevo-trabajador (html, ts, scss), informacion-empleado, trabajadores.
+
+### Afternoon — TASK-005/013/010 + depuración
+- **Depuración estados**: TASK-001/002/003/004/006/012 `Borrador` → `#por-revisar`.
+- **TASK-005 — Departamentos**: Flat list (input + botón + tabla editable). 3 iteraciones: step-wizard → accordion → flat list.
+- **TASK-013 — Cargos**: Nuevo `CargosComponent` mismo patrón flat list. Ruta `/empresa/cargos`.
+- **TASK-010 — Flag +58**: SVG bandera Venezuela + `+58` en inputs teléfono de nuevo-trabajador (4) y new-cliente (1).
+- **Bug fix**: `</div>` extra en nuevo-trabajador.html.
+- **Re-aplicados**: cambios revertidos restaurados.
+
+### Code changes
+- **`cargos/cargos.component.ts`**: Nuevo — flat list con add/edit/delete + `deptosFiltrados` getter.
+- **`cargos/cargos.component.html`**: Input + botón "Agregar" + tabla plana con edición inline.
+- **`empresa/empresa.component.html`**: Rediseño departamentos flat list.
+- **`empresa/empresa.component.ts`**: Lógica flat list para departamentos.
+- **`empresa/departamentos/departamentos.component.ts`**: Flat list pattern.
+- **`empresa/departamentos/departamentos.component.html`**: Flat list template.
+- **`empresa/empresa-routing.module.ts`**: Route `/empresa/cargos`.
+- **`empresa/empresa.module.ts`**: Declaraciones + imports para cargos.
+- **`empleados/trabajadores/nuevo-trabajador/nuevo-trabajador.component.html`**: +4 banderas teléfono, fix `</div>`.
+- **`empleados/trabajadores/nuevo-trabajador/nuevo-trabajador.component.ts`**: `banderaSVG`, `getBandera()` para prefixes.
+- **`ordenes/clientes/new-cliente/new-cliente.component.html`**: +1 bandera teléfono.
+- **`ordenes/clientes/new-cliente/new-cliente.component.ts`**: Flag prefix logic.
+- **`shared/recibos/recibos.component.ts`**: Nueva tarea en seed data.
+
+### Key decisions
+- TASK-005 flat list fue la 3ra iteración después de step-wizard (rechazado) y accordion (rechazado).
+- TASK-013 copia exactamente el patrón visual de TASK-005 para consistencia.
+- TASK-010 cambió de auto-detección de país a solo indicador visual bandera +58.
+- Dependencias TASK-010→TASK-009 y TASK-012→TASK-005 eliminadas.
