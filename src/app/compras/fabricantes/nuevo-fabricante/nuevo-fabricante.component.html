@@ -128,7 +128,7 @@
         </label>
       </ng-container>
 
-      <ng-container *ngIf="editar">
+      <ng-container *ngIf="editar && data?.proveedor">
         <hr class="modal-divider" />
         <a class="is-link" (click)="BuscarProveedor()"> <i class="fas fa-truck"></i> Ver información de proveedor </a>
       </ng-container>

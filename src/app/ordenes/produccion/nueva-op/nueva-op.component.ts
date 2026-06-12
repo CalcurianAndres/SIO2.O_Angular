@@ -208,18 +208,7 @@ export class NuevaOPComponent implements OnInit, OnChanges {
   faseEliminada: any = {};
   maquina: any = [];
   fase: any = [];
-  cards = [
-    { title: 'Identificación del producto', content: 'Contenido 1' },
-    { title: 'Sustrato', content: 'Contenido 1' },
-    { title: 'Tintas', content: 'Contenido 1' },
-    { title: 'Barniz', content: 'Contenido 1' },
-    { title: 'Embalaje', content: 'Contenido 1' },
-    { title: 'Maquinas', content: 'Contenido 1' },
-    { title: 'Planificación', content: 'Contenido 1' },
-    { title: 'Adicional', content: 'Contenido 1' },
-    // Agrega más tarjetas según sea necesario
-  ];
-  currentIndex = 0;
+
 
   public coloresHex = {
     A: '#FFFF00', // Amarillo
@@ -707,18 +696,6 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     // Si todas las fases están borradas, establecer la primera fase como no borrada
     if (todasFasesBorradas) {
       this.maquinasDestino[maquinaIndex].fases[0].borrado = false;
-    }
-  }
-
-  previous() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    }
-  }
-
-  next() {
-    if (this.currentIndex < this.cards.length - 1) {
-      this.currentIndex++;
     }
   }
 

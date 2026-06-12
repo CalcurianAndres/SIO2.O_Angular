@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,6 +12,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./trabajadores.component.scss'],
 })
 export class TrabajadoresComponent implements OnInit {
+  apiUrl = environment.apiUrl;
+  imgUrl = environment.imgUrl;
   public randomUsers;
   constructor(
     private http: HttpClient,

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import { environment } from 'src/environments/environment';
 import { Cell, Columns, Img, Ol, PdfMakeWrapper, Stack, Table, Txt, Ul } from 'pdfmake-wrapper';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
@@ -11,6 +12,9 @@ import * as moment from 'moment';
   styleUrls: ['./informacion-empleado.component.scss'],
 })
 export class InformacionEmpleadoComponent {
+  apiUrl = environment.apiUrl;
+  imgUrl = environment.imgUrl;
+
   constructor(public empleados: TrabajadoresService) {}
 
   @Input() informacion: any;
@@ -100,7 +104,7 @@ export class InformacionEmpleadoComponent {
             new Cell(new Txt('Nombres').bold().end).fillColor('#dbdbdb').colSpan(2).end,
             new Cell(new Txt(informacion.datos_personales.nombres).end).end,
             new Cell(
-              await new Img(`https://192.168.0.22/api/imagen/empleado/${informacion.datos_personales.foto}`)
+              await new Img(`${environment.imgUrl}/imagen/empleado/${informacion.datos_personales.foto}`)
                 .fit([163, 200])
                 .build(),
             )

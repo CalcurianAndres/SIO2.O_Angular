@@ -6,27 +6,7 @@
       <button class="delete red_cross" (click)="onCloseModal.emit()" [disabled]="guardando"></button>
     </div>
     <div class="modal-card-body" style="max-height: 80vh; overflow-y: auto">
-      <!-- Step indicator -->
-      <div class="step-indicator">
-        <div
-          class="step-dot-wrapper"
-          *ngFor="let s of steps"
-          (click)="goToStep(s.num)"
-          [ngClass]="{ active: currentStep === s.num, completed: s.num < currentStep }"
-        >
-          <div class="step-dot"><i class="fas" [ngClass]="s.icon"></i></div>
-          <span class="step-label">{{ s.label }}</span>
-        </div>
-      </div>
-
-      <!-- Progress bar -->
-      <div class="progress-wrapper">
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="progressPercentage"></div>
-        </div>
-        <span class="progress-text">{{ progressPercentage }}%</span>
-      </div>
-
+      <app-step-wizard [steps]="steps" [(currentStep)]="currentStep"></app-step-wizard>
       <hr class="modal-divider" />
 
       <!-- Step 1: Identificación -->

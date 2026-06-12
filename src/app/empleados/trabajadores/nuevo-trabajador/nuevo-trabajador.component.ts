@@ -41,17 +41,16 @@ export class NuevoTrabajadorComponent implements OnInit {
   public estado = '';
   public municipio = '';
   public parroquia = '';
-  public progressValue = 0;
 
-  cards = [
-    { title: 'Datos Personales', content: 'Contenido 1' },
-    { title: 'Referencias personales', content: 'Contenido 1' },
-    { title: 'Cargas Familiares', content: 'Contenido 1' },
-    { title: 'Instrucción académica', content: 'Contenido 1' },
-    { title: 'Función en la empresa', content: 'Contenido 1' },
-    // Agrega más tarjetas según sea necesario
+  steps = [
+    { num: 1, label: 'Datos personales', icon: 'fa-user' },
+    { num: 2, label: 'Referencias', icon: 'fa-user-friends' },
+    { num: 3, label: 'Cargas familiares', icon: 'fa-users' },
+    { num: 4, label: 'Instrucción académica', icon: 'fa-user-graduate' },
+    { num: 5, label: 'Función en la empresa', icon: 'fa-user-tie' },
   ];
-  currentIndex = 0;
+  currentStep = 1;
+  fotoPreview: string | null = null;
 
   public REFERENCIA = {
     nombre: '',
@@ -138,15 +137,9 @@ export class NuevoTrabajadorComponent implements OnInit {
       });
   }
 
-  previous() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    }
-  }
-
-  next() {
-    if (this.currentIndex < this.cards.length - 1) {
-      this.currentIndex++;
+  goToStep(n: number) {
+    if (n >= 1 && n <= this.steps.length) {
+      this.currentStep = n;
     }
   }
 
@@ -314,39 +307,6 @@ export class NuevoTrabajadorComponent implements OnInit {
     this.trabajador.manejo_herramientas.softwares.acrobat = acrobatCheckbox.checked;
   }
 
-  showProgress(x, y) {
-    let max = 0;
-    switch (this.currentIndex) {
-      case 0: {
-        max = 20;
-        break;
-      }
-      case 1: {
-        max = 40;
-        break;
-      }
-      case 2: {
-        max = 60;
-        break;
-      }
-      case 3: {
-        max = 80;
-        break;
-      }
-      case 4: {
-        max = 100;
-        break;
-      }
-    }
-    const interval = setInterval(() => {
-      if (this.progressValue < max) {
-        this.progressValue++;
-      } else {
-        this.progressValue--;
-      }
-    }, 500);
-  }
-
   onFileSelected(event) {
     const file = event.target.files[0];
     if (file) {
@@ -354,9 +314,8 @@ export class NuevoTrabajadorComponent implements OnInit {
         this.trabajador.datos_personales.foto = img;
       });
       const reader = new FileReader();
-      reader.onload = function (e: any) {
-        const imgElement: any = document.querySelector('.image-hover-wrapper img');
-        imgElement.src = e.target.result;
+      reader.onload = (e: any) => {
+        this.fotoPreview = e.target.result;
       };
       reader.readAsDataURL(file);
     }

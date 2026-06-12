@@ -6,6 +6,7 @@ import { GestionComponent } from './gestion/gestion.component';
 import { DepartamentosComponent } from './departamentos/departamentos.component';
 import { TrabajadoresComponent } from './trabajadores/trabajadores.component';
 import { HorariosComponent } from './horarios/horarios.component';
+import { OrganigramaEmpleadosComponent } from './organigrama-empleados/organigrama-empleados.component';
 
 const routes: Routes = [
   {
@@ -22,12 +23,13 @@ const routes: Routes = [
       },
       {
         path: 'empleados',
-        component: TrabajadoresComponent,
+        component: OrganigramaEmpleadosComponent,
       },
       {
         path: 'horarios',
         component: HorariosComponent,
       },
+
     ],
   },
 ];

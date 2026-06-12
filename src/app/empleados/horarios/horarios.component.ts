@@ -44,7 +44,6 @@ export class HorariosComponent {
       confirmButtonColor: '#3ec487',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         this.api.eliminarHorario(horario);
         setTimeout(() => {

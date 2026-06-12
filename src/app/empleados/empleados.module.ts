@@ -21,6 +21,7 @@ import { InformacionEmpleadoComponent } from './trabajadores/informacion-emplead
 import { HistorialEmpleadoComponent } from './trabajadores/historial-empleado/historial-empleado.component';
 import { HorariosComponent } from './horarios/horarios.component';
 import { NuevoHorarioComponent } from './horarios/nuevo-horario/nuevo-horario.component';
+import { OrganigramaEmpleadosComponent } from './organigrama-empleados/organigrama-empleados.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NuevoHorarioComponent } from './horarios/nuevo-horario/nuevo-horario.co
     HistorialEmpleadoComponent,
     HorariosComponent,
     NuevoHorarioComponent,
+    OrganigramaEmpleadosComponent,
   ],
   imports: [
     CommonModule,

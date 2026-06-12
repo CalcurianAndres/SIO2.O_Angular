@@ -6,10 +6,11 @@ import { PageLayoutComponent } from './page-layout/page-layout.component';
 import { AppModalComponent } from './app-modal/app-modal.component';
 import { ToastComponent } from './toast/toast.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
+import { StepWizardComponent } from './step-wizard/step-wizard.component';
 
 @NgModule({
-  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent],
+  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent],
   imports: [CommonModule, RouterModule],
-  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent],
+  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent],
 })
 export class SharedComponentsModule {}

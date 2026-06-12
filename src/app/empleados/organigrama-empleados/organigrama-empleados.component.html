@@ -1,0 +1,134 @@
+<app-nuevo-trabajador
+  [nuevo_trabajador]="nuevo_trabajador"
+  [trabajador]="trabajador"
+  [referencias]="referencias"
+  [carga]="carga"
+  [emergencias]="emergencias"
+  [cursos_realizados]="cursos_realizados"
+  [softwares]="softwares"
+  (onCloseModal)="nuevo_trabajador = false"
+>
+</app-nuevo-trabajador>
+
+<app-informacion-empleado
+  [informacion]="informacion"
+  [_informacion]="_informacion_"
+  (onCloseModal)="informacion = false"
+>
+</app-informacion-empleado>
+
+<app-page-layout>
+  <app-section-header
+    title="Empleados"
+    description="Organigrama jerárquico de la empresa"
+    icon="fa-users"
+    color="teal"
+  ></app-section-header>
+
+  <button class="button is-info" (click)="nuevo_trabajador = true">
+    <span class="icon"><i class="fas fa-plus-circle"></i></span>
+    <span>Empleado</span>
+  </button>
+  <br /><br />
+
+  <!-- Search -->
+  <div class="field" style="max-width: 400px; margin-bottom: 1rem">
+    <div class="control has-icons-left">
+      <input class="input" type="text" placeholder="Buscar empleado o departamento..." [(ngModel)]="searchTerm" />
+      <span class="icon is-left"><i class="fas fa-search"></i></span>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="departamentos.length === 0" class="empty-state">
+    <i class="fas fa-users empty-icon"></i>
+    <p class="empty-title">Sin resultados</p>
+    <p class="empty-hint">No se encontraron empleados o departamentos con ese nombre</p>
+  </div>
+
+  <!-- Department cards -->
+  <div *ngFor="let dep of departamentos" class="card dep-card animate__animated animate__fadeInUp">
+    <div class="card-header" (click)="toggleExpand(dep)">
+      <div class="card-header-title">
+        <span class="dep-badge" [style.background-color]="dep.color"></span>
+        <span class="dep-name">{{ dep.nombre }}</span>
+        <span class="tag is-light">{{ obtenerEmpleadosDelDepartamento(dep).length }} empleados</span>
+        <span *ngIf="obtenerAreas(dep).length > 0" class="tag is-info is-light">{{ obtenerAreas(dep).length }} áreas</span>
+      </div>
+      <div class="card-header-actions">
+        <i class="fas fa-chevron-up chevron-btn" [ngClass]="expandedDepId === dep._id ? 'rotate-down' : 'rotate-up'"></i>
+      </div>
+    </div>
+
+    <!-- Card body (expandable) -->
+    <div class="card-content" [ngClass]="{ active: expandedDepId === dep._id }">
+      <div *ngIf="obtenerEmpleadosDelDepartamento(dep).length === 0" class="has-text-centered py-4">
+        <i class="fas fa-user-plus" style="font-size: 1.5rem; color: var(--text-muted); opacity: 0.4"></i>
+        <p class="mt-2" style="color: var(--text-muted); font-size: 0.85rem">No hay empleados en este departamento</p>
+      </div>
+
+      <!-- Direct employees (no subunidad / department-level) -->
+      <div *ngIf="empleadosDirectos(dep).length > 0" class="direct-section">
+        <span class="direct-label"><i class="fas fa-user-tie mr-1"></i>Dirección / Gerencia</span>
+        <div class="emp-grid">
+          <div *ngFor="let emp of empleadosDirectos(dep)" class="emp-card">
+            <div class="emp-avatar-col">
+              <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
+                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
+                (error)="emp._imgError = true" />
+              <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+            <div class="emp-info">
+              <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
+              <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
+            </div>
+            <div class="emp-actions">
+              <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
+              <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+              <i class="fas fa-trash-alt red" title="Eliminar" (click)="eliminarTrabajador(emp)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Areas -->
+      <div *ngFor="let area of obtenerAreas(dep)" class="area-section">
+        <span class="area-label"><i class="fas fa-folder-open mr-1"></i>{{ area.nombre }}</span>
+        <div *ngIf="empleadosDelArea(area, dep).length === 0" class="has-text-centered py-3" style="color: var(--text-muted); font-size: 0.85rem">
+          Sin empleados en esta área
+        </div>
+        <div class="emp-grid">
+          <div *ngFor="let emp of empleadosDelArea(area, dep)" class="emp-card">
+            <div class="emp-avatar-col">
+              <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
+                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
+                (error)="emp._imgError = true" />
+              <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+            <div class="emp-info">
+              <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
+              <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
+            </div>
+            <div class="emp-actions">
+              <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
+              <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+              <i class="fas fa-trash-alt red" title="Eliminar" (click)="eliminarTrabajador(emp)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card footer -->
+    <div class="card-footer" *ngIf="expandedDepId === dep._id">
+      <button class="button is-success is-small" (click)="nuevo_trabajador = true">
+        <span class="icon"><i class="fas fa-plus-circle"></i></span>
+        <span>Nuevo Empleado</span>
+      </button>
+    </div>
+  </div>
+</app-page-layout>

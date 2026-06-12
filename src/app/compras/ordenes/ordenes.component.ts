@@ -6,6 +6,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { LoginService } from 'src/app/services/login.service';
 import { OpoligraficaService } from 'src/app/services/opoligrafica.service';
 import pdffonts from '../../../assets/fonts/custom';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ordenes',
@@ -511,7 +512,7 @@ export class OrdenesComponent {
             new Cell(new Txt(' ').end).border([false]).end,
             new Cell(new Txt(' ').end).border([false]).end,
             new Cell(new Txt('Firma:').bold().end).fillColor('#c9c9c9').fontSize(8).alignment('center').end,
-            new Cell(new Txt('').bold().end).fontSize(8).alignment('center').end,
+            new Cell(new Txt(firmaTexto).bold().end).fontSize(7).alignment('center').end,
           ],
           [
             new Cell(new Txt(' ').end).border([false]).end,
@@ -530,15 +531,20 @@ export class OrdenesComponent {
   }
   ═══════════════════════════════════════════════════════════════ */
 
-  // ✅ Nuevo DescargarPDF — formato FCP-001 exacto (09/06/2026)
+  // ✅ Nuevo DescargarPDF — formato FCP-001 exacto (09/06/2026) + protección contra edición
   DescargarPDF(orden) {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
     const hoy = `${day}/${month}/${year}`;
+    const horas = String(today.getHours()).padStart(2, '0');
+    const minutos = String(today.getMinutes()).padStart(2, '0');
+    const segundos = String(today.getSeconds()).padStart(2, '0');
+    const ahora = `${hoy} ${horas}:${minutos}:${segundos}`;
     const entrega = orden.entrega ? moment(orden.entrega).format('DD/MM/YYYY') : '';
     const usuario = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
+    const firmaTexto = `${usuario} - ${ahora}`;
     const fmt = (n) => this.decimalPipe.transform(n || 0, '1.2-2', 'es') ?? '0,00';
 
     async function generarOrden() {
@@ -647,7 +653,6 @@ export class OrdenesComponent {
       pdf.add(new Txt(' ').fontSize(4).end);
 
       // ═══════════ 3. TABLA PRINCIPAL DE ÍTEMES ═══════════
-      // 1. Modificamos hCell para que acepte un marginTop opcional (por defecto 0)
  const hCell = (txt, marginTop = 0) =>
   new Cell(
     new Txt(txt)
@@ -655,28 +660,27 @@ export class OrdenesComponent {
       .fontSize(9)
       .color('white')
       .alignment('center')
-      .margin([0, marginTop, 0, 0]) // <-- Aquí se aplica el margen dinámico
+      .margin([0, marginTop, 0, 0])
       .end
   ).fillColor('#9db0ba').alignment('center').end;
 
-// 2. Tu arreglo de itemsBody ya nivelado
 const itemsBody = [
   [
-    hCell('POS.', 6),          // Con margen de 6 para nivelar
+    hCell('POS.', 6),
     hCell([
       {text:'CANTIDAD', bold:true},
       {text:'\nQTY.', bold:false}
-    ]),                        // Sin margen (ya tiene 2 líneas)
-    hCell('DESCRIPCIÓN', 6),    // Con margen de 6 para nivelar
+    ]),
+    hCell('DESCRIPCIÓN', 6),
     hCell([
       {text:'MON.'},
       {text:'\nCCY', bold:false}
-    ]),                        // Sin margen (ya tiene 2 líneas)
+    ]),
     hCell([
       {text:'PRECIO UNITARIO.'},
       {text:'\nUNIT PRICE', bold:false}
-    ]),                        // Sin margen (ya tiene 2 líneas)
-    hCell('TOTAL', 6)          // Con margen de 6 para nivelar
+    ]),
+    hCell('TOTAL', 6)
   ],
 ];
 
@@ -765,27 +769,34 @@ const itemsBody = [
       pdf.footer((currentPage, pageCount) => {
       return new Table([
         [
-          new Cell(
-        new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end
-      ).border([false, false, false, true]).alignment('right').end,
-    ],
-    [
-      new Cell(
-        new Txt('FCP-001').fontSize(7).end
-      ).border([false]).bold().alignment('right').end,
-    ],
-    [
-      new Cell(
-        new Txt(`N° de Revisión: 1 / Fecha: 03/05/2026`).fontSize(10).end
-      ).border([false]).fontSize(7).alignment('right').end,
-    ],
-  ]).layout({
+          new Cell(new Txt('').end).border([false, false, false, true]).end,
+          new Cell(new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end)
+            .border([false, false, false, true]).alignment('right').end,
+        ],
+        [
+          new Cell(new Txt('').end).border([false]).end,
+          new Cell(new Txt('FCP-001').fontSize(7).end)
+            .border([false]).bold().alignment('right').end,
+        ],
+        [
+          new Cell(new Txt(`Descargado por: ${firmaTexto}`).fontSize(6).color('#999999').end)
+            .border([false]).alignment('left').end,
+          new Cell(new Txt(`N° de Revisión: 1 / Fecha: 03/05/2026`).fontSize(7).end)
+            .border([false]).alignment('right').end,
+        ],
+      ]).layout({
             hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
             vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
             hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
             vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
-          }).widths(['100%']).margin([30,0,30,0]).end;
+          }).widths(['50%', '50%']).margin([30,0,30,0]).end;
 });
+      pdf.permissions('SioDoc2026', {
+        printing: 'highResolution',
+        modifying: false,
+        copying: false,
+        annotating: false,
+      });
       pdf.create().download(`OCP-${orden.numero}.pdf`);
     }
     generarOrden();

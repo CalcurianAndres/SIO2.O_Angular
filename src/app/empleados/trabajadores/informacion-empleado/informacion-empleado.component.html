@@ -4,7 +4,7 @@
   (onCloseModal)="historial = false; informacion = true"
 >
 </app-historial-empleado>
-<div class="modal is-active" [ngClass]="{ 'is-active': informacion }">
+<div class="modal" [ngClass]="{ 'is-active': informacion }">
   <div class="modal-background"></div>
   <div class="modal-card">
     <div class="modal-card-head">
@@ -15,7 +15,10 @@
       <div class="columns">
         <div class="column">
           <figure class="image is-75x75 profile_pic">
-            <img src="https://192.168.0.22/api/imagen/empleado/{{ _informacion.datos_personales.foto }}" />
+            <img *ngIf="_informacion.datos_personales.foto && !_informacion._imgError" [src]="imgUrl + '/imagen/empleado/' + _informacion.datos_personales.foto" (error)="_informacion._imgError = true" />
+            <div *ngIf="!_informacion.datos_personales.foto || _informacion._imgError" style="width: 75px; height: 75px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem">
+              <i class="fas fa-user"></i>
+            </div>
           </figure>
           <button
             class="button"
