@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class TrabajadoresComponent implements OnInit {
   apiUrl = environment.apiUrl;
+  imgUrl = environment.imgUrl;
   public randomUsers;
   constructor(
     private http: HttpClient,

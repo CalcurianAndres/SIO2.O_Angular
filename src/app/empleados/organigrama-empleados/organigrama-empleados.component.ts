@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class OrganigramaEmpleadosComponent {
   apiUrl = environment.apiUrl;
+  imgUrl = environment.imgUrl;
 
   constructor(
     public api: DepartamentosService,

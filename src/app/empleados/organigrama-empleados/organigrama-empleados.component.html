@@ -74,7 +74,7 @@
           <div *ngFor="let emp of empleadosDirectos(dep)" class="emp-card">
             <div class="emp-avatar-col">
               <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
-                [src]="apiUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
+                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
                 (error)="emp._imgError = true" />
               <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
                 <i class="fas fa-user"></i>
@@ -103,7 +103,7 @@
           <div *ngFor="let emp of empleadosDelArea(area, dep)" class="emp-card">
             <div class="emp-avatar-col">
               <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
-                [src]="apiUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
+                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
                 (error)="emp._imgError = true" />
               <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
                 <i class="fas fa-user"></i>

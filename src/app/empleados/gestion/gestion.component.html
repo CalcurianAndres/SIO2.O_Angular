@@ -22,15 +22,21 @@
   >  <br />
   <br />
 
-  <div class="cargos-list">
-    <div class="cargo-item" *ngFor="let cargo of api.cargos">
-      <span class="cargo-name">{{ cargo.nombre }}</span>
-      <span class="tag is-light">{{ cargo.funcion }}</span>
-      <span class="cargo-actions">
-        <i class="fas fa-info-circle blue_" (click)="showInfo(cargo)" title="Ver info"></i>
-        <i class="far fa-edit green" (click)="editar(cargo)" title="Editar"></i>
-        <i class="fas fa-trash-alt red" (click)="EliminarCargo(cargo)" title="Eliminar"></i>
-      </span>
+  <div class="Departamentos">
+    <div class="card dep" *ngFor="let cargos of api.cargos">
+      <div class="card-header">
+        <div class="card-header-title">
+          <div class="subtitle">
+            <div class="brillo"></div>
+            {{ cargos.nombre }}
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a class="card-footer-item"><i class="fas fa-info-circle blue_" (click)="showInfo(cargos)"></i></a>
+        <a class="card-footer-item"><i class="far fa-edit green" (click)="editar(cargos)"></i></a>
+        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="EliminarCargo(cargos)"></i></a>
+      </footer>
     </div>
   </div>
 </app-page-layout>
