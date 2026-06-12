@@ -1,13 +1,8 @@
 {
   "/api": {
-    "target": "http://siob:3000",
+    "target": "https://192.168.0.22",
     "secure": false,
-    "logLevel": "warn"
-  },
-  "/socket.io": {
-    "target": "http://siob:3000",
-    "ws": true,
-    "secure": false,
-    "logLevel": "warn"
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

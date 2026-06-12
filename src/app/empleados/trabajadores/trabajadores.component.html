@@ -39,7 +39,7 @@
                 <img
                   class="is-rounded"
                   *ngIf="cargos.datos_personales.foto && !cargos._imgError"
-                  [src]="imgUrl + '/imagen/empleado/' + cargos.datos_personales.foto"
+                  [src]="apiUrl + '/imagen/empleado/' + cargos.datos_personales.foto"
                   (error)="cargos._imgError = true" />
                 <div *ngIf="!cargos.datos_personales.foto || cargos._imgError" style="width: 75px; height: 75px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem">
                   <i class="fas fa-user"></i>
