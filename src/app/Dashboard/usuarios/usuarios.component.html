@@ -79,12 +79,10 @@
               </div>
             </td>
             <td>
-              <i
-                class="fas fa-trash-alt"
-                style="color: var(--accent-red); cursor: pointer"
-                (click)="eliminarUsuario(usuario, i)"
-              ></i
-              >   <i
+              <button class="button is-small is-danger is-light" title="Eliminar"
+                (click)="eliminarUsuario(usuario, i)">
+                <span class="icon is-small"><i class="fas fa-trash-alt"></i></span>
+              </button>   <i
                 class="fas fa-key"
                 style="color: var(--accent-blue); cursor: pointer"
                 (click)="resetPassword(usuario)"

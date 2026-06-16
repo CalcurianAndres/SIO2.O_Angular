@@ -159,7 +159,7 @@
           <span class="section-label"><i class="fas fa-id-card"></i> Datos generales</span>
           <div class="detail-row">
             <span class="detail-label"><i class="fas fa-file-invoice"></i> RIF</span>
-            <span class="detail-value is-family-code">{{ cliente_seleccionado.rif }}</span>
+            <span class="detail-value">{{ cliente_seleccionado.rif }}</span>
           </div>
           <div class="detail-row" *ngIf="cliente_seleccionado.direccion">
             <span class="detail-label"><i class="fas fa-map-pin"></i> Dirección</span>
@@ -191,7 +191,7 @@
             Sin almacenes registrados
           </div>
           <div class="tags-list">
-            <span *ngFor="let almacen of cliente_seleccionado.almacenes" class="tag is-warning is-light is-medium">
+            <span *ngFor="let almacen of cliente_seleccionado.almacenes" class="tag is-info is-light is-medium">
               <i class="fas fa-warehouse mr-1"></i> {{ almacen.nombre }}
             </span>
           </div>

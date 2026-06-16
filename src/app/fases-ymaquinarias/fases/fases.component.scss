@@ -128,7 +128,7 @@
 
 .skeleton-header {
   height: 1.5rem;
-  background: var(--skeleton-bg, #e0e0e0);
+  background: var(--bg-secondary);
   border-radius: 4px;
   margin: 0.75rem;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
@@ -136,7 +136,7 @@
 
 .skeleton-line {
   height: 1rem;
-  background: var(--skeleton-bg, #e0e0e0);
+  background: var(--bg-secondary);
   border-radius: 4px;
   margin: 0.75rem;
   animation: skeleton-pulse 1.5s ease-in-out infinite;
@@ -148,7 +148,7 @@
 
 .skeleton-footer {
   height: 2.5rem;
-  background: var(--skeleton-bg, #e0e0e0);
+  background: var(--bg-secondary);
   border-radius: 4px;
   margin: 0.75rem;
   animation: skeleton-pulse 1.5s ease-in-out infinite;

@@ -13,7 +13,7 @@ interface Pais {
   prefijo: string;
 }
 
-const PAISES: Pais[] = [
+export const PAISES: Pais[] = [
   { nombre: 'Afganistán', nombreEn: 'Afghanistan', cca2: 'AF', bandera: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_the_Taliban.svg', prefijo: '+93' },
   { nombre: 'Albania', nombreEn: 'Albania', cca2: 'AL', bandera: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg', prefijo: '+355' },
   { nombre: 'Alemania', nombreEn: 'Germany', cca2: 'DE', bandera: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg', prefijo: '+49' },

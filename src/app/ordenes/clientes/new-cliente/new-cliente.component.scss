@@ -6,53 +6,6 @@
   margin-top: 0.4rem;
 }
 
-/* ── Contact grid: 2 columns ── */
-.tags-list.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-/* ── Contact card (replaces tag badges) ── */
-.contact-card {
-  background: color-mix(in srgb, var(--bg-secondary) 90%, var(--accent-blue) 5%);
-  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
-  border-radius: 8px;
-  padding: 0.45rem 0.7rem;
-  min-width: 0;
-
-  &__head {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.82rem;
-    margin-bottom: 0.25rem;
-
-    strong {
-      flex: 1;
-      min-width: 0;
-      word-break: break-word;
-    }
-
-    .delete {
-      flex-shrink: 0;
-    }
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  &__row {
-    font-size: 0.75rem;
-    color: var(--text-primary);
-    opacity: 0.75;
-    word-break: break-all;
-    line-height: 1.4;
-  }
-}
-
 /* ── Section label ── */
 .section-label {
   font-size: 0.75rem;

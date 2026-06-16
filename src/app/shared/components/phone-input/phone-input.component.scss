@@ -1,0 +1,90 @@
+@use 'bulma/sass/utilities/mixins' as bulmaMixins;
+
+.phone-input-wrapper {
+  position: relative;
+
+  .phone-prefix-btn {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .flag-icon {
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .prefix-code {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .prefix-placeholder {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .dropdown {
+    position: static;
+
+    .dropdown-menu {
+      min-width: 280px;
+      max-width: 320px;
+    }
+
+    .dropdown-items-list {
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .country-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 0.75rem;
+
+      .flag-icon {
+        flex-shrink: 0;
+      }
+
+      .country-name {
+        flex: 1;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .country-prefix {
+        font-size: 0.8rem;
+        color: var(--text-muted, #7a7a7a);
+        font-weight: 500;
+        flex-shrink: 0;
+      }
+
+      &.is-active {
+        background-color: var(--accent-blue, #3e8ed0);
+        color: #fff;
+
+        .country-prefix {
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+  }
+
+  .control.is-expanded .input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}

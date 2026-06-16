@@ -31,7 +31,6 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
   public contacto_numero: string = '';
   public contacto_email: string = '';
   public contacto_cargo: string = '';
-  public contacto_pais_detectado: any = null;
   public fabricante: any;
   public contactos: any = [];
   public fabricantes_array: any = [];
@@ -102,12 +101,6 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
     this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
       this.estados = states;
       this.cargandoEstados = false;
-    });
-  }
-
-  onTelefonoInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.contacto_numero).pipe(take(1)).subscribe((detected) => {
-      this.contacto_pais_detectado = detected;
     });
   }
 

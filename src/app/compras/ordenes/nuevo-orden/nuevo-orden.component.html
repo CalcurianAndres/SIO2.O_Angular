@@ -5,7 +5,7 @@
       <p class="modal-card-title">
         <i class="fas fa-shopping-cart" style="margin-right: 0.5rem"></i> Nueva Orden de Compra
       </p>
-      <button class="delete" (click)="cerrar()" aria-label="close"></button>
+      <button class="delete red_cross" (click)="cerrar()" aria-label="close"></button>
     </header>
 
     <section class="modal-card-body">
@@ -30,7 +30,7 @@
             <div class="select is-fullwidth">
               <select [(ngModel)]="Fabricant_Sustrato" (change)="condiciones($event.target)">
                 <option value="">— Seleccionar fabricante —</option>
-                <option *ngFor="let f of fabricantes.fabricantes" [value]="f._id">{{ f.alias }}</option>
+                <option *ngFor="let f of fabricantesFiltrados" [value]="f._id">{{ f.alias }}</option>
               </select>
             </div>
           </div>
@@ -132,11 +132,10 @@
               <td>{{ Number_(pedido.precio) | number: '2.2-2' }}</td>
               <td>{{ Number_((pedido.precio * pedido.cantidad).toFixed(2)) | number: '2.2-2' }}</td>
               <td>
-                <i
-                  class="fas fa-trash-alt"
-                  style="cursor: pointer; color: var(--status-danger)"
-                  (click)="borrar(i)"
-                ></i>
+                <button class="button is-small is-danger is-light" title="Eliminar"
+                  (click)="borrar(i)">
+                  <span class="icon is-small"><i class="fas fa-trash-alt"></i></span>
+                </button>
               </td>
             </tr>
           </tbody>

@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class StepWizardComponent {
   @Input() steps: { num: number; label: string; icon: string }[] = [];
-  @Input() currentStep = 1;
+  @Input() currentStep: number = 1;
   @Output() currentStepChange = new EventEmitter<number>();
   @Output() stepChange = new EventEmitter<{ from: number; to: number }>();
 

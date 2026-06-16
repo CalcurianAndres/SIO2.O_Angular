@@ -58,7 +58,7 @@
           ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
         ></a>
         <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
-        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="eliminarTrabajador(cargos)"></i></a>
+        <button type="button" class="card-footer-item" (click)="eliminarTrabajador(cargos)"><i class="fas fa-trash-alt red"></i></button>
       </footer>
     </div>
   </div>

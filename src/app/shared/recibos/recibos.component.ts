@@ -26,6 +26,8 @@ export class RecibosComponent {
         { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de órdenes de compra' },
         { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en órdenes de compra' },
         { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama de empleados, configuración de producción para HTTPS, rediseño de departamentos y cargos, bandera +58 en teléfonos, wizard de nuevo empleado y corrección de rutas de imágenes' },
+        { fecha: '16/06/2026', horas: 8, descripcion: 'Auditoría y actualización del sistema de diseño, corrección de 7 inconsistencias visuales y refactor de accesibilidad en iconos de eliminación' },
+        { fecha: '16/06/2026', horas: 8, descripcion: 'Corrección de errores de compilación, bugs de órdenes de compra y finalización de 3 tareas del sistema' },
       ]),
   );
 

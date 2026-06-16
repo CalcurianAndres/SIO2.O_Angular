@@ -1,0 +1,70 @@
+<div class="field has-addons phone-input-wrapper">
+  <!-- Dropdown de prefijos -->
+  <div class="control">
+    <div class="dropdown" [class.is-active]="isOpen">
+      <div class="dropdown-trigger">
+        <button
+          class="button phone-prefix-btn"
+          type="button"
+          [disabled]="disabled"
+          (click)="toggleDropdown()"
+          [title]="selectedPrefix ? selectedPrefix.nombre + ' (' + selectedPrefix.prefijo + ')' : 'Seleccionar país'"
+        >
+          <ng-container *ngIf="selectedPrefix; else noPrefix">
+            <img [src]="selectedPrefix.bandera" class="flag-icon" alt="" />
+            <span class="prefix-code">{{ selectedPrefix.prefijo }}</span>
+          </ng-container>
+          <ng-template #noPrefix>
+            <span class="prefix-placeholder">🌎</span>
+          </ng-template>
+          <span class="icon is-small">
+            <i class="fas fa-angle-down"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" role="menu">
+        <div class="dropdown-content">
+          <div class="dropdown-item">
+            <input
+              class="input is-small"
+              type="text"
+              placeholder="Buscar país o código..."
+              [value]="searchTerm"
+              (input)="searchTerm = $any($event.target).value; filterCountries()"
+              (click)="$event.stopPropagation()"
+              autofocus
+            />
+          </div>
+          <div class="dropdown-items-list">
+            <a
+              *ngFor="let pais of filteredPrefixes"
+              class="dropdown-item country-option"
+              [class.is-active]="selectedPrefix?.cca2 === pais.cca2"
+              (click)="selectPrefix(pais)"
+            >
+              <img [src]="pais.bandera" class="flag-icon" alt="" />
+              <span class="country-name">{{ pais.nombre }}</span>
+              <span class="country-prefix">{{ pais.prefijo }}</span>
+            </a>
+            <div *ngIf="filteredPrefixes.length === 0" class="dropdown-item has-text-grey has-text-centered is-size-7">
+              Sin resultados
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input del número local -->
+  <div class="control is-expanded">
+    <input
+      class="input"
+      type="text"
+      [placeholder]="placeholder"
+      [value]="localNumber"
+      (input)="onNumberInput($event.target)"
+      [disabled]="disabled"
+      inputmode="numeric"
+    />
+  </div>
+</div>

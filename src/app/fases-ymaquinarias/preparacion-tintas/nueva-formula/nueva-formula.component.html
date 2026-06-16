@@ -58,8 +58,8 @@
             <tr *ngFor="let formula of formular">
               <td>{{ formula.nombre }}</td>
               <td>{{ formula.cantidad }}</td>
-              <td (click)="borrarMaterial(formula.material)">
-                <i class="fas fa-trash-alt red" style="cursor: pointer"></i>
+              <td>
+                <button class="button is-small is-danger is-light" title="Eliminar" (click)="borrarMaterial(formula.material)"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
               </td>
             </tr>
           </tbody>

@@ -42,7 +42,7 @@
       <span class="dep-actions">
         <i class="fas fa-info-circle blue_" (click)="showAreas(dep)" title="Ver áreas"></i>
         <i class="far fa-edit green" (click)="unidad = dep; Nuevo = true" title="Editar"></i>
-        <i class="fas fa-trash-alt red" (click)="eliminarDepartamento(dep)" title="Eliminar"></i>
+        <button class="button btn-action-icon" title="Eliminar" (click)="eliminarDepartamento(dep)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
       </span>
     </div>
   </div>

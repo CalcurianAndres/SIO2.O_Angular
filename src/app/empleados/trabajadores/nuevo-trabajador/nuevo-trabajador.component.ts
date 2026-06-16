@@ -4,8 +4,6 @@ import { CargosService } from 'src/app/services/cargos.service';
 import { DepartamentosService } from 'src/app/services/departamentos.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
-import { PaisesService } from 'src/app/services/paises.service';
-import { take } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,7 +19,6 @@ export class NuevoTrabajadorComponent implements OnInit {
     public cargos: CargosService,
     public api: TrabajadoresService,
     public imagenes: SubirArchivosService,
-    public paisesService: PaisesService,
   ) {}
 
   @Input() nuevo_trabajador: any;
@@ -52,7 +49,7 @@ export class NuevoTrabajadorComponent implements OnInit {
     { num: 4, label: 'Instrucción académica', icon: 'fa-user-graduate' },
     { num: 5, label: 'Función en la empresa', icon: 'fa-user-tie' },
   ];
-  currentStep = 1;
+  currentStep: number = 1;
   fotoPreview: string | null = null;
 
   public REFERENCIA = {
@@ -140,33 +137,8 @@ export class NuevoTrabajadorComponent implements OnInit {
       });
   }
 
-  telefono_pais_detectado: any = null;
-  celular_pais_detectado: any = null;
-  refTelefono_pais_detectado: any = null;
-  emergTelefono_pais_detectado: any = null;
-
-  onTelefonoInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.trabajador.datos_personales.telefono).pipe(take(1)).subscribe((detected) => {
-      this.telefono_pais_detectado = detected;
-    });
-  }
-
-  onCelularInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.trabajador.datos_personales.celular).pipe(take(1)).subscribe((detected) => {
-      this.celular_pais_detectado = detected;
-    });
-  }
-
-  onRefTelefonoInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.REFERENCIA.telefono).pipe(take(1)).subscribe((detected) => {
-      this.refTelefono_pais_detectado = detected;
-    });
-  }
-
-  onEmergTelefonoInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.EMERGENCIA.telefono).pipe(take(1)).subscribe((detected) => {
-      this.emergTelefono_pais_detectado = detected;
-    });
+  isStep(step: number): boolean {
+    return this.currentStep === step;
   }
 
   goToStep(n: number) {

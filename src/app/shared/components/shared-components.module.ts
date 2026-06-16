@@ -9,10 +9,11 @@ import { SkeletonComponent } from './skeleton/skeleton.component';
 import { StepWizardComponent } from './step-wizard/step-wizard.component';
 import { ImgFallbackComponent } from './img-fallback/img-fallback.component';
 import { BadgeListComponent } from './badge-list/badge-list.component';
+import { PhoneInputComponent } from './phone-input/phone-input.component';
 
 @NgModule({
-  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent],
+  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent, PhoneInputComponent],
   imports: [CommonModule, RouterModule],
-  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent],
+  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent, PhoneInputComponent],
 })
 export class SharedComponentsModule {}

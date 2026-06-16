@@ -88,7 +88,7 @@
         </div>
         <div class="card-header-actions">
           <i class="far fa-edit green action-icon" title="Editar" (click)="$event.stopPropagation(); EditarGrupo(grupo)"></i>
-          <i class="fas fa-trash-alt red action-icon" title="Eliminar" (click)="$event.stopPropagation(); eliminarGrupo(grupo._id)"></i>
+          <button class="button btn-action-icon" title="Eliminar" (click)="$event.stopPropagation(); eliminarGrupo(grupo._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
           <span class="count-badge">
             {{ getMaterialesDelGrupo(grupo._id).length }} <i class="fas fa-cube"></i>
           </span>
@@ -126,7 +126,7 @@
                 <div class="brand-header" (click)="toggleBrand(nameGroup.key, brand.alias)">
                   <i class="fas" [ngClass]="expandedBrandKey === (nameGroup.key + '|' + brand.alias) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
                   <span class="brand-label">{{ brand.alias }}</span>
-                  <span class="tag is-light">{{ brand.count }} und.</span>
+                  <span class="tag is-info is-light">{{ brand.count }} und.</span>
                 </div>
 
                 <!-- Level 3: Detail table (sortable) -->
@@ -161,7 +161,7 @@
                         <td>{{ mat.codigo || '-' }}</td>
                         <td class="has-text-centered">
                           <i class="far fa-edit green mr-2" title="Editar" (click)="selectedGrupo = grupo; EditarMaterial(mat)"></i>
-                          <i class="fas fa-trash-alt red" title="Eliminar" (click)="eliminarMaterial(mat._id)"></i>
+                          <button class="button is-small is-danger is-light" title="Eliminar" (click)="eliminarMaterial(mat._id)"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
                         </td>
                       </tr>
                     </tbody>

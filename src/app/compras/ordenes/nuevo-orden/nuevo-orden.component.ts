@@ -29,13 +29,20 @@ export class NuevoOrdenComponent {
     this.onCloseModal.emit();
   }
 
-  public fabricantesIDs;
+  public fabricantesIDs: string[] = [];
   public proveedor = '';
   public material__ = '';
   public loading = false;
   public Fabricant_Sustrato;
   public Sustratos: any[] = [];
   public Sustrato_Material = '';
+
+  get fabricantesFiltrados(): any[] {
+    if (!this.fabricantesIDs.length) return this.fabricantes.fabricantes || [];
+    return (this.fabricantes.fabricantes || []).filter((f: any) =>
+      this.fabricantesIDs.includes(String(f._id))
+    );
+  }
 
   proveedores_(e) {
     this.onChangeProv.emit();
@@ -44,6 +51,9 @@ export class NuevoOrdenComponent {
       if (!proveedor) return;
       this.Orden.proveedor = proveedor._id;
       this.fabricantesIDs = proveedor.fabricantes.map((fabricante) => fabricante._id);
+      // Reset fabricante selection when proveedor changes
+      this.Fabricant_Sustrato = '';
+      this.Sustratos = [];
     }, 500);
   }
 

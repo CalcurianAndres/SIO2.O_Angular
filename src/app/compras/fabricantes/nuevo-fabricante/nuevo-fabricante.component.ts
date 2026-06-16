@@ -37,7 +37,6 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
   p_direccion: string = '';
   p_rif: string = '';
   p_cargo: string = '';
-  p_telefono_pais_detectado: any = null;
 
   proveedor_directo_selected: any;
   proveedor_directo_abierto: boolean = false;
@@ -95,6 +94,8 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
     }
     if (changes['editar'] && changes['editar'].currentValue) {
       this.guardando = false;
+      this.proveedor_directo_abierto = false;
+      this.proveedor_directo_selected = null;
     }
   }
 
@@ -187,12 +188,6 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
     this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
       this.estados = states;
       this.cargandoEstados = false;
-    });
-  }
-
-  onTelefonoInput() {
-    this.paisesService.detectarPaisPorPrefijo(this.p_telefono).pipe(take(1)).subscribe((detected) => {
-      this.p_telefono_pais_detectado = detected;
     });
   }
 

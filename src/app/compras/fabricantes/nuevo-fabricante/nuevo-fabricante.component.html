@@ -191,16 +191,7 @@
             <input type="text" class="input" placeholder="Nombre" [(ngModel)]="p_nombre" />
           </div>
           <div class="column">
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <input type="text" class="input" placeholder="Teléfono" [(ngModel)]="p_telefono" (input)="onTelefonoInput()" />
-              </div>
-              <div class="control" *ngIf="p_telefono_pais_detectado">
-                <span class="button is-static" title="{{ p_telefono_pais_detectado.nombre }} ({{ p_telefono_pais_detectado.codigo })">
-                  <img [src]="p_telefono_pais_detectado.bandera" class="flag-icon" />
-                </span>
-              </div>
-            </div>
+            <app-phone-input [value]="p_telefono" (valueChange)="p_telefono = $event" placeholder="Teléfono"></app-phone-input>
           </div>
           <div class="column">
             <input
