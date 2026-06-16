@@ -13,7 +13,6 @@ import * as moment from 'moment';
 })
 export class InformacionEmpleadoComponent {
   apiUrl = environment.apiUrl;
-  imgUrl = environment.imgUrl;
 
   constructor(public empleados: TrabajadoresService) {}
 
@@ -69,6 +68,16 @@ export class InformacionEmpleadoComponent {
       (cursoObj) => `${cursoObj.nombre} - ${cursoObj.periodo}`,
     );
 
+    const getImageSafe = async (url: string, fit?: [number, number]) => {
+      try {
+        const img = new Img(url);
+        if (fit) img.fit(fit);
+        return await img.build();
+      } catch {
+        return new Txt('').end;
+      }
+    };
+
     async function GenerarPDF() {
       const fecha_nacimiento = moment(informacion.datos_personales.fecha_nac).add(1, 'day').format('DD/MM/yyyy');
 
@@ -104,9 +113,7 @@ export class InformacionEmpleadoComponent {
             new Cell(new Txt('Nombres').bold().end).fillColor('#dbdbdb').colSpan(2).end,
             new Cell(new Txt(informacion.datos_personales.nombres).end).end,
             new Cell(
-              await new Img(`${environment.imgUrl}/imagen/empleado/${informacion.datos_personales.foto}`)
-                .fit([163, 200])
-                .build(),
+              await getImageSafe(`${environment.imgUrl}/imagen/empleado/${informacion.datos_personales.foto}`, [163, 200])
             )
               .colSpan(2)
               .rowSpan(10).end,

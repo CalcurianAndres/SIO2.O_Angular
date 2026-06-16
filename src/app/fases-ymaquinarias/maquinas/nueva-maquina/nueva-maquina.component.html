@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="tags" *ngIf="fasesQueTrabaja && fasesQueTrabaja.length > 0; else noFases">
-        <span class="tag is-info is-light" *ngFor="let fase of fasesQueTrabaja">
+        <span class="tag is-info is-light is-medium" *ngFor="let fase of fasesQueTrabaja">
           <i class="fas fa-check-circle"></i>&nbsp;{{ fase.nombre }}
           <button class="delete is-small" (click)="deleteFase(fase)"></button>
         </span>
@@ -136,7 +136,7 @@
         </div>
       </div>
       <div class="tags" *ngIf="data.pinzas && data.pinzas.length > 0; else noPinzas">
-        <span class="tag is-warning is-light" *ngFor="let pinza of data.pinzas; index as i">
+        <span class="tag is-info is-light is-medium" *ngFor="let pinza of data.pinzas; index as i">
           <i class="fas fa-ruler-combined"></i>&nbsp;{{ pinza }} mm
           <button class="delete is-small" (click)="deletePinza(i)"></button>
         </span>

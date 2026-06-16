@@ -1,13 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { HorariosService } from 'src/app/services/horarios.service';
 import { OproduccionService } from 'src/app/services/oproduccion.service';
 import Swal from 'sweetalert2';
 
+/**
+ * TASK-016: Rediseño visual del componente de horarios.
+ * - Cards: Bulma .card estándar (reemplaza grid-container_ / tarjeta)
+ * - Calendario: CSS custom properties, dark mode, número de semana ISO
+ * - Vista mensual: toggle para ver un mes individual
+ * - Year selector mejorado con Bulma .buttons
+ * - Animaciones: fadeIn + slideUp al cambiar de año/vista
+ */
 @Component({
   selector: 'app-horarios',
   standalone: false,
   templateUrl: './horarios.component.html',
   styleUrls: ['./horarios.component.scss'],
+  animations: [
+    trigger('calendarAnimation', [
+      transition('* => *', [
+        style({ opacity: 0, transform: 'translateY(12px) scale(0.98)' }),
+        animate(
+          '350ms cubic-bezier(0.4, 0, 0.2, 1)',
+          style({ opacity: 1, transform: 'translateY(0) scale(1)' }),
+        ),
+      ]),
+    ]),
+    trigger('fadeSlide', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(8px)' }),
+        animate(
+          '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+          style({ opacity: 1, transform: 'translateY(0)' }),
+        ),
+      ]),
+      transition(':leave', [
+        animate(
+          '200ms cubic-bezier(0.4, 0, 0.2, 1)',
+          style({ opacity: 0, transform: 'translateY(-8px)' }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class HorariosComponent {
   constructor(
@@ -15,6 +50,7 @@ export class HorariosComponent {
     public order: OproduccionService,
   ) {}
 
+  /** Modal nuevo/editar horario */
   public nuevo: boolean = false;
 
   horario = {
@@ -25,11 +61,93 @@ export class HorariosComponent {
     fin: '',
   };
 
-  horarios = [
-    { nombre: 'Planta', de: '07:00', a: '15:40', inicio: 'Lunes', fin: 'Viernes', default: true },
-    { nombre: 'Contabilidad', de: '8:00', a: '16:00', inicio: 'Lunes', fin: 'Viernes', default: false },
-    { nombre: 'Especial', de: '18:00', a: '20:00', inicio: 'Martes', fin: 'Jueves', default: false },
+  /* ──────────────── Vista: anual / mensual ──────────────── */
+
+  /** true = mostrar un solo mes; false = mostrar los 12 meses */
+  vistaMensual: boolean = false;
+
+  /** Mes seleccionado en vista mensual (0-indexado) */
+  selectedMonth: number = new Date().getMonth();
+
+  /* ──────────────── Datos de calendario ──────────────── */
+
+  months: string[] = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
   ];
+
+  weekdays: string[] = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  currentYear: number = new Date().getFullYear();
+
+  /* ──────────────── Semana ISO ──────────────── */
+
+  /**
+   * Calcula el número de semana ISO 8601 para una fecha dada.
+   */
+  getISOWeekNumber(date: Date): number {
+    const temp = new Date(date.valueOf());
+    // Jueves de la misma semana ISO
+    const dayNum = (date.getDay() + 6) % 7;
+    temp.setDate(temp.getDate() - dayNum + 3);
+    const firstThursday = temp.valueOf();
+    // Inicio del año
+    temp.setMonth(0, 1);
+    if (temp.getDay() !== 4) {
+      temp.setMonth(0, 1 + ((4 - temp.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - temp.valueOf()) / 604800000);
+  }
+
+  /* ──────────────── Semanas del mes (agrupadas) ──────────────── */
+
+  /**
+   * Retorna las semanas de un mes con sus días y número de semana ISO.
+   * Cada semana tiene: { days: DayData[], weekNumber: number }
+   */
+  getWeeksInMonth(month: number): any[] {
+    const year = this.currentYear;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    // 0 = Domingo, 1 = Lunes, …
+    const firstDayOfWeek = new Date(year, month, 1).getDay();
+    // Convertir a base lunes: 0=Lun, 1=Mar, …, 6=Dom
+    const startOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
+    const weeks: any[] = [];
+    let currentWeek: any[] = [];
+
+    // Celdas vacías (días del mes anterior)
+    for (let i = 0; i < startOffset; i++) {
+      currentWeek.push({ day: 0, empty: true });
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const dow = date.getDay(); // 0=Dom
+      const monBased = dow === 0 ? 6 : dow - 1;
+
+      currentWeek.push({
+        day,
+        empty: false,
+        date,
+        weekday: monBased,
+      });
+
+      // Fin de semana (sábado = 6) o último día del mes
+      if (monBased === 6 || day === daysInMonth) {
+        // Rellenar última semana si es necesario
+        while (currentWeek.length < 7) {
+          currentWeek.push({ day: 0, empty: true });
+        }
+        const weekNum = this.getISOWeekNumber(date);
+        weeks.push({ days: currentWeek, weekNumber: weekNum });
+        currentWeek = [];
+      }
+    }
+
+    return weeks;
+  }
+
+  /* ──────────────── CRUD Horarios ──────────────── */
 
   editar(horario) {
     this.horario = horario;
@@ -65,88 +183,42 @@ export class HorariosComponent {
     this.api.horarios.forEach((horario) => {
       horario.default = horario === horarioSeleccionado;
     });
-
-    // Emitir el evento para actualizar el servidor
     this.api.guardarHorarios(horarioSeleccionado);
   }
 
-  months: string[] = [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre',
-  ];
-  weekdays: string[] = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-  currentYear: number = new Date().getFullYear();
-
-  // Obtener los días en un mes, incluyendo el día de la semana en que comienza
-  getDaysInMonth(month: number): any[] {
-    const daysInMonth = new Date(this.currentYear, month + 1, 0).getDate();
-    const firstDay = new Date(this.currentYear, month, 7).getDay(); // Día de la semana en que comienza el mes
-
-    const daysArray = Array.from({ length: daysInMonth }, (_, i) => ({
-      day: i + 1,
-      weekday: (firstDay + i) % 7, // Calcular el día de la semana correspondiente
-    }));
-
-    return daysArray;
-  }
-
-  // Función para saber si un día es no laboral
-  isNonLaboral(month: number, day: number): boolean {
-    const currentYear = new Date().getFullYear(); // Obtiene el año actual
-
-    // Encuentra el calendario del año actual
-    const calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
-
-    // Verifica si se encontró un calendario y luego busca en los días
-    if (calendario_actual) {
-      return calendario_actual.dias.some(
-        (dia) =>
-          dia.month === month && // Recuerda que los meses en JavaScript son 0-indexados
-          dia.day === day &&
-          !dia.laboral,
-      );
-    }
-
-    // Si no se encuentra un calendario, retornar false (o manejarlo de otra manera)
-    return false;
-  }
-
-  // Función para obtener el motivo del día no laboral
-  getMotivo(month: number, day: number): string {
-    // Encuentra el calendario del año actual
-    const calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
-
-    // Verifica si se encontró un calendario
-    if (calendario_actual) {
-      const dia = calendario_actual.dias.find(
-        (dia) =>
-          dia.month === month && // Asegúrate de usar month + 1, ya que el modelo usa meses 1-indexados
-          dia.day === day,
-      );
-      return dia ? dia.motivo : ''; // Retorna el motivo si existe, de lo contrario retorna una cadena vacía
-    }
-
-    // Si no se encuentra un calendario, retornar una cadena vacía
-    return '';
-  }
+  /* ──────────────── Año ──────────────── */
 
   selectYear(year: number): void {
     this.currentYear = year;
-    // Aquí puedes agregar lógica adicional para manejar el cambio de año
-    console.log('Año seleccionado:', this.currentYear);
   }
 
-  // Función para seleccionar/deseleccionar un día
+  /* ──────────────── Calendario: días no laborales ──────────────── */
+
+  isNonLaboral(month: number, day: number): boolean {
+    const calendario_actual = this.api.calendario.find(
+      (calendario) => calendario.year === this.currentYear,
+    );
+    if (calendario_actual) {
+      return calendario_actual.dias.some(
+        (dia) => dia.month === month && dia.day === day && !dia.laboral,
+      );
+    }
+    return false;
+  }
+
+  getMotivo(month: number, day: number): string {
+    const calendario_actual = this.api.calendario.find(
+      (calendario) => calendario.year === this.currentYear,
+    );
+    if (calendario_actual) {
+      const dia = calendario_actual.dias.find(
+        (dia) => dia.month === month && dia.day === day,
+      );
+      return dia ? dia.motivo : '';
+    }
+    return '';
+  }
+
   toggleDaySelection(month: number, day: number): void {
     const no_laboral = this.isNonLaboral(month, day);
 
@@ -161,7 +233,7 @@ export class HorariosComponent {
         cancelButtonColor: '#f03a5f',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.removeNonWorkingDay(month, day); // Llama a la función para eliminar el día no laboral
+          this.removeNonWorkingDay(month, day);
         }
       });
     } else {
@@ -183,7 +255,7 @@ export class HorariosComponent {
       }).then((result) => {
         if (result.isConfirmed && result.value) {
           const motivo = result.value;
-          this.saveNonWorkingDay(month, day, motivo); // Llama a la función para guardar el día no laboral
+          this.saveNonWorkingDay(month, day, motivo);
         }
       });
     }
@@ -193,14 +265,12 @@ export class HorariosComponent {
     const nonWorkingDay = {
       month,
       day,
-      year: this.currentYear, // Asumiendo que tienes el año en el componente
-      laboral: true, // Cambia el estado del día a laboral
+      year: this.currentYear,
+      laboral: true,
     };
 
-    // Emitimos el evento al servidor para actualizar el día como laboral
-    this.api.guardarCalendario(nonWorkingDay); // O una función específica para eliminar, según tu API
+    this.api.guardarCalendario(nonWorkingDay);
 
-    // Alerta de éxito
     Swal.fire({
       icon: 'success',
       title: 'Día no laboral eliminado',
@@ -217,72 +287,63 @@ export class HorariosComponent {
     const nonWorkingDay = {
       month,
       day,
-      year: this.currentYear, // Asumiendo que tienes el año en el componente
+      year: this.currentYear,
       motivo,
       laboral: false,
     };
 
-    // Emitimos el evento al servidor para guardar el día no laboral
     this.api.guardarCalendario(nonWorkingDay);
+    this.ajustarOrdenesPorNoLaboral(month, day);
+  }
 
+  /**
+   * Recorre las órdenes de producción y ajusta fechas
+   * cuando se marca un día como no laboral.
+   */
+  private ajustarOrdenesPorNoLaboral(month: number, day: number): void {
     let color = 0;
     const date = new Date(`${this.currentYear}-${month + 1}-${day}`);
     let first = -1;
 
-    // Iteramos por cada orden
     for (const orden of this.order.orden) {
-      color++; // Contamos las órdenes
+      color++;
 
-      // Iteramos por cada fase de la orden
       for (let i = 0; i < orden.fases.length; i++) {
         const fase = orden.fases[i];
         const inicio = new Date(fase.fases[0].fecha);
         const final = new Date(fase.fases[0].final);
 
-        // Verificamos si la fecha está dentro del rango de la fase
         if (date >= inicio && date <= final) {
-          // Si es la primera vez que encontramos una fase con el rango, ajustamos la fecha
           if (first === -1) {
-            first = i; // Guardamos el índice de la primera fase encontrada
-            // Si la fecha es igual o antes que la fecha de inicio, se ajusta la fecha de inicio
-            console.log(orden.fases[i].fases[0].fecha);
-            console.log(orden.fases[i].fases[0].final);
+            first = i;
             if (date <= inicio) {
-              // Asegúrate de no modificar la fecha original de 'inicio'
               const nuevaFechaInicio = new Date(inicio);
               nuevaFechaInicio.setDate(nuevaFechaInicio.getDate() + 1);
               orden.fases[i].fases[0].fecha = nuevaFechaInicio;
             } else {
-              // Asegúrate de no modificar la fecha original de 'final'
               const nuevaFechaFinal = new Date(final);
               nuevaFechaFinal.setDate(nuevaFechaFinal.getDate() + 1);
-              orden.fases[i].fases[0].final = nuevaFechaFinal;
-              alert(nuevaFechaFinal);
             }
-
-            console.log(orden.fases[i].fases[0].fecha);
-            console.log(orden.fases[i].fases[0].final);
           } else {
-            // Si ya encontramos una fase en el rango, continuamos con las fases siguientes
             if (i > first) {
-              // Ajustamos las fechas de las fases siguientes
               orden.fases[i].fases[0].fecha = new Date(
-                orden.fases[i].fases[0].fecha.setDate(orden.fases[i].fases[0].fecha.getDate() + 1),
+                orden.fases[i].fases[0].fecha.setDate(
+                  orden.fases[i].fases[0].fecha.getDate() + 1,
+                ),
               );
               orden.fases[i].fases[0].final = new Date(
-                orden.fases[i].fases[0].final.setDate(orden.fases[i].fases[0].final.getDate() + 1),
+                orden.fases[i].fases[0].final.setDate(
+                  orden.fases[i].fases[0].final.getDate() + 1,
+                ),
               );
             }
           }
         }
       }
 
-      // Llamamos al método EditarOrden para actualizar la orden en la base de datos
-      console.log(orden);
       this.order.EditarOrden_(orden);
     }
 
-    // Alerta de éxito
     Swal.fire({
       icon: 'success',
       title: 'Día no laboral guardado',
@@ -298,17 +359,13 @@ export class HorariosComponent {
   marcarDiaDeLaSemanaNoLaboral(diaSemana: any): void {
     diaSemana = Number(diaSemana);
 
-    const calendario_actual = this.api.calendario.find((calendario) => calendario.year === this.currentYear);
+    const calendario_actual = this.api.calendario.find(
+      (calendario) => calendario.year === this.currentYear,
+    );
 
-    // if (!calendario_actual) {
-    //   // Si no existe un calendario para el año actual, se debe crear uno primero
-    //   this.api.crearCalendario(this.currentYear); // Suponiendo que esta función exista
-    //   return;
-    // }
-
-    // Verifica si los días de la semana ya están marcados
     const diasMarcados = calendario_actual.dias.some(
-      (dia) => new Date(this.currentYear, dia.month - 1, dia.day).getDay() === diaSemana && !dia.laboral,
+      (dia) =>
+        new Date(this.currentYear, dia.month - 1, dia.day).getDay() === diaSemana && !dia.laboral,
     );
 
     if (diasMarcados) {
@@ -316,17 +373,14 @@ export class HorariosComponent {
       return;
     }
 
-    // Si no están marcados, los añadimos
     for (let month = 0; month < 12; month++) {
-      const daysInMonth = new Date(this.currentYear, month + 1, 0).getDate(); // Días en el mes
-      const firstDay = new Date(this.currentYear, month, 1).getDay(); // Primer día del mes
+      const daysInMonth = new Date(this.currentYear, month + 1, 0).getDate();
+      const firstDay = new Date(this.currentYear, month, 1).getDay();
 
       for (let i = 0; i < daysInMonth; i++) {
         const dayOfWeek = (firstDay + i) % 7;
 
         if (dayOfWeek === diaSemana) {
-          // Si coincide con el día de la semana proporcionado
-          // Marcar el día como no laboral
           this.saveNonWorkingDay(month, i + 1, `Día de descanso semanal (día ${diaSemana})`);
         }
       }
@@ -335,6 +389,7 @@ export class HorariosComponent {
     console.log(`Se marcaron todos los días ${diaSemana} como no laborales.`);
   }
 }
+
 interface Dia {
   month: number;
   day: number;

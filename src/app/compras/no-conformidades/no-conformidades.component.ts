@@ -4,6 +4,7 @@ import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { RecepcionService } from 'src/app/services/recepcion.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,7 +32,7 @@ export class NoConformidadesComponent {
   }
 
   verPlan(plan) {
-    const url = `https://192.168.0.22/api/imagen/plan/${plan}`;
+    const url = `${environment.imgUrl}/imagen/plan/${plan}`;
 
     // Create an anchor element
     const link = document.createElement('a');

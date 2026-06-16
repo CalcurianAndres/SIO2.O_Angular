@@ -82,7 +82,7 @@
         <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el origen
       </p>
       <div class="tags-list" *ngIf="nuevo ? origenes.length > 0 : (data?.origenes?.length ?? 0) > 0">
-        <span class="tag is-info is-light" *ngFor="let o of nuevo ? origenes : data?.origenes || []; index as i">
+        <span class="tag is-info is-light is-medium" *ngFor="let o of nuevo ? origenes : data?.origenes || []; index as i">
           <i class="fas fa-flag"></i> {{ o.pais }} ({{ o.estado }})
           <button class="delete is-small" (click)="nuevo ? deleteOrigen(i) : deleteOrigen_(i)"></button>
         </span>
@@ -113,7 +113,7 @@
 
       <!-- Tags: grupos added -->
       <div class="tags-list" *ngIf="nuevo ? grupos.length > 0 : (data?.grupo?.length ?? 0) > 0">
-        <span class="tag is-info is-light" *ngFor="let g of nuevo ? grupos : data?.grupo || []; index as i">
+        <span class="tag is-info is-light is-medium" *ngFor="let g of nuevo ? grupos : data?.grupo || []; index as i">
           <i class="fas fa-cube"></i> {{ g.nombre }}
           <button class="delete is-small" (click)="nuevo ? deleteGrupo(i) : deleteGrupo_(i)"></button>
         </span>
@@ -229,30 +229,27 @@
         </p>
         <p id="validationMessage" class="help is-danger" style="display: none"></p>
 
-        <!-- Contactos table -->
-        <table
-          class="table is-fullwidth is-narrow"
+        <!-- Contactos cards -->
+        <div
+          class="tags-list contact-grid"
           *ngIf="(nuevo ? p_contacto : proveedor_directo_selected?.[0]?.contactos)?.length > 0"
         >
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Correo</th>
-              <th>Cargo</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of nuevo ? p_contacto : proveedor_directo_selected?.[0]?.contactos || []; index as i">
-              <td>{{ c.nombre }}</td>
-              <td>{{ c.numero || c.telefono }}</td>
-              <td>{{ c.email || c.correo }}</td>
-              <td>{{ c.cargo }}</td>
-              <td><i class="fas fa-trash-alt red" (click)="nuevo ? deletecontacto(i) : deletecontacto_(i)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+          <div
+            *ngFor="let c of nuevo ? p_contacto : proveedor_directo_selected?.[0]?.contactos || []; index as i"
+            class="contact-card"
+          >
+            <div class="contact-card__head">
+              <i class="fas fa-user-tie mr-1"></i>
+              <strong>{{ c.nombre }}</strong>
+              <button class="delete is-small" (click)="nuevo ? deletecontacto(i) : deletecontacto_(i)"></button>
+            </div>
+            <div class="contact-card__body">
+              <div class="contact-card__row" *ngIf="c.numero || c.telefono"><i class="fas fa-phone mr-1"></i> {{ c.numero || c.telefono }}</div>
+              <div class="contact-card__row" *ngIf="c.email || c.correo"><i class="fas fa-at mr-1"></i> {{ c.email || c.correo }}</div>
+              <div class="contact-card__row" *ngIf="c.cargo"><i class="fas fa-briefcase mr-1"></i> {{ c.cargo }}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Guardar / Editar button -->

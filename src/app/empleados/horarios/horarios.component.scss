@@ -1,146 +1,423 @@
-.tarjetas_menu {
-  cursor: pointer;
-  text-align: center;
-  font-family: 'Gilroy';
-  color: white;
-  font-size: x-large;
+/* ============================================================
+   TASK-016: Rediseño visual del componente de horarios
+   - Reemplazados todos los colores hex por CSS custom properties
+   - Eliminados estilos .grid-container_, .tarjeta, .tabs custom
+   - Agregados estilos para número de semana y toggle vista mensual
+   - Modernismo: micro-interacciones, elevación, glow, transiciones
+   ============================================================ */
+
+/* ===================================================================
+   1. SCHEDULE CARDS  (Bulma .card + hover elevado)
+   =================================================================== */
+
+.horario-cards {
+  margin-top: 0.5rem;
 }
 
-/* Estilos principales del calendario */
+.schedule-card {
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.25s ease;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.schedule-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--border-color);
+}
+
+.schedule-card .card-content p {
+  line-height: 1.6;
+}
+
+/* Iconos de acción con micro-interacción */
+.icon-action {
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+  display: inline-block;
+}
+
+.icon-action:hover {
+  transform: scale(1.25);
+}
+
+/* Star toggle (default horario) */
+.star-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.star-toggle i {
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.4s, transform 0.3s ease;
+}
+.star-toggle i:hover {
+  transform: scale(1.2);
+}
+.star-toggle input:checked + i {
+  color: gold;
+}
+
+/* ===================================================================
+   2. YEAR SELECTOR  (moderno con glow y chevrons animados)
+   =================================================================== */
+
+.year-selector {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1rem;
+}
+
+.year-btn {
+  border-radius: 0;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition:
+    all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.year-btn:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.year-btn:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.year-btn:hover:not(.is-active-year) {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.year-btn.is-active-year {
+  background: linear-gradient(135deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 80%, #000));
+  color: #fff;
+  border-color: var(--accent-blue);
+  box-shadow:
+    0 4px 14px color-mix(in srgb, var(--accent-blue) 40%, transparent);
+  z-index: 1;
+  position: relative;
+}
+
+.year-btn.is-active-year:hover {
+  box-shadow:
+    0 6px 20px color-mix(in srgb, var(--accent-blue) 50%, transparent);
+  transform: translateY(-2px);
+}
+
+.year-btn:active:not(.is-active-year) {
+  transform: translateY(1px);
+}
+
+.year-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.25s ease;
+}
+
+.year-btn:hover .year-arrow {
+  transform: translateX(2px);
+}
+
+.year-btn:first-child:hover .year-arrow {
+  transform: translateX(-2px);
+}
+
+.year-current {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.year-label {
+  font-size: 0.85rem;
+}
+
+/* ===================================================================
+   3. VIEW TOGGLE  (Anual / Mensual)
+   =================================================================== */
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.view-toggle-group {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.view-toggle-btn {
+  transition:
+    all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.view-toggle-btn.is-active-view {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+  box-shadow:
+    0 2px 8px color-mix(in srgb, var(--accent-blue) 30%, transparent);
+}
+
+.view-toggle-btn:not(.is-active-view) {
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+
+.view-toggle-btn:not(.is-active-view):hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+/* ===================================================================
+   4. CALENDAR CARD  (elevado con glow)
+   =================================================================== */
+
+.calendar-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.calendar-card:hover {
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ===================================================================
+   5. CALENDAR GRID
+   =================================================================== */
+
 .calendar-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  gap: 0.5rem;
+  padding: 0.25rem;
 }
 
+/* Cada mes */
 .month {
   width: 27%;
-  padding: 15px;
+  padding: 12px 15px 15px;
+  min-width: 240px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
+.month:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Vista mensual: el mes ocupa más espacio */
+.month.mensual {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.month h3 {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: var(--text-heading);
+  font-family: 'Gilroy', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+
+.month h3::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+  border-radius: 2px;
+  margin: 0.3rem auto 0;
+}
+
+/* Grilla de días: 7 columnas + 1 para número de semana */
 .days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 32px repeat(7, 1fr);
+  gap: 2px;
 }
 
+/* Header de días de la semana */
 .weekday {
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
-  padding: 2px;
-  background-color: #f4f4f4;
-  border: 1px solid #ddd;
+  padding: 5px 2px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
 }
 
+/* Número de semana ISO */
+.week-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: transparent;
+  border: none;
+  padding: 2px;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  opacity: 0.7;
+}
+
+/* Cada celda de día */
 .day {
-  padding: 10px;
+  padding: 5px 3px;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   cursor: pointer;
   position: relative;
-}
-
-.selected {
-  background-color: lightcoral;
-  color: white;
-}
-
-.non-laboral {
-  background-color: lightblue;
+  background-color: var(--bg-card);
   color: var(--text-primary);
+  font-size: 0.78rem;
+  border-radius: 4px;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.day:hover {
-  background-color: #f0f0f0;
+.day.empty {
+  border-color: transparent;
+  background-color: transparent;
+  cursor: default;
 }
 
+.day:not(.empty):hover {
+  background-color: var(--hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+/* Día no laboral */
+.day.selected {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--status-danger) 20%, var(--bg-card)), color-mix(in srgb, var(--status-danger) 12%, var(--bg-card)));
+  color: var(--status-danger);
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--status-danger) 35%, transparent);
+}
+
+.day.selected:hover {
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--status-danger) 25%, transparent);
+}
+
+/* Popup del motivo (tooltip) */
 .motivo-popup {
   display: none;
   position: absolute;
-  top: -30px;
+  bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  background-color: #2f2f2fde;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  padding: 5px;
-  z-index: 10;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 6px 10px;
+  z-index: 20;
   width: 150px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+  font-size: 0.7rem;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.4;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: tooltipIn 0.2s ease-out;
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .day:hover .motivo-popup {
   display: block;
 }
 
-.grid-container_ {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 16px;
-  padding: 16px;
-}
+/* ===================================================================
+   6. RESPONSIVE
+   =================================================================== */
 
-//   .tarjeta:first-child {
-//     margin-left: -13px; /* Elimina cualquier margen izquierdo de la primera tarjeta */
-//   }
+@media screen and (max-width: 768px) {
+  .month {
+    width: 100%;
+    min-width: unset;
+  }
 
-.star-toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+  .days {
+    grid-template-columns: 28px repeat(7, 1fr);
+    gap: 1px;
+  }
 
-.star-toggle i {
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.4s;
-}
+  .day {
+    padding: 3px 2px;
+    font-size: 0.65rem;
+  }
 
-.star-toggle input:checked + i {
-  color: gold; /* Estrellas doradas */
-}
+  .week-number {
+    font-size: 0.5rem;
+  }
 
-.title__ {
-  font-family: 'Gilroy';
-  font-size: large;
-}
+  .schedule-card:hover {
+    transform: translateY(-2px);
+  }
 
-.tabs {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  margin: 0px 0;
-}
+  .year-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
 
-.tab {
-  background-color: white; /* Color de fondo blanco */
-  color: #333; /* Color del texto */
-  padding: 10px 80px; /* Espaciado interno */
-  margin: 0 0px;
-  cursor: pointer;
-  position: relative;
-  border-radius: 10px 10px 0 0; /* Bordes redondeados en la parte superior */
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
-  transform: translateY(15px); /* Eleva la pestaña activa */
-}
-
-.tab.active {
-  background-color: white; /* Mantiene el fondo blanco */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más fuerte para la pestaña activa */
-  transform: translateY(0px); /* Eleva la pestaña activa */
-  z-index: 2; /* Asegura que la pestaña activa esté por encima */
-  font-size: xx-large;
-  font-family: 'Gilroy';
-}
-
-.tab span {
-  z-index: 1; /* Asegura que el texto esté en la parte superior */
-  font-weight: bold; /* Texto en negrita */
-}
-
-/* Alineación del texto centrado */
-.tab span {
-  display: inline-block; /* Para centrar el texto */
-  text-align: center; /* Centra el texto en la pestaña */
+  .year-current {
+    font-size: 0.95rem;
+  }
 }

@@ -184,7 +184,7 @@
       <div class="tags-list mb-3" *ngIf="data.almacenes?.length">
         <span
           *ngFor="let almacen of data.almacenes; index as i"
-          class="tag is-warning is-light is-medium is-clickable"
+          class="tag is-info is-light is-medium is-clickable"
           [ngClass]="{ 'has-coords': almacen.lat && almacen.lng }"
           (click)="seleccionarAlmacenParaEditar(almacen)"
         >

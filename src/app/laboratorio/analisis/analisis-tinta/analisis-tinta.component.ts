@@ -11,6 +11,7 @@ import { SolicitudesService } from 'src/app/services/solicitudes.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
 import Swal from 'sweetalert2';
 import { LoginService } from 'src/app/services/login.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-analisis-tinta',
@@ -77,7 +78,7 @@ export class AnalisisTintaComponent implements OnChanges {
   MostrarImagen() {
     Swal.fire({
       title: 'Draw down',
-      imageUrl: `https://192.168.0.22/api/imagen/analisis/${this.Analisis.img}`,
+      imageUrl: `${environment.imgUrl}/imagen/analisis/${this.Analisis.img}`,
       imageAlt: 'Draw down',
       showConfirmButton: false,
     });
@@ -421,6 +422,17 @@ export class AnalisisTintaComponent implements OnChanges {
         pdf.pageOrientation('portrait');
         pdf.pageSize('A4');
 
+        const getImageSafe = async (url: string, opts?: { width?: number; margin?: [number, number] }) => {
+          try {
+            const img = new Img(url);
+            if (opts?.width) img.width(opts.width);
+            if (opts?.margin) img.margin(opts.margin);
+            return await img.build();
+          } catch {
+            return new Txt('').end;
+          }
+        };
+
         pdf.add(
           new Table([
             [
@@ -600,15 +612,15 @@ export class AnalisisTintaComponent implements OnChanges {
               new Cell(new Txt('').bold().end).end,
               new Cell(new Txt('').bold().end).end,
               new Cell(new Txt('').bold().end).end,
-              new Cell(
-                await new Img(`https://192.168.0.22/api/imagen/analisis/${analisis.img}`)
-                  .width(150)
-                  .margin([8, 0])
-                  .build(),
+                            new Cell(
+                await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, { width: 150, margin: [8, 0] })
               )
                 .rowSpan(34)
                 .border([false, false])
                 .fontSize(8).end,
+
+
+
             ],
             [
               new Cell(new Txt('Transparencia / Opacidad').alignment('center').bold().end)
@@ -1570,6 +1582,17 @@ export class AnalisisTintaComponent implements OnChanges {
       pdf.pageOrientation('portrait');
       pdf.pageSize('A4');
 
+      const getImageSafe = async (url: string, opts?: { width?: number; margin?: [number, number] }) => {
+        try {
+          const img = new Img(url);
+          if (opts?.width) img.width(opts.width);
+          if (opts?.margin) img.margin(opts.margin);
+          return await img.build();
+        } catch {
+          return new Txt('').end;
+        }
+      };
+
       pdf.add(
         new Table([
           [
@@ -1748,10 +1771,7 @@ export class AnalisisTintaComponent implements OnChanges {
             new Cell(new Txt('').bold().end).end,
             new Cell(new Txt('').bold().end).end,
             new Cell(
-              await new Img(`https://192.168.0.22/api/imagen/analisis/${analisis.img}`)
-                .width(150)
-                .margin([8, 0])
-                .build(),
+              await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, { width: 150, margin: [8, 0] })
             )
               .rowSpan(34)
               .border([false, false])

@@ -93,26 +93,7 @@
 
       <hr />
 
-      <table class="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Defecto</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let defectos of defectos_agregados; index as i">
-            <td>{{ defectos }}</td>
-            <td>
-              <i
-                class="fas fa-trash-alt"
-                style="color: var(--status-danger); cursor: pointer"
-                (click)="defectos_agregados.splice(i, 1)"
-              ></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <app-badge-list [items]="defectos_agregados" (remove)="defectos_agregados.splice($event, 1)"></app-badge-list>
 
       <hr />
 
@@ -482,11 +463,8 @@
         <div class="columns">
           <div class="column is-2">
             <figure class="image is-75x75 profile_pic">
-              <img
-                class="is-rounded"
-                width="30px"
-                [src]="imgUrl + '/imagen/empleado/' + trabajador.datos_personales.foto"
-              />
+              <app-img-fallback tipo="empleado" [filename]="trabajador.datos_personales.foto"
+                cssClass="is-rounded" width="30px" height="30px"></app-img-fallback>
             </figure>
           </div>
           <div class="column is-4">
@@ -510,26 +488,7 @@
         </div>
       </span>
       <hr />
-      <table class="table is-fullwidth is-striped">
-        <thead>
-          <tr>
-            <th>Empleado</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let empleado of data.team; index as i">
-            <td>{{ empleado }}</td>
-            <td>
-              <i
-                class="fas fa-trash-alt"
-                style="cursor: pointer; color: var(--status-danger)"
-                (click)="data.team.splice(i, 1)"
-              ></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <app-badge-list [items]="data.team" (remove)="data.team.splice($event, 1)"></app-badge-list>
       <br />
       <button class="button is-success" (click)="GuardarData()">
         <span class="icon"></span>

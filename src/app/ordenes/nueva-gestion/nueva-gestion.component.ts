@@ -4,7 +4,6 @@ import { DefectosService } from 'src/app/services/defectos.service';
 import { LoginService } from 'src/app/services/login.service';
 import { OproduccionService } from 'src/app/services/oproduccion.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
-import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,7 +22,6 @@ export class NuevaGestionComponent {
   public login = inject(LoginService);
   public defectos = inject(DefectosService);
   public trabajadores = inject(TrabajadoresService);
-  imgUrl = environment.imgUrl;
 
   public tipo = '';
   public hojas: boolean = true;

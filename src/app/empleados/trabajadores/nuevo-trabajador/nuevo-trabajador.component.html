@@ -206,26 +206,20 @@
             </button>
           </div>
         </div>
-        <table class="table is-fullwidth is-striped" *ngIf="referencias.length > 0">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Dirección</th>
-              <th>Teléfono</th>
-              <th>Ocupación</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ref of referencias; index as i">
-              <td>{{ ref.nombre }}</td>
-              <td>{{ ref.direccion }}</td>
-              <td>{{ ref.telefono }}</td>
-              <td>{{ ref.ocupacion }}</td>
-              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="referencias.splice(i, 1)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="tags-list contact-grid" *ngIf="referencias.length > 0">
+          <div *ngFor="let ref of referencias; index as i" class="contact-card">
+            <div class="contact-card__head">
+              <i class="fas fa-user-friends mr-1"></i>
+              <strong>{{ ref.nombre }}</strong>
+              <button class="delete is-small" (click)="referencias.splice(i, 1)"></button>
+            </div>
+            <div class="contact-card__body">
+              <div class="contact-card__row" *ngIf="ref.direccion"><i class="fas fa-map-marker-alt mr-1"></i> {{ ref.direccion }}</div>
+              <div class="contact-card__row" *ngIf="ref.telefono"><i class="fas fa-phone mr-1"></i> {{ ref.telefono }}</div>
+              <div class="contact-card__row" *ngIf="ref.ocupacion"><i class="fas fa-briefcase mr-1"></i> {{ ref.ocupacion }}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Step 3: Cargas Familiares -->
@@ -251,24 +245,11 @@
             </button>
           </div>
         </div>
-        <table class="table is-fullwidth is-striped" *ngIf="carga.length > 0">
-          <thead>
-            <tr>
-              <th>Parentesco</th>
-              <th>Apellidos y Nombre</th>
-              <th>Fecha de nacimiento</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let c of carga; index as i">
-              <td>{{ c.parentesco }}</td>
-              <td>{{ c.nombre }}</td>
-              <td>{{ c.fecha }}</td>
-              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="carga.splice(i, 1)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+        <app-badge-list [items]="carga" (remove)="carga.splice($event, 1)">
+          <ng-template let-c>
+            <i class="fas fa-user mr-1"></i> {{ c.parentesco }}: {{ c.nombre }} · {{ c.fecha }}
+          </ng-template>
+        </app-badge-list>
         <hr />
         <span class="section-label"><i class="fas fa-exclamation-triangle mr-1"></i>Contacto de emergencia</span>
         <div class="field is-grouped mt-2">
@@ -302,26 +283,19 @@
             </button>
           </div>
         </div>
-        <table class="table is-fullwidth is-striped" *ngIf="emergencias.length > 0">
-          <thead>
-            <tr>
-              <th>Parentesco</th>
-              <th>Nombre</th>
-              <th>Dirección</th>
-              <th>Teléfono</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let em of emergencias; index as i">
-              <td>{{ em.parentesco }}</td>
-              <td>{{ em.nombre }}</td>
-              <td>{{ em.direccion }}</td>
-              <td>{{ em.telefono }}</td>
-              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="emergencias.splice(i, 1)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="tags-list contact-grid" *ngIf="emergencias.length > 0">
+          <div *ngFor="let em of emergencias; index as i" class="contact-card">
+            <div class="contact-card__head">
+              <i class="fas fa-exclamation-triangle mr-1"></i>
+              <strong>{{ em.parentesco }}: {{ em.nombre }}</strong>
+              <button class="delete is-small" (click)="emergencias.splice(i, 1)"></button>
+            </div>
+            <div class="contact-card__body">
+              <div class="contact-card__row" *ngIf="em.direccion"><i class="fas fa-map-marker-alt mr-1"></i> {{ em.direccion }}</div>
+              <div class="contact-card__row" *ngIf="em.telefono"><i class="fas fa-phone mr-1"></i> {{ em.telefono }}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Step 4: Instrucción Académica -->
@@ -366,22 +340,11 @@
             </button>
           </div>
         </div>
-        <table class="table is-fullwidth is-striped" *ngIf="cursos_realizados.length > 0">
-          <thead>
-            <tr>
-              <th>Curso</th>
-              <th>Período</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let curso of cursos_realizados; index as i">
-              <td>{{ curso.nombre }}</td>
-              <td>{{ curso.periodo }}</td>
-              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="cursos_realizados.splice(i, 1)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+        <app-badge-list [items]="cursos_realizados" (remove)="cursos_realizados.splice($event, 1)">
+          <ng-template let-curso>
+            <i class="fas fa-pen mr-1"></i> {{ curso.nombre }} · {{ curso.periodo }}
+          </ng-template>
+        </app-badge-list>
         <span class="section-label mt-3"><i class="fas fa-laptop mr-1"></i>Manejo de herramientas informáticas</span>
         <div class="field is-grouped mt-2">
           <div class="control">
@@ -402,17 +365,11 @@
             </button>
           </div>
         </div>
-        <table class="table is-fullwidth is-striped" *ngIf="softwares.length > 0">
-          <thead>
-            <tr><th>Software</th><th></th></tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sfw of softwares; index as i">
-              <td>{{ sfw }}</td>
-              <td><i class="fas fa-trash-alt red" style="cursor: pointer" (click)="softwares.splice(i, 1)"></i></td>
-            </tr>
-          </tbody>
-        </table>
+        <app-badge-list [items]="softwares" (remove)="softwares.splice($event, 1)">
+          <ng-template let-sfw>
+            <i class="fas fa-laptop mr-1"></i> {{ sfw }}
+          </ng-template>
+        </app-badge-list>
       </div>
 
       <!-- Step 5: Función en la Empresa -->

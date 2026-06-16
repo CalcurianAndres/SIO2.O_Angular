@@ -13,6 +13,7 @@
   "
 >
 </app-nuevo-horario>
+
 <app-page-layout>
   <app-section-header
     title="Horarios"
@@ -20,75 +21,173 @@
     icon="fa-users"
     color="teal"
   ></app-section-header>
+
   <br />
+
   <button class="button is-info" (click)="nuevo = true">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>
     <span>Horario</span>
   </button>
+
   <br /><br />
-  <div class="grid-container_">
-    <div class="card tarjeta animate__animated animate__fadeInUp" *ngFor="let horario of api.horarios">
-      <div class="card-header">
-        <div class="card-header-title">
-          <div class="subtitle">
-            <div class="field is-grouped">
-              <div class="control">
-                <label class="star-toggle">
-                  <input type="checkbox" [checked]="horario.default" (change)="setDefault(horario)" />
-                  <i [class]="horario.default ? 'fas fa-star' : 'far fa-star'"></i>
-                </label>
-              </div>
-              <span style="font-family: 'Gilroy'; font-size: 15px">{{ horario.nombre }}</span>
-            </div>
+
+  <!-- Cards de horario — Bulma .card estándar con hover elevado -->
+  <div class="columns is-multiline horario-cards">
+    <div class="column is-4" *ngFor="let horario of api.horarios; let hIdx = index">
+      <div
+        class="card schedule-card animate__animated animate__fadeInUp"
+        [style.animation-delay]="hIdx * 0.06 + 's'"
+      >
+        <header class="card-header">
+          <p class="card-header-title">{{ horario.nombre }}</p>
+          <div class="card-header-icon">
+            <label class="star-toggle">
+              <input type="checkbox" [checked]="horario.default" (change)="setDefault(horario)" />
+              <i [class]="horario.default ? 'fas fa-star' : 'far fa-star'"></i>
+            </label>
           </div>
+        </header>
+        <div class="card-content">
+          <p><strong>Horario:</strong> {{ horario.de }} a {{ horario.a }}</p>
+          <p><strong>Días:</strong> de {{ horario.inicio }} a {{ horario.fin }}</p>
         </div>
+        <footer class="card-footer">
+          <a class="card-footer-item" (click)="editar(horario)">
+            <i class="far fa-edit green icon-action"></i>
+          </a>
+          <a class="card-footer-item" (click)="borrar(horario)">
+            <i class="fas fa-trash-alt red icon-action"></i>
+          </a>
+        </footer>
       </div>
-      <div class="card-content">
-        <strong>Horario:</strong> {{ horario.de }} a {{ horario.a }}<br />
-        <strong>Días:</strong> de {{ horario.inicio }} a {{ horario.fin }}
-      </div>
-      <footer class="card-footer">
-        <a class="card-footer-item"><i class="far fa-edit green" (click)="editar(horario)"></i></a>
-        <a class="card-footer-item"><i class="fas fa-trash-alt red" (click)="borrar(horario)"></i></a>
-      </footer>
     </div>
   </div>
+
   <br />
-  <div class="tabs">
-    <div class="tab" (click)="selectYear(currentYear - 1)">
-      <span>{{ currentYear - 1 }}</span>
+
+  <!-- Selector de año — moderno con animación -->
+  <div class="year-selector">
+    <button
+      class="button year-btn"
+      [ngClass]="{ 'is-active-year': currentYear === currentYear - 1 }"
+      (click)="selectYear(currentYear - 1)"
+      title="Año anterior"
+    >
+      <i class="fas fa-chevron-left year-arrow"></i>
+      <span class="year-label">{{ currentYear - 1 }}</span>
+    </button>
+    <button
+      class="button year-btn is-active-year"
+      (click)="selectYear(currentYear)"
+      title="Año actual"
+    >
+      <span class="year-current">{{ currentYear }}</span>
+    </button>
+    <button
+      class="button year-btn"
+      [ngClass]="{ 'is-active-year': currentYear === currentYear + 1 }"
+      (click)="selectYear(currentYear + 1)"
+      title="Año siguiente"
+    >
+      <span class="year-label">{{ currentYear + 1 }}</span>
+      <i class="fas fa-chevron-right year-arrow"></i>
+    </button>
+  </div>
+
+  <br />
+
+  <!-- Toggle: vista anual ↔ mensual con animación al cambiar -->
+  <div class="view-toggle mb-3">
+    <div class="buttons has-addons view-toggle-group">
+      <button
+        class="button is-small view-toggle-btn"
+        [ngClass]="{ 'is-active-view': !vistaMensual }"
+        (click)="vistaMensual = false"
+      >
+        <span class="icon is-small"><i class="fas fa-calendar-alt"></i></span>
+        <span>Anual</span>
+      </button>
+      <button
+        class="button is-small view-toggle-btn"
+        [ngClass]="{ 'is-active-view': vistaMensual }"
+        (click)="vistaMensual = true"
+      >
+        <span class="icon is-small"><i class="fas fa-calendar-day"></i></span>
+        <span>Mensual</span>
+      </button>
     </div>
-    <div class="tab active">
-      <span>{{ currentYear }}</span>
-    </div>
-    <div class="tab" (click)="selectYear(currentYear + 1)">
-      <span>{{ currentYear + 1 }}</span>
+    <div *ngIf="vistaMensual" class="select is-small" @fadeSlide>
+      <select [(ngModel)]="selectedMonth">
+        <option *ngFor="let month of months; let i = index" [value]="i">{{ month }}</option>
+      </select>
     </div>
   </div>
-  <div class="card">
-    <div class="calendar-container">
-      <div class="month" *ngFor="let month of months; let i = index">
-        <h3>{{ month }}</h3>
-        <div class="days">
-          <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
-          <div
-            *ngFor="let empty of getDaysInMonth(i) | slice: 0 : getDaysInMonth(i)[0].weekday"
-            class="day empty"
-          ></div>
-          <div
-            class="day"
-            *ngFor="let dayObj of getDaysInMonth(i)"
-            [ngClass]="{ selected: isNonLaboral(i, dayObj.day) }"
-            (click)="toggleDaySelection(i, dayObj.day)"
-          >
-            {{ dayObj.day }}
-            <div class="motivo-popup" *ngIf="isNonLaboral(i, dayObj.day)" style="text-align: center">
-              {{ getMotivo(i, dayObj.day) }}
-            </div>
+
+  <!-- Calendario con animación al cambiar año/vista -->
+  <div class="card calendar-card">
+    <div
+      class="calendar-container"
+      [@calendarAnimation]="currentYear + '-' + vistaMensual"
+    >
+      <!-- Vista anual: 12 meses -->
+      <ng-container *ngIf="!vistaMensual">
+        <div class="month" *ngFor="let month of months; let m = index">
+          <h3>{{ month }}</h3>
+          <div class="days">
+            <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
+            <ng-container *ngFor="let week of getWeeksInMonth(m)">
+              <div class="week-number">{{ week.weekNumber }}</div>
+              <div
+                class="day"
+                *ngFor="let dayObj of week.days"
+                [ngClass]="{
+                  empty: dayObj.empty,
+                  selected: !dayObj.empty && isNonLaboral(m, dayObj.day)
+                }"
+                (click)="!dayObj.empty && toggleDaySelection(m, dayObj.day)"
+              >
+                <ng-container *ngIf="!dayObj.empty">
+                  {{ dayObj.day }}
+                  <div class="motivo-popup" *ngIf="isNonLaboral(m, dayObj.day)">
+                    {{ getMotivo(m, dayObj.day) }}
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
           </div>
         </div>
-      </div>
+      </ng-container>
+
+      <!-- Vista mensual: mes individual más grande -->
+      <ng-container *ngIf="vistaMensual">
+        <div class="month mensual">
+          <h3>{{ months[selectedMonth] }}</h3>
+          <div class="days">
+            <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
+            <ng-container *ngFor="let week of getWeeksInMonth(selectedMonth)">
+              <div class="week-number">{{ week.weekNumber }}</div>
+              <div
+                class="day"
+                *ngFor="let dayObj of week.days"
+                [ngClass]="{
+                  empty: dayObj.empty,
+                  selected: !dayObj.empty && isNonLaboral(selectedMonth, dayObj.day)
+                }"
+                (click)="!dayObj.empty && toggleDaySelection(selectedMonth, dayObj.day)"
+              >
+                <ng-container *ngIf="!dayObj.empty">
+                  {{ dayObj.day }}
+                  <div class="motivo-popup" *ngIf="isNonLaboral(selectedMonth, dayObj.day)">
+                    {{ getMotivo(selectedMonth, dayObj.day) }}
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
+
   <hr />
 </app-page-layout>

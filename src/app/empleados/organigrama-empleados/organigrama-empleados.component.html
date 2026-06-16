@@ -73,12 +73,8 @@
         <div class="emp-grid">
           <div *ngFor="let emp of empleadosDirectos(dep)" class="emp-card">
             <div class="emp-avatar-col">
-              <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
-                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
-                (error)="emp._imgError = true" />
-              <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
-                <i class="fas fa-user"></i>
-              </div>
+              <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
+                cssClass="emp-avatar" width="40px" height="40px"></app-img-fallback>
             </div>
             <div class="emp-info">
               <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
@@ -102,12 +98,8 @@
         <div class="emp-grid">
           <div *ngFor="let emp of empleadosDelArea(area, dep)" class="emp-card">
             <div class="emp-avatar-col">
-              <img *ngIf="emp.datos_personales?.foto && !emp._imgError" class="emp-avatar"
-                [src]="imgUrl + '/imagen/empleado/' + emp.datos_personales?.foto"
-                (error)="emp._imgError = true" />
-              <div *ngIf="!emp.datos_personales?.foto || emp._imgError" class="emp-avatar-placeholder">
-                <i class="fas fa-user"></i>
-              </div>
+              <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
+                cssClass="emp-avatar" width="40px" height="40px"></app-img-fallback>
             </div>
             <div class="emp-info">
               <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>

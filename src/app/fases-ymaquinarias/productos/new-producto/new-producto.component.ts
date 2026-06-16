@@ -12,6 +12,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
 import { Cell, Columns, Img, Ol, PdfMakeWrapper, Stack, Table, Txt, Ul } from 'pdfmake-wrapper';
 import { ProductosService } from 'src/app/services/productos.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-new-producto',
@@ -182,7 +183,7 @@ export class NewProductoComponent {
   openImage(imageName, imageAlt) {
     Swal.fire({
       showConfirmButton: false,
-      imageUrl: `https://192.168.0.22/api/imagen/producto/${imageName}`,
+      imageUrl: `${environment.imgUrl}/imagen/producto/${imageName}`,
       imageAlt: imageAlt,
     });
   }
@@ -741,6 +742,16 @@ export class NewProductoComponent {
       pdf.pageOrientation('portrait');
       pdf.pageSize('A4');
 
+      const getImageSafe = async (url: string, opts?: { width?: number }) => {
+        try {
+          const img = new Img(url);
+          if (opts?.width) img.width(opts.width);
+          return await img.build();
+        } catch {
+          return new Txt('').end;
+        }
+      };
+
       pdf.add(
         new Table([
           [
@@ -869,10 +880,7 @@ export class NewProductoComponent {
           [new Cell(new Txt('2.3 Diseño del producto').end).fillColor('#dedede').bold().border([false]).end],
           [
             new Cell(
-              await new Img('https://192.168.0.22/api/imagen/producto/PRODUCTO_2_4_2024_15_42_39_494.png')
-                .width(450)
-                .margin([0, 15])
-                .build(),
+              await getImageSafe(`${environment.imgUrl}/imagen/producto/PRODUCTO_2_4_2024_15_42_39_494.png`, { width: 450 })
             )
               .alignment('center')
               .border([false])

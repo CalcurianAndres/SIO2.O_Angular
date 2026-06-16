@@ -6,6 +6,7 @@ import { ClientesService } from 'src/app/services/clientes.service';
 import { ProductosService } from 'src/app/services/productos.service';
 import { DefectosService } from 'src/app/services/defectos.service';
 import { FormulasService } from 'src/app/services/formulas.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-productos',
@@ -425,6 +426,16 @@ export class ProductosComponent implements OnInit {
       pdf.pageOrientation('portrait');
       pdf.pageSize('A4');
 
+      const getImageSafe = async (url: string, opts?: { width?: number }) => {
+        try {
+          const img = new Img(url);
+          if (opts?.width) img.width(opts.width);
+          return await img.build();
+        } catch {
+          return new Txt('').end;
+        }
+      };
+
       const Sustratos: any = [];
       const Sustratos_: any = [];
       const barnices: any = [];
@@ -677,10 +688,7 @@ export class ProductosComponent implements OnInit {
           [new Cell(new Txt('2.3 Diseño del producto').end).fillColor('#dedede').bold().border([false]).end],
           [
             new Cell(
-              await new Img(`https://192.168.0.22/api/imagen/producto/${producto.dimensiones.diseno}`)
-                .width(400)
-                .margin([0, 15])
-                .build(),
+              await getImageSafe(`${environment.imgUrl}/imagen/producto/${producto.dimensiones.diseno}`, { width: 400 }),
             )
               .alignment('center')
               .border([false])

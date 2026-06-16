@@ -1,0 +1,17 @@
+/* ── Badge list: flex-wrap layout for tags ── */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  .delete.is-small {
+    margin-left: 2px;
+  }
+}

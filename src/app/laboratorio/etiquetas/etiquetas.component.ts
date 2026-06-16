@@ -3,6 +3,7 @@ import { PdfMakeWrapper, Txt, Columns, Table, Canvas, Cell, Img } from 'pdfmake-
 import { HttpClient } from '@angular/common/http';
 // import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import pdfFonts from '../../../assets/fonts/custom';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-etiquetas-lab',
@@ -303,7 +304,7 @@ export class EtiquetasComponent {
 
     pdfDoc.getBase64((base64: string) => {
       this.http
-        .post('https:192.168.0.22/api/print', {
+        .post(environment.apiUrl + '/print', {
           pdfBase64: base64,
           printer: '\\\\192.168.0.39\\IMPRESORA SIO',
           copies: 1,
@@ -375,7 +376,7 @@ export class EtiquetasComponent {
 
     pdfDoc.getBase64((base64: string) => {
       this.http
-        .post('https:192.168.0.22/api/print', {
+        .post(environment.apiUrl + '/print', {
           pdfBase64: base64,
           printer: '\\\\pol-ind-017\\Etiquetas',
           copies: 1,

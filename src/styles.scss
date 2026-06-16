@@ -881,6 +881,64 @@ input[type='checkbox'].checkbox:disabled:checked {
   border-radius: 2px;
 }
 
+// ─── Shared tags-list (base layout) ───
+// Base flex-wrap layout. Component-specific overrides use this class + a child selector.
+.tags-list:not(.contact-grid) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+// ─── Shared contact-card pattern ───
+// Used by: clientes, trabajadores, fabricantes, and any module with rich multi-field items
+.tags-list.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.contact-card {
+  background: color-mix(in srgb, var(--bg-secondary) 90%, var(--accent-blue) 5%);
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  min-width: 0;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+
+    strong {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    .delete {
+      flex-shrink: 0;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  &__row {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    opacity: 0.75;
+    word-break: break-all;
+    line-height: 1.4;
+  }
+}
+
 // ─── Global transition ───
 * {
   transition-property: background-color, border-color, color, box-shadow;

@@ -1,0 +1,17 @@
+<div class="img-fallback-wrapper" [style.width]="width" [style.height]="height">
+  <img *ngIf="!hasNoPhoto && !error"
+       class="img-fallback-img"
+       [ngClass]="cssClass"
+       [src]="resolvedSrc"
+       [style.width]="width"
+       [style.height]="height"
+       (load)="onLoad()"
+       (error)="onError()" />
+  <div *ngIf="hasNoPhoto || error || loading"
+       class="img-fallback-placeholder"
+       [ngClass]="{ 'is-loading': loading }"
+       [style.width]="width"
+       [style.height]="height">
+    <i *ngIf="!loading" class="fas" [ngClass]="'fa-' + fallbackIcon"></i>
+  </div>
+</div>

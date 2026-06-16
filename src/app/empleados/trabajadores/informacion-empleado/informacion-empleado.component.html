@@ -15,10 +15,8 @@
       <div class="columns">
         <div class="column">
           <figure class="image is-75x75 profile_pic">
-            <img *ngIf="_informacion.datos_personales.foto && !_informacion._imgError" [src]="imgUrl + '/imagen/empleado/' + _informacion.datos_personales.foto" (error)="_informacion._imgError = true" />
-            <div *ngIf="!_informacion.datos_personales.foto || _informacion._imgError" style="width: 75px; height: 75px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem">
-              <i class="fas fa-user"></i>
-            </div>
+            <app-img-fallback tipo="empleado" [filename]="_informacion.datos_personales.foto"
+              cssClass="" width="75px" height="75px"></app-img-fallback>
           </figure>
           <button
             class="button"

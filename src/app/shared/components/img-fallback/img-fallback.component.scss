@@ -1,0 +1,31 @@
+.img-fallback-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.img-fallback-img {
+  display: block;
+  object-fit: cover;
+}
+
+.img-fallback-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary, #f0f0f0);
+  color: var(--text-muted, #999);
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.img-fallback-placeholder.is-loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
