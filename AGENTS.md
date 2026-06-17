@@ -202,3 +202,36 @@ Create hierarchical org chart for employees, migrate carousel to step-wizard, fi
 - TASK-013 copia exactamente el patrón visual de TASK-005 para consistencia.
 - TASK-010 cambió de auto-detección de país a solo indicador visual bandera +58.
 - Dependencias TASK-010→TASK-009 y TASK-012→TASK-005 eliminadas.
+
+## Session Log — 2026-06-16
+
+### Goal
+Correcciones en módulo de compras, cierre de tareas, creación de herramienta de registro de horas y actualización del manual de diseño.
+
+### Code changes
+- **`recibos/recibos.component.ts`**: Nueva herramienta interna de registro de horas con seed data, PDF generation, y cálculo de totales.
+- **`recibos/recibos.component.html`**: Template del componente recibos con tabla editable y botón PDF.
+- **`recibos/recibos.component.scss`**: Estilos visuales del componente de recibos.
+
+## Session Log — 2026-06-17
+
+### Goal
+Correcciones en wizard de empleados y geolocalización, mejora de calendario con número de semana, y limpieza de documentación.
+
+### Code changes
+- **`empleados/trabajadores/nuevo-trabajador/nuevo-trabajador.component.ts`**: Inicialización de foto de empleado en wizard de edición.
+- **`ordenes/clientes/paises.service.ts`**: Migración de imágenes de banderas a servidor CDN de banderas y corrección de ruta de conexión con geolocalización.
+- **`ordenes/clientes/new-cliente/new-cliente.component.html`**: Corrección de warnings de compilación.
+- **`empleados/horarios/horarios.component.ts`**: Incorporación de columna de número de semana (SEM) y lógica de cálculo.
+- **`empleados/horarios/horarios.component.html`**: Template con columna SEM y eliminación de línea decorativa del calendario.
+- **`empleados/horarios/horarios.component.scss`**: Color distintivo para la columna de número de semana.
+- **`shared/recibos/recibos.component.ts`**: Descripciones resumidas en seed data.
+
+### Documentation
+- **SIO_CEREBRO**: Limpieza y reorganización general de la documentación técnica del vault.
+- **reportes/reporte-17-06-2026.md**: Creación y actualización con descripciones resumidas.
+
+### Key decisions
+- Banderas migradas a `flagsapi.com` CDN ante inestabilidad del servidor anterior.
+- Columna SEM con color de fondo distintivo para diferenciación visual del resto del calendario.
+- Descripciones de seed data en recibos resumidas a formato ejecutivo (máximo ~15 palabras).
