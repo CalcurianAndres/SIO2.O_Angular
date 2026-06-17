@@ -1,52 +1,9 @@
 /* ============================================================
    TASK-016: Rediseño visual del componente de horarios
-   - Reemplazados todos los colores hex por CSS custom properties
-   - Eliminados estilos .grid-container_, .tarjeta, .tabs custom
-   - Agregados estilos para número de semana y toggle vista mensual
-   - Modernismo: micro-interacciones, elevación, glow, transiciones
+   - Cards reemplazadas por tabla Bulma `table is-fullwidth is-hoverable`
+   - Iconos de acción usan `.btn-action-icon` global de styles.scss
+   - Calendario: CSS custom properties, sin hex hardcodeados
    ============================================================ */
-
-/* ===================================================================
-   1. SCHEDULE CARDS  (Bulma .card + hover elevado)
-   =================================================================== */
-
-.horario-cards {
-  margin-top: 0.5rem;
-}
-
-.schedule-card {
-  transition:
-    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.25s ease;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.schedule-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: var(--border-color);
-}
-
-.schedule-card .card-content p {
-  line-height: 1.6;
-}
-
-/* Iconos de acción con micro-interacción */
-.icon-action {
-  transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
-  display: inline-block;
-}
-
-.icon-action:hover {
-  transform: scale(1.25);
-}
 
 /* Star toggle (default horario) */
 .star-toggle input {
@@ -402,10 +359,6 @@
 
   .week-number {
     font-size: 0.55rem;
-  }
-
-  .schedule-card:hover {
-    transform: translateY(-2px);
   }
 
   .year-btn {

@@ -31,37 +31,39 @@
 
   <br /><br />
 
-  <!-- Cards de horario — Bulma .card estándar con hover elevado -->
-  <div class="columns is-multiline horario-cards">
-    <div class="column is-4" *ngFor="let horario of api.horarios; let hIdx = index">
-      <div
-        class="card schedule-card animate__animated animate__fadeInUp"
-        [style.animation-delay]="hIdx * 0.06 + 's'"
-      >
-        <header class="card-header">
-          <p class="card-header-title">{{ horario.nombre }}</p>
-          <div class="card-header-icon">
-            <label class="star-toggle">
-              <input type="checkbox" [checked]="horario.default" (change)="setDefault(horario)" />
-              <i [class]="horario.default ? 'fas fa-star' : 'far fa-star'"></i>
-            </label>
-          </div>
-        </header>
-        <div class="card-content">
-          <p><strong>Horario:</strong> {{ horario.de }} a {{ horario.a }}</p>
-          <p><strong>Días:</strong> de {{ horario.inicio }} a {{ horario.fin }}</p>
-        </div>
-        <footer class="card-footer">
-          <a class="card-footer-item" (click)="editar(horario)">
-            <i class="far fa-edit green icon-action"></i>
-          </a>
-          <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="borrar(horario)">
-            <i class="fas fa-trash-alt icon-danger"></i>
+  <!-- Tabla de horarios — Bulma estándar, reemplaza las cards anteriores -->
+  <table class="table is-fullwidth is-hoverable">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Horario</th>
+        <th>Días</th>
+        <th class="has-text-centered">Default</th>
+        <th class="has-text-centered">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let horario of api.horarios">
+        <td><strong>{{ horario.nombre }}</strong></td>
+        <td>{{ horario.de }} a {{ horario.a }}</td>
+        <td>de {{ horario.inicio }} a {{ horario.fin }}</td>
+        <td class="has-text-centered">
+          <label class="star-toggle">
+            <input type="checkbox" [checked]="horario.default" (change)="setDefault(horario)" />
+            <i [class]="horario.default ? 'fas fa-star' : 'far fa-star'"></i>
+          </label>
+        </td>
+        <td class="has-text-centered has-nowrap">
+          <button type="button" class="btn-action-icon" title="Editar" (click)="editar(horario)">
+            <i class="fas fa-edit icon-action"></i>
           </button>
-        </footer>
-      </div>
-    </div>
-  </div>
+          <button type="button" class="btn-action-icon" title="Eliminar" (click)="borrar(horario)">
+            <i class="fas fa-trash icon-danger"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <br />
 

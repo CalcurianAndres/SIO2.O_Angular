@@ -22,12 +22,12 @@ export class RecibosComponent {
         { fecha: '25/05/2026', horas: 8, descripcion: 'Registro y configuración de productos en el sistema' },
         { fecha: '26/05/2026', horas: 8, descripcion: ' organización del módulo de compras y proveedores' },
         { fecha: '29/05/2026', horas: 8, descripcion: 'Mejoras en tablas y orden de información del sistema' },
-        { fecha: '05/06/2026', horas: 8, descripcion: 'Actualización de especificaciones técnicas, clientes, proveedores e integración de países por API' },
+        { fecha: '05/06/2026', horas: 8, descripcion: 'Actualización de especificaciones y datos de clientes y proveedores' },
         { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de órdenes de compra' },
         { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en órdenes de compra' },
-        { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama de empleados, configuración de producción para HTTPS, rediseño de departamentos y cargos, bandera +58 en teléfonos, wizard de nuevo empleado y corrección de rutas de imágenes' },
-        { fecha: '16/06/2026', horas: 8, descripcion: 'Corrección de filtro de fabricantes en órdenes de compra, arreglo de acento faltante en producción y botón de cierre de ventanas, verificación y cierre de tareas de ocultar datos de proveedor y selector universal de prefijos telefónicos, corrección de errores de compilación del sistema, creación de herramienta interna de registro de horas y actualización del manual de diseño visual con corrección de inconsistencias' },
-        { fecha: '17/06/2026', horas: 8, descripcion: 'Corrección de foto de empleado en wizard de edición, ajuste de ruta de conexión con servicio de geolocalización, migración de imágenes de banderas de países a servidor de banderas, eliminación de línea decorativa del calendario de horarios, incorporación de columna de número de semana en el calendario y aplicación de color distintivo a la misma, y limpieza general de la documentación técnica del sistema' },
+        { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama de empleados, ajustes de producción, rediseño de departamentos y cargos, y mejoras en formularios de empleados' },
+        { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones en módulo de compras y producción, cierre de tareas pendientes, y actualización del manual de diseño' },
+        { fecha: '17/06/2026', horas: 8, descripcion: 'Correcciones en wizard de empleados y geolocalización, mejora de calendario con número de semana, y limpieza de documentación' },
       ]),
   );
 
