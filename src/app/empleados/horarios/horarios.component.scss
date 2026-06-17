@@ -255,20 +255,10 @@
   padding-bottom: 0.4rem;
 }
 
-.month h3::after {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-blue), transparent);
-  border-radius: 2px;
-  margin: 0.3rem auto 0;
-}
-
-/* Grilla de días: 7 columnas + 1 para número de semana */
+/* Grilla de días: 7 columnas para días + 1 para SEM */
 .days {
   display: grid;
-  grid-template-columns: 32px repeat(7, 1fr);
+  grid-template-columns: repeat(7, 1fr) 50px;
   gap: 2px;
 }
 
@@ -286,20 +276,26 @@
   border-radius: 4px;
 }
 
-/* Número de semana ISO */
+/* Último encabezado = columna SEM */
+.weekday:last-child {
+  background-color: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+  font-size: 0.6rem;
+}
+
+/* Número de semana ISO — columna SEM en filas de datos */
 .week-number {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: var(--text-muted);
-  background-color: transparent;
-  border: none;
+  background-color: color-mix(in srgb, var(--accent-blue) 8%, var(--bg-card));
+  border-left: 2px solid var(--border-color);
+  border-radius: 4px;
   padding: 2px;
-  writing-mode: vertical-lr;
-  text-orientation: mixed;
-  opacity: 0.7;
 }
 
 /* Cada celda de día */
@@ -395,7 +391,7 @@
   }
 
   .days {
-    grid-template-columns: 28px repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr) 40px;
     gap: 1px;
   }
 
@@ -405,7 +401,7 @@
   }
 
   .week-number {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
   }
 
   .schedule-card:hover {

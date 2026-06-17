@@ -161,7 +161,7 @@
                         <td>{{ mat.codigo || '-' }}</td>
                         <td class="has-text-centered">
                           <i class="far fa-edit green mr-2" title="Editar" (click)="selectedGrupo = grupo; EditarMaterial(mat)"></i>
-                          <button class="button is-small is-danger is-light" title="Eliminar" (click)="eliminarMaterial(mat._id)"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
+                          <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(mat._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
                         </td>
                       </tr>
                     </tbody>

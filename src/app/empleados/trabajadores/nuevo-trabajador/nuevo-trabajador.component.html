@@ -12,134 +12,251 @@
 
       <!-- Step 1: Datos Personales -->
       <div *ngIf="isStep(1)" class="step-panel animate__animated animate__fadeIn">
-        <span class="section-label"><i class="fas fa-user mr-1"></i>Datos personales</span>
-        <div class="columns mt-2">
-          <div class="column">
-            <div class="field is-grouped has-addons">
-              <div class="control">
-                <label class="label">Apellidos</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.apellidos" />
-              </div>
-              <div class="control">
-                <label class="label">Nombres</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nombres" />
-              </div>
-              <p class="control">
-                <label class="label">.</label>
-                <span class="select">
-                  <select>
-                    <option>V</option>
-                    <option>E</option>
-                  </select>
-                </span>
-              </p>
-              <p class="control" style="width: 110px">
-                <label class="label">Cédula</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.cedula" />
-              </p>
-              <div class="control">
-                <label class="label">Fecha nacimiento</label>
-                <input type="date" class="input" [(ngModel)]="trabajador.datos_personales.fecha_nac" />
-              </div>
-              <div class="control">
-                <label class="label">Sexo</label>
-                <fieldset>
-                  M: <input type="radio" name="sexo" [(ngModel)]="trabajador.datos_personales.sexo" value="M" />
-                  F: <input type="radio" name="sexo" [(ngModel)]="trabajador.datos_personales.sexo" value="F" />
-                </fieldset>
-              </div>
-            </div>
-            <div class="field is-grouped">
-              <div class="control">
-                <label class="label">Altura (m)</label>
-                <input type="text" class="input" style="width: 60px" [(ngModel)]="trabajador.datos_personales.altura" />
-              </div>
-              <div class="control">
-                <label class="label">Peso (kg)</label>
-                <input type="text" class="input" style="width: 60px" [(ngModel)]="trabajador.datos_personales.peso" />
-              </div>
-              <div class="control">
-                <label class="label">Lugar de nacimiento</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacimiento" />
-              </div>
-              <div class="control">
-                <label class="label">Nacionalidad</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacionalidad" />
-              </div>
-              <div class="control">
-                <label class="label">Estado Civil</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.estado_civil" />
-              </div>
-            </div>
-            <div class="field is-grouped">
-              <div class="control">
-                <label class="label">Licencia de conducir No.</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.licencia" />
-              </div>
-              <div class="control" style="width: 60px">
-                <label class="label">Grado</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.grado" />
-              </div>
-              <div class="control">
-                <label class="label">Rif</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.rif" />
-              </div>
-              <div class="control">
-                <label class="label">Correo Electrónico</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.email" />
-              </div>
-            </div>
-            <span class="subtitles">Dirección</span>
-            <div class="field is-grouped">
-              <div class="control">
-                <label class="label">Estado</label>
-                <div class="select">
-                  <select (change)="BuscarMunicipio($event.target)" [(ngModel)]="estado">
-                    <option value="{{ estado.geonameId }}-{{ estado.name }}" *ngFor="let estado of estados">
-                      {{ estado.name }}
-                    </option>
-                  </select>
+        <div class="columns is-multiline">
+          <!-- Main form column -->
+          <div class="column is-9">
+            <!-- Section: Información personal -->
+            <span class="section-label"><i class="fas fa-user mr-1"></i>Información personal</span>
+            <div class="columns is-multiline is-variable is-2 mt-1">
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Apellidos</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.apellidos" />
+                  </div>
                 </div>
               </div>
-              <div class="control">
-                <label class="label">Municipio</label>
-                <div class="select">
-                  <select (change)="BuscarParroquia($event.target)" [(ngModel)]="municipio">
-                    <option value="{{ municipio.geonameId }}-{{ municipio.toponymName }}" *ngFor="let municipio of Municipio">
-                      {{ municipio.toponymName }}
-                    </option>
-                  </select>
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Nombres</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nombres" />
+                  </div>
                 </div>
               </div>
-              <div class="control">
-                <label class="label">Parroquia</label>
-                <div class="select">
-                  <select [(ngModel)]="trabajador.datos_personales.parroquia">
-                    <option value="{{ parroquia.toponymName }}" *ngFor="let parroquia of Parroquia">
-                      {{ parroquia.toponymName }}
-                    </option>
-                  </select>
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Cédula</label>
+                  <div class="field has-addons">
+                    <div class="control">
+                      <span class="select">
+                        <select>
+                          <option>V</option>
+                          <option>E</option>
+                        </select>
+                      </span>
+                    </div>
+                    <div class="control is-expanded">
+                      <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.cedula" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="control">
-                <label class="label">Sector/Urbanización</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.sector" />
               </div>
             </div>
-            <div class="field is-grouped">
-              <div class="control">
-                <label class="label">Domicilio (Calle/Av.)</label>
-                <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.domicilio" />
+
+            <div class="columns is-variable is-2">
+              <div class="column is-3">
+                <div class="field">
+                  <label class="label">Fecha de nacimiento</label>
+                  <div class="control">
+                    <input type="date" class="input" [(ngModel)]="trabajador.datos_personales.fecha_nac" />
+                  </div>
+                </div>
               </div>
-              <div class="control">
-                <label class="label">Teléfono</label>
-                <app-phone-input [value]="trabajador.datos_personales.telefono" (valueChange)="trabajador.datos_personales.telefono = $event" placeholder="Número telefónico"></app-phone-input>
+              <div class="column is-2">
+                <div class="field">
+                  <label class="label">Sexo</label>
+                  <div class="control">
+                    <div class="radio-group">
+                      <label class="radio-label">
+                        <input type="radio" name="sexo" [(ngModel)]="trabajador.datos_personales.sexo" value="M" />
+                        <span>M</span>
+                      </label>
+                      <label class="radio-label">
+                        <input type="radio" name="sexo" [(ngModel)]="trabajador.datos_personales.sexo" value="F" />
+                        <span>F</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="control">
-                <label class="label">Teléfono Celular</label>
-                <app-phone-input [value]="trabajador.datos_personales.celular" (valueChange)="trabajador.datos_personales.celular = $event" placeholder="Número celular"></app-phone-input>
+              <div class="column is-2">
+                <div class="field">
+                  <label class="label">Altura (m)</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.altura" />
+                  </div>
+                </div>
               </div>
+              <div class="column is-2">
+                <div class="field">
+                  <label class="label">Peso (kg)</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.peso" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="modal-divider" />
+
+            <!-- Section: Origen y documentación -->
+            <span class="section-label"><i class="fas fa-id-card mr-1"></i>Origen y documentación</span>
+            <div class="columns is-variable is-2 mt-1">
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Lugar de nacimiento</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacimiento" />
+                  </div>
+                </div>
+              </div>
+              <div class="column is-3">
+                <div class="field">
+                  <label class="label">Nacionalidad</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nacionalidad" />
+                  </div>
+                </div>
+              </div>
+              <div class="column is-3">
+                <div class="field">
+                  <label class="label">Estado civil</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.estado_civil" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns is-variable is-2">
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Licencia de conducir N°</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.licencia" />
+                  </div>
+                </div>
+              </div>
+              <div class="column is-2">
+                <div class="field">
+                  <label class="label">Grado</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.grado" />
+                  </div>
+                </div>
+              </div>
+              <div class="column is-3">
+                <div class="field">
+                  <label class="label">RIF</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.rif" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns is-variable is-2">
+              <div class="column is-6">
+                <div class="field">
+                  <label class="label">Correo electrónico</label>
+                  <div class="control">
+                    <input type="email" class="input" [(ngModel)]="trabajador.datos_personales.email" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="modal-divider" />
+
+            <!-- Section: Dirección -->
+            <span class="section-label"><i class="fas fa-map-marker-alt mr-1"></i>Dirección</span>
+            <div class="columns is-variable is-2 mt-1">
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Estado</label>
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select (change)="BuscarMunicipio($event.target)" [(ngModel)]="estado">
+                        <option value="" disabled>Seleccionar estado</option>
+                        <option value="{{ e.geonameId }}-{{ e.name }}" *ngFor="let e of estados">{{ e.name }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Municipio</label>
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select (change)="BuscarParroquia($event.target)" [(ngModel)]="municipio">
+                        <option value="" disabled>Seleccionar municipio</option>
+                        <option value="{{ m.geonameId }}-{{ m.toponymName }}" *ngFor="let m of Municipio">{{ m.toponymName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Parroquia</label>
+                  <div class="control">
+                    <div class="select is-fullwidth">
+                      <select [(ngModel)]="trabajador.datos_personales.parroquia">
+                        <option value="" disabled>Seleccionar parroquia</option>
+                        <option value="{{ p.toponymName }}" *ngFor="let p of Parroquia">{{ p.toponymName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns is-variable is-2">
+              <div class="column is-4">
+                <div class="field">
+                  <label class="label">Sector / Urbanización</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.sector" />
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="field">
+                  <label class="label">Domicilio (Calle / Av.)</label>
+                  <div class="control">
+                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.domicilio" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="modal-divider" />
+
+            <!-- Section: Contacto -->
+            <span class="section-label"><i class="fas fa-phone mr-1"></i>Contacto</span>
+            <div class="columns is-variable is-2 mt-1">
+              <div class="column is-5">
+                <div class="field">
+                  <label class="label">Teléfono</label>
+                  <div class="control">
+                    <app-phone-input [value]="trabajador.datos_personales.telefono" (valueChange)="trabajador.datos_personales.telefono = $event" placeholder="Número telefónico"></app-phone-input>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-5">
+                <div class="field">
+                  <label class="label">Teléfono celular</label>
+                  <div class="control">
+                    <app-phone-input [value]="trabajador.datos_personales.celular" (valueChange)="trabajador.datos_personales.celular = $event" placeholder="Número celular"></app-phone-input>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Photo column -->
           <div class="column is-3">
             <label class="image-hover-wrapper" for="file-input">
               <figure class="image is-4by5">

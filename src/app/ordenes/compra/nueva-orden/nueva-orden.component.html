@@ -146,8 +146,8 @@
             <td>{{ producto.solicitud }}</td>
             <td>{{ producto.entrega }}</td>
             <td>
-              <button class="button button-hidde_" (click)="orden.pedido.splice(i, 1)">
-                <span class="icon"><i class="fa-solid fa-trash-can"></i></span>
+              <button class="button btn-action-icon" title="Eliminar" (click)="orden.pedido.splice(i, 1)">
+                <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
               </button>
             </td>
           </tr>

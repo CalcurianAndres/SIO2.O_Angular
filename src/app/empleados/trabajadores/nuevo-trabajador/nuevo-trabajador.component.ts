@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CargosService } from 'src/app/services/cargos.service';
 import { DepartamentosService } from 'src/app/services/departamentos.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './nuevo-trabajador.component.html',
   styleUrls: ['./nuevo-trabajador.component.scss'],
 })
-export class NuevoTrabajadorComponent implements OnInit {
+export class NuevoTrabajadorComponent implements OnInit, OnChanges {
   constructor(
     private http: HttpClient,
     public departamentos: DepartamentosService,
@@ -93,12 +94,38 @@ export class NuevoTrabajadorComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.cargarEstados();
+  }
+
+  cargarEstados() {
     this.http
-      .get('/api/external', { params: { url: 'http://api.geonames.org/childrenJSON?geonameId=3625428&username=poligrafica' } })
-      .subscribe((response: any) => {
-        this.estados = response.geonames;
+      .get(`${environment.apiUrl}/external`, { params: { url: 'http://api.geonames.org/childrenJSON?geonameId=3625428&username=poligrafica' } })
+      .subscribe({
+        next: (response: any) => {
+          this.estados = response.geonames;
+        },
+        error: (err) => {
+          console.error('Error al cargar estados:', err);
+          this.estados = [];
+        },
       });
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['trabajador']) {
+      const foto = this.trabajador?.datos_personales?.foto;
+      if (foto && foto !== 'no-image') {
+        this.fotoPreview = `${environment.imgUrl}/imagen/empleado/${foto}`;
+      } else {
+        this.fotoPreview = null;
+      }
+    }
+    // Recargar estados cada vez que se abre el modal
+    if (changes['nuevo_trabajador'] && changes['nuevo_trabajador'].currentValue === true) {
+      this.cargarEstados();
+    }
+  }
+
   cerrar() {
     this.onCloseModal.emit();
   }
@@ -121,9 +148,15 @@ export class NuevoTrabajadorComponent implements OnInit {
     const dividir = e.value.split('-');
     this.trabajador.datos_personales.estado = dividir[1];
     this.http
-      .get('/api/external', { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
-      .subscribe((response: any) => {
-        this.Municipio = response.geonames;
+      .get(`${environment.apiUrl}/external`, { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
+      .subscribe({
+        next: (response: any) => {
+          this.Municipio = response.geonames;
+        },
+        error: (err) => {
+          console.error('Error al cargar municipios:', err);
+          this.Municipio = [];
+        },
       });
   }
 
@@ -131,9 +164,15 @@ export class NuevoTrabajadorComponent implements OnInit {
     const dividir = e.value.split('-');
     this.trabajador.datos_personales.municipio = dividir[1];
     this.http
-      .get('/api/external', { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
-      .subscribe((response: any) => {
-        this.Parroquia = response.geonames;
+      .get(`${environment.apiUrl}/external`, { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
+      .subscribe({
+        next: (response: any) => {
+          this.Parroquia = response.geonames;
+        },
+        error: (err) => {
+          console.error('Error al cargar parroquias:', err);
+          this.Parroquia = [];
+        },
       });
   }
 

@@ -148,7 +148,7 @@
           <i class="fas fa-user"></i> {{ c.nombre }} – {{ c.numero }}
           <button
             class="delete is-small"
-            (click)="nuevo ? EliminarContacto(i) : proveedor?.contactos?.splice(i, 1)"
+            (click)="nuevo ? EliminarContacto(i) : proveedor.contactos.splice(i, 1)"
           ></button>
         </span>
       </div>
@@ -190,7 +190,7 @@
           <i class="fas fa-industry"></i> {{ f }}
           <button
             class="delete is-small"
-            (click)="nuevo ? EliminarFabricante(i) : proveedor?.fabricantes?.splice(i, 1)"
+            (click)="nuevo ? EliminarFabricante(i) : proveedor.fabricantes.splice(i, 1)"
           ></button>
         </span>
       </div>

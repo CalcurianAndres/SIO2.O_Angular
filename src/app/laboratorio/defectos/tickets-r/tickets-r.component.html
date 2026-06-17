@@ -73,12 +73,15 @@
                     </div>
                     <span style="color: var(--text-primary)">
                       {{ ticket.destructor }}
-                      <i
-                        class="fa-solid fa-trash-can"
-                        style="color: var(--accent-red); cursor: pointer"
+                      <button
+                        class="button btn-action-icon"
+                        title="Eliminar"
                         (click)="ticket.destructor = ''"
                         *ngIf="ticket.destructor"
-                      ></i>
+                        style="display: inline-flex; vertical-align: middle;"
+                      >
+                        <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+                      </button>
                     </span>
                   </div>
                 </div>

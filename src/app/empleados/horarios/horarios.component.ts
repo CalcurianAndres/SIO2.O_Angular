@@ -76,7 +76,7 @@ export class HorariosComponent {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
   ];
 
-  weekdays: string[] = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  weekdays: string[] = ['L', 'M', 'M', 'J', 'V', 'S', 'D', 'SEM'];
   currentYear: number = new Date().getFullYear();
 
   /* ──────────────── Semana ISO ──────────────── */

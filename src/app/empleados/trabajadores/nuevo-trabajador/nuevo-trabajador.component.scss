@@ -115,3 +115,33 @@ input[type='file'] {
   border: none;
   border-top: 1px solid var(--border-color);
 }
+
+/* Radio group for sexo */
+.radio-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  height: 2.25em;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.radio-label input[type="radio"] {
+  accent-color: var(--accent-blue);
+  cursor: pointer;
+}
+
+/* Bulma select fullwidth fix */
+.select.is-fullwidth {
+  width: 100%;
+}
+.select.is-fullwidth select {
+  width: 100%;
+}

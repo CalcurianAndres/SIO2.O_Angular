@@ -55,8 +55,8 @@
           <a class="card-footer-item" (click)="editar(horario)">
             <i class="far fa-edit green icon-action"></i>
           </a>
-          <button type="button" class="card-footer-item" (click)="borrar(horario)">
-            <i class="fas fa-trash-alt red icon-action"></i>
+          <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="borrar(horario)">
+            <i class="fas fa-trash-alt icon-danger"></i>
           </button>
         </footer>
       </div>
@@ -136,7 +136,6 @@
           <div class="days">
             <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
             <ng-container *ngFor="let week of getWeeksInMonth(m)">
-              <div class="week-number">{{ week.weekNumber }}</div>
               <div
                 class="day"
                 *ngFor="let dayObj of week.days"
@@ -153,6 +152,7 @@
                   </div>
                 </ng-container>
               </div>
+              <div class="week-number">{{ week.weekNumber }}</div>
             </ng-container>
           </div>
         </div>
@@ -165,7 +165,6 @@
           <div class="days">
             <div class="weekday" *ngFor="let day of weekdays">{{ day }}</div>
             <ng-container *ngFor="let week of getWeeksInMonth(selectedMonth)">
-              <div class="week-number">{{ week.weekNumber }}</div>
               <div
                 class="day"
                 *ngFor="let dayObj of week.days"
@@ -182,6 +181,7 @@
                   </div>
                 </ng-container>
               </div>
+              <div class="week-number">{{ week.weekNumber }}</div>
             </ng-container>
           </div>
         </div>
