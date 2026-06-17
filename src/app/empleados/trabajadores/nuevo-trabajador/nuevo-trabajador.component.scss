@@ -37,6 +37,15 @@
   color: white;
 }
 
+/* Override for contact-card to ensure dark text */
+.contact-card strong {
+  color: var(--text-heading) !important;
+}
+
+.contact-card__row {
+  color: var(--text-primary) !important;
+}
+
 table.dark_ {
   background-color: rgb(38, 52, 61);
   color: white;

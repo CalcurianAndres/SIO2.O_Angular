@@ -235,9 +235,9 @@
               <button class="delete is-small" (click)="nuevo ? deletecontacto(i) : deletecontacto_(i)"></button>
             </div>
             <div class="contact-card__body">
-              <div class="contact-card__row" *ngIf="c.numero || c.telefono"><i class="fas fa-phone mr-1"></i> {{ c.numero || c.telefono }}</div>
-              <div class="contact-card__row" *ngIf="c.email || c.correo"><i class="fas fa-at mr-1"></i> {{ c.email || c.correo }}</div>
-              <div class="contact-card__row" *ngIf="c.cargo"><i class="fas fa-briefcase mr-1"></i> {{ c.cargo }}</div>
+              <div class="contact-card__row" *ngIf="c.numero || c.telefono">📞 {{ c.numero || c.telefono }}</div>
+              <div class="contact-card__row" *ngIf="c.email || c.correo">📧 {{ c.email || c.correo }}</div>
+              <div class="contact-card__row" *ngIf="c.cargo">💼 {{ c.cargo }}</div>
             </div>
           </div>
         </div>

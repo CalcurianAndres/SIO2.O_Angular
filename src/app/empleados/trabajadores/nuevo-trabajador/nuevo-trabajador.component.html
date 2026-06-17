@@ -309,9 +309,9 @@
               <button class="delete is-small" (click)="referencias.splice(i, 1)"></button>
             </div>
             <div class="contact-card__body">
-              <div class="contact-card__row" *ngIf="ref.direccion"><i class="fas fa-map-marker-alt mr-1"></i> {{ ref.direccion }}</div>
-              <div class="contact-card__row" *ngIf="ref.telefono"><i class="fas fa-phone mr-1"></i> {{ ref.telefono }}</div>
-              <div class="contact-card__row" *ngIf="ref.ocupacion"><i class="fas fa-briefcase mr-1"></i> {{ ref.ocupacion }}</div>
+              <div class="contact-card__row" *ngIf="ref.direccion">📌 {{ ref.direccion }}</div>
+              <div class="contact-card__row" *ngIf="ref.telefono">📞 {{ ref.telefono }}</div>
+              <div class="contact-card__row" *ngIf="ref.ocupacion">💼 {{ ref.ocupacion }}</div>
             </div>
           </div>
         </div>
@@ -379,8 +379,8 @@
               <button class="delete is-small" (click)="emergencias.splice(i, 1)"></button>
             </div>
             <div class="contact-card__body">
-              <div class="contact-card__row" *ngIf="em.direccion"><i class="fas fa-map-marker-alt mr-1"></i> {{ em.direccion }}</div>
-              <div class="contact-card__row" *ngIf="em.telefono"><i class="fas fa-phone mr-1"></i> {{ em.telefono }}</div>
+              <div class="contact-card__row" *ngIf="em.direccion">📌 {{ em.direccion }}</div>
+              <div class="contact-card__row" *ngIf="em.telefono">📞 {{ em.telefono }}</div>
             </div>
           </div>
         </div>
@@ -506,7 +506,7 @@
 
       <!-- Step navigation -->
       <div class="step-nav">
-        <button class="button" (click)="goToStep(currentStep - 1)" [disabled]="currentStep === 1">
+        <button class="button is-info" (click)="goToStep(currentStep - 1)" [disabled]="currentStep === 1">
           <i class="fas fa-chevron-left"></i> Anterior
         </button>
         <button class="button is-info" *ngIf="currentStep < steps.length" (click)="goToStep(currentStep + 1)">
