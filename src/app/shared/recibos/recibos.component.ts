@@ -28,7 +28,7 @@ export class RecibosComponent {
         { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama de empleados, ajustes de producción, rediseño de departamentos y cargos, y mejoras en formularios de empleados' },
         { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones en módulo de compras y producción, cierre de tareas pendientes, y actualización del manual de diseño' },
         { fecha: '17/06/2026', horas: 8, descripcion: 'Correcciones en wizard de empleados y geolocalización, mejora de calendario con número de semana, y limpieza de documentación' },
-        { fecha: '19/06/2026', horas: 8, descripcion: 'Implementación del cálculo de devaluación salarial en el historial de empleados, mostrando sueldo en bolívares, USD histórico y USD actual con indicador de devaluación en el wizard de empleados y en el modal de historial de cargos' },
+        { fecha: '19/06/2026', horas: 8, descripcion: 'Implementación del cálculo de devaluación salarial en el historial de empleados, cascada de unidades/subunidades/áreas en wizard de empleados, corrección de reactividad de tasa del día, y botón de eliminar sub-unidad con eliminación en cascada en el backend' },
       ]),
   );
 
