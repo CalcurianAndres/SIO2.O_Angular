@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { CargosService } from 'src/app/services/cargos.service';
 import { DepartamentosService } from 'src/app/services/departamentos.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
+import { TasasService } from 'src/app/services/tasas.service';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -20,6 +21,7 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     public cargos: CargosService,
     public api: TrabajadoresService,
     public imagenes: SubirArchivosService,
+    public tasas: TasasService,
   ) {}
 
   @Input() nuevo_trabajador: any;
@@ -52,9 +54,18 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
   ];
   currentStep: number = 1;
   fotoPreview: string | null = null;
+  tasaActual: number | null = null;
+  tasaManual: number | null = null;
+  tasaRequiereManual: boolean = false;
+
+  erroresPaso1 = {
+    apellidos: false,
+    nombres: false,
+  };
 
   public REFERENCIA = {
-    nombre: '',
+    apellidos: '',
+    nombres: '',
     direccion: '',
     telefono: '',
     ocupacion: '',
@@ -62,13 +73,15 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
 
   public CARGA_FAMILIAR = {
     parentesco: '',
-    nombre: '',
+    apellidos: '',
+    nombres: '',
     fecha: '',
   };
 
   public EMERGENCIA = {
     parentesco: '',
-    nombre: '',
+    apellidos: '',
+    nombres: '',
     direccion: '',
     telefono: '',
   };
@@ -99,7 +112,9 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
 
   cargarEstados() {
     this.http
-      .get(`${environment.apiUrl}/external`, { params: { url: 'http://api.geonames.org/childrenJSON?geonameId=3625428&username=poligrafica' } })
+      .get(`${environment.apiUrl}/external`, {
+        params: { url: 'http://api.geonames.org/childrenJSON?geonameId=3625428&username=poligrafica' },
+      })
       .subscribe({
         next: (response: any) => {
           this.estados = response.geonames;
@@ -119,10 +134,144 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
       } else {
         this.fotoPreview = null;
       }
+      this.normalizarContratacion();
     }
-    // Recargar estados cada vez que se abre el modal
+    // Recargar estados y tasa cada vez que se abre el modal
     if (changes['nuevo_trabajador'] && changes['nuevo_trabajador'].currentValue === true) {
       this.cargarEstados();
+      this.tasas.obtenerTasaActual();
+      this.tasas.tasaActual$.subscribe((tasa) => {
+        this.tasaActual = tasa?.tasa ?? null;
+        this.tasaRequiereManual = tasa?.manual ?? true;
+        if (this.tasaActual && !this.trabajador?.contratacion?.tasa) {
+          this.trabajador.contratacion.tasa = this.tasaActual;
+        }
+      });
+    }
+  }
+
+  normalizarContratacion(): void {
+    if (!this.trabajador) return;
+
+    // Asegurar que la fecha se pueda mostrar en input type="date"
+    const fecha = this.trabajador.contratacion?.fecha;
+    if (fecha && typeof fecha === 'string' && fecha.includes('T')) {
+      this.trabajador.contratacion.fecha = fecha.split('T')[0];
+    }
+
+    // Normalizar "De" vacío a null para indicar departamento/directo
+    if (this.trabajador.contratacion?.de === '6696bc0c3b59a8877b99bf36') {
+      this.trabajador.contratacion.de = '';
+    }
+  }
+
+  get fechaIngresoInput(): string {
+    const fecha = this.trabajador?.contratacion?.fecha;
+    if (!fecha) return '';
+    if (typeof fecha === 'string') return fecha.split('T')[0];
+    const d = new Date(fecha);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  set fechaIngresoInput(value: string) {
+    if (this.trabajador?.contratacion) {
+      this.trabajador.contratacion.fecha = value;
+    }
+  }
+
+  get tasaRegistro(): number {
+    return this.trabajador?.contratacion?.tasa || this.tasaActual || 0;
+  }
+
+  get sueldoBs(): number {
+    const sueldo = this.trabajador?.contratacion?.sueldo;
+    if (!sueldo) return 0;
+    return parseFloat(String(sueldo).replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  get sueldoUSDRegistro(): number {
+    const tasa = this.tasaRegistro;
+    if (!tasa || tasa <= 0) return 0;
+    return this.sueldoBs / tasa;
+  }
+
+  get sueldoUSDActual(): number {
+    const tasa = this.tasaActual || this.tasaRegistro;
+    if (!tasa || tasa <= 0) return 0;
+    return this.sueldoBs / tasa;
+  }
+
+  get devaluacionSalarial(): number {
+    const original = this.sueldoUSDRegistro;
+    const actual = this.sueldoUSDActual;
+    if (!original || original <= 0 || !actual || actual <= 0) return 0;
+    return ((original - actual) / original) * 100;
+  }
+
+  get historialContrataciones(): any[] {
+    const historial = (this.api.contrataciones || [])
+      .filter((c: any) => c.trabajador === this.trabajador?._id || c.trabajador?._id === this.trabajador?._id)
+      .sort((a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+
+    // Mostrar fila del contrato que se está creando/editando solo para empleados nuevos
+    if (!this.trabajador?._id) {
+      const actual = this.filaContratoActual;
+      if (actual) return [actual, ...historial];
+    }
+
+    return historial;
+  }
+
+  get filaContratoActual(): any | null {
+    const c = this.trabajador?.contratacion;
+    if (!c || !c.fecha || !c.sueldo) return null;
+
+    return {
+      fecha: c.fecha,
+      departamento: { nombre: this.getNombreDepartamento(c.departamento) },
+      cargo: { nombre: this.getNombreCargo(c.cargo) },
+      de: c.de ? { nombre: this.getNombreDepartamento(c.de) } : null,
+      sueldo: c.sueldo,
+      tasa: c.tasa,
+      activo: true,
+    };
+  }
+
+  getNombreDepartamento(id: string): string {
+    const d = this.departamentos?.departamentos?.find((x: any) => String(x._id) === String(id));
+    return d?.nombre || '-';
+  }
+
+  getNombreCargo(id: string): string {
+    const c = this.cargos?.cargos?.find((x: any) => String(x._id) === String(id));
+    return c?.nombre || '-';
+  }
+
+  calcularUSDHoy(sueldo: any): number {
+    const tasa = this.tasaActual || this.tasaManual || 0;
+    const s = parseFloat(String(sueldo).replace(/[^0-9.]/g, '')) || 0;
+    if (!tasa || tasa <= 0 || !s || s <= 0) return 0;
+    return s / tasa;
+  }
+
+  calcularDevaluacion(sueldo: any, tasaRegistro: any): number {
+    const s = parseFloat(String(sueldo).replace(/[^0-9.]/g, '')) || 0;
+    const tr = parseFloat(String(tasaRegistro).replace(/[^0-9.]/g, '')) || 0;
+    if (!s || !tr || tr <= 0) return 0;
+    const usdHistorico = s / tr;
+    const usdHoy = this.calcularUSDHoy(sueldo);
+    if (!usdHistorico || !usdHoy) return 0;
+    return ((usdHistorico - usdHoy) / usdHistorico) * 100;
+  }
+
+  guardarTasaManual(): void {
+    if (this.tasaManual && this.tasaManual > 0) {
+      this.tasas.guardarTasa(this.tasaManual);
+      this.trabajador.contratacion.tasa = this.tasaManual;
+      this.tasaRequiereManual = false;
     }
   }
 
@@ -148,7 +297,9 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     const dividir = e.value.split('-');
     this.trabajador.datos_personales.estado = dividir[1];
     this.http
-      .get(`${environment.apiUrl}/external`, { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
+      .get(`${environment.apiUrl}/external`, {
+        params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` },
+      })
       .subscribe({
         next: (response: any) => {
           this.Municipio = response.geonames;
@@ -164,7 +315,9 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     const dividir = e.value.split('-');
     this.trabajador.datos_personales.municipio = dividir[1];
     this.http
-      .get(`${environment.apiUrl}/external`, { params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` } })
+      .get(`${environment.apiUrl}/external`, {
+        params: { url: `http://api.geonames.org/childrenJSON?geonameId=${dividir[0]}&username=poligrafica` },
+      })
       .subscribe({
         next: (response: any) => {
           this.Parroquia = response.geonames;
@@ -180,16 +333,38 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     return this.currentStep === step;
   }
 
+  validarPaso1(): boolean {
+    const apellidos = (this.trabajador?.datos_personales?.apellidos || '').trim();
+    const nombres = (this.trabajador?.datos_personales?.nombres || '').trim();
+
+    this.erroresPaso1.apellidos = apellidos === '';
+    this.erroresPaso1.nombres = nombres === '';
+
+    return !this.erroresPaso1.apellidos && !this.erroresPaso1.nombres;
+  }
+
   goToStep(n: number) {
     if (n >= 1 && n <= this.steps.length) {
+      // Solo validar al avanzar del paso 1 al 2
+      if (this.currentStep === 1 && n === 2 && !this.validarPaso1()) {
+        return;
+      }
       this.currentStep = n;
     }
   }
 
+  private concatenarNombre(apellidos: string, nombres: string): string {
+    return `${apellidos || ''} ${nombres || ''}`.trim();
+  }
+
   addReferencia() {
-    this.referencias.push(this.REFERENCIA);
+    this.referencias.push({
+      ...this.REFERENCIA,
+      nombre: this.concatenarNombre(this.REFERENCIA.apellidos, this.REFERENCIA.nombres),
+    });
     this.REFERENCIA = {
-      nombre: '',
+      apellidos: '',
+      nombres: '',
       direccion: '',
       telefono: '',
       ocupacion: '',
@@ -197,19 +372,27 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
   }
 
   addCarga() {
-    this.carga.push(this.CARGA_FAMILIAR);
+    this.carga.push({
+      ...this.CARGA_FAMILIAR,
+      nombre: this.concatenarNombre(this.CARGA_FAMILIAR.apellidos, this.CARGA_FAMILIAR.nombres),
+    });
     this.CARGA_FAMILIAR = {
       parentesco: '',
-      nombre: '',
+      apellidos: '',
+      nombres: '',
       fecha: '',
     };
   }
 
   addEmergencia() {
-    this.emergencias.push(this.EMERGENCIA);
+    this.emergencias.push({
+      ...this.EMERGENCIA,
+      nombre: this.concatenarNombre(this.EMERGENCIA.apellidos, this.EMERGENCIA.nombres),
+    });
     this.EMERGENCIA = {
       parentesco: '',
-      nombre: '',
+      apellidos: '',
+      nombres: '',
       direccion: '',
       telefono: '',
     };
@@ -255,6 +438,17 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     this.trabajador.instruccion_academica.idiomas.idiomas = this.idiomas;
     this.trabajador.manejo_herramientas.otros = this.softwares;
     this.trabajador.manejo_herramientas.referencias = this.trabajoAnterior;
+
+    // Normalizar "De" vacío a null para indicar empleado directo del departamento
+    if (this.trabajador.contratacion?.de === '') {
+      this.trabajador.contratacion.de = null;
+    }
+
+    // Asegurar que la tasa de registro esté presente
+    if (!this.trabajador.contratacion.tasa) {
+      this.trabajador.contratacion.tasa = this.tasaActual || this.tasaManual || 0;
+    }
+
     this.api.nuevoTrabajador(this.trabajador);
     setTimeout(() => {
       this.trabajador = {

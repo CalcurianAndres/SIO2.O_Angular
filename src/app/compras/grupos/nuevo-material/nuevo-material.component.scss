@@ -15,3 +15,40 @@
     }
   }
 }
+
+.pantone-field {
+  margin-top: 0.5rem;
+}
+
+.pantone-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+
+  .swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+  }
+
+  .code {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+  }
+
+  .hex {
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin-left: auto;
+  }
+}

@@ -132,7 +132,7 @@ export class TrabajadoresComponent implements OnInit {
     this.carga = this.trabajador.informacion_adicional.carga_familiar;
     this.emergencias = this.trabajador.informacion_adicional.emergencia;
     this.cursos_realizados = this.trabajador.instruccion_academica.cursos;
-    this.softwares = this.trabajador.manejo_herramientas.softwares;
+    this.softwares = this.trabajador.manejo_herramientas.otros;
   }
 
   eliminarTrabajador(trabajador: any) {

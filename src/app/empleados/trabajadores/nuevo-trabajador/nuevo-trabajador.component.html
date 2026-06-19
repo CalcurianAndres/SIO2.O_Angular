@@ -2,7 +2,9 @@
   <div class="modal-background"></div>
   <div class="modal-card long">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente" *ngIf="nuevo_trabajador"><i class="fas fa-user-plus mr-2"></i>Nuevo empleado</p>
+      <p class="modal-card-title fuente" *ngIf="nuevo_trabajador">
+        <i class="fas fa-user-plus mr-2"></i>Nuevo empleado
+      </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body light" style="max-height: 70vh; overflow-y: auto">
@@ -22,16 +24,30 @@
                 <div class="field">
                   <label class="label">Apellidos</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.apellidos" />
+                    <input
+                      type="text"
+                      class="input"
+                      [ngClass]="{ 'is-danger': erroresPaso1.apellidos }"
+                      [(ngModel)]="trabajador.datos_personales.apellidos"
+                      (ngModelChange)="erroresPaso1.apellidos = false"
+                    />
                   </div>
+                  <p class="help is-danger" *ngIf="erroresPaso1.apellidos">El apellido es obligatorio</p>
                 </div>
               </div>
               <div class="column is-4">
                 <div class="field">
                   <label class="label">Nombres</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="trabajador.datos_personales.nombres" />
+                    <input
+                      type="text"
+                      class="input"
+                      [ngClass]="{ 'is-danger': erroresPaso1.nombres }"
+                      [(ngModel)]="trabajador.datos_personales.nombres"
+                      (ngModelChange)="erroresPaso1.nombres = false"
+                    />
                   </div>
+                  <p class="help is-danger" *ngIf="erroresPaso1.nombres">El nombre es obligatorio</p>
                 </div>
               </div>
               <div class="column is-4">
@@ -181,7 +197,7 @@
                         <option value="" disabled>Seleccionar estado</option>
                         <option value="{{ e.geonameId }}-{{ e.name }}" *ngFor="let e of estados">{{ e.name }}</option>
                       </select>
-                    </div>
+div>
                   </div>
                 </div>
               </div>
@@ -192,7 +208,9 @@
                     <div class="select is-fullwidth">
                       <select (change)="BuscarParroquia($event.target)" [(ngModel)]="municipio">
                         <option value="" disabled>Seleccionar municipio</option>
-                        <option value="{{ m.geonameId }}-{{ m.toponymName }}" *ngFor="let m of Municipio">{{ m.toponymName }}</option>
+                        <option value="{{ m.geonameId }}-{{ m.toponymName }}" *ngFor="let m of Municipio">
+                          {{ m.toponymName }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -241,7 +259,11 @@
                 <div class="field">
                   <label class="label">Teléfono</label>
                   <div class="control">
-                    <app-phone-input [value]="trabajador.datos_personales.telefono" (valueChange)="trabajador.datos_personales.telefono = $event" placeholder="Número telefónico"></app-phone-input>
+                    <app-phone-input
+                      [value]="trabajador.datos_personales.telefono"
+                      (valueChange)="trabajador.datos_personales.telefono = $event"
+                      placeholder="Número telefónico"
+                    ></app-phone-input>
                   </div>
                 </div>
               </div>
@@ -249,7 +271,11 @@
                 <div class="field">
                   <label class="label">Teléfono celular</label>
                   <div class="control">
-                    <app-phone-input [value]="trabajador.datos_personales.celular" (valueChange)="trabajador.datos_personales.celular = $event" placeholder="Número celular"></app-phone-input>
+                    <app-phone-input
+                      [value]="trabajador.datos_personales.celular"
+                      (valueChange)="trabajador.datos_personales.celular = $event"
+                      placeholder="Número celular"
+                    ></app-phone-input>
                   </div>
                 </div>
               </div>
@@ -279,8 +305,12 @@
         <span class="section-label"><i class="fas fa-user-friends mr-1"></i>Referencias personales</span>
         <div class="field is-grouped mt-2">
           <div class="control">
-            <label class="label">Nombre</label>
-            <input type="text" class="input" [(ngModel)]="REFERENCIA.nombre" />
+            <label class="label">Apellidos</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.apellidos" />
+          </div>
+          <div class="control">
+            <label class="label">Nombres</label>
+            <input type="text" class="input" [(ngModel)]="REFERENCIA.nombres" />
           </div>
           <div class="control">
             <label class="label">Dirección</label>
@@ -288,7 +318,11 @@
           </div>
           <div class="control">
             <label class="label">Teléfono</label>
-            <app-phone-input [value]="REFERENCIA.telefono" (valueChange)="REFERENCIA.telefono = $event" placeholder="Número telefónico"></app-phone-input>
+            <app-phone-input
+              [value]="REFERENCIA.telefono"
+              (valueChange)="REFERENCIA.telefono = $event"
+              placeholder="Número telefónico"
+            ></app-phone-input>
           </div>
           <div class="control">
             <label class="label">Ocupación</label>
@@ -296,7 +330,11 @@
           </div>
           <div class="control">
             <label class="label">.</label>
-            <button class="button" style="background-color: transparent; border: none; color: var(--accent-blue)" (click)="addReferencia()">
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
+              (click)="addReferencia()"
+            >
               <span><i class="fas fa-plus"></i></span>
             </button>
           </div>
@@ -326,8 +364,12 @@
             <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.parentesco" />
           </div>
           <div class="control">
-            <label class="label">Apellidos y Nombres</label>
-            <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.nombre" />
+            <label class="label">Apellidos</label>
+            <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.apellidos" />
+          </div>
+          <div class="control">
+            <label class="label">Nombres</label>
+            <input type="text" class="input" [(ngModel)]="CARGA_FAMILIAR.nombres" />
           </div>
           <div class="control">
             <label class="label">Fecha de nacimiento</label>
@@ -335,7 +377,11 @@
           </div>
           <div class="control">
             <label class="label">.</label>
-            <button class="button" style="background-color: transparent; border: none; color: var(--accent-blue)" (click)="addCarga()">
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
+              (click)="addCarga()"
+            >
               <span><i class="fas fa-plus"></i></span>
             </button>
           </div>
@@ -353,8 +399,12 @@
             <input type="text" class="input" [(ngModel)]="EMERGENCIA.parentesco" />
           </div>
           <div class="control">
-            <label class="label">Nombre</label>
-            <input type="text" class="input" [(ngModel)]="EMERGENCIA.nombre" />
+            <label class="label">Apellidos</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.apellidos" />
+          </div>
+          <div class="control">
+            <label class="label">Nombres</label>
+            <input type="text" class="input" [(ngModel)]="EMERGENCIA.nombres" />
           </div>
           <div class="control">
             <label class="label">Dirección</label>
@@ -362,11 +412,19 @@
           </div>
           <div class="control">
             <label class="label">Teléfono</label>
-            <app-phone-input [value]="EMERGENCIA.telefono" (valueChange)="EMERGENCIA.telefono = $event" placeholder="Número de emergencia"></app-phone-input>
+            <app-phone-input
+              [value]="EMERGENCIA.telefono"
+              (valueChange)="EMERGENCIA.telefono = $event"
+              placeholder="Número de emergencia"
+            ></app-phone-input>
           </div>
           <div class="control">
             <label class="label">.</label>
-            <button class="button" style="background-color: transparent; border: none; color: var(--accent-blue)" (click)="addEmergencia()">
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
+              (click)="addEmergencia()"
+            >
               <span><i class="fas fa-plus"></i></span>
             </button>
           </div>
@@ -423,7 +481,11 @@
           </div>
           <div class="control">
             <label class="label">.</label>
-            <button class="button" style="background-color: transparent; border: none; color: var(--accent-blue)" (click)="addCurso()">
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
+              (click)="addCurso()"
+            >
               <span><i class="fas fa-plus"></i></span>
             </button>
           </div>
@@ -438,8 +500,20 @@
           <div class="control">
             <label class="label">Sabe utilizar computadora</label>
             <fieldset>
-              Si: <input type="radio" name="computadora" value="Si" [(ngModel)]="trabajador.manejo_herramientas.computadora" />
-              No: <input type="radio" name="computadora" value="No" [(ngModel)]="trabajador.manejo_herramientas.computadora" />
+              Si:
+              <input
+                type="radio"
+                name="computadora"
+                value="Si"
+                [(ngModel)]="trabajador.manejo_herramientas.computadora"
+              />
+              No:
+              <input
+                type="radio"
+                name="computadora"
+                value="No"
+                [(ngModel)]="trabajador.manejo_herramientas.computadora"
+              />
             </fieldset>
           </div>
           <div class="control">
@@ -448,15 +522,17 @@
           </div>
           <div class="control">
             <label class="label">.</label>
-            <button class="button" style="background-color: transparent; border: none; color: var(--accent-blue)" (click)="addSoftware()">
+            <button
+              class="button"
+              style="background-color: transparent; border: none; color: var(--accent-blue)"
+              (click)="addSoftware()"
+            >
               <span><i class="fas fa-plus"></i></span>
             </button>
           </div>
         </div>
         <app-badge-list [items]="softwares" (remove)="softwares.splice($event, 1)">
-          <ng-template let-sfw>
-            <i class="fas fa-laptop mr-1"></i> {{ sfw }}
-          </ng-template>
+          <ng-template let-sfw> <i class="fas fa-laptop mr-1"></i> {{ sfw }} </ng-template>
         </app-badge-list>
       </div>
 
@@ -466,7 +542,12 @@
         <div class="field is-grouped mt-2">
           <div class="control">
             <label class="label">Fecha de ingreso</label>
-            <input type="date" class="input" [(ngModel)]="trabajador.contratacion.fecha" />
+            <input
+              type="date"
+              class="input"
+              [ngModel]="fechaIngresoInput"
+              (ngModelChange)="fechaIngresoInput = $event"
+            />
           </div>
           <div class="control">
             <label class="label">Departamento</label>
@@ -490,14 +571,77 @@
             <label class="label">De</label>
             <div class="select">
               <select [(ngModel)]="trabajador.contratacion.de">
-                <option value="6696bc0c3b59a8877b99bf36">Departamento</option>
+                <option value="">Departamento</option>
                 <option value="{{ unidad._id }}" *ngFor="let unidad of subAreas">{{ unidad.nombre }}</option>
               </select>
             </div>
           </div>
           <div class="control">
-            <label class="label">Sueldo inicial</label>
-            <input type="text" class="input" [(ngModel)]="trabajador.contratacion.sueldo" />
+            <label class="label">Sueldo inicial (Bs.)</label>
+            <input type="text" class="input" [(ngModel)]="trabajador.contratacion.sueldo" placeholder="Ej: 5000.00" />
+          </div>
+        </div>
+
+        <!-- Tasa del día -->
+        <div class="field is-grouped mt-2">
+          <div class="control">
+            <label class="label">Tasa del día (Bs./USD)</label>
+            <input
+              type="number"
+              class="input"
+              [ngClass]="{ 'is-warning': tasaRequiereManual }"
+              [(ngModel)]="trabajador.contratacion.tasa"
+              placeholder="Ej: 45.50"
+            />
+            <p class="help is-warning" *ngIf="tasaRequiereManual && !trabajador.contratacion.tasa">
+              No se pudo obtener la tasa automática. Ingrésala manualmente.
+            </p>
+          </div>
+          <div class="control" *ngIf="tasaRequiereManual">
+            <label class="label">.</label>
+            <button class="button is-info" (click)="tasaManual = trabajador.contratacion.tasa; guardarTasaManual()">
+              <span><i class="fas fa-save mr-1"></i></span> Guardar tasa
+            </button>
+          </div>
+        </div>
+
+        <!-- Historial de cargos -->
+        <div class="mt-4" *ngIf="historialContrataciones.length > 0">
+          <span class="section-label"><i class="fas fa-history mr-1"></i>Historial de cargos</span>
+          <div class="table-container mt-2">
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Departamento</th>
+                  <th>Cargo</th>
+                  <th>Sueldo Bs.</th>
+                  <th>Tasa</th>
+                  <th>USD histórico</th>
+                  <th>USD hoy</th>
+                  <th>Devaluación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let h of historialContrataciones" [class.has-background-info-light]="h.activo">
+                  <td>{{ h.fecha | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ h.departamento?.nombre || '-' }}</td>
+                  <td>{{ h.cargo?.nombre || '-' }} {{ h.de?.nombre ? 'de ' + h.de.nombre : '' }}</td>
+                  <td>{{ h.sueldo | number: '1.2-2' }}</td>
+                  <td>{{ h.tasa | number: '1.2-2' }}</td>
+                  <td>{{ h.tasa ? (h.sueldo / h.tasa | number: '1.2-2') : '-' }}</td>
+                  <td>{{ calcularUSDHoy(h.sueldo) | number: '1.2-2' }}</td>
+                  <td>
+                    <span
+                      class="tag"
+                      [ngClass]="calcularDevaluacion(h.sueldo, h.tasa) > 0 ? 'is-danger' : 'is-success'"
+                    >
+                      {{ calcularDevaluacion(h.sueldo, h.tasa) | number: '1.2-2' }}%
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

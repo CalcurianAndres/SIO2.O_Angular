@@ -1,0 +1,184 @@
+<!-- Modal Pantone Selector -->
+<div class="modal" [ngClass]="{ 'is-active': isOpen }">
+  <div class="modal-background" (click)="close()"></div>
+  <div class="modal-card animate__animated animate__fadeInUp pantone-modal">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente">
+        <i class="fas fa-palette"></i>
+        {{ showCreateForm ? 'Registrar nuevo Pantone' : 'Seleccionar Pantone' }}
+      </p>
+      <button class="delete red_cross" aria-label="close" (click)="close()"></button>
+    </div>
+
+    <div class="modal-card-body">
+
+      <!-- ═══ VISTA: BÚSQUEDA ═══ -->
+      <ng-container *ngIf="!showCreateForm">
+
+        <!-- Input de búsqueda -->
+        <div class="field">
+          <div class="control has-icons-left">
+            <input
+              type="text"
+              class="input"
+              placeholder="Buscar por código o HEX..."
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onSearchInput()"
+              autofocus
+            />
+            <span class="icon is-left">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-state" *ngIf="loading">
+          <i class="fas fa-spinner fa-pulse fa-2x"></i>
+          <p>Cargando Pantones...</p>
+        </div>
+
+        <!-- Grid de resultados -->
+        <div class="pantone-grid" *ngIf="!loading && filteredPantones.length > 0">
+          <div
+            class="pantone-card"
+            *ngFor="let pantone of filteredPantones"
+            (click)="selectPantone(pantone)"
+          >
+            <div class="pantone-swatch" [style.background-color]="getSwatchColor(pantone)"></div>
+            <span class="pantone-code">{{ pantone.code }}</span>
+            <span class="pantone-hex">#{{ pantone.hex }}</span>
+          </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="empty-state" *ngIf="!loading && filteredPantones.length === 0">
+          <i class="fas fa-search fa-3x"></i>
+          <p class="empty-text">
+            No se encontraron Pantones para "<strong>{{ searchQuery }}</strong>"
+          </p>
+          <button class="button is-info" (click)="showCreate()">
+            <span class="icon"><i class="fas fa-plus"></i></span>
+            <span>Registrar nuevo Pantone</span>
+          </button>
+        </div>
+
+        <!-- Footer con contador -->
+        <div class="pantone-footer" *ngIf="!loading">
+          <span class="tag is-light">{{ filteredPantones.length }} Pantones disponibles</span>
+        </div>
+      </ng-container>
+
+      <!-- ═══ VISTA: REGISTRO ═══ -->
+      <ng-container *ngIf="showCreateForm">
+
+        <!-- Botón volver -->
+        <button class="button is-light is-small back-btn" (click)="backToSearch()">
+          <span class="icon"><i class="fas fa-arrow-left"></i></span>
+          <span>Volver a búsqueda</span>
+        </button>
+
+        <div class="create-form">
+          <!-- Preview del color -->
+          <div class="preview-section">
+            <div class="swatch-large" [style.background-color]="previewColor"></div>
+            <span class="preview-label">{{ previewColor }}</span>
+          </div>
+
+          <!-- Campos del formulario -->
+          <div class="form-section">
+            <div class="field">
+              <label class="label">Código Pantone</label>
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  placeholder="Ej: Custom Red C"
+                  [(ngModel)]="form.code"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">HEX</label>
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  placeholder="Ej: FF5500"
+                  [(ngModel)]="form.hex"
+                  (ngModelChange)="onHexChange()"
+                  maxlength="6"
+                  style="text-transform: uppercase; font-family: monospace;"
+                />
+              </div>
+              <p class="help" *ngIf="form.hex && form.hex.length !== 6">
+                Debe tener exactamente 6 caracteres
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">RGB</label>
+              <div class="rgb-group">
+                <div class="rgb-input">
+                  <label class="label is-small">R</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="0"
+                    max="255"
+                    [(ngModel)]="form.r"
+                    (ngModelChange)="onRgbChange()"
+                  />
+                </div>
+                <div class="rgb-input">
+                  <label class="label is-small">G</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="0"
+                    max="255"
+                    [(ngModel)]="form.g"
+                    (ngModelChange)="onRgbChange()"
+                  />
+                </div>
+                <div class="rgb-input">
+                  <label class="label is-small">B</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="0"
+                    max="255"
+                    [(ngModel)]="form.b"
+                    (ngModelChange)="onRgbChange()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error de duplicado -->
+        <div class="notification is-danger is-light" *ngIf="errorMessage">
+          <i class="fas fa-exclamation-triangle"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="create-actions">
+          <button class="button" (click)="close()">Cancelar</button>
+          <button
+            class="button is-success"
+            [disabled]="!formValid || creating"
+            (click)="createPantone()"
+          >
+            <span class="icon" *ngIf="creating"><i class="fas fa-spinner fa-pulse"></i></span>
+            <span class="icon" *ngIf="!creating"><i class="fas fa-plus"></i></span>
+            <span>{{ creating ? 'Creando...' : 'Crear Pantone' }}</span>
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

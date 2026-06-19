@@ -1,30 +1,80 @@
 <div class="modal" [ngClass]="{ 'is-active': historial }">
   <div class="modal-background"></div>
-  <div class="modal-card">
+  <div class="modal-card" style="width: 80%">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente">Información empleado</p>
+      <p class="modal-card-title fuente">Historial de cargos</p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body light" style="max-height: 500px; overflow-y: auto">
-      <ng-container *ngIf="info_trabajador">
-        <table class="table is-fullwidth">
+      <!-- Tasa del día -->
+      <div class="field is-grouped mb-3">
+        <div class="control">
+          <label class="label">Tasa de hoy (Bs./USD)</label>
+          <input
+            type="number"
+            class="input"
+            [ngClass]="{ 'is-warning': tasaRequiereManual }"
+            [(ngModel)]="tasaInput"
+            placeholder="Ej: 45.50"
+          />
+          <p class="help is-warning" *ngIf="tasaRequiereManual && !tasaActual">
+            No se pudo obtener la tasa automática. Ingrésala manualmente.
+          </p>
+        </div>
+        <div class="control">
+          <label class="label">.</label>
+          <button class="button is-info" (click)="guardarTasaManual()">
+            <span><i class="fas fa-save mr-1"></i></span> Guardar tasa
+          </button>
+        </div>
+      </div>
+
+      <ng-container *ngIf="info_trabajador && info_trabajador.length > 0">
+        <table class="table is-fullwidth is-striped is-hoverable">
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Departamentos</th>
+              <th>Departamento</th>
               <th>Cargo</th>
-              <th>Sueldo</th>
+              <th>Sueldo Bs.</th>
+              <th>Tasa</th>
+              <th>USD histórico</th>
+              <th>USD hoy</th>
+              <th>Devaluación</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let historial of info_trabajador">
+            <tr *ngFor="let historial of info_trabajador" [class.has-background-info-light]="historial.activo">
               <td>{{ historial.fecha | date: 'dd/MM/yyyy' : 'UTC' }}</td>
-              <td>{{ historial.departamento.nombre }}</td>
-              <td>{{ historial.cargo.nombre }} de {{ historial.de.nombre }}</td>
-              <td>{{ historial.sueldo }}</td>
+              <td>{{ historial.departamento?.nombre || '-' }}</td>
+              <td>
+                {{ historial.cargo?.nombre || '-' }}
+                <span *ngIf="historial.de?.nombre"> de {{ historial.de.nombre }}</span>
+              </td>
+              <td>{{ historial.sueldo | number: '1.2-2' }}</td>
+              <td>{{ historial.tasa | number: '1.2-2' }}</td>
+              <td>{{ historial.tasa ? (historial.sueldo / historial.tasa | number: '1.2-2') : '-' }}</td>
+              <td>{{ calcularUSDHoy(historial.sueldo) | number: '1.2-2' }}</td>
+              <td>
+                <span
+                  class="tag"
+                  [ngClass]="calcularDevaluacion(historial.sueldo, historial.tasa) > 0 ? 'is-danger' : 'is-success'"
+                >
+                  {{ calcularDevaluacion(historial.sueldo, historial.tasa) | number: '1.2-2' }}%
+                </span>
+              </td>
+              <td>
+                <span class="tag" [ngClass]="historial.activo ? 'is-success' : 'is-light'">
+                  {{ historial.activo ? 'Activo' : 'Histórico' }}
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
+      </ng-container>
+      <ng-container *ngIf="!info_trabajador || info_trabajador.length === 0">
+        <p class="has-text-centered py-4" style="color: var(--text-muted)">No hay historial de cargos registrado.</p>
       </ng-container>
     </div>
   </div>

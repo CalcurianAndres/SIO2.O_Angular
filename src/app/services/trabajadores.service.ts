@@ -40,6 +40,10 @@ export class TrabajadoresService {
   }
 
   buscarHistorialTrabajador(trabajador_id) {
-    return this.contrataciones.filter((x: any) => x.trabajador === trabajador_id);
+    if (!this.contrataciones) return [];
+    return this.contrataciones.filter((x: any) => {
+      const id = x.trabajador?._id || x.trabajador;
+      return String(id) === String(trabajador_id);
+    });
   }
 }

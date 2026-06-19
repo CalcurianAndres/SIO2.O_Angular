@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FabricantesService } from 'src/app/services/fabricantes.service';
 import { GruposService } from 'src/app/services/grupos.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
+import { Pantone } from 'src/app/services/pantone.service';
 
 @Component({
   selector: 'app-nuevo-material',
@@ -32,6 +33,10 @@ export class NuevoMaterialComponent implements OnChanges {
   guardando = false;
   colores = ['Cyan', 'Magenta', 'Amarillo', 'Negro', 'Pantone'];
 
+  // Pantone selector
+  selectedPantone: Pantone | null = null;
+  showPantoneSelector = false;
+
   constructor(
     public grupos: GruposService,
     public fabricante: FabricantesService,
@@ -58,7 +63,18 @@ export class NuevoMaterialComponent implements OnChanges {
   onColorChange() {
     if (!this.esPantone) {
       this.pantoneCode = '';
+      this.selectedPantone = null;
     }
+  }
+
+  openPantoneSelector() {
+    this.showPantoneSelector = true;
+  }
+
+  onPantoneSelected(pantone: Pantone) {
+    this.selectedPantone = pantone;
+    this.pantoneCode = pantone.code;
+    this.showPantoneSelector = false;
   }
 
   get esCaja(): boolean {
@@ -70,6 +86,7 @@ export class NuevoMaterialComponent implements OnChanges {
     if (!this.grupo || this.Fabricante === '' || !this.nombre || !this.serie || !this.codigo) return false;
     if (this.esSustrato && (!this.calibre || !this.gramaje)) return false;
     if (this.esTinta && !this.color) return false;
+    if (this.esPantone && !this.selectedPantone) return false;
     if (this.esCaja && !this.cinta) return false;
     return true;
   }
@@ -104,6 +121,15 @@ export class NuevoMaterialComponent implements OnChanges {
       this.gramaje = m.gramaje || '';
       this.color = m.color || '';
       this.cinta = m.cinta || '';
+
+      // Restaurar Pantone si existe en el material
+      if (m.pantone) {
+        this.selectedPantone = m.pantone;
+        this.pantoneCode = m.pantone.code;
+      } else if (m.color && m.color.startsWith('Pantone ')) {
+        this.color = 'Pantone';
+        this.pantoneCode = m.color.replace('Pantone ', '');
+      }
     }
   }
 
@@ -122,6 +148,8 @@ export class NuevoMaterialComponent implements OnChanges {
     this.gramaje = '';
     this.color = '';
     this.pantoneCode = '';
+    this.selectedPantone = null;
+    this.showPantoneSelector = false;
     this.cinta = '';
     this.onCloseModal.emit();
   }
@@ -136,6 +164,8 @@ export class NuevoMaterialComponent implements OnChanges {
     this.gramaje = '';
     this.color = '';
     this.pantoneCode = '';
+    this.selectedPantone = null;
+    this.showPantoneSelector = false;
     this.cinta = '';
     this.onCloseModal_.emit();
   }
@@ -157,7 +187,18 @@ export class NuevoMaterialComponent implements OnChanges {
       data.gramaje = this.gramaje;
     }
     if (this.esTinta) {
-      data.color = this.esPantone ? `Pantone ${this.pantoneCode}` : this.color;
+      if (this.esPantone && this.selectedPantone) {
+        data.color = 'Pantone';
+        data.pantone = {
+          code: this.selectedPantone.code,
+          hex: this.selectedPantone.hex,
+          r: this.selectedPantone.r,
+          g: this.selectedPantone.g,
+          b: this.selectedPantone.b,
+        };
+      } else {
+        data.color = this.color;
+      }
     }
     if (this.esCaja) {
       data.cinta = this.cinta;
