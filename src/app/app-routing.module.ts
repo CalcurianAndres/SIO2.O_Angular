@@ -9,6 +9,11 @@ import { RecibosComponent } from './shared/recibos/recibos.component';
 const routes: Routes = [
   {
     path: '',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./Dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
+  {
+    path: 'login',
     loadChildren: () => import('./login/login.module').then((m) => m.LoginModule),
   },
   {

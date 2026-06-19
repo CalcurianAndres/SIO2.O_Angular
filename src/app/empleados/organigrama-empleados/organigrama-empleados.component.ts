@@ -20,6 +20,7 @@ export class OrganigramaEmpleadosComponent {
 
   searchTerm = '';
   expandedDepId: string | null = null;
+  filterMode: 'activos' | 'baja' = 'activos';
 
   nuevo_trabajador = false;
   informacion = false;
@@ -87,8 +88,14 @@ export class OrganigramaEmpleadosComponent {
     }
   }
 
+  get listaTrabajadores(): any[] {
+    return this.filterMode === 'baja'
+      ? (this.trabajadores.trabajadorTodos || []).filter((t: any) => t.borrado === true)
+      : (this.trabajadores.trabajador || []);
+  }
+
   obtenerEmpleadosDelDepartamento(dep: any): any[] {
-    return (this.trabajadores.trabajador || []).filter((t: any) => t.contratacion?.departamento?.nombre === dep.nombre);
+    return this.listaTrabajadores.filter((t: any) => t.contratacion?.departamento?.nombre === dep.nombre);
   }
 
   obtenerAreas(dep: any): any[] {
@@ -96,8 +103,12 @@ export class OrganigramaEmpleadosComponent {
   }
 
   empleadosDirectos(dep: any): any[] {
-    const areaNombres = new Set(this.obtenerAreas(dep).map((a: any) => a.nombre));
-    return this.obtenerEmpleadosDelDepartamento(dep).filter((t: any) => !areaNombres.has(t.contratacion?.de?.nombre));
+    const allAreaNombres = new Set(
+      (this.api.subunidad || [])
+        .filter((s: any) => s.departamento === dep.nombre)
+        .map((s: any) => s.nombre),
+    );
+    return this.obtenerEmpleadosDelDepartamento(dep).filter((t: any) => !allAreaNombres.has(t.contratacion?.de?.nombre));
   }
 
   empleadosDelArea(area: any, dep: any): any[] {
@@ -131,6 +142,71 @@ export class OrganigramaEmpleadosComponent {
     this.emergencias = this.trabajador.informacion_adicional.emergencia;
     this.cursos_realizados = this.trabajador.instruccion_academica.cursos;
     this.softwares = this.trabajador.manejo_herramientas.otros;
+  }
+
+  setFilterMode(mode: 'activos' | 'baja') {
+    this.filterMode = mode;
+    if (mode === 'baja') {
+      this.trabajadores.BuscarTrabajadorTodos();
+    }
+  }
+
+  darDeBajaTrabajador(trabajador: any) {
+    Swal.fire({
+      icon: 'question',
+      title: '¿Dar de baja al trabajador?',
+      text: 'El trabajador aparecerá en la sección "De baja" y podrá ser reactivado posteriormente.',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Dar de baja',
+      denyButtonText: 'Cancelar',
+      confirmButtonColor: '#f03a5f',
+      denyButtonColor: '#48c78e',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.trabajadores.darDeBajaTrabajador(trabajador);
+        setTimeout(() => {
+          Swal.fire({
+            text: this.trabajadores.mensaje.mensaje,
+            icon: this.trabajadores.mensaje.icon,
+            position: 'top-end',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            timer: 5000,
+          });
+        }, 500);
+      }
+    });
+  }
+
+  reactivarTrabajador(trabajador: any) {
+    Swal.fire({
+      icon: 'question',
+      title: '¿Reactivar al trabajador?',
+      text: 'El trabajador volverá a aparecer en la sección de activos.',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Reactivar',
+      denyButtonText: 'Cancelar',
+      confirmButtonColor: '#48c78e',
+      denyButtonColor: '#f03a5f',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.trabajadores.reactivarTrabajador(trabajador);
+        setTimeout(() => {
+          Swal.fire({
+            text: this.trabajadores.mensaje.mensaje,
+            icon: this.trabajadores.mensaje.icon,
+            position: 'top-end',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            timer: 5000,
+          });
+        }, 500);
+      }
+    });
   }
 
   eliminarTrabajador(trabajador: any) {

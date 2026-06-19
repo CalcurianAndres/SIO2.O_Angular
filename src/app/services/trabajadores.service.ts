@@ -7,8 +7,10 @@ import { Mensaje } from '../compras/models/modelos-compra';
 })
 export class TrabajadoresService {
   public trabajador;
+  public trabajadorTodos;
   public contrataciones;
   public mensaje!: Mensaje;
+  private pendingTodos = false;
 
   constructor(private socket: WebSocketService) {
     this.BuscarTrabajador();
@@ -18,7 +20,12 @@ export class TrabajadoresService {
     this.socket.io.emit('CLIENTE:Trabajador');
 
     this.socket.io.on('SERVER:Trabajador', (data) => {
-      this.trabajador = data;
+      if (this.pendingTodos) {
+        this.trabajadorTodos = data;
+        this.pendingTodos = false;
+      } else {
+        this.trabajador = data;
+      }
     });
 
     this.socket.io.on('SERVER:Contrataciones', (data) => {
@@ -31,12 +38,25 @@ export class TrabajadoresService {
     });
   }
 
+  BuscarTrabajadorTodos() {
+    this.pendingTodos = true;
+    this.socket.io.emit('CLIENTE:Trabajador', { incluirBorrados: true });
+  }
+
   nuevoTrabajador(data: any) {
     this.socket.io.emit('CLIENTE:nuevoTrabajador', data);
   }
 
   eliminarTrabajador(data: any) {
     this.socket.io.emit('CLIENTE:EliminarTrabajador', data);
+  }
+
+  darDeBajaTrabajador(data: any) {
+    this.socket.io.emit('CLIENTE:DarDeBajaTrabajador', data);
+  }
+
+  reactivarTrabajador(data: any) {
+    this.socket.io.emit('CLIENTE:ReactivarTrabajador', data);
   }
 
   buscarHistorialTrabajador(trabajador_id) {

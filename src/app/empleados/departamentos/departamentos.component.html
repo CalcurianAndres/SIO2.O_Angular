@@ -22,7 +22,7 @@
 </app-areas>
 <app-page-layout>
   <app-section-header
-    title="Departamentos"
+    title="Unidades"
     description="Estructura organizacional"
     icon="fa-users"
     color="teal"
@@ -48,8 +48,8 @@
   </div>
   <br />
   <br />
-  <!-- <div> 
-                <div> 
+  <!-- <div>
+                <div>
 
                     <ng-container *ngFor="let dep of Departamentos">showAreas(dep)"
                         <div class="card">
@@ -75,7 +75,7 @@
                                 </table>
                                 <table class="table is-fullwidth is-bordered">
                                     <ng-container *ngFor="let cargo of filtrarDepartamento(dep.nombre);index as i">
-                                        
+
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="card-header-title">
@@ -109,7 +109,7 @@
 
                                   <ng-template #renderCargos__ let-superior="superior" let-index="index">
                                     <ng-container *ngFor="let subcargo of obtenerSubcargos(superior, dep.nombre);index as i">
-                                        
+
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="card-header-title">
@@ -141,7 +141,7 @@
                                         </tr>
                                     </ng-container>
                                   </ng-template>
-                                  
+
                                   <ng-template #renderCargos let-superior="superior">
                                     <div class="columns">
                                       <div class="column" *ngFor="let subcargo of obtenerSubcargos(superior, dep.nombre)">

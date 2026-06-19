@@ -18,6 +18,15 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const token = localStorage.getItem('TOKEN_SESSION');
+    if (token) {
+      this.api.validarToken().subscribe((isValid) => {
+        if (isValid) {
+          console.log('Token válido — redirigiendo al dashboard');
+          this.router.navigateByUrl('/dashboard');
+        }
+      });
+    }
     this.session_email = this.api.Correo_session;
     this.session_name = this.api.Nombre_session;
     this.Correo = this.api.Correo_session;

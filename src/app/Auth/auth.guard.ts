@@ -16,16 +16,11 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return this.api.validarToken().pipe(
       map((isAuth) => {
-        // if (isAuth && state.url === '/') {
-        //   return this.router.createUrlTree(['/compras']); // Redirigir a '/compras' si el usuario está autenticado y ya está en '/'
-        // }
-        return isAuth || this.router.createUrlTree(['/']); // Si no está autenticado, redirigir a '/'
+        return isAuth || this.router.createUrlTree(['/login']);
       }),
       tap((isAuth) => {
         if (!isAuth) {
-          console.log('Access denied - Redirecting to login');
-        } else if (state.url === '/') {
-          console.log('Authenticated user on "/" - Redirecting to /compras');
+          console.log('Access denied — Redirecting to /login');
         }
       }),
     );

@@ -31,6 +31,18 @@
   </button>
   <br /><br />
 
+  <!-- Tabs -->
+  <div class="tabs">
+    <ul>
+      <li [class.is-active]="filterMode === 'activos'">
+        <a (click)="setFilterMode('activos')">Activos</a>
+      </li>
+      <li [class.is-active]="filterMode === 'baja'">
+        <a (click)="setFilterMode('baja')">De baja</a>
+      </li>
+    </ul>
+  </div>
+
   <!-- Search -->
   <div class="field" style="max-width: 400px; margin-bottom: 1rem">
     <div class="control has-icons-left">
@@ -83,7 +95,8 @@
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
               <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
-              <button class="button btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(emp)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
+              <button *ngIf="filterMode === 'activos'" class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
+              <button *ngIf="filterMode === 'baja'" class="button btn-action-icon" title="Reactivar" (click)="reactivarTrabajador(emp)"><span class="icon"><i class="fas fa-user-check icon-success"></i></span></button>
             </div>
           </div>
         </div>
@@ -108,7 +121,8 @@
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
               <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
-              <button class="button btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(emp)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
+              <button *ngIf="filterMode === 'activos'" class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
+              <button *ngIf="filterMode === 'baja'" class="button btn-action-icon" title="Reactivar" (click)="reactivarTrabajador(emp)"><span class="icon"><i class="fas fa-user-check icon-success"></i></span></button>
             </div>
           </div>
         </div>

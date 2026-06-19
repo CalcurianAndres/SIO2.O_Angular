@@ -27,10 +27,20 @@
   <button class="button is-info" (click)="nuevo_trabajador = true">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>
     <span>Empleado</span></button
-  >  <br />
+  >  <br />
   <br />
+  <div class="tabs">
+    <ul>
+      <li [class.is-active]="filterMode === 'activos'">
+        <a (click)="setFilterMode('activos')">Activos</a>
+      </li>
+      <li [class.is-active]="filterMode === 'todos'">
+        <a (click)="setFilterMode('todos')">Todos</a>
+      </li>
+    </ul>
+  </div>
   <div class="Departamentos">
-    <div class="card dep" *ngFor="let cargos of trabajadores.trabajador">
+    <div class="card dep" *ngFor="let cargos of listaTrabajadores">
       <div class="card_designed">
         <span class="color" [style.background-color]="cargos.contratacion.departamento.color">
           <div class="columns">
@@ -51,6 +61,9 @@
         <span class="info">
           {{ cargos.contratacion.cargo.nombre }} de <br />
           {{ cargos.contratacion.de.nombre }}
+        </span>
+        <span class="tag" [ngClass]="cargos.borrado ? 'is-danger' : 'is-success'">
+          {{ cargos.borrado ? 'De baja' : 'Activo' }}
         </span>
       </div>
       <footer class="card-footer">

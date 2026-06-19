@@ -21,6 +21,21 @@ export class TrabajadoresComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  public filterMode: 'activos' | 'todos' = 'activos';
+
+  get listaTrabajadores() {
+    return this.filterMode === 'todos'
+      ? this.trabajadores.trabajadorTodos
+      : this.trabajadores.trabajador;
+  }
+
+  setFilterMode(mode: 'activos' | 'todos') {
+    this.filterMode = mode;
+    if (mode === 'todos') {
+      this.trabajadores.BuscarTrabajadorTodos();
+    }
+  }
+
   public nuevo_trabajador = false;
 
   public colores = ['#30cf60', '#375bea', '#ac2abe'];
