@@ -197,7 +197,7 @@
                         <option value="" disabled>Seleccionar estado</option>
                         <option value="{{ e.geonameId }}-{{ e.name }}" *ngFor="let e of estados">{{ e.name }}</option>
                       </select>
-div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -550,9 +550,9 @@ div>
             />
           </div>
           <div class="control">
-            <label class="label">Departamento</label>
+            <label class="label">Unidad</label>
             <div class="select">
-              <select [(ngModel)]="trabajador.contratacion.departamento" (change)="buscarSubArea($event.target)">
+              <select [(ngModel)]="trabajador.contratacion.departamento" (change)="buscarSubUnidades($event.target)">
                 <option value="{{ departamento._id }}" *ngFor="let departamento of departamentos.departamentos">
                   {{ departamento.nombre }}
                 </option>
@@ -567,12 +567,29 @@ div>
               </select>
             </div>
           </div>
+        </div>
+        <div class="field is-grouped mt-2">
           <div class="control">
-            <label class="label">De</label>
+            <label class="label">Sub unidad</label>
             <div class="select">
-              <select [(ngModel)]="trabajador.contratacion.de">
-                <option value="">Departamento</option>
-                <option value="{{ unidad._id }}" *ngFor="let unidad of subAreas">{{ unidad.nombre }}</option>
+              <select [(ngModel)]="trabajador.contratacion.subUnidadTemp" (change)="onSubUnidadChange($event.target)">
+                <option value="">Gerente de la unidad</option>
+                <option value="{{ unidad._id }}" *ngFor="let unidad of subUnidadesDisponibles">
+                  {{ unidad.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <label class="label">Sub area</label>
+            <div class="select" [ngClass]="{ 'is-disabled': !subUnidadesDisponibles.length }">
+              <select
+                [(ngModel)]="trabajador.contratacion.de"
+                (change)="onSubAreaChange($event.target)"
+                [disabled]="!subUnidadesDisponibles.length"
+              >
+                <option value="">Ninguna</option>
+                <option value="{{ area._id }}" *ngFor="let area of subAreas">{{ area.nombre }}</option>
               </select>
             </div>
           </div>
@@ -591,6 +608,7 @@ div>
               class="input"
               [ngClass]="{ 'is-warning': tasaRequiereManual }"
               [(ngModel)]="trabajador.contratacion.tasa"
+              (ngModelChange)="tasaActual = $event"
               placeholder="Ej: 45.50"
             />
             <p class="help is-warning" *ngIf="tasaRequiereManual && !trabajador.contratacion.tasa">

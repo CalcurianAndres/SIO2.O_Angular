@@ -55,8 +55,8 @@ export class AreasComponent {
       showCancelButton: false,
       confirmButtonText: 'Eliminar',
       denyButtonText: `No eliminar`,
-      confirmButtonColor: '#f03a5f',
-      denyButtonColor: '#48c78e',
+      confirmButtonColor: 'var(--accent-red)',
+      denyButtonColor: 'var(--accent-green)',
     }).then((result) => {
       if (result.isConfirmed) {
         this.api.EliminarSubUnidad(subarea);
@@ -75,6 +75,52 @@ export class AreasComponent {
       } else if (result.isDenied) {
         Swal.fire({
           text: 'La subunidad aun se conserva',
+          icon: 'success',
+          position: 'top-end',
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          timer: 5000,
+        });
+      }
+    });
+  }
+
+  EliminarSubUnidad(area) {
+    const hijos = this.Areas_creadas.filter(
+      (a) => a.sup === area.nombre && a.departamento === area.departamento,
+    );
+    Swal.fire({
+      icon: 'question',
+      title: '¿Eliminar subunidad?',
+      text:
+        hijos.length > 0
+          ? `Esta subunidad tiene ${hijos.length} subárea(s) asociada(s) que también serán eliminadas.`
+          : '¿Estás seguro de que quieres eliminar esta subunidad?',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Eliminar',
+      denyButtonText: 'No eliminar',
+      confirmButtonColor: 'var(--accent-red)',
+      denyButtonColor: 'var(--accent-green)',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.EliminarSubUnidad(area);
+        setTimeout(() => {
+          this.Update.emit(area.departamento);
+          Swal.fire({
+            text: this.api.mensaje.mensaje,
+            icon: this.api.mensaje.icon,
+            position: 'top-end',
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            timer: 5000,
+          });
+        }, 500);
+      } else if (result.isDenied) {
+        Swal.fire({
+          text: 'La subunidad aún se conserva',
           icon: 'success',
           position: 'top-end',
           timerProgressBar: true,

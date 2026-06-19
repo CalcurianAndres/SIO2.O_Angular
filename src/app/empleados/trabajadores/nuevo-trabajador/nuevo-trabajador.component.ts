@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CargosService } from 'src/app/services/cargos.service';
 import { DepartamentosService } from 'src/app/services/departamentos.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './nuevo-trabajador.component.html',
   styleUrls: ['./nuevo-trabajador.component.scss'],
 })
-export class NuevoTrabajadorComponent implements OnInit, OnChanges {
+export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private http: HttpClient,
     public departamentos: DepartamentosService,
@@ -57,6 +58,7 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
   tasaActual: number | null = null;
   tasaManual: number | null = null;
   tasaRequiereManual: boolean = false;
+  tasaSubscription: Subscription = new Subscription();
 
   erroresPaso1 = {
     apellidos: false,
@@ -135,33 +137,82 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
         this.fotoPreview = null;
       }
       this.normalizarContratacion();
+      this.obtenerTasa();
     }
-    // Recargar estados y tasa cada vez que se abre el modal
     if (changes['nuevo_trabajador'] && changes['nuevo_trabajador'].currentValue === true) {
       this.cargarEstados();
-      this.tasas.obtenerTasaActual();
-      this.tasas.tasaActual$.subscribe((tasa) => {
-        this.tasaActual = tasa?.tasa ?? null;
-        this.tasaRequiereManual = tasa?.manual ?? true;
-        if (this.tasaActual && !this.trabajador?.contratacion?.tasa) {
-          this.trabajador.contratacion.tasa = this.tasaActual;
-        }
-      });
+      this.obtenerTasa();
     }
+  }
+
+  obtenerTasa(): void {
+    this.tasas.obtenerTasaActual();
+    this.tasaSubscription.unsubscribe();
+    this.tasaSubscription = this.tasas.tasaActual$.subscribe((tasa) => {
+      this.tasaActual = tasa?.tasa ?? null;
+      this.tasaRequiereManual = !tasa?.tasa;
+      if (this.tasaActual && !this.trabajador?.contratacion?.tasa) {
+        this.trabajador.contratacion.tasa = this.tasaActual;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.tasaSubscription.unsubscribe();
   }
 
   normalizarContratacion(): void {
     if (!this.trabajador) return;
 
-    // Asegurar que la fecha se pueda mostrar en input type="date"
     const fecha = this.trabajador.contratacion?.fecha;
     if (fecha && typeof fecha === 'string' && fecha.includes('T')) {
       this.trabajador.contratacion.fecha = fecha.split('T')[0];
     }
 
-    // Normalizar "De" vacío a null para indicar departamento/directo
     if (this.trabajador.contratacion?.de === '6696bc0c3b59a8877b99bf36') {
       this.trabajador.contratacion.de = '';
+    }
+
+    const deAreaId = this.trabajador.contratacion?.de;
+
+    if (!deAreaId) {
+      if (this.trabajador.contratacion?.departamento) {
+        const deptoId = this.trabajador.contratacion.departamento;
+        const todas = this.departamentos.buscarSubUnidad(deptoId);
+        this.subUnidadesDisponibles = todas.filter((x: any) => x.sup === '#');
+      } else {
+        this.subUnidadesDisponibles = [];
+      }
+      this.subAreas = [];
+      this.subUnidadSeleccionada = null;
+      this.trabajador.contratacion.subUnidadTemp = '';
+      return;
+    }
+
+    const areaSeleccionada = this.departamentos.subunidad.find((x: any) => String(x._id) === String(deAreaId));
+    if (!areaSeleccionada) {
+      this.subUnidadesDisponibles = [];
+      this.subAreas = [];
+      this.subUnidadSeleccionada = null;
+      return;
+    }
+
+    const depto = this.departamentos.departamentos.find((d: any) => d.nombre === areaSeleccionada.departamento);
+    if (depto) {
+      this.trabajador.contratacion.departamento = depto._id;
+      const todas = this.departamentos.buscarSubUnidad(depto._id);
+      this.subUnidadesDisponibles = todas.filter((x: any) => x.sup === '#');
+
+      if (areaSeleccionada.sup === '#') {
+        this.subUnidadSeleccionada = areaSeleccionada;
+        this.subAreas = todas.filter((x: any) => x.sup === this.subUnidadSeleccionada.nombre);
+      } else {
+        const padre = this.departamentos.subunidad.find((x: any) => x.nombre === areaSeleccionada.sup);
+        if (padre) {
+          this.subUnidadSeleccionada = padre;
+          this.subAreas = todas.filter((x: any) => x.sup === this.subUnidadSeleccionada.nombre);
+        }
+      }
     }
   }
 
@@ -270,8 +321,16 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
   guardarTasaManual(): void {
     if (this.tasaManual && this.tasaManual > 0) {
       this.tasas.guardarTasa(this.tasaManual);
+      this.tasaActual = this.tasaManual;
       this.trabajador.contratacion.tasa = this.tasaManual;
       this.tasaRequiereManual = false;
+      Swal.fire({
+        icon: 'success',
+        title: 'Tasa guardada',
+        text: `Tasa de ${this.tasaManual} Bs/USD guardada correctamente`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     }
   }
 
@@ -558,7 +617,55 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges {
     }
   }
 
+  public subUnidadesDisponibles: any = [];
   public subAreas: any = [];
+  public subUnidadSeleccionada: any = null;
+
+  buscarSubUnidades(e) {
+    const deptoId = e.value;
+    if (!deptoId) {
+      this.subUnidadesDisponibles = [];
+      this.subAreas = [];
+      this.subUnidadSeleccionada = null;
+      return;
+    }
+    const todas = this.departamentos.buscarSubUnidad(deptoId);
+    this.subUnidadesDisponibles = todas.filter((x: any) => x.sup === '#');
+    this.subAreas = [];
+    this.subUnidadSeleccionada = null;
+  }
+
+  onSubUnidadChange(e) {
+    const subUnidadId = e.value;
+    if (!subUnidadId) {
+      this.subAreas = [];
+      this.subUnidadSeleccionada = null;
+      this.trabajador.contratacion.de = null;
+      return;
+    }
+    this.subUnidadSeleccionada = this.subUnidadesDisponibles.find((x: any) => x._id === subUnidadId) || null;
+    if (!this.subUnidadSeleccionada) return;
+    const depto = this.departamentos.departamentos.find(
+      (d: any) => d._id === this.trabajador.contratacion.departamento,
+    );
+    if (!depto) return;
+    this.subAreas = this.departamentos.subunidad.filter(
+      (x: any) => x.departamento === depto.nombre && x.sup === this.subUnidadSeleccionada.nombre,
+    );
+    this.trabajador.contratacion.subUnidadTemp = subUnidadId;
+    this.trabajador.contratacion.de = subUnidadId;
+  }
+
+  onSubAreaChange(e) {
+    const areaId = e.value;
+    if (!areaId) {
+      if (this.subUnidadSeleccionada) {
+        this.trabajador.contratacion.de = this.subUnidadSeleccionada._id;
+      }
+      return;
+    }
+    this.trabajador.contratacion.de = areaId;
+  }
 
   buscarSubArea(e) {
     this.subAreas = this.departamentos.buscarSubUnidad(e.value);
