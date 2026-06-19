@@ -1,58 +1,144 @@
-<div class="container_"></div>
-<div class="modal">
-  <div class="modal-container">
-    <div class="modal-left">
-      <h1 class="modal-title" style="font-size: 'Gilroy'">Bienvenido!</h1>
+<div class="login-container">
+  <div class="animated-background">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+      <div class="shape shape-6"></div>
+    </div>
+
+    <div class="registration-marks">
+      <svg class="reg-mark reg-1" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="50" y1="0" x2="50" y2="100" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="0" y1="50" x2="100" y2="50" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <circle cx="50" cy="50" r="5" fill="#26343d" opacity="0.15"/>
+      </svg>
+      <svg class="reg-mark reg-2" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="50" y1="0" x2="50" y2="100" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="0" y1="50" x2="100" y2="50" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <circle cx="50" cy="50" r="5" fill="#26343d" opacity="0.15"/>
+      </svg>
+      <svg class="reg-mark reg-3" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="50" y1="0" x2="50" y2="100" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <line x1="0" y1="50" x2="100" y2="50" stroke="#26343d" stroke-width="1" opacity="0.25"/>
+        <circle cx="50" cy="50" r="5" fill="#26343d" opacity="0.15"/>
+      </svg>
+    </div>
+
+    <div class="halftone-grid">
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+      <div class="halftone-dot"></div>
+    </div>
+
+    <div class="floating-paper paper-1">
+      <svg viewBox="0 0 100 120" class="paper-svg">
+        <rect x="5" y="5" width="90" height="110" rx="4" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+        <line x1="15" y1="25" x2="85" y2="25" stroke="#f0f0f0" stroke-width="8"/>
+        <line x1="15" y1="45" x2="70" y2="45" stroke="#f0f0f0" stroke-width="8"/>
+        <line x1="15" y1="65" x2="60" y2="65" stroke="#f0f0f0" stroke-width="8"/>
+      </svg>
+    </div>
+    <div class="floating-paper paper-2">
+      <svg viewBox="0 0 100 120" class="paper-svg">
+        <rect x="5" y="5" width="90" height="110" rx="4" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+        <line x1="15" y1="30" x2="75" y2="30" stroke="#f5f5f5" stroke-width="10"/>
+        <line x1="15" y1="55" x2="55" y2="55" stroke="#f5f5f5" stroke-width="10"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="login-content">
+    <div class="logo-section">
+      <img src="../../assets/LOGO-SIO.png" alt="SIO Logo" class="logo" />
+    </div>
+
+    <div class="form-section">
+      <div class="form-header">
+        <h1 class="welcome-text">Bienvenido</h1>
+        <p class="subtitle">Sistema Integral Operativo</p>
+      </div>
+
       <ng-container *ngIf="session_name">
-        <div class="title" style="font-size: 40px">
-          {{ session_name }}
+        <div class="session-info">
+          <div class="avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="session-details">
+            <span class="session-name">{{ session_name }}</span>
+            <a (click)="borrar_sessiones()" class="change-user">¿No eres {{ session_name }}?</a>
+          </div>
         </div>
       </ng-container>
-      <p class="modal-desc"></p>
+
       <ng-container *ngIf="!session_name">
-        <div class="input-block">
-          <label for="email" class="input-label">Correo</label>
+        <div class="input-group">
+          <label for="email" class="input-label">Correo electrónico</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope input-icon"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="correo@ejemplo.com"
+              [(ngModel)]="Correo"
+              (keyup.enter)="login()"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="input-group">
+        <label for="password" class="input-label">Contraseña</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
           <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            [(ngModel)]="Correo"
+            type="password"
+            id="password"
+            placeholder="••••••••"
+            [(ngModel)]="Password"
             (keyup.enter)="login()"
+            class="input-field"
           />
         </div>
-      </ng-container>
-      <div class="input-block">
-        <label for="password" class="input-label">Contraseña</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          [(ngModel)]="Password"
-          (keyup.enter)="login()"
-        />
       </div>
-      <input type="checkbox" id="recuerdame" [hidden]="session_name" /> <span [hidden]="session_name"> Recuerdame</span>
-      <ng-container *ngIf="session_name">
-        <a (click)="borrar_sessiones()">¿No eres {{ session_name }}?</a>
-      </ng-container>
-      <div class="modal-buttons">
-        <!-- <a href="" class="">Forgot your password?</a> -->
-        <button class="input-button" (click)="login()">Login</button>
+
+      <div class="remember-row" [hidden]="session_name">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="recuerdame" />
+          <span class="checkmark"></span>
+          <span class="remember-text">Recuerdame</span>
+        </label>
       </div>
-      <!-- <p class="sign-up">Don't have an account? <a href="#">Sign up now</a></p> -->
+
+      <button class="login-button" (click)="login()">
+        <span>Iniciar sesión</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
-    <div class="modal-right">
-      <img src="../../assets/Imagen-pequeña-v2.jpg" alt="" />
+
+    <div class="cmyk-accent">
+      <div class="cmyk-dot cyan"></div>
+      <div class="cmyk-dot magenta"></div>
+      <div class="cmyk-dot yellow"></div>
+      <div class="cmyk-dot black"></div>
     </div>
-    <button class="icon-button close-button" (click)="closeModal()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
-        <path
-          d="M 25 3 C 12.86158 3 3 12.86158 3 25 C 3 37.13842 12.86158 47 25 47 C 37.13842 47 47 37.13842 47 25 C 47 12.86158 37.13842 3 25 3 z M 25 5 C 36.05754 5 45 13.94246 45 25 C 45 36.05754 36.05754 45 25 45 C 13.94246 45 5 36.05754 5 25 C 5 13.94246 13.94246 5 25 5 z M 16.990234 15.990234 A 1.0001 1.0001 0 0 0 16.292969 17.707031 L 23.585938 25 L 16.292969 32.292969 A 1.0001 1.0001 0 1 0 17.707031 33.707031 L 25 26.414062 L 32.292969 33.707031 A 1.0001 1.0001 0 1 0 33.707031 32.292969 L 26.414062 25 L 33.707031 17.707031 A 1.0001 1.0001 0 0 0 32.980469 15.990234 A 1.0001 1.0001 0 0 0 32.292969 16.292969 L 25 23.585938 L 17.707031 16.292969 A 1.0001 1.0001 0 0 0 16.990234 15.990234 z"
-        ></path>
-      </svg>
-    </button>
   </div>
-  <button class="modal-button" (click)="openModal()">Ingresar</button>
 </div>
