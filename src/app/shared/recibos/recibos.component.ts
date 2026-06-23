@@ -29,6 +29,7 @@ export class RecibosComponent {
         { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones en módulo de compras y producción, cierre de tareas pendientes, y actualización del manual de diseño' },
         { fecha: '17/06/2026', horas: 8, descripcion: 'Correcciones en wizard de empleados y geolocalización, mejora de calendario con número de semana, y limpieza de documentación' },
         { fecha: '19/06/2026', horas: 8, descripcion: 'Implementación del cálculo de devaluación salarial en el historial de empleados, cascada de unidades/subunidades/áreas en wizard de empleados, corrección de reactividad de tasa del día, y botón de eliminar sub-unidad con eliminación en cascada en el backend' },
+        { fecha: '23/06/2026', horas: 8, descripcion: 'Corrección del bug de datos fantasma en modal de empleado mediante separación en dos componentes independientes, y corrección de la tasa BCV para que se obtenga directamente de la API en lugar de la base de datos cacheada' },
       ]),
   );
 
