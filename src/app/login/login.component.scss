@@ -456,55 +456,31 @@
 
 .product-svg {
   position: absolute;
-  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.25));
-  animation: product-float 20s infinite ease-in-out;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+  animation: product-float 22s infinite ease-in-out;
 }
 
-.product-box {
-  width: 140px;
-  top: 8%;
-  right: 6%;
+.product-cereal-purple {
+  width: 150px;
+  top: 5%;
+  right: 5%;
   animation-delay: 0s;
-  animation-duration: 25s;
-}
-
-.product-can {
-  width: 100px;
-  bottom: 15%;
-  left: 4%;
-  animation-delay: -8s;
-  animation-duration: 22s;
-}
-
-.product-label-roll {
-  width: 120px;
-  top: 35%;
-  right: 10%;
-  animation-delay: -4s;
   animation-duration: 28s;
 }
 
-.product-card {
-  width: 80px;
-  top: 12%;
-  left: 8%;
-  animation-delay: -12s;
-  animation-duration: 24s;
-}
-
-.product-flyer {
-  width: 110px;
-  bottom: 35%;
-  left: 12%;
-  animation-delay: -6s;
-  animation-duration: 26s;
-}
-
-.product-bag {
+.product-cereal-yellow {
   width: 100px;
-  bottom: 8%;
-  right: 18%;
-  animation-delay: -10s;
+  bottom: 10%;
+  left: 5%;
+  animation-delay: -7s;
+  animation-duration: 25s;
+}
+
+.product-ketchup-label {
+  width: 100px;
+  bottom: 15%;
+  right: 15%;
+  animation-delay: -14s;
   animation-duration: 30s;
 }
 
@@ -513,16 +489,16 @@
     transform: translate(0, 0) rotate(0deg);
   }
   20% {
-    transform: translate(20px, -30px) rotate(3deg);
-  }
-  40% {
-    transform: translate(-15px, -15px) rotate(-2deg);
-  }
-  60% {
     transform: translate(25px, -35px) rotate(4deg);
   }
+  40% {
+    transform: translate(-20px, -15px) rotate(-3deg);
+  }
+  60% {
+    transform: translate(30px, -40px) rotate(5deg);
+  }
   80% {
-    transform: translate(-10px, -20px) rotate(-3deg);
+    transform: translate(-15px, -25px) rotate(-4deg);
   }
 }
 
