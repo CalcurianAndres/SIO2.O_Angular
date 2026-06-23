@@ -1,434 +1,181 @@
-<div class="login-container">
-  <div class="animated-background">
-    <div class="color-explosion">
-      <div class="color-wave wave-1"></div>
-      <div class="color-wave wave-2"></div>
-      <div class="color-wave wave-3"></div>
+<div class="login-page">
+
+  <!-- ═══════════ PANEL IZQUIERDO — Diseño Offset ═══════════ -->
+  <div class="design-panel">
+
+    <!-- Gradiente base animado -->
+    <div class="gradient-bg"></div>
+
+    <!-- Barras offset diagonales animadas -->
+    <div class="offset-bars">
+      <div class="bar bar-1"></div>
+      <div class="bar bar-2"></div>
+      <div class="bar bar-3"></div>
+      <div class="bar bar-4"></div>
+      <div class="bar bar-5"></div>
+      <div class="bar bar-6"></div>
+      <div class="bar bar-7"></div>
     </div>
 
-    <div class="floating-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-      <div class="shape shape-4"></div>
-      <div class="shape shape-5"></div>
-      <div class="shape shape-6"></div>
-      <div class="shape shape-7"></div>
-      <div class="shape shape-8"></div>
-      <div class="shape shape-9"></div>
-      <div class="shape shape-10"></div>
+    <!-- Círculos halftone animados -->
+    <div class="halftone-circles">
+      <div class="hc hc-1"></div>
+      <div class="hc hc-2"></div>
+      <div class="hc hc-3"></div>
+      <div class="hc hc-4"></div>
+      <div class="hc hc-5"></div>
+      <div class="hc hc-6"></div>
+      <div class="hc hc-7"></div>
+      <div class="hc hc-8"></div>
+      <div class="hc hc-9"></div>
+      <div class="hc hc-10"></div>
+      <div class="hc hc-11"></div>
+      <div class="hc hc-12"></div>
     </div>
 
-    <div class="confetti-container">
-      <div class="confetti c1"></div>
-      <div class="confetti c2"></div>
-      <div class="confetti c3"></div>
-      <div class="confetti c4"></div>
-      <div class="confetti c5"></div>
-      <div class="confetti c6"></div>
-      <div class="confetti c7"></div>
-      <div class="confetti c8"></div>
-      <div class="confetti c9"></div>
-      <div class="confetti c10"></div>
-      <div class="confetti c11"></div>
-      <div class="confetti c12"></div>
-    </div>
+    <!-- Separación CMYK -->
+    <div class="cmyk-separation">
+      <svg class="cmyk-svg" viewBox="0 0 400 600">
+        <!-- Canales de separación superpuestos con overprint -->
+        <circle cx="180" cy="250" r="100" fill="#00bcd4" opacity="0.3" class="ch-c"/>
+        <circle cx="220" cy="280" r="100" fill="#e91e63" opacity="0.3" class="ch-m"/>
+        <circle cx="200" cy="300" r="100" fill="#ffeb3b" opacity="0.3" class="ch-y"/>
+        <circle cx="200" cy="270" r="80"  fill="#1a1a2e" opacity="0.25" class="ch-k"/>
 
-    <div class="neon-lines">
-      <div class="neon-line line-1"></div>
-      <div class="neon-line line-2"></div>
-      <div class="neon-line line-3"></div>
-      <div class="neon-line line-4"></div>
-    </div>
+        <!-- Registration marks -->
+        <g class="reg-marks" opacity="0.4">
+          <circle cx="30" cy="30" r="12" fill="none" stroke="white" stroke-width="0.8"/>
+          <line x1="30" y1="18" x2="30" y2="42" stroke="white" stroke-width="0.8"/>
+          <line x1="18" y1="30" x2="42" y2="30" stroke="white" stroke-width="0.8"/>
+          <circle cx="370" cy="30" r="12" fill="none" stroke="white" stroke-width="0.8"/>
+          <line x1="370" y1="18" x2="370" y2="42" stroke="white" stroke-width="0.8"/>
+          <line x1="358" y1="30" x2="382" y2="30" stroke="white" stroke-width="0.8"/>
+          <circle cx="30" cy="570" r="12" fill="none" stroke="white" stroke-width="0.8"/>
+          <line x1="30" y1="558" x2="30" y2="582" stroke="white" stroke-width="0.8"/>
+          <line x1="18" y1="570" x2="42" y2="570" stroke="white" stroke-width="0.8"/>
+          <circle cx="370" cy="570" r="12" fill="none" stroke="white" stroke-width="0.8"/>
+          <line x1="370" y1="558" x2="370" y2="582" stroke="white" stroke-width="0.8"/>
+          <line x1="358" y1="570" x2="382" y2="570" stroke="white" stroke-width="0.8"/>
+        </g>
 
-    <div class="floating-dots">
-      <div class="dot d1"></div>
-      <div class="dot d2"></div>
-      <div class="dot d3"></div>
-      <div class="dot d4"></div>
-      <div class="dot d5"></div>
-      <div class="dot d6"></div>
-      <div class="dot d7"></div>
-      <div class="dot d8"></div>
-      <div class="dot d9"></div>
-      <div class="dot d10"></div>
-      <div class="dot d11"></div>
-      <div class="dot d12"></div>
-    </div>
+        <!-- Color bars (CMYK strip) -->
+        <g class="color-bars">
+          <rect x="30"  y="540" width="25" height="10" fill="#00bcd4" opacity="0.6"/>
+          <rect x="55"  y="540" width="25" height="10" fill="#e91e63" opacity="0.6"/>
+          <rect x="80"  y="540" width="25" height="10" fill="#ffeb3b" opacity="0.6"/>
+          <rect x="105" y="540" width="25" height="10" fill="#1a1a2e" opacity="0.6"/>
+          <rect x="130" y="540" width="25" height="10" fill="#ff9800" opacity="0.6"/>
+          <rect x="155" y="540" width="25" height="10" fill="#9c27b0" opacity="0.6"/>
+          <rect x="180" y="540" width="25" height="10" fill="#4caf50" opacity="0.6"/>
+          <rect x="205" y="540" width="25" height="10" fill="#f03a5f" opacity="0.6"/>
+        </g>
 
-    <div class="registration-marks">
-      <svg class="reg-mark reg-1" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#f03a5f" stroke-width="2" opacity="0.4"/>
-        <circle cx="50" cy="50" r="30" fill="none" stroke="#48c78e" stroke-width="1.5" opacity="0.3"/>
-        <circle cx="50" cy="50" r="15" fill="none" stroke="#3e8ed0" stroke-width="1" opacity="0.3"/>
-        <line x1="50" y1="0" x2="50" y2="100" stroke="#f03a5f" stroke-width="1.5" opacity="0.4"/>
-        <line x1="0" y1="50" x2="100" y2="50" stroke="#f03a5f" stroke-width="1.5" opacity="0.4"/>
-        <circle cx="50" cy="50" r="5" fill="#f03a5f" opacity="0.5"/>
-      </svg>
-      <svg class="reg-mark reg-2" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#00bcd4" stroke-width="2" opacity="0.35"/>
-        <circle cx="50" cy="50" r="30" fill="none" stroke="#ffeb3b" stroke-width="1.5" opacity="0.3"/>
-        <line x1="50" y1="0" x2="50" y2="100" stroke="#00bcd4" stroke-width="1.5" opacity="0.35"/>
-        <line x1="0" y1="50" x2="100" y2="50" stroke="#00bcd4" stroke-width="1.5" opacity="0.35"/>
-        <circle cx="50" cy="50" r="5" fill="#00bcd4" opacity="0.4"/>
-      </svg>
-      <svg class="reg-mark reg-3" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#e91e63" stroke-width="2" opacity="0.3"/>
-        <circle cx="50" cy="50" r="25" fill="none" stroke="#ff9800" stroke-width="1.5" opacity="0.25"/>
-        <line x1="50" y1="0" x2="50" y2="100" stroke="#e91e63" stroke-width="1.5" opacity="0.3"/>
-        <line x1="0" y1="50" x2="100" y2="50" stroke="#e91e63" stroke-width="1.5" opacity="0.3"/>
-        <circle cx="50" cy="50" r="5" fill="#e91e63" opacity="0.35"/>
-      </svg>
-      <svg class="reg-mark reg-4" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#9c27b0" stroke-width="2" opacity="0.25"/>
-        <circle cx="50" cy="50" r="35" fill="none" stroke="#4caf50" stroke-width="1" opacity="0.2"/>
-        <line x1="50" y1="0" x2="50" y2="100" stroke="#9c27b0" stroke-width="1.5" opacity="0.25"/>
-        <line x1="0" y1="50" x2="100" y2="50" stroke="#9c27b0" stroke-width="1.5" opacity="0.25"/>
-        <circle cx="50" cy="50" r="5" fill="#9c27b0" opacity="0.3"/>
+        <!-- Trapping lines -->
+        <g class="trapping" opacity="0.3">
+          <rect x="100" y="400" width="200" height="1" fill="white"/>
+          <rect x="100" y="420" width="200" height="0.5" fill="white"/>
+          <rect x="100" y="440" width="200" height="2" fill="white"/>
+          <rect x="100" y="460" width="200" height="0.5" fill="white"/>
+          <rect x="100" y="480" width="200" height="1" fill="white"/>
+        </g>
       </svg>
     </div>
 
-    <div class="halftone-overlay">
-      <div class="halftone-row">
-        <div class="halftone-dot h1 cyan"></div>
-        <div class="halftone-dot h2 magenta"></div>
-        <div class="halftone-dot h3 yellow"></div>
-        <div class="halftone-dot h4 black"></div>
-        <div class="halftone-dot h5 cyan"></div>
-        <div class="halftone-dot h6 magenta"></div>
-        <div class="halftone-dot h7 yellow"></div>
-        <div class="halftone-dot h8 black"></div>
-        <div class="halftone-dot h9 cyan"></div>
-        <div class="halftone-dot h10 magenta"></div>
-        <div class="halftone-dot h11 yellow"></div>
-        <div class="halftone-dot h12 black"></div>
-      </div>
+    <!-- Texto de bienvenida -->
+    <div class="welcome-content">
+      <h1 class="welcome-title">SIO</h1>
+      <p class="welcome-subtitle">Sistema Integral Operativo</p>
+      <div class="welcome-divider"></div>
+      <p class="welcome-tagline">Gestión Inteligente para tu Empresa</p>
     </div>
 
-    <div class="floating-products">
-      <!-- CEREALES FLIPS - Fondo púrpura oscuro elegante sin bordes coloridos -->
-      <div class="product-svg product-cereal-purple">
-        <svg viewBox="0 0 130 200">
-          <defs>
-            <linearGradient id="flipsMainPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4A148C"/>
-              <stop offset="50%" style="stop-color:#6A1B9A"/>
-              <stop offset="100%" style="stop-color:#38006b"/>
-            </linearGradient>
-            <linearGradient id="flipsGold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#FFD700"/>
-              <stop offset="50%" style="stop-color:#FFC107"/>
-              <stop offset="100%" style="stop-color:#FF8F00"/>
-            </linearGradient>
-            <linearGradient id="flipsLightPurple" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#AB47BC"/>
-              <stop offset="100%" style="stop-color:#7B1FA2"/>
-            </linearGradient>
-            <pattern id="flipsTexture" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-              <rect width="100" height="100" fill="#4A148C"/>
-              <circle cx="20" cy="20" r="1" fill="#ffffff" opacity="0.03"/>
-              <circle cx="50" cy="30" r="1" fill="#ffffff" opacity="0.02"/>
-              <circle cx="80" cy="15" r="1" fill="#ffffff" opacity="0.03"/>
-              <circle cx="30" cy="60" r="1" fill="#ffffff" opacity="0.02"/>
-              <circle cx="70" cy="70" r="1" fill="#ffffff" opacity="0.03"/>
-              <circle cx="10" cy="90" r="1" fill="#ffffff" opacity="0.02"/>
-              <circle cx="90" cy="90" r="1" fill="#ffffff" opacity="0.03"/>
-            </pattern>
-          </defs>
-          
-          <!-- Box body - front - DARK PURPLE -->
-          <rect x="10" y="20" width="110" height="170" fill="url(#flipsMainPurple)"/>
-          <rect x="10" y="20" width="110" height="170" fill="url(#flipsTexture)"/>
-          
-          <!-- Top stripe - simple gold line -->
-          <rect x="10" y="20" width="110" height="4" fill="url(#flipsGold)"/>
-          
-          <!-- Bottom stripe - simple gold line -->
-          <rect x="10" y="186" width="110" height="4" fill="url(#flipsGold)"/>
-          
-          <!-- Box side - slightly lighter -->
-          <path d="M120 20 L120 190 L130 185 L130 15 Z" fill="#38006b"/>
-          
-          <!-- FLIPS logo area - purple panel -->
-          <rect x="18" y="32" width="94" height="55" rx="4" fill="url(#flipsLightPurple)"/>
-
-          <!-- FLIPS text - COLORFUL LETTERS -->
-          <text x="20" y="75" font-family="Arial Black, sans-serif" font-size="40" font-weight="900" fill="#FFEB3B">F</text>
-          <text x="40" y="75" font-family="Arial Black, sans-serif" font-size="40" font-weight="900" fill="#E91E63">L</text>
-          <text x="58" y="75" font-family="Arial Black, sans-serif" font-size="40" font-weight="900" fill="#4CAF50">I</text>
-          <text x="73" y="75" font-family="Arial Black, sans-serif" font-size="40" font-weight="900" fill="#00BCD4">P</text>
-          <text x="97" y="75" font-family="Arial Black, sans-serif" font-size="40" font-weight="900" fill="#FF5722">S</text>
-          
-          <!-- CROCANT text - white simple -->
-          <rect x="30" y="95" width="70" height="16" rx="2" fill="#1A1A2E" opacity="0.5"/>
-          <text x="65" y="107" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">CROCANT</text>
-          
-          <!-- Main visual - cereal bowl illustration -->
-          <ellipse cx="65" cy="145" rx="42" ry="25" fill="#FFFFFF" opacity="0.1"/>
-          <ellipse cx="65" cy="143" rx="38" ry="22" fill="#2D1B4E"/>
-          <ellipse cx="65" cy="141" rx="35" ry="19" fill="#3D2660"/>
-          
-          <!-- Cereal pieces - simple circles -->
-          <circle cx="50" cy="138" r="6" fill="#FFD54F"/>
-          <circle cx="65" cy="135" r="5" fill="#FFC107"/>
-          <circle cx="78" cy="139" r="6" fill="#FFD54F"/>
-          <circle cx="55" cy="145" r="5" fill="#FFCA28"/>
-          <circle cx="72" cy="146" r="5" fill="#FFC107"/>
-          <circle cx="60" cy="140" r="4" fill="#FFE082"/>
-          <circle cx="70" cy="142" r="4" fill="#FFD54F"/>
-          
-          <!-- Milk in bowl -->
-          <ellipse cx="65" cy="142" rx="30" ry="12" fill="#F5F5F5" opacity="0.3"/>
-          
-          <!-- Content info -->
-          <rect x="18" y="165" width="60" height="5" rx="1" fill="#FFFFFF" opacity="0.6"/>
-          <rect x="18" y="173" width="45" height="4" rx="1" fill="#FFFFFF" opacity="0.4"/>
-          
-          <!-- Net weight - simple gold badge -->
-          <rect x="88" y="165" width="32" height="14" rx="2" fill="url(#flipsGold)"/>
-          <text x="104" y="175" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#4A148C" text-anchor="middle">450g</text>
-          
-          <!-- Simple corner accent -->
-          <rect x="18" y="32" width="4" height="20" fill="url(#flipsGold)"/>
-          
-          <!-- Registration marks - subtle -->
-          <circle cx="15" cy="185" r="2.5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.5"/>
-          <line x1="15" y1="182.5" x2="15" y2="187.5" stroke="#FFD700" stroke-width="0.5" opacity="0.5"/>
-          <line x1="12.5" y1="185" x2="17.5" y2="185" stroke="#FFD700" stroke-width="0.5" opacity="0.5"/>
-        </svg>
-      </div>
-
-      <!-- MAIZINA AMERICANA - Chiquita amarilla con detalles negros -->
-      <div class="product-svg product-cereal-yellow">
-        <svg viewBox="0 0 100 150">
-          <defs>
-            <linearGradient id="yellowBoxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#FFC107"/>
-              <stop offset="50%" style="stop-color:#FFD54F"/>
-              <stop offset="100%" style="stop-color:#FFB300"/>
-            </linearGradient>
-            <linearGradient id="yellowSideGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#FF8F00"/>
-              <stop offset="100%" style="stop-color:#FFB300"/>
-            </linearGradient>
-            <linearGradient id="yellowTopGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" style="stop-color:#FFC107"/>
-              <stop offset="100%" style="stop-color:#FFCA28"/>
-            </linearGradient>
-            <pattern id="cornPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-              <circle cx="5" cy="5" r="3" fill="#FFB300" opacity="0.5"/>
-            </pattern>
-          </defs>
-          
-          <!-- Box body - front -->
-          <rect x="5" y="25" width="85" height="120" fill="url(#yellowBoxGrad)"/>
-          <rect x="5" y="25" width="85" height="120" fill="url(#cornPattern)"/>
-          
-          <!-- Box body - right side -->
-          <path d="M90 25 L90 145 L100 142 L100 22 Z" fill="url(#yellowSideGrad)"/>
-          
-          <!-- Box top -->
-          <path d="M5 25 L50 5 L100 22 L90 25 Z" fill="url(#yellowTopGrad)"/>
-          
-          <!-- Top black stripe -->
-          <rect x="5" y="25" width="85" height="10" fill="#1A1A2E"/>
-          
-          <!-- MAIZINA logo -->
-          <rect x="12" y="40" width="70" height="35" rx="3" fill="#1A1A2E"/>
-          <text x="47" y="63" font-family="Georgia, serif" font-size="18" font-weight="bold" font-style="italic" fill="#FFC107" text-anchor="middle">Maizina</text>
-          <text x="47" y="72" font-family="Arial" font-size="7" fill="white" text-anchor="middle">AMERICANA</text>
-          
-          <!-- Corn illustration -->
-          <ellipse cx="45" cy="95" rx="25" ry="18" fill="#FFEB3B" stroke="#1A1A2E" stroke-width="2"/>
-          <ellipse cx="45" cy="95" rx="20" ry="14" fill="#FFC107"/>
-          <circle cx="35" cy="90" r="3" fill="#FFB300"/>
-          <circle cx="45" cy="88" r="3" fill="#FFB300"/>
-          <circle cx="55" cy="90" r="3" fill="#FFB300"/>
-          <circle cx="38" cy="97" r="3" fill="#FFB300"/>
-          <circle cx="48" cy="95" r="3" fill="#FFB300"/>
-          <circle cx="58" cy="97" r="3" fill="#FFB300"/>
-          <circle cx="42" cy="102" r="3" fill="#FFB300"/>
-          <circle cx="52" cy="100" r="3" fill="#FFB300"/>
-          
-          <!-- Content text -->
-          <rect x="12" y="118" width="50" height="4" rx="1" fill="#1A1A2E" opacity="0.7"/>
-          <rect x="12" y="125" width="35" height="3" rx="1" fill="#1A1A2E" opacity="0.5"/>
-          
-          <!-- Net weight black badge -->
-          <rect x="68" y="118" width="18" height="12" rx="2" fill="#1A1A2E"/>
-          <text x="77" y="127" font-family="Arial" font-size="7" font-weight="bold" fill="white" text-anchor="middle">250g</text>
-          
-          <!-- Bottom decorative line -->
-          <rect x="5" y="140" width="85" height="3" fill="#1A1A2E"/>
-          
-          <!-- Registration marks -->
-          <circle cx="10" cy="138" r="3" fill="none" stroke="#1A1A2E" stroke-width="0.5"/>
-          <line x1="10" y1="135" x2="10" y2="141" stroke="#1A1A2E" stroke-width="0.5"/>
-          <line x1="7" y1="138" x2="13" y2="138" stroke="#1A1A2E" stroke-width="0.5"/>
-        </svg>
-      </div>
-
-      <!-- ETIQUETA KETCHUP - Estilo etiqueta de cerveza clásica -->
-      <div class="product-svg product-ketchup-label">
-        <svg viewBox="0 0 90 130">
-          <defs>
-            <linearGradient id="ketchupGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#D32F2F"/>
-              <stop offset="30%" style="stop-color:#F44336"/>
-              <stop offset="70%" style="stop-color:#D32F2F"/>
-              <stop offset="100%" style="stop-color:#B71C1C"/>
-            </linearGradient>
-            <linearGradient id="ketchupGold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#FFD700"/>
-              <stop offset="50%" style="stop-color:#FFC107"/>
-              <stop offset="100%" style="stop-color:#FF8F00"/>
-            </linearGradient>
-            <pattern id="ketchupPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
-              <circle cx="4" cy="4" r="1" fill="white" opacity="0.1"/>
-            </pattern>
-          </defs>
-          
-          <!-- Bottle label shape - oval/rectangle with curved top/bottom -->
-          <path d="M10 20 Q10 10 20 10 L70 10 Q80 10 80 20 L80 110 Q80 120 70 120 L20 120 Q10 120 10 110 Z" 
-                fill="url(#ketchupGrad)" stroke="#B71C1C" stroke-width="2"/>
-          <path d="M10 20 Q10 10 20 10 L70 10 Q80 10 80 20 L80 110 Q80 120 70 120 L20 120 Q10 120 10 110 Z" 
-                fill="url(#ketchupPattern)"/>
-          
-          <!-- Gold decorative border -->
-          <path d="M12 22 Q12 12 22 12 L68 12 Q78 12 78 22 L78 108 Q78 118 68 118 L22 118 Q12 118 12 108 Z" 
-                fill="none" stroke="url(#ketchupGold)" stroke-width="1.5"/>
-          
-          <!-- Inner border -->
-          <path d="M16 26 Q16 16 26 16 L64 16 Q74 16 74 26 L74 104 Q74 114 64 114 L26 114 Q16 114 16 104 Z" 
-                fill="none" stroke="url(#ketchupGold)" stroke-width="0.5"/>
-          
-          <!-- Header banner -->
-          <rect x="15" y="18" width="60" height="18" rx="2" fill="#FFC107"/>
-          <text x="45" y="31" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#B71C1C" text-anchor="middle">KETCHUP</text>
-          
-          <!-- Decorative line -->
-          <rect x="20" y="40" width="50" height="2" fill="url(#ketchupGold)"/>
-          
-          <!-- Main product name -->
-          <text x="45" y="60" font-family="Georgia, serif" font-size="22" font-weight="bold" font-style="italic" fill="#FFC107" text-anchor="middle" stroke="#1A1A2E" stroke-width="0.5">TOMATE</text>
-          
-          <!-- Subtitle -->
-          <text x="45" y="72" font-family="Arial" font-size="8" fill="white" text-anchor="middle">SALSA DE</text>
-          
-          <!-- Tomato illustration -->
-          <ellipse cx="45" cy="88" rx="15" ry="10" fill="#FFC107" stroke="#B71C1C" stroke-width="1"/>
-          <ellipse cx="45" cy="88" rx="12" ry="7" fill="#F44336"/>
-          <path d="M40 80 Q45 75 50 80" fill="none" stroke="#4CAF50" stroke-width="2"/>
-          <ellipse cx="43" cy="86" rx="2" ry="1.5" fill="#FFCDD2"/>
-          <ellipse cx="47" cy="87" rx="2" ry="1.5" fill="#FFCDD2"/>
-          <ellipse cx="45" cy="90" rx="1.5" ry="1" fill="#FFCDD2"/>
-          
-          <!-- Bottom text -->
-          <rect x="20" y="98" width="50" height="2" fill="url(#ketchupGold)"/>
-          <text x="45" y="108" font-family="Arial" font-size="6" fill="white" text-anchor="middle">PRODUCTO DE VENEZUELA</text>
-          
-          <!-- Net content -->
-          <rect x="30" y="112" width="30" height="6" rx="1" fill="white"/>
-          <text x="45" y="117" font-family="Arial" font-size="5" font-weight="bold" fill="#B71C1C" text-anchor="middle">500 ml</text>
-          
-          <!-- Corner decorations -->
-          <circle cx="15" cy="20" r="2" fill="url(#ketchupGold)"/>
-          <circle cx="75" cy="20" r="2" fill="url(#ketchupGold)"/>
-          <circle cx="15" cy="110" r="2" fill="url(#ketchupGold)"/>
-          <circle cx="75" cy="110" r="2" fill="url(#ketchupGold)"/>
-          
-          <!-- Registration marks -->
-          <circle cx="8" cy="15" r="3" fill="none" stroke="white" stroke-width="0.5"/>
-          <line x1="8" y1="12" x2="8" y2="18" stroke="white" stroke-width="0.5"/>
-          <line x1="5" y1="15" x2="11" y2="15" stroke="white" stroke-width="0.5"/>
-        </svg>
-      </div>
+    <!-- Logo flotante -->
+    <div class="floating-logo">
+      <img src="../../assets/LOGO-SIO.png" alt="SIO" class="logo-img" />
     </div>
 
-    <div class="rgb-splitter">
-      <div class="rgb-bar rgb-r"></div>
-      <div class="rgb-bar rgb-g"></div>
-      <div class="rgb-bar rgb-b"></div>
+    <!-- CMYK dots decorativos -->
+    <div class="cmyk-dots">
+      <div class="dot-row">
+        <span class="cd cyan"></span>
+        <span class="cd magenta"></span>
+        <span class="cd yellow"></span>
+        <span class="cd black"></span>
+      </div>
+      <div class="dot-row">
+        <span class="cd magenta"></span>
+        <span class="cd yellow"></span>
+        <span class="cd black"></span>
+        <span class="cd cyan"></span>
+      </div>
     </div>
   </div>
 
-  <div class="login-content">
-    <div class="logo-section">
-      <img src="../../assets/LOGO-SIO.png" alt="SIO Logo" class="logo" />
-    </div>
+  <!-- ═══════════ PANEL DERECHO — Formulario ═══════════ -->
+  <div class="form-panel">
+    <div class="form-wrapper">
 
-    <div class="form-section">
-      <div class="rainbow-bar"></div>
       <div class="form-header">
-        <h1 class="welcome-text">Bienvenido</h1>
-        <p class="subtitle">Sistema Integral Operativo</p>
+        <div class="form-logo">
+          <img src="../../assets/LOGO-SIO.png" alt="SIO" class="form-logo-img" />
+        </div>
+        <h2 class="form-title">USER LOGIN</h2>
       </div>
 
       <ng-container *ngIf="session_name">
-        <div class="session-info">
-          <div class="avatar-glow">
-            <div class="avatar">
-              <i class="fas fa-user"></i>
-            </div>
+        <div class="session-card">
+          <div class="session-avatar">
+            <i class="fas fa-user"></i>
           </div>
-          <div class="session-details">
+          <div class="session-info">
             <span class="session-name">{{ session_name }}</span>
-            <a (click)="borrar_sessiones()" class="change-user">¿No eres {{ session_name }}?</a>
+            <a (click)="borrar_sessiones()" class="session-link">¿No eres {{ session_name }}?</a>
           </div>
         </div>
       </ng-container>
 
       <ng-container *ngIf="!session_name">
-        <div class="input-group">
-          <label for="email" class="input-label">Correo electrónico</label>
-          <div class="input-wrapper">
-            <i class="fas fa-envelope input-icon"></i>
-            <input
-              type="email"
-              id="email"
-              placeholder="correo@ejemplo.com"
-              [(ngModel)]="Correo"
-              (keyup.enter)="login()"
-              class="input-field"
-            />
+        <div class="form-group">
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
           </div>
+          <input
+            type="email"
+            placeholder="Email"
+            [(ngModel)]="Correo"
+            (keyup.enter)="login()"
+            class="form-input"
+          />
         </div>
       </ng-container>
 
-      <div class="input-group">
-        <label for="password" class="input-label">Contraseña</label>
-        <div class="input-wrapper">
-          <i class="fas fa-lock input-icon"></i>
-          <input
-            type="password"
-            id="password"
-            placeholder="••••••••"
-            [(ngModel)]="Password"
-            (keyup.enter)="login()"
-            class="input-field"
-          />
+      <div class="form-group">
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
         </div>
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="Password"
+          (keyup.enter)="login()"
+          class="form-input"
+        />
       </div>
 
-      <div class="remember-row" [hidden]="session_name">
-        <label class="checkbox-wrapper">
+      <div class="form-options">
+        <label class="check-wrapper" [hidden]="session_name">
           <input type="checkbox" id="recuerdame" />
-          <span class="checkmark"></span>
-          <span class="remember-text">Recuerdame</span>
+          <span class="check-circle"></span>
+          <span>Remember</span>
         </label>
+        <a class="forgot-link">Forgot password?</a>
       </div>
 
-      <button class="login-button" (click)="login()">
-        <span>Iniciar sesión</span>
-        <i class="fas fa-arrow-right"></i>
+      <button class="login-btn" (click)="login()">
+        LOGIN
       </button>
 
-      <div class="cmyk-footer">
-        <div class="cmyk-dot cyan"></div>
-        <div class="cmyk-dot magenta"></div>
-        <div class="cmyk-dot yellow"></div>
-        <div class="cmyk-dot black"></div>
-      </div>
     </div>
   </div>
+
 </div>
