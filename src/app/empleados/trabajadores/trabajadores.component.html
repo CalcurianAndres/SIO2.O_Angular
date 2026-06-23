@@ -1,14 +1,15 @@
-<app-nuevo-trabajador
-  [nuevo_trabajador]="nuevo_trabajador"
-  [trabajador]="trabajador"
-  [referencias]="referencias"
-  [carga]="carga"
-  [emergencias]="emergencias"
-  [cursos_realizados]="cursos_realizados"
-  [softwares]="softwares"
-  (onCloseModal)="nuevo_trabajador = false"
+<app-crear-trabajador
+  *ngIf="modalCrear"
+  (onCloseModal)="cerrarModalCrear()"
 >
-</app-nuevo-trabajador>
+</app-crear-trabajador>
+
+<app-editar-trabajador
+  *ngIf="modalEditar && empleadoAEditar"
+  [empleado]="empleadoAEditar"
+  (onCloseModal)="cerrarModalEditar()"
+>
+</app-editar-trabajador>
 
 <app-informacion-empleado
   [informacion]="informacion"
@@ -24,7 +25,7 @@
     color="teal"
   ></app-section-header>
   <br />
-  <button class="button is-info" (click)="nuevo_trabajador = true">
+  <button class="button is-info" (click)="abrirModalCrear()">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>
     <span>Empleado</span></button
   >  <br />
@@ -71,7 +72,7 @@
           <a class="card-footer-item"
             ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
           ></a>
-          <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
+          <a class="card-footer-item"><i class="far fa-edit green" (click)="abrirModalEditar(cargos)"></i></a>
           <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(cargos)"><i class="fas fa-trash-alt icon-danger"></i></button>
         </footer>
       </ng-container>
@@ -110,7 +111,7 @@
           <a class="card-footer-item"
             ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
           ></a>
-          <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
+          <a class="card-footer-item"><i class="far fa-edit green" (click)="abrirModalEditar(cargos)"></i></a>
         </footer>
       </ng-container>
 

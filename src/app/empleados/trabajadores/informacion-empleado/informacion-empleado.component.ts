@@ -113,7 +113,10 @@ export class InformacionEmpleadoComponent {
             new Cell(new Txt('Nombres').bold().end).fillColor('#dbdbdb').colSpan(2).end,
             new Cell(new Txt(informacion.datos_personales.nombres).end).end,
             new Cell(
-              await getImageSafe(`${environment.imgUrl}/imagen/empleado/${informacion.datos_personales.foto}`, [163, 200])
+              await getImageSafe(
+                `${environment.imgUrl}/imagen/empleado/${informacion.datos_personales.foto}`,
+                [163, 200],
+              ),
             )
               .colSpan(2)
               .rowSpan(10).end,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { TrabajadoresService } from 'src/app/services/trabajadores.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -39,7 +38,6 @@ export class TrabajadoresComponent implements OnInit {
     if (this.filterMode === 'todos') {
       return (this.trabajadores.trabajadorTodos || []).filter((t: any) => t.borrado === true);
     }
-    // Activos: usar trabajadorTodos si está cargado, si no fallback a trabajador
     const todos = this.trabajadores.trabajadorTodos;
     if (todos && todos.length > 0) {
       return todos.filter((t: any) => !t.borrado);
@@ -99,7 +97,9 @@ export class TrabajadoresComponent implements OnInit {
     }
   }
 
-  public nuevo_trabajador = false;
+  public modalCrear = false;
+  public modalEditar = false;
+  public empleadoAEditar: any = null;
 
   public colores = ['#30cf60', '#375bea', '#ac2abe'];
 
@@ -107,72 +107,6 @@ export class TrabajadoresComponent implements OnInit {
 
   public informacion = false;
   public _informacion_: any;
-  public referencias: any = [];
-  public carga: any = [];
-  public emergencias: any = [];
-  public cursos_realizados: any = [];
-  public softwares: any = [];
-
-  public trabajador = {
-    datos_personales: {
-      apellidos: '',
-      nombres: '',
-      cedula: '',
-      fecha_nac: '',
-      altura: '',
-      peso: '',
-      sexo: '',
-      nacimiento: '',
-      nacionalidad: '',
-      estado_civil: '',
-      licencia: '',
-      grado: '',
-      rif: '',
-      email: '',
-      estado: '',
-      municipio: '',
-      parroquia: '',
-      sector: '',
-      domicilio: '',
-      telefono: '',
-      celular: '',
-      foto: '',
-    },
-    informacion_adicional: {
-      referencias: [],
-      carga_familiar: [],
-      emergencia: [],
-    },
-    instruccion_academica: {
-      grado: {
-        instruccion: '',
-        ano: '',
-        titulo: '',
-      },
-      cursos: [],
-      idiomas: {
-        idiomas: [],
-      },
-    },
-    manejo_herramientas: {
-      computadora: false,
-      softwares: {
-        word: false,
-        excel: false,
-        power_point: false,
-        acrobat: false,
-      },
-      otros: [],
-      referencias: [],
-    },
-    contratacion: {
-      fecha: '',
-      departamento: '',
-      cargo: '',
-      de: '',
-      sueldo: '',
-    },
-  };
 
   getRandomLetter(): string {
     const alphabet = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
@@ -188,29 +122,40 @@ export class TrabajadoresComponent implements OnInit {
     return this.color_generos[Math.floor(Math.random() * 2)];
   }
 
-  // eliminarTrabajador(trabajador:any){
-  //   this.trabajadores.eliminarTrabajador(trabajador)
-  //   setTimeout(() => {
-  //     Swal.fire({
-  //       text:this.trabajadores.mensaje.mensaje,
-  //       icon:this.trabajadores.mensaje.icon,
-  //       position:'top-end',
-  //       timerProgressBar:true,
-  //       showConfirmButton:false,
-  //       toast:true,
-  //       timer:5000
-  //     })
-  //   }, 500);
-  // }
+  /**
+   * Abre el modal de CREAR empleado.
+   * El componente CrearTrabajadorComponent es totalmente independiente:
+   * no recibe inputs y siempre nace con estado vacío.
+   */
+  abrirModalCrear() {
+    this.cerrarCualquierModal();
+    this.modalCrear = true;
+  }
 
-  EDITAR_EMPLEADO(cargos) {
-    this.trabajador = cargos;
-    this.nuevo_trabajador = true;
-    this.referencias = this.trabajador.informacion_adicional.referencias;
-    this.carga = this.trabajador.informacion_adicional.carga_familiar;
-    this.emergencias = this.trabajador.informacion_adicional.emergencia;
-    this.cursos_realizados = this.trabajador.instruccion_academica.cursos;
-    this.softwares = this.trabajador.manejo_herramientas.otros;
+  /**
+   * Abre el modal de EDITAR empleado.
+   * Se pasa el empleado por input. El componente EditarTrabajadorComponent
+   * es totalmente independiente de CrearTrabajadorComponent.
+   */
+  abrirModalEditar(empleado: any) {
+    this.cerrarCualquierModal();
+    this.empleadoAEditar = JSON.parse(JSON.stringify(empleado));
+    this.modalEditar = true;
+  }
+
+  cerrarModalCrear() {
+    this.modalCrear = false;
+  }
+
+  cerrarModalEditar() {
+    this.modalEditar = false;
+    this.empleadoAEditar = null;
+  }
+
+  private cerrarCualquierModal() {
+    this.modalCrear = false;
+    this.modalEditar = false;
+    this.empleadoAEditar = null;
   }
 
   eliminarTrabajador(trabajador: any) {

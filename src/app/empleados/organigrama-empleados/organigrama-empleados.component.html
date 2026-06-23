@@ -1,14 +1,15 @@
-<app-nuevo-trabajador
-  [nuevo_trabajador]="nuevo_trabajador"
-  [trabajador]="trabajador"
-  [referencias]="referencias"
-  [carga]="carga"
-  [emergencias]="emergencias"
-  [cursos_realizados]="cursos_realizados"
-  [softwares]="softwares"
-  (onCloseModal)="nuevo_trabajador = false"
+<app-crear-trabajador
+  *ngIf="modalCrear"
+  (onCloseModal)="cerrarModalCrear()"
 >
-</app-nuevo-trabajador>
+</app-crear-trabajador>
+
+<app-editar-trabajador
+  *ngIf="modalEditar && empleadoAEditar"
+  [empleado]="empleadoAEditar"
+  (onCloseModal)="cerrarModalEditar()"
+>
+</app-editar-trabajador>
 
 <app-informacion-empleado
   [informacion]="informacion"
@@ -25,7 +26,7 @@
     color="teal"
   ></app-section-header>
 
-  <button class="button is-info" (click)="nuevo_trabajador = true">
+  <button class="button is-info" (click)="abrirModalCrear()">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>
     <span>Empleado</span>
   </button>
@@ -98,7 +99,7 @@
             <td>
               <div class="actions-cell">
                 <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
-                <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+                <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
                 <button class="button btn-action-icon is-small" title="Reactivar" (click)="reactivarTrabajador(emp)">
                   <span class="icon"><i class="fas fa-user-check icon-success"></i></span>
                 </button>
@@ -161,7 +162,7 @@
             </div>
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
-              <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+              <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
               <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
             </div>
           </div>
@@ -186,7 +187,7 @@
             </div>
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
-              <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+              <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
               <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
             </div>
           </div>
@@ -196,7 +197,7 @@
 
     <!-- Card footer -->
     <div class="card-footer" *ngIf="expandedDepId === dep._id">
-      <button class="button is-success is-small" (click)="nuevo_trabajador = true">
+      <button class="button is-success is-small" (click)="abrirModalCrear()">
         <span class="icon"><i class="fas fa-plus-circle"></i></span>
         <span>Nuevo Empleado</span>
       </button>

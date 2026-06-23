@@ -1,0 +1,156 @@
+.long {
+  width: 80%;
+}
+
+.back {
+  font-size: 55px;
+  position: absolute;
+  left: 2%;
+  background-color: transparent;
+  width: 100px;
+}
+
+.back:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.front {
+  font-size: 55px;
+  position: absolute;
+  right: 2%;
+  background-color: transparent;
+  width: 100px;
+}
+
+.front:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.modal .modal-card .bg {
+  background-color: rgb(38, 52, 61);
+  color: white;
+}
+
+.modal .modal-card strong {
+  color: white;
+}
+
+/* Override for contact-card to ensure dark text */
+.contact-card strong {
+  color: var(--text-heading) !important;
+}
+
+.contact-card__row {
+  color: var(--text-primary) !important;
+}
+
+table.dark_ {
+  background-color: rgb(38, 52, 61);
+  color: white;
+}
+
+.dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(249, 37, 37);
+  border-radius: 500px;
+}
+
+.titulos {
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  margin-right: 10px;
+}
+
+.image-hover-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.image-hover-wrapper img {
+  display: block;
+  width: 100%;
+}
+
+.hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.image-hover-wrapper:hover .hover-overlay {
+  opacity: 1;
+}
+
+input[type='file'] {
+  display: none;
+}
+
+/* Step navigation */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.modal-divider {
+  margin: 0.75rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Radio group for sexo */
+.radio-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  height: 2.25em;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.radio-label input[type="radio"] {
+  accent-color: var(--accent-blue);
+  cursor: pointer;
+}
+
+/* Bulma select fullwidth fix */
+.select.is-fullwidth {
+  width: 100%;
+}
+.select.is-fullwidth select {
+  width: 100%;
+}

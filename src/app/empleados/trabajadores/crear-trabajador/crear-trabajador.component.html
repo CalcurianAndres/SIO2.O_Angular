@@ -1,8 +1,8 @@
-<div class="modal" [ngClass]="{ 'is-active': nuevo_trabajador }">
+<div class="modal is-active">
   <div class="modal-background"></div>
   <div class="modal-card long">
     <div class="modal-card-head">
-      <p class="modal-card-title fuente" *ngIf="nuevo_trabajador">
+      <p class="modal-card-title fuente">
         <i class="fas fa-user-plus mr-2"></i>Nuevo empleado
       </p>
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>

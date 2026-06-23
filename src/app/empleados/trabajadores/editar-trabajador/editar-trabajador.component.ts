@@ -21,12 +21,12 @@ import Swal from 'sweetalert2';
 import { TasaCambioService } from 'src/app/services/tasa-cambio.service';
 
 @Component({
-  selector: 'app-nuevo-trabajador',
+  selector: 'app-editar-trabajador',
   standalone: false,
-  templateUrl: './nuevo-trabajador.component.html',
-  styleUrls: ['./nuevo-trabajador.component.scss'],
+  templateUrl: './editar-trabajador.component.html',
+  styleUrls: ['./editar-trabajador.component.scss'],
 })
-export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
+export class EditarTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
@@ -38,18 +38,17 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
     public tasaCambio: TasaCambioService,
   ) {}
 
-  @Input() nuevo_trabajador: any;
-  @Input() trabajador: any;
-  @Input() referencias: any;
-  @Input() carga: any;
-  @Input() emergencias: any;
-  @Input() cursos_realizados: any;
-  @Input() softwares: any;
+  @Input() empleado: any;
   @Output() onCloseModal = new EventEmitter();
 
   public copiaInterna: any;
   public idiomas: any = [];
   public trabajoAnterior: any = [];
+  public referencias: any = [];
+  public carga: any = [];
+  public emergencias: any = [];
+  public cursos_realizados: any = [];
+  public softwares: any = [];
 
   public CI = 'V-';
   public estados: any = [];
@@ -125,8 +124,59 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.copiaInterna = JSON.parse(JSON.stringify(this.trabajador));
-    this.cargarEstados();
+    if (this.empleado) {
+      this.copiaInterna = JSON.parse(JSON.stringify(this.empleado));
+      this.referencias = JSON.parse(JSON.stringify(this.empleado.informacion_adicional?.referencias || []));
+      this.carga = JSON.parse(JSON.stringify(this.empleado.informacion_adicional?.carga_familiar || []));
+      this.emergencias = JSON.parse(JSON.stringify(this.empleado.informacion_adicional?.emergencia || []));
+      this.cursos_realizados = JSON.parse(JSON.stringify(this.empleado.instruccion_academica?.cursos || []));
+      this.softwares = JSON.parse(JSON.stringify(this.empleado.manejo_herramientas?.otros || []));
+      this.idiomas = JSON.parse(JSON.stringify(this.empleado.instruccion_academica?.idiomas?.idiomas || []));
+      this.trabajoAnterior = JSON.parse(JSON.stringify(this.empleado.manejo_herramientas?.referencias || []));
+      this.cargarEstados();
+      const foto = this.copiaInterna?.datos_personales?.foto;
+      if (foto && foto !== 'no-image') {
+        this.fotoPreview = `${environment.imgUrl}/imagen/empleado/${foto}`;
+      } else {
+        this.fotoPreview = null;
+      }
+      this.normalizarContratacion();
+      this.obtenerTasa();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['empleado'] && changes['empleado'].currentValue) {
+      this.copiaInterna = JSON.parse(JSON.stringify(changes['empleado'].currentValue));
+      this.referencias = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.informacion_adicional?.referencias || []),
+      );
+      this.carga = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.informacion_adicional?.carga_familiar || []),
+      );
+      this.emergencias = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.informacion_adicional?.emergencia || []),
+      );
+      this.cursos_realizados = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.instruccion_academica?.cursos || []),
+      );
+      this.softwares = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.manejo_herramientas?.otros || []),
+      );
+      this.idiomas = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.instruccion_academica?.idiomas?.idiomas || []),
+      );
+      this.trabajoAnterior = JSON.parse(
+        JSON.stringify(changes['empleado'].currentValue.manejo_herramientas?.referencias || []),
+      );
+      const foto = this.copiaInterna?.datos_personales?.foto;
+      if (foto && foto !== 'no-image') {
+        this.fotoPreview = `${environment.imgUrl}/imagen/empleado/${foto}`;
+      } else {
+        this.fotoPreview = null;
+      }
+      this.normalizarContratacion();
+    }
   }
 
   cargarEstados() {
@@ -145,43 +195,35 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['trabajador'] && changes['trabajador'].currentValue) {
-      this.copiaInterna = JSON.parse(JSON.stringify(changes['trabajador'].currentValue));
-      const foto = this.copiaInterna?.datos_personales?.foto;
-      if (foto && foto !== 'no-image') {
-        this.fotoPreview = `${environment.imgUrl}/imagen/empleado/${foto}`;
-      } else {
-        this.fotoPreview = null;
-      }
-      this.normalizarContratacion();
-    }
-    if (changes['nuevo_trabajador'] && changes['nuevo_trabajador'].currentValue === true) {
-      this.copiaInterna = JSON.parse(JSON.stringify(this.trabajador));
-      this.currentStep = 1;
-      this.fotoPreview = null;
-      this.erroresPaso1 = { apellidos: false, nombres: false };
-      this.REFERENCIA = { apellidos: '', nombres: '', direccion: '', telefono: '', ocupacion: '' };
-      this.CARGA_FAMILIAR = { parentesco: '', apellidos: '', nombres: '', fecha: '' };
-      this.EMERGENCIA = { parentesco: '', apellidos: '', nombres: '', direccion: '', telefono: '' };
-      this.CURSO = { nombre: '', periodo: '' };
-      this.IDIOMA = { idioma: '', nivel: '' };
-      this.SOFTWARE = '';
-      this.TRABAJOS_ANTERIORES = { empresa: '', periodo: '', cargo: '', remuneracion: '', motivo: '' };
-      this.idiomas = [];
-      this.trabajoAnterior = [];
-      this.subUnidadesDisponibles = [];
-      this.subAreas = [];
-      this.subUnidadSeleccionada = null;
-      this.cargarEstados();
-      this.obtenerTasa();
-    }
-  }
-
   obtenerTasa(): void {
     this.tasaLoading = true;
     this.tasaError = null;
 
+    this.http
+      .get(`${environment.apiUrl}/external`, {
+        params: { url: 'https://ve.dolarapi.com/v1/dolares/oficial' },
+      })
+      .subscribe({
+        next: (response: any) => {
+          const tasa = response?.promedio ?? response?.tasa ?? response?.rate;
+          if (typeof tasa === 'number' && tasa > 0) {
+            this.tasaActual = tasa;
+            this.tasaRequiereManual = false;
+            this.tasaLoading = false;
+            if (this.copiaInterna?.contratacion) {
+              this.copiaInterna.contratacion.tasa = this.tasaActual;
+            }
+          } else {
+            this.fallbackTasaSocket();
+          }
+        },
+        error: () => {
+          this.fallbackTasaSocket();
+        },
+      });
+  }
+
+  private fallbackTasaSocket(): void {
     this.tasas.obtenerTasaActual();
     this.tasaSubscription.unsubscribe();
     this.tasaSubscription = this.tasas.tasaActual$.subscribe((tasa) => {
@@ -189,57 +231,19 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
         this.tasaActual = tasa.tasa;
         this.tasaRequiereManual = false;
         this.tasaLoading = false;
-        if (!this.copiaInterna?.contratacion?.tasa) {
+        if (this.copiaInterna?.contratacion) {
           this.copiaInterna.contratacion.tasa = this.tasaActual;
         }
         return;
       }
-      this.tasaCambio.getTasaActual().subscribe({
-        next: (resp) => {
-          this.tasaActual = resp.tasa;
-          this.tasaRequiereManual = resp.manual;
-          this.tasaLoading = false;
-          if (this.tasaActual && !this.copiaInterna?.contratacion?.tasa) {
-            this.copiaInterna.contratacion.tasa = this.tasaActual;
-          }
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.tasaLoading = false;
-          this.tasaRequiereManual = true;
-          this.tasaError = 'No se pudo obtener la tasa automática. Ingrésela manualmente.';
-          this.cdr.markForCheck();
-        },
-      });
+      this.tasaLoading = false;
+      this.tasaRequiereManual = true;
+      this.tasaError = 'No se pudo obtener la tasa automática. Ingrésela manualmente.';
     });
   }
 
   ngOnDestroy(): void {
     this.tasaSubscription.unsubscribe();
-  }
-
-  resetForm(): void {
-    this.currentStep = 1;
-    this.fotoPreview = null;
-    this.idiomas = [];
-    this.trabajoAnterior = [];
-    this.CI = 'V-';
-    this.Municipio = undefined;
-    this.Parroquia = undefined;
-    this.estado = '';
-    this.municipio = '';
-    this.parroquia = '';
-    this.erroresPaso1 = { apellidos: false, nombres: false };
-    this.REFERENCIA = { apellidos: '', nombres: '', direccion: '', telefono: '', ocupacion: '' };
-    this.CARGA_FAMILIAR = { parentesco: '', apellidos: '', nombres: '', fecha: '' };
-    this.EMERGENCIA = { parentesco: '', apellidos: '', nombres: '', direccion: '', telefono: '' };
-    this.CURSO = { nombre: '', periodo: '' };
-    this.IDIOMA = { idioma: '', nivel: '' };
-    this.SOFTWARE = '';
-    this.TRABAJOS_ANTERIORES = { empresa: '', periodo: '', cargo: '', remuneracion: '', motivo: '' };
-    this.subUnidadesDisponibles = [];
-    this.subAreas = [];
-    this.subUnidadSeleccionada = null;
   }
 
   normalizarContratacion(): void {
@@ -345,8 +349,7 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
 
   get historialContrataciones(): any[] {
     if (!this.copiaInterna?._id) {
-      const actual = this.filaContratoActual;
-      return actual ? [actual] : [];
+      return [];
     }
 
     return (this.api.contrataciones || [])
@@ -487,7 +490,6 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
 
   goToStep(n: number) {
     if (n >= 1 && n <= this.steps.length) {
-      // Solo validar al avanzar del paso 1 al 2
       if (this.currentStep === 1 && n === 2 && !this.validarPaso1()) {
         return;
       }
@@ -591,81 +593,6 @@ export class NuevoTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
 
     this.api.nuevoTrabajador(this.copiaInterna);
     setTimeout(() => {
-      this.copiaInterna = {
-        datos_personales: {
-          apellidos: '',
-          nombres: '',
-          cedula: '',
-          fecha_nac: '',
-          altura: '',
-          peso: '',
-          sexo: '',
-          nacimiento: '',
-          nacionalidad: '',
-          estado_civil: '',
-          licencia: '',
-          grado: '',
-          rif: '',
-          email: '',
-          estado: '',
-          municipio: '',
-          parroquia: '',
-          sector: '',
-          domicilio: '',
-          telefono: '',
-          celular: '',
-        },
-        informacion_adicional: {
-          referencias: [],
-          carga_familiar: [],
-          emergencia: [],
-        },
-        instruccion_academica: {
-          grado: {
-            instruccion: '',
-            ano: '',
-            titulo: '',
-          },
-          cursos: [],
-          idiomas: {
-            idiomas: [],
-          },
-        },
-        manejo_herramientas: {
-          computadora: false,
-          softwares: {
-            word: false,
-            excel: false,
-            power_point: false,
-            acrobat: false,
-          },
-          otros: [],
-          referencias: [],
-        },
-        contratacion: {
-          fecha: '',
-          departamento: '',
-          cargo: '',
-          de: '',
-          sueldo: '',
-        },
-      };
-      this.referencias = [];
-      this.carga = [];
-      this.emergencias = [];
-      this.cursos_realizados = [];
-      this.idiomas = [];
-      this.softwares = [];
-      this.trabajoAnterior = [];
-      Swal.fire({
-        text: this.api.mensaje.mensaje,
-        icon: this.api.mensaje.icon,
-        position: 'top-end',
-        timerProgressBar: true,
-        showConfirmButton: false,
-        toast: true,
-        timer: 5000,
-      });
       this.cerrar();
     }, 500);
   }

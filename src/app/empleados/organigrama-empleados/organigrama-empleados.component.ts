@@ -79,50 +79,38 @@ export class OrganigramaEmpleadosComponent {
     return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
   }
 
-  nuevo_trabajador = false;
+  public modalCrear = false;
+  public modalEditar = false;
+  public empleadoAEditar: any = null;
+
+  abrirModalCrear() {
+    this.cerrarCualquierModal();
+    this.modalCrear = true;
+  }
+
+  abrirModalEditar(empleado: any) {
+    this.cerrarCualquierModal();
+    this.empleadoAEditar = JSON.parse(JSON.stringify(empleado));
+    this.modalEditar = true;
+  }
+
+  cerrarModalCrear() {
+    this.modalCrear = false;
+  }
+
+  cerrarModalEditar() {
+    this.modalEditar = false;
+    this.empleadoAEditar = null;
+  }
+
+  private cerrarCualquierModal() {
+    this.modalCrear = false;
+    this.modalEditar = false;
+    this.empleadoAEditar = null;
+  }
+
   informacion = false;
   _informacion_: any;
-  referencias: any = [];
-  carga: any = [];
-  emergencias: any = [];
-  cursos_realizados: any = [];
-  softwares: any = [];
-
-  public trabajador = {
-    datos_personales: {
-      apellidos: '',
-      nombres: '',
-      cedula: '',
-      fecha_nac: '',
-      altura: '',
-      peso: '',
-      sexo: '',
-      nacimiento: '',
-      nacionalidad: '',
-      estado_civil: '',
-      licencia: '',
-      grado: '',
-      rif: '',
-      email: '',
-      estado: '',
-      municipio: '',
-      parroquia: '',
-      sector: '',
-      domicilio: '',
-      telefono: '',
-      celular: '',
-      foto: '',
-    },
-    informacion_adicional: { referencias: [], carga_familiar: [], emergencia: [] },
-    instruccion_academica: { grado: { instruccion: '', ano: '', titulo: '' }, cursos: [], idiomas: { idiomas: [] } },
-    manejo_herramientas: {
-      computadora: false,
-      softwares: { word: false, excel: false, power_point: false, acrobat: false },
-      otros: [],
-      referencias: [],
-    },
-    contratacion: { fecha: '', departamento: '', cargo: '', de: '', sueldo: '' },
-  };
 
   get departamentos(): any[] {
     const deps = this.api.departamentos || [];
@@ -195,16 +183,6 @@ export class OrganigramaEmpleadosComponent {
     return this.obtenerEmpleadosDelDepartamento(dep).filter(
       (t: any) => t.contratacion?.de?.nombre === area.nombre && !subNombres.has(t.contratacion?.de?.nombre),
     );
-  }
-
-  EDITAR_EMPLEADO(cargos: any) {
-    this.trabajador = cargos;
-    this.nuevo_trabajador = true;
-    this.referencias = this.trabajador.informacion_adicional.referencias;
-    this.carga = this.trabajador.informacion_adicional.carga_familiar;
-    this.emergencias = this.trabajador.informacion_adicional.emergencia;
-    this.cursos_realizados = this.trabajador.instruccion_academica.cursos;
-    this.softwares = this.trabajador.manejo_herramientas.otros;
   }
 
   setFilterMode(mode: 'activos' | 'baja') {

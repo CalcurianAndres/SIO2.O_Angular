@@ -16,6 +16,8 @@ import { NuevaGestionComponent } from './gestion/nueva-gestion/nueva-gestion.com
 import { InfoGestionComponent } from './gestion/info-gestion/info-gestion.component';
 import { TrabajadoresComponent } from './trabajadores/trabajadores.component';
 import { NuevoTrabajadorComponent } from './trabajadores/nuevo-trabajador/nuevo-trabajador.component';
+import { CrearTrabajadorComponent } from './trabajadores/crear-trabajador/crear-trabajador.component';
+import { EditarTrabajadorComponent } from './trabajadores/editar-trabajador/editar-trabajador.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InformacionEmpleadoComponent } from './trabajadores/informacion-empleado/informacion-empleado.component';
 import { HistorialEmpleadoComponent } from './trabajadores/historial-empleado/historial-empleado.component';
@@ -36,6 +38,8 @@ import { OrganigramaEmpleadosComponent } from './organigrama-empleados/organigra
     InfoGestionComponent,
     TrabajadoresComponent,
     NuevoTrabajadorComponent,
+    CrearTrabajadorComponent,
+    EditarTrabajadorComponent,
     InformacionEmpleadoComponent,
     HistorialEmpleadoComponent,
     HorariosComponent,
