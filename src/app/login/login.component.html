@@ -86,7 +86,7 @@
       <h1 class="welcome-title">SIO</h1>
       <p class="welcome-subtitle">Sistema Integral Operativo</p>
       <div class="welcome-divider"></div>
-      <p class="welcome-tagline">Gestión Inteligente para tu Empresa</p>
+      <p class="welcome-tagline">Poligrafica Industrial C.A.</p>
     </div>
 
     <!-- Logo flotante -->
@@ -119,17 +119,17 @@
         <div class="form-logo">
           <img src="../../assets/LOGO-SIO.png" alt="SIO" class="form-logo-img" />
         </div>
-        <h2 class="form-title">USER LOGIN</h2>
+        <h2 class="form-title">LOGIN</h2>
       </div>
 
       <ng-container *ngIf="session_name">
-        <div class="session-card">
-          <div class="session-avatar">
+        <div class="session-card field is-grouped">
+          <div class="session-avatar control">
             <i class="fas fa-user"></i>
           </div>
-          <div class="session-info">
-            <span class="session-name">{{ session_name }}</span>
-            <a (click)="borrar_sessiones()" class="session-link">¿No eres {{ session_name }}?</a>
+          <div class="session-info control">
+            <span class="session-name">{{ session_name }} </span>
+            <a (click)="borrar_sessiones()" class="session-link"> ¿No eres {{ session_name }}?</a>
           </div>
         </div>
       </ng-container>
@@ -166,16 +166,14 @@
         <label class="check-wrapper" [hidden]="session_name">
           <input type="checkbox" id="recuerdame" />
           <span class="check-circle"></span>
-          <span>Remember</span>
+          <span>Recuerdame</span>
         </label>
-        <a class="forgot-link">Forgot password?</a>
+        <a class="forgot-link">¿Olvidaste tu contraseña?</a>
       </div>
 
       <button class="login-btn" (click)="login()">
-        LOGIN
+        INGRESAR
       </button>
-
     </div>
   </div>
-
 </div>
