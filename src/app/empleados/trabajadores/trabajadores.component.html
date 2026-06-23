@@ -35,44 +35,85 @@
         <a (click)="setFilterMode('activos')">Activos</a>
       </li>
       <li [class.is-active]="filterMode === 'todos'">
-        <a (click)="setFilterMode('todos')">Todos</a>
+        <a (click)="setFilterMode('todos')">De baja</a>
       </li>
     </ul>
   </div>
   <div class="Departamentos">
-    <div class="card dep" *ngFor="let cargos of listaTrabajadores">
-      <div class="card_designed">
-        <span class="color" [style.background-color]="cargos.contratacion.departamento.color">
-          <div class="columns">
-            <div class="column is-4">
-              <figure class="image is-75x75 profile_pic">
-                <app-img-fallback tipo="empleado" [filename]="cargos.datos_personales.foto"
-                  cssClass="is-rounded" width="75px" height="75px"></app-img-fallback>
-              </figure>
+    <div class="card dep" *ngFor="let cargos of sortedListaTrabajadores">
+
+      <!-- ── Activos ── -->
+      <ng-container *ngIf="!cargos.borrado">
+        <div class="card_designed">
+          <span class="color" [style.background-color]="cargos.contratacion.departamento.color">
+            <div class="columns">
+              <div class="column is-4">
+                <figure class="image is-75x75 profile_pic">
+                  <app-img-fallback tipo="empleado" [filename]="cargos.datos_personales.foto"
+                    cssClass="is-rounded" width="75px" height="75px"></app-img-fallback>
+                </figure>
+              </div>
+              <div class="column">
+                <span style="font-family: 'Gilroy'">
+                  {{ cargos.datos_personales.nombres }} <br />
+                  {{ cargos.datos_personales.apellidos }}
+                </span>
+              </div>
             </div>
-            <div class="column">
-              <span style="font-family: 'Gilroy'">
-                {{ cargos.datos_personales.nombres }} <br />
-                {{ cargos.datos_personales.apellidos }}
-              </span>
+          </span>
+          <span class="info">
+            {{ cargos.contratacion.cargo.nombre }} de <br />
+            {{ cargos.contratacion.de.nombre }}
+          </span>
+          <span class="tag is-success">Activo</span>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item"
+            ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
+          ></a>
+          <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
+          <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(cargos)"><i class="fas fa-trash-alt icon-danger"></i></button>
+        </footer>
+      </ng-container>
+
+      <!-- ── De baja ── -->
+      <ng-container *ngIf="cargos.borrado">
+        <div class="card_designed baja-card">
+          <span class="color" [style.background-color]="cargos.contratacion.departamento?.color || '#9ca3af'">
+            <div class="columns">
+              <div class="column is-4">
+                <figure class="image is-48x48 profile_pic">
+                  <app-img-fallback tipo="empleado" [filename]="cargos.datos_personales.foto"
+                    cssClass="is-rounded is-grayscale" width="48px" height="48px"></app-img-fallback>
+                </figure>
+              </div>
+              <div class="column">
+                <span class="baja-nombre">
+                  {{ cargos.datos_personales.nombres }} <br />
+                  {{ cargos.datos_personales.apellidos }}
+                </span>
+              </div>
             </div>
-          </div>
-        </span>
-        <span class="info">
-          {{ cargos.contratacion.cargo.nombre }} de <br />
-          {{ cargos.contratacion.de.nombre }}
-        </span>
-        <span class="tag" [ngClass]="cargos.borrado ? 'is-danger' : 'is-success'">
-          {{ cargos.borrado ? 'De baja' : 'Activo' }}
-        </span>
-      </div>
-      <footer class="card-footer">
-        <a class="card-footer-item"
-          ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
-        ></a>
-        <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
-        <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(cargos)"><i class="fas fa-trash-alt icon-danger"></i></button>
-      </footer>
+          </span>
+          <span class="info">
+            <span class="dept-dot-row">
+              <span class="dept-dot" [style.background-color]="cargos.contratacion.departamento?.color"></span>
+              {{ cargos.contratacion.de?.nombre || cargos.contratacion.departamento?.nombre || '—' }}
+            </span>
+            <span class="baja-fecha">
+              <i class="fas fa-calendar-xmark"></i> Baja: {{ formatFechaBaja(cargos.fechaBaja) }}
+            </span>
+          </span>
+          <span class="tag is-danger is-light">De baja</span>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item"
+            ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
+          ></a>
+          <a class="card-footer-item"><i class="far fa-edit green" (click)="EDITAR_EMPLEADO(cargos)"></i></a>
+        </footer>
+      </ng-container>
+
     </div>
   </div>
 </app-page-layout>

@@ -228,3 +228,62 @@
   border-top: 1px solid var(--border-color);
   gap: 0.5rem;
 }
+
+/* ═══════════════════════════════════════════════════
+   TABLA PLANA — De baja
+   ═══════════════════════════════════════════════════ */
+
+.baja-table-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.baja-count {
+  margin-bottom: 0.75rem;
+}
+
+.baja-table {
+  .sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    i { margin-left: 4px; opacity: 0.5; }
+    &:hover i { opacity: 1; }
+  }
+
+  .emp-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .emp-avatar-sm {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .dept-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  td { vertical-align: middle; }
+
+  .actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    i { cursor: pointer; font-size: 1rem; }
+  }
+
+  .empty-row {
+    padding: 40px !important;
+    color: var(--text-muted);
+    i { font-size: 2rem; display: block; margin-bottom: 8px; }
+  }
+}

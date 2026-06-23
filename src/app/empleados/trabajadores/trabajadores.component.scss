@@ -67,3 +67,62 @@
   color: var(--text-primary);
   margin: 10px;
 }
+
+/* ── Card De baja ── */
+.baja-card {
+  height: auto !important;
+  min-height: 120px;
+
+  .color {
+    height: 60px;
+  }
+
+  .profile_pic {
+    width: 48px !important;
+    height: 48px !important;
+    margin-left: 5px;
+    border: solid 2px white;
+    font-size: 2.5em;
+  }
+
+  .profile_pic img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .is-grayscale {
+    filter: grayscale(100%);
+    opacity: 0.7;
+  }
+}
+
+.baja-nombre {
+  font-family: 'Gilroy';
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.dept-dot-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.dept-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.baja-fecha {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

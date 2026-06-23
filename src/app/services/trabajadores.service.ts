@@ -10,27 +10,18 @@ export class TrabajadoresService {
   public trabajadorTodos;
   public contrataciones;
   public mensaje!: Mensaje;
-  private pendingTodos = false;
 
   constructor(private socket: WebSocketService) {
     this.BuscarTrabajador();
-  }
-
-  BuscarTrabajador() {
-    this.socket.io.emit('CLIENTE:Trabajador');
 
     this.socket.io.on('SERVER:Trabajador', (data) => {
-      if (this.pendingTodos) {
-        this.trabajadorTodos = data;
-        this.pendingTodos = false;
-      } else {
-        this.trabajador = data;
-      }
+      // Siempre mantener ambas listas sincronizadas
+      this.trabajadorTodos = data;
+      this.trabajador = (data || []).filter((t: any) => !t.borrado);
     });
 
     this.socket.io.on('SERVER:Contrataciones', (data) => {
       this.contrataciones = data;
-      console.log('contrataciones:', this.contrataciones);
     });
 
     this.socket.io.on('SERVIDOR:enviaMensaje', (data) => {
@@ -38,8 +29,11 @@ export class TrabajadoresService {
     });
   }
 
+  BuscarTrabajador() {
+    this.socket.io.emit('CLIENTE:Trabajador', { incluirBorrados: true });
+  }
+
   BuscarTrabajadorTodos() {
-    this.pendingTodos = true;
     this.socket.io.emit('CLIENTE:Trabajador', { incluirBorrados: true });
   }
 

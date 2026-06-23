@@ -23,10 +23,73 @@ export class TrabajadoresComponent implements OnInit {
 
   public filterMode: 'activos' | 'todos' = 'activos';
 
+  sortBy = 'nombre';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  toggleSort(field: string) {
+    if (this.sortBy === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = field;
+      this.sortDirection = 'asc';
+    }
+  }
+
   get listaTrabajadores() {
-    return this.filterMode === 'todos'
-      ? this.trabajadores.trabajadorTodos
-      : this.trabajadores.trabajador;
+    if (this.filterMode === 'todos') {
+      return (this.trabajadores.trabajadorTodos || []).filter((t: any) => t.borrado === true);
+    }
+    // Activos: usar trabajadorTodos si está cargado, si no fallback a trabajador
+    const todos = this.trabajadores.trabajadorTodos;
+    if (todos && todos.length > 0) {
+      return todos.filter((t: any) => !t.borrado);
+    }
+    return this.trabajadores.trabajador || [];
+  }
+
+  get sortedListaTrabajadores(): any[] {
+    const list = this.listaTrabajadores || [];
+    return [...list].sort((a, b) => {
+      let valA: any, valB: any;
+      switch (this.sortBy) {
+        case 'nombre':
+          valA = `${a.datos_personales?.nombres} ${a.datos_personales?.apellidos}`.toLowerCase();
+          valB = `${b.datos_personales?.nombres} ${b.datos_personales?.apellidos}`.toLowerCase();
+          break;
+        case 'cedula':
+          valA = a.datos_personales?.cedula || '';
+          valB = b.datos_personales?.cedula || '';
+          break;
+        case 'departamento':
+          valA = a.contratacion?.de?.nombre || a.contratacion?.departamento?.nombre || '';
+          valB = b.contratacion?.de?.nombre || b.contratacion?.departamento?.nombre || '';
+          break;
+        case 'cargo':
+          valA = a.contratacion?.cargo?.nombre || '';
+          valB = b.contratacion?.cargo?.nombre || '';
+          break;
+        case 'fecha':
+          valA = a.fechaBaja ? new Date(a.fechaBaja).getTime() : 0;
+          valB = b.fechaBaja ? new Date(b.fechaBaja).getTime() : 0;
+          break;
+        default:
+          valA = valB = '';
+      }
+      if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  formatFechaBaja(fecha: any): string {
+    if (!fecha) return '—';
+    const d = new Date(fecha);
+    return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  getSortIcon(field: string): string {
+    if (this.sortBy !== field) return 'fas fa-sort';
+    return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
   }
 
   setFilterMode(mode: 'activos' | 'todos') {

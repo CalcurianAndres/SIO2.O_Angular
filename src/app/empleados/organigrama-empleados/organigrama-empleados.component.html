@@ -51,13 +51,80 @@
     </div>
   </div>
 
-  <!-- Empty state -->
-  <div *ngIf="departamentos.length === 0" class="empty-state">
+  <!-- ═══════════ TABLA PLANA — De baja ═══════════ -->
+  <div *ngIf="filterMode === 'baja'" class="baja-table-wrapper">
+    <div class="baja-count">
+      <span class="tag is-danger is-light">{{ sortedBajaEmpleados.length }} empleados de baja</span>
+    </div>
+
+    <div class="table-container">
+      <table class="table is-fullwidth is-hoverable baja-table">
+        <thead>
+          <tr>
+            <th class="sortable" (click)="toggleSort('nombre')">
+              Nombre <i [class]="getSortIcon('nombre')"></i>
+            </th>
+            <th class="sortable" (click)="toggleSort('cedula')">
+              Cédula <i [class]="getSortIcon('cedula')"></i>
+            </th>
+            <th class="sortable" (click)="toggleSort('cargo')">
+              Cargo <i [class]="getSortIcon('cargo')"></i>
+            </th>
+            <th class="sortable" (click)="toggleSort('departamento')">
+              Departamento <i [class]="getSortIcon('departamento')"></i>
+            </th>
+            <th class="sortable" (click)="toggleSort('fecha')">
+              Fecha de baja <i [class]="getSortIcon('fecha')"></i>
+            </th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of sortedBajaEmpleados">
+            <td>
+              <div class="emp-name-cell">
+                <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
+                  cssClass="emp-avatar-sm" width="32px" height="32px"></app-img-fallback>
+                <span>{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
+              </div>
+            </td>
+            <td>{{ emp.datos_personales?.cedula || '—' }}</td>
+            <td>{{ emp.contratacion?.cargo?.nombre || '—' }}</td>
+            <td>
+              <span class="dept-dot" [style.background-color]="emp.contratacion?.departamento?.color"></span>
+              {{ emp.contratacion?.departamento?.nombre || '—' }}
+            </td>
+            <td>{{ formatFechaBaja(emp.fechaBaja) }}</td>
+            <td>
+              <div class="actions-cell">
+                <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
+                <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
+                <button class="button btn-action-icon is-small" title="Reactivar" (click)="reactivarTrabajador(emp)">
+                  <span class="icon"><i class="fas fa-user-check icon-success"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="sortedBajaEmpleados.length === 0">
+            <td colspan="6" class="has-text-centered empty-row">
+              <i class="fas fa-user-slash" style="opacity:0.3"></i>
+              <p>No hay empleados de baja</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════ Empty state ═══════════ -->
+  <div *ngIf="departamentos.length === 0 && filterMode === 'activos'" class="empty-state">
     <i class="fas fa-users empty-icon"></i>
     <p class="empty-title">Sin resultados</p>
     <p class="empty-hint">No se encontraron empleados o departamentos con ese nombre</p>
   </div>
 
+  <!-- ═══════════ DEPARTMENT CARDS — Solo activos ═══════════ -->
+  <div *ngIf="filterMode === 'activos'">
   <!-- Department cards -->
   <div *ngFor="let dep of departamentos" class="card dep-card animate__animated animate__fadeInUp">
     <div class="card-header" (click)="toggleExpand(dep)">
@@ -95,8 +162,7 @@
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
               <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
-              <button *ngIf="filterMode === 'activos'" class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
-              <button *ngIf="filterMode === 'baja'" class="button btn-action-icon" title="Reactivar" (click)="reactivarTrabajador(emp)"><span class="icon"><i class="fas fa-user-check icon-success"></i></span></button>
+              <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
             </div>
           </div>
         </div>
@@ -121,8 +187,7 @@
             <div class="emp-actions">
               <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
               <i class="far fa-edit green" title="Editar" (click)="EDITAR_EMPLEADO(emp)"></i>
-              <button *ngIf="filterMode === 'activos'" class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
-              <button *ngIf="filterMode === 'baja'" class="button btn-action-icon" title="Reactivar" (click)="reactivarTrabajador(emp)"><span class="icon"><i class="fas fa-user-check icon-success"></i></span></button>
+              <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
             </div>
           </div>
         </div>
@@ -136,5 +201,6 @@
         <span>Nuevo Empleado</span>
       </button>
     </div>
+  </div>
   </div>
 </app-page-layout>
