@@ -37,10 +37,10 @@
     <div class="cmyk-separation">
       <svg class="cmyk-svg" viewBox="0 0 400 600">
         <!-- Canales de separación superpuestos con overprint -->
-        <circle cx="180" cy="250" r="100" fill="#00bcd4" opacity="0.3" class="ch-c"/>
-        <circle cx="220" cy="280" r="100" fill="#e91e63" opacity="0.3" class="ch-m"/>
+        <circle cx="180" cy="250" r="100" fill="#06b6d4" opacity="0.3" class="ch-c"/>
+        <circle cx="220" cy="280" r="100" fill="#14b8a6" opacity="0.3" class="ch-m"/>
         <circle cx="200" cy="300" r="100" fill="#ffeb3b" opacity="0.3" class="ch-y"/>
-        <circle cx="200" cy="270" r="80"  fill="#1a1a2e" opacity="0.25" class="ch-k"/>
+        <circle cx="200" cy="270" r="80"  fill="#0d9488" opacity="0.25" class="ch-k"/>
 
         <!-- Registration marks -->
         <g class="reg-marks" opacity="0.4">
@@ -60,14 +60,14 @@
 
         <!-- Color bars (CMYK strip) -->
         <g class="color-bars">
-          <rect x="30"  y="540" width="25" height="10" fill="#00bcd4" opacity="0.6"/>
-          <rect x="55"  y="540" width="25" height="10" fill="#e91e63" opacity="0.6"/>
+          <rect x="30"  y="540" width="25" height="10" fill="#06b6d4" opacity="0.6"/>
+          <rect x="55"  y="540" width="25" height="10" fill="#14b8a6" opacity="0.6"/>
           <rect x="80"  y="540" width="25" height="10" fill="#ffeb3b" opacity="0.6"/>
-          <rect x="105" y="540" width="25" height="10" fill="#1a1a2e" opacity="0.6"/>
-          <rect x="130" y="540" width="25" height="10" fill="#ff9800" opacity="0.6"/>
-          <rect x="155" y="540" width="25" height="10" fill="#9c27b0" opacity="0.6"/>
-          <rect x="180" y="540" width="25" height="10" fill="#4caf50" opacity="0.6"/>
-          <rect x="205" y="540" width="25" height="10" fill="#f03a5f" opacity="0.6"/>
+          <rect x="105" y="540" width="25" height="10" fill="#0d9488" opacity="0.6"/>
+          <rect x="130" y="540" width="25" height="10" fill="#2dd4bf" opacity="0.6"/>
+          <rect x="155" y="540" width="25" height="10" fill="#10b981" opacity="0.6"/>
+          <rect x="180" y="540" width="25" height="10" fill="#22d3ee" opacity="0.6"/>
+          <rect x="205" y="540" width="25" height="10" fill="#5eead4" opacity="0.6"/>
         </g>
 
         <!-- Trapping lines -->
@@ -81,17 +81,14 @@
       </svg>
     </div>
 
-    <!-- Texto de bienvenida -->
-    <div class="welcome-content">
-      <h1 class="welcome-title">SIO</h1>
-      <p class="welcome-subtitle">Sistema Integral Operativo</p>
-      <div class="welcome-divider"></div>
-      <p class="welcome-tagline">Poligrafica Industrial C.A.</p>
+    <!-- Logo SIO grande centrado -->
+    <div class="welcome-logo">
+      <img src="../../assets/LOGO-SIO.png" alt="SIO" class="sio-logo" />
     </div>
 
     <!-- Logo flotante -->
     <div class="floating-logo">
-      <img src="../../assets/LOGO-SIO.png" alt="SIO" class="logo-img" />
+      <img src="../../assets/poli_cintillo.png" alt="SIO" class="logo-img" />
     </div>
 
     <!-- CMYK dots decorativos -->
@@ -115,22 +112,14 @@
   <div class="form-panel">
     <div class="form-wrapper">
 
-      <div class="form-header">
-        <div class="form-logo">
-          <img src="../../assets/LOGO-SIO.png" alt="SIO" class="form-logo-img" />
-        </div>
-        <h2 class="form-title">LOGIN</h2>
-      </div>
-
       <ng-container *ngIf="session_name">
-        <div class="session-card field is-grouped">
-          <div class="session-avatar control">
+        <div class="session-card">
+          <div class="session-avatar">
             <i class="fas fa-user"></i>
           </div>
-          <div class="session-info control">
-            <span class="session-name">{{ session_name }} </span>
-            <a (click)="borrar_sessiones()" class="session-link"> ¿No eres {{ session_name }}?</a>
-          </div>
+          <p class="session-welcome">Bienvenido</p>
+          <p class="session-name">{{ session_name }}</p>
+          <a (click)="borrar_sessiones()" class="session-link">¿No eres {{ session_name }}?</a>
         </div>
       </ng-container>
 
