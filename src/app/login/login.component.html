@@ -106,82 +106,80 @@
     </div>
 
     <div class="floating-products">
-      <!-- CEREALES FLIPS MORADO - Grande con letras coloridas -->
+      <!-- CEREALES FLIPS - Fondo amarillo con detalles coloridos -->
       <div class="product-svg product-cereal-purple">
         <svg viewBox="0 0 130 200">
           <defs>
-            <linearGradient id="purpleBoxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#7B1FA2"/>
-              <stop offset="50%" style="stop-color:#9C27B0"/>
-              <stop offset="100%" style="stop-color:#6A1B9A"/>
+            <linearGradient id="flipsYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFD54F"/>
+              <stop offset="50%" style="stop-color:#FFEB3B"/>
+              <stop offset="100%" style="stop-color:#FFC107"/>
             </linearGradient>
-            <linearGradient id="purpleSideGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#4A148C"/>
-              <stop offset="100%" style="stop-color:#6A1B9A"/>
+            <linearGradient id="flipsPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#9C27B0"/>
+              <stop offset="100%" style="stop-color:#7B1FA2"/>
             </linearGradient>
-            <linearGradient id="purpleTopGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" style="stop-color:#7B1FA2"/>
-              <stop offset="100%" style="stop-color:#AB47BC"/>
+            <linearGradient id="flipsOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#FF9800"/>
+              <stop offset="100%" style="stop-color:#FF5722"/>
             </linearGradient>
-            <pattern id="halftonePurple" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-              <circle cx="3" cy="3" r="1" fill="white" opacity="0.15"/>
+            <pattern id="colorfulBorder" x="0" y="0" width="40" height="12" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="10" height="12" fill="#9C27B0"/>
+              <rect x="10" y="0" width="10" height="12" fill="#00BCD4"/>
+              <rect x="20" y="0" width="10" height="12" fill="#FFEB3B"/>
+              <rect x="30" y="0" width="10" height="12" fill="#FF5722"/>
             </pattern>
-            <pattern id="stripesPurple" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <rect width="4" height="8" fill="#FFEB3B"/>
-              <rect x="4" width="4" height="8" fill="#00BCD4"/>
+            <pattern id="flipsHalftone" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="4" r="1.5" fill="#9C27B0" opacity="0.15"/>
             </pattern>
           </defs>
           
-          <!-- Box body - front -->
-          <rect x="10" y="30" width="110" height="160" fill="url(#purpleBoxGrad)"/>
-          <rect x="10" y="30" width="110" height="160" fill="url(#halftonePurple)"/>
+          <!-- Box body - front - YELLOW BACKGROUND -->
+          <rect x="10" y="25" width="110" height="165" fill="url(#flipsYellow)"/>
+          <rect x="10" y="25" width="110" height="165" fill="url(#flipsHalftone)"/>
           
-          <!-- Box body - right side -->
-          <path d="M120 30 L120 190 L130 185 L130 25 Z" fill="url(#purpleSideGrad)"/>
+          <!-- Colorful border top -->
+          <rect x="10" y="25" width="110" height="12" fill="url(#colorfulBorder)"/>
           
-          <!-- Box top -->
-          <path d="M10 30 L65 5 L130 25 L120 30 Z" fill="url(#purpleTopGrad)"/>
+          <!-- Colorful border bottom -->
+          <rect x="10" y="178" width="110" height="12" fill="url(#colorfulBorder)"/>
           
-          <!-- Box bottom -->
-          <path d="M10 190 L120 190 L130 185 L65 195 Z" fill="#4A148C"/>
+          <!-- Box side -->
+          <path d="M120 25 L120 190 L130 185 L130 20 Z" fill="#FFA000"/>
           
-          <!-- Top decorative stripe -->
-          <rect x="10" y="30" width="110" height="12" fill="url(#stripesPurple)"/>
+          <!-- FLIPS main title - PURPLE -->
+          <rect x="20" y="45" width="90" height="50" rx="5" fill="#9C27B0"/>
+          <text x="65" y="82" font-family="Arial Black, sans-serif" font-size="36" font-weight="900" fill="#FFEB3B" text-anchor="middle">FLIPS</text>
           
-          <!-- FLIPS logo area -->
-          <rect x="20" y="50" width="90" height="45" rx="5" fill="#1A1A2E"/>
-          <text x="65" y="82" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#FFEB3B" text-anchor="middle">FLIPS</text>
-          <rect x="25" y="87" width="80" height="3" fill="#00BCD4"/>
+          <!-- CROCANT subtitle - ORANGE -->
+          <rect x="25" y="100" width="80" height="18" rx="3" fill="url(#flipsOrange)"/>
+          <text x="65" y="113" font-family="Arial Black, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">CROCANT</text>
           
-          <!-- Colorful letters decoration -->
-          <text x="30" y="115" font-family="Arial Black" font-size="18" fill="#FF5722">C</text>
-          <text x="45" y="115" font-family="Arial Black" font-size="18" fill="#4CAF50">R</text>
-          <text x="60" y="115" font-family="Arial Black" font-size="18" fill="#2196F3">O</text>
-          <text x="75" y="115" font-family="Arial Black" font-size="18" fill="#FFEB3B">C</text>
-          <text x="90" y="115" font-family="Arial Black" font-size="18" fill="#E91E63">A</text>
-          <text x="105" y="115" font-family="Arial Black" font-size="18" fill="#00BCD4">N</text>
+          <!-- CHOCOLATE text -->
+          <text x="65" y="132" font-family="Georgia, serif" font-size="14" font-style="italic" font-weight="bold" fill="#5D4037" text-anchor="middle">CHOCOLATE</text>
           
-          <!-- Cereal illustration -->
-          <rect x="25" y="125" width="80" height="50" rx="3" fill="#1A1A2E" opacity="0.3"/>
-          <circle cx="40" cy="145" r="8" fill="#FFEB3B"/>
-          <circle cx="55" cy="150" r="6" fill="#E91E63"/>
-          <circle cx="70" cy="143" r="7" fill="#4CAF50"/>
-          <circle cx="85" cy="148" r="5" fill="#2196F3"/>
-          <circle cx="95" cy="142" r="6" fill="#FF5722"/>
-          <rect x="30" y="160" width="70" height="8" rx="2" fill="#FFEB3B"/>
+          <!-- Corn flakes illustration -->
+          <rect x="20" y="140" width="90" height="35" rx="3" fill="#5D4037" opacity="0.15"/>
+          <ellipse cx="40" cy="155" rx="8" ry="5" fill="#FFEB3B" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="55" cy="152" rx="7" ry="4" fill="#FFC107" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="70" cy="156" rx="9" ry="5" fill="#FFD54F" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="85" cy="153" rx="6" ry="4" fill="#FFEB3B" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="47" cy="162" rx="7" ry="4" fill="#FFC107" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="62" cy="165" rx="8" ry="5" fill="#FFD54F" stroke="#FFA000" stroke-width="1"/>
+          <ellipse cx="78" cy="163" rx="6" ry="4" fill="#FFEB3B" stroke="#FFA000" stroke-width="1"/>
           
-          <!-- Product info -->
-          <rect x="20" y="178" width="50" height="5" rx="1" fill="white" opacity="0.7"/>
-          <rect x="20" y="185" width="40" height="4" rx="1" fill="white" opacity="0.4"/>
+          <!-- Bottom info bar -->
+          <rect x="20" y="178" width="55" height="8" rx="1" fill="white" opacity="0.8"/>
+          <rect x="20" y="186" width="40" height="4" rx="1" fill="white" opacity="0.5"/>
           
-          <!-- Net weight -->
-          <rect x="85" y="178" width="30" height="12" rx="2" fill="#FFEB3B"/>
-          <text x="100" y="187" font-family="Arial" font-size="8" font-weight="bold" fill="#1A1A2E" text-anchor="middle">450g</text>
+          <!-- Net weight badge -->
+          <rect x="85" y="180" width="28" height="12" rx="2" fill="#9C27B0"/>
+          <text x="99" y="189" font-family="Arial" font-size="8" font-weight="bold" fill="white" text-anchor="middle">450g</text>
           
           <!-- Registration marks -->
-          <circle cx="15" cy="185" r="4" fill="none" stroke="#FFEB3B" stroke-width="0.5"/>
-          <line x1="15" y1="181" x2="15" y2="189" stroke="#FFEB3B" stroke-width="0.5"/>
-          <line x1="11" y1="185" x2="19" y2="185" stroke="#FFEB3B" stroke-width="0.5"/>
+          <circle cx="15" cy="178" r="3" fill="none" stroke="#9C27B0" stroke-width="0.5"/>
+          <line x1="15" y1="175" x2="15" y2="181" stroke="#9C27B0" stroke-width="0.5"/>
+          <line x1="12" y1="178" x2="18" y2="178" stroke="#9C27B0" stroke-width="0.5"/>
         </svg>
       </div>
 
