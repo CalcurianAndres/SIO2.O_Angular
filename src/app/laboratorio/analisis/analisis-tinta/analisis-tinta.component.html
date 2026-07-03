@@ -106,10 +106,10 @@
             </div>
             <!-- <div class="field is-grouped">
                             <div class="control">
-                                <input type="text" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.gramaje">
+                                <input type="number" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.gramaje">
                             </div>
                             <div class="control">
-                                <input type="text" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.calibre">
+                                <input type="number" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.calibre">
                             </div>
                         </div> -->
           </td>
@@ -117,7 +117,7 @@
             <div class="field">
               <div class="control">
                 <label for="" class="label">Nº Lote</label>
-                <input type="text" class="input" [(ngModel)]="Analisis.resultado.estandar" />
+                <input type="number" class="input" [(ngModel)]="Analisis.resultado.estandar" />
               </div>
             </div>
           </td>
@@ -152,10 +152,10 @@
             </div>
             <!-- <div class="field is-grouped">
                             <div class="control">
-                                <input type="text" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.papel">
+                                <input type="number" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.papel">
                             </div>
                             <div class="control">
-                                <input type="text" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.papel">
+                                <input type="number" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.papel">
                             </div>
                         </div> -->
           </td>
@@ -173,7 +173,7 @@
                                 <div class="field" *ngIf="Analisis.cuantitativo.papel">
                                     <label for="" class="label">Gramaje (g/m²)</label>
                                     <div class="field">
-                                        <input type="text" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.papel" [(ngModel)]="Analisis.cuantitativo.gramaje">
+                                        <input type="number" class="input" placeholder="Gramaje" *ngIf="Analisis.cuantitativo.papel" [(ngModel)]="Analisis.cuantitativo.gramaje">
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
                                 <div class="field" *ngIf="Analisis.cuantitativo.carton">
                                     <label for="" class="label">Calibre (pt)</label>
                                     <div class="field">
-                                        <input type="text" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.calibre">
+                                        <input type="number" class="input" placeholder="Calibre" *ngIf="Analisis.cuantitativo.carton" [(ngModel)]="Analisis.cuantitativo.calibre">
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                     </td>
                     <td>
                         <label for="" class="label">Estándar tomado</label>
-                        <input type="text" class="input" [(ngModel)]="Analisis.resultado.estandar">
+                        <input type="number" class="input" [(ngModel)]="Analisis.resultado.estandar">
                     </td>
                     <td>
                         <fieldset (change)="muestreo($event.target)">
@@ -244,7 +244,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.l" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.l" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -252,7 +252,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.a" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.a" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -260,7 +260,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_1.b" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.b" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -290,7 +290,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.l" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.l" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -298,7 +298,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.a" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.a" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -306,7 +306,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.b" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.b" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -314,7 +314,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.ll" />
                   </div>
                 </div>
               </td>
@@ -322,7 +322,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.aa" />
                   </div>
                 </div>
               </td>
@@ -330,7 +330,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.bb" />
                   </div>
                 </div>
               </td>
@@ -338,7 +338,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_1.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.e" />
                   </div>
                 </div>
               </td>
@@ -352,7 +352,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.l" />
                   </div>
                 </div>
               </td>
@@ -360,7 +360,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.a" />
                   </div>
                 </div>
               </td>
@@ -368,7 +368,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_2.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.b" />
                   </div>
                 </div>
               </td>
@@ -398,7 +398,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.l" />
                   </div>
                 </div>
               </td>
@@ -406,7 +406,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.a" />
                   </div>
                 </div>
               </td>
@@ -414,7 +414,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.b" />
                   </div>
                 </div>
               </td>
@@ -422,7 +422,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.ll" />
                   </div>
                 </div>
               </td>
@@ -430,7 +430,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.aa" />
                   </div>
                 </div>
               </td>
@@ -438,7 +438,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.bb" />
                   </div>
                 </div>
               </td>
@@ -446,7 +446,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_2.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.e" />
                   </div>
                 </div>
               </td>
@@ -460,7 +460,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.l" />
                   </div>
                 </div>
               </td>
@@ -468,7 +468,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.a" />
                   </div>
                 </div>
               </td>
@@ -476,7 +476,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.estandar_3.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.b" />
                   </div>
                 </div>
               </td>
@@ -506,7 +506,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.l" />
                   </div>
                 </div>
               </td>
@@ -514,7 +514,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.a" />
                   </div>
                 </div>
               </td>
@@ -522,7 +522,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.b" />
                   </div>
                 </div>
               </td>
@@ -530,7 +530,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.ll" />
                   </div>
                 </div>
               </td>
@@ -538,7 +538,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.aa" />
                   </div>
                 </div>
               </td>
@@ -546,7 +546,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.bb" />
                   </div>
                 </div>
               </td>
@@ -554,7 +554,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.carton.muestra_3.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.e" />
                   </div>
                 </div>
               </td>
@@ -570,7 +570,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.l" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.l" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -578,7 +578,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.a" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.a" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -586,7 +586,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_1.b" (change)="move()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.b" (change)="move()" />
                   </div>
                 </div>
               </td>
@@ -616,7 +616,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.l" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.l" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -624,7 +624,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.a" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.a" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -632,7 +632,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.b" (change)="move2()" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.b" (change)="move2()" />
                   </div>
                 </div>
               </td>
@@ -640,7 +640,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.ll" />
                   </div>
                 </div>
               </td>
@@ -648,7 +648,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.aa" />
                   </div>
                 </div>
               </td>
@@ -656,7 +656,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.bb" />
                   </div>
                 </div>
               </td>
@@ -664,7 +664,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_1.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.e" />
                   </div>
                 </div>
               </td>
@@ -678,7 +678,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.l" />
                   </div>
                 </div>
               </td>
@@ -686,7 +686,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.a" />
                   </div>
                 </div>
               </td>
@@ -694,7 +694,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_2.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.b" />
                   </div>
                 </div>
               </td>
@@ -724,7 +724,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.l" />
                   </div>
                 </div>
               </td>
@@ -732,7 +732,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.a" />
                   </div>
                 </div>
               </td>
@@ -740,7 +740,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.b" />
                   </div>
                 </div>
               </td>
@@ -748,7 +748,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.ll" />
                   </div>
                 </div>
               </td>
@@ -756,7 +756,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.aa" />
                   </div>
                 </div>
               </td>
@@ -764,7 +764,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.bb" />
                   </div>
                 </div>
               </td>
@@ -772,7 +772,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_2.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.e" />
                   </div>
                 </div>
               </td>
@@ -786,7 +786,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.l" />
                   </div>
                 </div>
               </td>
@@ -794,7 +794,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.a" />
                   </div>
                 </div>
               </td>
@@ -802,7 +802,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.estandar_3.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.b" />
                   </div>
                 </div>
               </td>
@@ -832,7 +832,7 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.l" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.l" />
                   </div>
                 </div>
               </td>
@@ -840,7 +840,7 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.a" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.a" />
                   </div>
                 </div>
               </td>
@@ -848,7 +848,7 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.b" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.b" />
                   </div>
                 </div>
               </td>
@@ -856,7 +856,7 @@
                 <div class="field">
                   <label for="" class="label">∆L*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.ll" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.ll" />
                   </div>
                 </div>
               </td>
@@ -864,7 +864,7 @@
                 <div class="field">
                   <label for="" class="label">∆a*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.aa" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.aa" />
                   </div>
                 </div>
               </td>
@@ -872,7 +872,7 @@
                 <div class="field">
                   <label for="" class="label">∆b*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.bb" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.bb" />
                   </div>
                 </div>
               </td>
@@ -880,7 +880,7 @@
                 <div class="field">
                   <label for="" class="label">∆E*</label>
                   <div class="control">
-                    <input type="text" class="input" [(ngModel)]="Analisis.papel.muestra_3.e" />
+                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.e" />
                   </div>
                 </div>
               </td>
@@ -897,7 +897,7 @@
               <div class="field">
                 <label for="" class="label">L*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.l" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_1.l" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -905,7 +905,7 @@
               <div class="field">
                 <label for="" class="label">a*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.a" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_1.a" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -913,7 +913,7 @@
               <div class="field">
                 <label for="" class="label">b*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_1.b" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_1.b" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -931,7 +931,7 @@
               <div class="field">
                 <label for="" class="label">L*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.l" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_2.l" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -939,7 +939,7 @@
               <div class="field">
                 <label for="" class="label">a*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.a" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_2.a" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -947,7 +947,7 @@
               <div class="field">
                 <label for="" class="label">b*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_2.b" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_2.b" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -965,7 +965,7 @@
               <div class="field">
                 <label for="" class="label">L*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.l" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_3.l" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -973,7 +973,7 @@
               <div class="field">
                 <label for="" class="label">a*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.a" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_3.a" (change)="move()" />
                 </div>
               </div>
             </td>
@@ -981,7 +981,7 @@
               <div class="field">
                 <label for="" class="label">b*</label>
                 <div class="control">
-                  <input type="text" class="input" [(ngModel)]="Analisis.muestra.estandar_3.b" (change)="move()" />
+                  <input type="number" class="input" [(ngModel)]="Analisis.muestra.estandar_3.b" (change)="move()" />
                 </div>
               </div>
             </td>

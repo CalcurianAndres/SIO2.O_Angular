@@ -280,7 +280,7 @@
             <div class="field">
               <label class="label">4.6 Tiempo de exposición (s)</label>
               <div class="control has-icons-left">
-                <input class="input" type="text" placeholder="Ej: 45" [(ngModel)]="producto.tiempo_exposicion" />
+                <input class="input" type="number" placeholder="Ej: 45" [(ngModel)]="producto.tiempo_exposicion" />
                 <span class="icon is-small is-left"><i class="fas fa-stopwatch"></i></span>
               </div>
             </div>
@@ -363,13 +363,13 @@
           <div class="column is-4">
             <div class="field">
               <label class="label">5.4 Área efectiva Montaje A (cm²)</label>
-              <input class="input" type="text" [(ngModel)]="producto.area_efectiva[0]" />
+              <input class="input" type="number" [(ngModel)]="producto.area_efectiva[0]" />
             </div>
           </div>
           <div class="column is-4">
             <div class="field">
               <label class="label">5.4 Área efectiva Montaje B (cm²)</label>
-              <input class="input" type="text" [(ngModel)]="producto.area_efectiva[1]" />
+              <input class="input" type="number" [(ngModel)]="producto.area_efectiva[1]" />
             </div>
           </div>
           <div class="column is-4">
@@ -499,7 +499,7 @@
           <div class="column is-4">
             <div class="field">
               <label class="label">Tamaño de paleta (cm)</label>
-              <input class="input" type="text" [(ngModel)]="producto.tamano_paleta" />
+              <input class="input" type="number" [(ngModel)]="producto.tamano_paleta" />
             </div>
           </div>
           <div class="column is-4">
@@ -511,7 +511,7 @@
           <div class="column is-4">
             <div class="field">
               <label class="label">Peso de caja (kg)</label>
-              <input class="input" type="text" [(ngModel)]="producto.peso_cajas" />
+              <input class="input" type="number" [(ngModel)]="producto.peso_cajas" />
             </div>
           </div>
         </div>

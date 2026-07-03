@@ -70,34 +70,34 @@
           <div class="field is-grouped">
             <div class="control is-25_">
               <label for="" class="label">Ancho</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.desplegado.ancho" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.desplegado.ancho" />
             </div>
             <div class="control is-25_">
               <label for="" class="label">Largo</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.desplegado.largo" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.desplegado.largo" />
             </div>
             <div class="control is-25_">
               <label for="" class="label">Tolerancia</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.desplegado.tolerancia" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.desplegado.tolerancia" />
             </div>
           </div>
           <div class="subtitles_">Tamaño del producto cerrado (mm)</div>
           <div class="field is-grouped">
             <div class="control is-25_">
               <label for="" class="label">Ancho</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.cerrado.ancho" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.cerrado.ancho" />
             </div>
             <div class="control is-25_">
               <label for="" class="label">Largo</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.cerrado.largo" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.cerrado.largo" />
             </div>
             <div class="control is-25_">
               <label for="" class="label">Alto</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.cerrado.alto" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.cerrado.alto" />
             </div>
             <div class="control is-25_">
               <label for="" class="label">Tolerancia</label>
-              <input type="text" class="input" [(ngModel)]="producto.dimensiones.cerrado.tolerancia" />
+              <input type="number" class="input" [(ngModel)]="producto.dimensiones.cerrado.tolerancia" />
             </div>
           </div>
           <div class="subtitles_">Diseño del producto</div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="control is-25_">
                         <label for="" class="label tooltip">Cantidad</label>
-                        <input type="text" class="input" [(ngModel)]="tinta_selected.cantidad">
+                        <input type="number" class="input" [(ngModel)]="tinta_selected.cantidad">
                     </div>
                     <div class="control" *ngIf="tinta_selected.tinta && tinta_selected.cantidad">
                         <label for="" class="label"> </label>
@@ -212,7 +212,7 @@
             </div>
             <div class="control is-25_">
               <label for="" class="label tooltip">Cantidad</label>
-              <input type="text" class="input" [(ngModel)]="this.barniz_selected.cantidad" />
+              <input type="number" class="input" [(ngModel)]="this.barniz_selected.cantidad" />
             </div>
             <div class="control" *ngIf="barniz_selected.barniz && barniz_selected.cantidad">
               <label for="" class="label"> </label>
@@ -963,11 +963,11 @@
           <div class="field is-grouped">
             <div class="control">
               <label for="" class="label">Alto</label>
-              <input type="text" class="input" [(ngModel)]="producto.post_impresion.henidura.alto" />
+              <input type="number" class="input" [(ngModel)]="producto.post_impresion.henidura.alto" />
             </div>
             <div class="control">
               <label for="" class="label">Ancho</label>
-              <input type="text" class="input" [(ngModel)]="producto.post_impresion.henidura.ancho" />
+              <input type="number" class="input" [(ngModel)]="producto.post_impresion.henidura.ancho" />
             </div>
           </div>
           <div class="field is-grouped">
@@ -1044,7 +1044,7 @@
             </div>
             <div class="control is-25_">
               <label for="" class="label tooltip">Cantidad</label>
-              <input type="text" class="input" [(ngModel)]="this.pegamento_selected.cantidad" />
+              <input type="number" class="input" [(ngModel)]="this.pegamento_selected.cantidad" />
             </div>
             <div class="control" *ngIf="pegamento_selected.pega && pegamento_selected.cantidad">
               <label for="" class="label"> </label>
@@ -1179,11 +1179,11 @@
           <div class="field is-grouped">
             <div class="control">
               <label class="label">Peso de caja (kg)</label>
-              <input type="text" class="input" [(ngModel)]="producto.post_impresion.distribucion.peso_cajas" />
+              <input type="number" class="input" [(ngModel)]="producto.post_impresion.distribucion.peso_cajas" />
             </div>
             <div class="control">
               <label class="label">Cantidad de estibas</label>
-              <input type="text" class="input" [(ngModel)]="producto.post_impresion.distribucion.estibas" />
+              <input type="number" class="input" [(ngModel)]="producto.post_impresion.distribucion.estibas" />
             </div>
           </div>
           <div class="field is-grouped">

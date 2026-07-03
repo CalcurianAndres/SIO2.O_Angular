@@ -60,7 +60,7 @@
               }}
             </td>
             <td align="center">
-              <input type="text" class="input" [(ngModel)]="analisis.ph" />
+              <input type="number" class="input" [(ngModel)]="analisis.ph" />
             </td>
           </tr>
         </thead>
@@ -80,7 +80,7 @@
           <tr *ngIf="Materiales[0].material.especificacion2">
             <td align="center">{{ getThirdKeyValue().value }}</td>
             <td align="center">
-              <input type="text" class="input" [(ngModel)]="analisis.otro" />
+              <input type="number" class="input" [(ngModel)]="analisis.otro" />
             </td>
           </tr>
         </thead>

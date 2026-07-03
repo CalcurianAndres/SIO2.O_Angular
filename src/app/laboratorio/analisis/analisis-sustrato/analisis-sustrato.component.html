@@ -247,7 +247,7 @@
           <tr *ngFor="let muestra of [].constructor(analisis.numero_muestras); index as i">
             <td>{{ i + 1 }}</td>
             <td>
-              <input type="text" class="input" [(ngModel)]="analisis.gramaje.masa_inicial[i]" (change)="gramaje(i)" />
+              <input type="number" class="input" [(ngModel)]="analisis.gramaje.masa_inicial[i]" (change)="gramaje(i)" />
             </td>
             <td width="25%">
               <div class="columns">
@@ -274,7 +274,7 @@
                 </div>
               </div>
             </td>
-            <td><input type="text" class="input" [(ngModel)]="analisis.gramaje.masa_final[i]" (change)="cobb(i)" /></td>
+            <td><input type="number" class="input" [(ngModel)]="analisis.gramaje.masa_final[i]" (change)="cobb(i)" /></td>
             <td width="25%">
               <div class="columns">
                 <div class="column is-3">

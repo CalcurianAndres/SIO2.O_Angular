@@ -83,7 +83,7 @@
             <label class="label">Base Imponible (Bs)</label>
             <div class="control has-icons-left">
               <input
-                type="text"
+                type="number"
                 class="input right-aligned-input"
                 [(ngModel)]="inputValue"
                 (keyup)="onInputChange($event)"
@@ -302,7 +302,7 @@
           <div class="field">
             <label class="label">Neto / und({{ Poligrafica_OC.pedido[material_selected_in_OC].unidad }})</label>
             <div class="control has-icons-left">
-              <input type="text" class="input" [(ngModel)]="neto_" />
+              <input type="number" class="input" [(ngModel)]="neto_" />
               <span class="icon is-small is-left"><i class="fas fa-weight"></i></span>
             </div>
           </div>
@@ -311,7 +311,7 @@
           <div class="field">
             <label class="label">Neto / und(Und)</label>
             <div class="control has-icons-left">
-              <input type="text" class="input" [(ngModel)]="neto_" />
+              <input type="number" class="input" [(ngModel)]="neto_" />
               <span class="icon is-small is-left"><i class="fas fa-weight"></i></span>
             </div>
           </div>
