@@ -21,6 +21,10 @@ export class GestionComponent {
 
   Cargos: any = [];
 
+  get cargosOrdenados() {
+    return this.api.cargos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  }
+
   editar(cargo) {
     this.cargo = cargo;
     this.nueva = true;

@@ -98,28 +98,28 @@
 
   <br />
 
-  <!-- Toggle: vista anual ↔ mensual con animación al cambiar -->
-  <div class="view-toggle mb-3">
-    <div class="buttons has-addons view-toggle-group">
-      <button
-        class="button is-small view-toggle-btn"
-        [ngClass]="{ 'is-active-view': !vistaMensual }"
-        (click)="vistaMensual = false"
-      >
-        <span class="icon is-small"><i class="fas fa-calendar-alt"></i></span>
-        <span>Anual</span>
-      </button>
-      <button
-        class="button is-small view-toggle-btn"
-        [ngClass]="{ 'is-active-view': vistaMensual }"
-        (click)="vistaMensual = true"
-      >
-        <span class="icon is-small"><i class="fas fa-calendar-day"></i></span>
-        <span>Mensual</span>
-      </button>
-    </div>
-    <div *ngIf="vistaMensual" class="select is-small" @fadeSlide>
-      <select [(ngModel)]="selectedMonth">
+  <!-- Toggle: vista anual ↔ mensual con dropdown de mes -->
+  <div class="view-toggle">
+    <button
+      type="button"
+      class="button is-small view-toggle-btn"
+      [class.is-active-view]="!vistaMensual"
+      (click)="vistaMensual = false"
+    >
+      <span class="icon is-small"><i class="fas fa-calendar-alt"></i></span>
+      <span>Anual</span>
+    </button>
+    <button
+      type="button"
+      class="button is-small view-toggle-btn"
+      [class.is-active-view]="vistaMensual"
+      (click)="vistaMensual = true"
+    >
+      <span class="icon is-small"><i class="fas fa-calendar-day"></i></span>
+      <span>Mensual</span>
+    </button>
+    <div class="select is-small view-toggle-select" *ngIf="vistaMensual">
+      <select [(ngModel)]="selectedMonth" aria-label="Seleccionar mes">
         <option *ngFor="let month of months; let i = index" [value]="i">{{ month }}</option>
       </select>
     </div>

@@ -23,7 +23,7 @@
   <br />
 
   <div class="cargos-list">
-    <div class="cargo-item" *ngFor="let cargo of api.cargos">
+    <div class="cargo-item" *ngFor="let cargo of cargosOrdenados">
       <span class="cargo-name">{{ cargo.nombre }}</span>
       <span class="tag is-light">{{ cargo.funcion }}</span>
       <span class="cargo-actions">
