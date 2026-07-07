@@ -31,6 +31,7 @@ export class RecibosComponent {
         { fecha: '19/06/2026', horas: 8, descripcion: 'Implementación del cálculo de devaluación salarial en el historial de empleados, cascada de unidades/subunidades/áreas en wizard de empleados, corrección de reactividad de tasa del día, y botón de eliminar sub-unidad con eliminación en cascada en el backend' },
         { fecha: '23/06/2026', horas: 8, descripcion: 'Corrección del bug de datos fantasma en modal de empleado mediante separación en dos componentes independientes, y corrección de la tasa BCV para que se obtenga directamente de la API en lugar de la base de datos cacheada' },
         { fecha: '03/07/2026', horas: 8, descripcion: 'Implementación de formato numérico global con punto en miles y coma en decimales en todos los campos del sistema (sueldos, montos, precios, medidas, pesos, tasas y colorimetría), ordenamiento alfabético de cargos, y corrección de alineación del selector de mes en la vista mensual del calendario de horarios' },
+        { fecha: '07/07/2026', horas: 8, descripcion: 'Corrección visual en pantalla de especificaciones técnicas del laboratorio, ajuste de color de iconos según guía de diseño del sistema, y corrección de duplicidad de datos en estadísticas de notas de entrega del sistema SIO v1' },
       ]),
   );
 
