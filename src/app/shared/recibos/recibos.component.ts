@@ -19,20 +19,20 @@ export class RecibosComponent {
   tareas: any[] = JSON.parse(
     localStorage.getItem(STORAGE_KEY) ||
       JSON.stringify([
-        { fecha: '25/05/2026', horas: 8, descripcion: 'Registro y configuración de productos en el sistema' },
-        { fecha: '26/05/2026', horas: 8, descripcion: ' organización del módulo de compras y proveedores' },
+        { fecha: '25/05/2026', horas: 8, descripcion: 'Registro de productos en el sistema' },
+        { fecha: '26/05/2026', horas: 8, descripcion: 'Organización del módulo de compras y proveedores' },
         { fecha: '29/05/2026', horas: 8, descripcion: 'Mejoras en tablas y orden de información del sistema' },
-        { fecha: '05/06/2026', horas: 8, descripcion: 'Actualización de especificaciones y datos de clientes y proveedores' },
-        { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de órdenes de compra' },
-        { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en órdenes de compra' },
-        { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama de empleados, ajustes de producción, rediseño de departamentos y cargos, y mejoras en formularios de empleados' },
-        { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones en módulo de compras y producción, cierre de tareas pendientes, y actualización del manual de diseño' },
-        { fecha: '17/06/2026', horas: 8, descripcion: 'Correcciones en wizard de empleados y geolocalización, mejora de calendario con número de semana, y limpieza de documentación' },
-        { fecha: '19/06/2026', horas: 8, descripcion: 'Implementación del cálculo de devaluación salarial en el historial de empleados, cascada de unidades/subunidades/áreas en wizard de empleados, corrección de reactividad de tasa del día, y botón de eliminar sub-unidad con eliminación en cascada en el backend' },
-        { fecha: '23/06/2026', horas: 8, descripcion: 'Corrección del bug de datos fantasma en modal de empleado mediante separación en dos componentes independientes, y corrección de la tasa BCV para que se obtenga directamente de la API en lugar de la base de datos cacheada' },
-        { fecha: '03/07/2026', horas: 8, descripcion: 'Implementación de formato numérico global con punto en miles y coma en decimales en todos los campos del sistema (sueldos, montos, precios, medidas, pesos, tasas y colorimetría), ordenamiento alfabético de cargos, y corrección de alineación del selector de mes en la vista mensual del calendario de horarios' },
-        { fecha: '07/07/2026', horas: 8, descripcion: 'Corrección visual en pantalla de especificaciones técnicas del laboratorio, ajuste de color de iconos según guía de diseño del sistema, y corrección de duplicidad de datos en estadísticas de notas de entrega del sistema SIO v1' },
-        { fecha: '08/07/2026', horas: 8, descripcion: 'Mejoras en órdenes de compra: ocultación de campos dimensionales para materiales no sustrato, rediseño del listado con énfasis en número de orden, ordenamiento ascendente/descendente, filtro de órdenes activas, rango de fecha permanente y cierre automático al enviar materiales a almacén' },
+        { fecha: '05/06/2026', horas: 8, descripcion: 'Especificaciones, clientes, proveedores, países por API' },
+        { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de OCP' },
+        { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en OCP' },
+        { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama empleados, departamentos/cargos, +58, wizard' },
+        { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones filtros, cierre tareas, manual de diseño' },
+        { fecha: '17/06/2026', horas: 8, descripcion: 'Wizard empleados, calendario SEM, sistema Pantone' },
+        { fecha: '19/06/2026', horas: 8, descripcion: 'Devaluación salarial, cascada unidad/subunidad, tasa del día' },
+        { fecha: '23/06/2026', horas: 8, descripcion: 'Bug modal empleado + tasa BCV directa de API' },
+        { fecha: '03/07/2026', horas: 8, descripcion: 'Formato numérico global, ordenamiento cargos, calendario' },
+        { fecha: '07/07/2026', horas: 8, descripcion: 'Correcciones UI laboratorio + duplicidad NE SIO v1' },
+        { fecha: '08/07/2026', horas: 8, descripcion: 'OCP: campos selectivos + listado rediseñado + auto-close' },
       ]),
   );
 
