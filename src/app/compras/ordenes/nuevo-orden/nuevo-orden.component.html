@@ -43,7 +43,7 @@
               <select [(ngModel)]="material.material" (ngModelChange)="onMaterialChange($event)">
                 <option [ngValue]="null">— Seleccionar material —</option>
                 <option *ngFor="let s of Sustratos" [ngValue]="s._id">
-                  {{ s.nombre }} — {{ s.gramaje }}g {{ s.calibre }}pt
+                  {{ s.nombre }}<ng-container *ngIf="s.grupo?.trato"> — {{ s.gramaje }}g {{ s.calibre }}pt</ng-container>
                 </option>
               </select>
             </div>
@@ -70,30 +70,34 @@
             <label class="label">Precio USD</label>
             <input type="number" class="input" [(ngModel)]="material.precio" />
           </div>
-          <div class="column is-2" *ngIf="material.gramaje">
-            <label class="label">Gramaje (g/m²)</label>
-            <input type="number" class="input" [(ngModel)]="material.gramaje" />
-          </div>
-          <div class="column is-2" *ngIf="material.calibre">
-            <label class="label">Calibre (pt)</label>
-            <input type="number" class="input" [(ngModel)]="material.calibre" />
-          </div>
-          <div
-            class="column is-narrow"
-            *ngIf="material.unidad === 't' && material.cantidad && Number_(material.cantidad) > 0"
-          >
-            <label class="label"> </label>
-            <label class="checkbox"> <input type="checkbox" [(ngModel)]="material.bobina" /> Bobina </label>
-          </div>
-          <div class="column is-2" *ngIf="material.precio && Number_(material.precio) > 0">
-            <label class="label">Ancho (cm)</label>
-            <input type="number" class="input" [(ngModel)]="material.ancho" />
-          </div>
-          <div class="column is-2" *ngIf="material.ancho && !material.bobina">
-            <label class="label">Alto (cm)</label>
-            <input type="number" class="input" [(ngModel)]="material.alto" />
-          </div>
-          <div class="column is-narrow" *ngIf="material.ancho">
+
+          <ng-container *ngIf="esSustrato">
+            <div class="column is-2" *ngIf="material.gramaje">
+              <label class="label">Gramaje (g/m²)</label>
+              <input type="number" class="input" [(ngModel)]="material.gramaje" />
+            </div>
+            <div class="column is-2" *ngIf="material.calibre">
+              <label class="label">Calibre (pt)</label>
+              <input type="number" class="input" [(ngModel)]="material.calibre" />
+            </div>
+            <div
+              class="column is-narrow"
+              *ngIf="material.unidad === 't' && material.cantidad && Number_(material.cantidad) > 0"
+            >
+              <label class="label"> </label>
+              <label class="checkbox"> <input type="checkbox" [(ngModel)]="material.bobina" /> Bobina </label>
+            </div>
+            <div class="column is-2" *ngIf="material.precio && Number_(material.precio) > 0">
+              <label class="label">Ancho (cm)</label>
+              <input type="number" class="input" [(ngModel)]="material.ancho" />
+            </div>
+            <div class="column is-2" *ngIf="material.ancho && !material.bobina">
+              <label class="label">Alto (cm)</label>
+              <input type="number" class="input" [(ngModel)]="material.alto" />
+            </div>
+          </ng-container>
+
+          <div class="column is-narrow" *ngIf="(esSustrato && material.ancho) || (!esSustrato && material.precio && Number_(material.precio) > 0)">
             <label class="label"> </label>
             <button class="button is-info" (click)="addMaterial()">
               <span class="icon"><i class="fas fa-plus"></i></span>

@@ -36,6 +36,7 @@ export class NuevoOrdenComponent {
   public Fabricant_Sustrato;
   public Sustratos: any[] = [];
   public Sustrato_Material = '';
+  public esSustrato = false;
 
   get fabricantesFiltrados(): any[] {
     if (!this.fabricantesIDs.length) return this.fabricantes.fabricantes || [];
@@ -60,25 +61,30 @@ export class NuevoOrdenComponent {
   condiciones(e: any) {
     const fabricante = this.fabricantes.buscarFabricantesPorId(e.value);
     if (!fabricante || !fabricante[0]) return;
-    const grupo = fabricante[0].grupo;
-    const tieneTrato = grupo.some((item) => item.trato === true);
-    this.Sustratos =
-      tieneTrato && this.materiales.materiales
-        ? this.materiales.materiales.filter((m: any) => String(m.fabricante._id) === e.value)
-        : [];
+    this.Sustratos = this.materiales.materiales
+      ? this.materiales.materiales.filter((m: any) => String(m.fabricante._id) === e.value)
+      : [];
+    this.esSustrato = false;
   }
 
   onMaterialChange(id: any) {
-    if (!id) return;
+    if (!id) {
+      this.esSustrato = false;
+      return;
+    }
     const material = this.Sustratos.find((s) => s._id === id || String(s._id) === String(id));
-    if (!material) return;
+    if (!material) {
+      this.esSustrato = false;
+      return;
+    }
+    this.esSustrato = material.grupo?.trato === true;
     this.material.nombre = material.nombre;
-    this.material.gramaje = material.gramaje || '';
-    this.material.calibre = material.calibre || '';
+    this.material.gramaje = this.esSustrato ? (material.gramaje || '') : '';
+    this.material.calibre = this.esSustrato ? (material.calibre || '') : '';
     this.material.unidad = this.material.unidad || 'Und';
-    this.material.alto = material.alto || '';
-    this.material.ancho = material.ancho || '';
-    this.material.bobina = material.bobina || false;
+    this.material.alto = '';
+    this.material.ancho = '';
+    this.material.bobina = false;
   }
 
   addMaterial() {
