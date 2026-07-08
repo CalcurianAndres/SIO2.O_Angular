@@ -111,22 +111,6 @@
   padding: 0.5rem 1rem;
   min-height: 52px;
 }
-.order-header-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-.order-provider {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-primary);
-}
-.order-number {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-family: monospace;
-}
 .order-header-actions {
   margin-left: auto;
   display: flex;
@@ -159,6 +143,45 @@
 }
 .chevron-btn.rotate-up {
   transform: rotate(180deg);
+}
+
+/* ── Order Header Layout ── */
+.order-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.order-number-emphasis {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.order-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.order-provider {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.order-number {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.order-creation-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ── Sort Tab ── */
+.sort-tab {
+  flex: 0 0 auto;
+  min-width: 44px;
 }
 
 /* ── Status Badge ── */

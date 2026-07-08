@@ -47,16 +47,33 @@
     </div>
   </div>
 
-  <!-- Filter tabs -->
+  <!-- Date range — siempre visible -->
+  <div class="filter-panel" style="margin-bottom: 0.5rem">
+    <div class="field is-grouped">
+      <div class="control">
+        <label class="label">Desde</label>
+        <input type="date" class="input" [(ngModel)]="fechaDesde" />
+      </div>
+      <div class="control">
+        <label class="label">Hasta</label>
+        <input type="date" class="input" [(ngModel)]="fechaHasta" />
+      </div>
+      <div class="control" *ngIf="fechaDesde || fechaHasta">
+        <label class="label">&nbsp;</label>
+        <button class="button is-small" (click)="fechaDesde = ''; fechaHasta = ''">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter tabs + sort toggle -->
   <div class="filter-tabs">
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'home' }" (click)="setFilter('home')">
-      <i class="fas fa-home"></i> Todas
-    </button>
-    <button class="filter-tab" [ngClass]="{ active: filterMode === 'date' }" (click)="setFilter('date')">
-      <i class="fas fa-calendar-day"></i> Por fecha
+      <i class="fas fa-check-circle"></i> Activas
     </button>
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'number' }" (click)="setFilter('number')">
-      <i class="fas fa-hashtag"></i> Por N°
+      <i class="fas fa-file-invoice"></i> Por N° OCP
     </button>
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'client' }" (click)="setFilter('client')">
       <i class="fas fa-users"></i> Por proveedor
@@ -64,28 +81,12 @@
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'fabricante' }" (click)="setFilter('fabricante')">
       <i class="fas fa-industry"></i> Por fabricante
     </button>
+    <button class="filter-tab sort-tab" (click)="toggleSort()" title="{{ sortAsc ? 'Más vieja primero' : 'Más nueva primero' }}">
+      <i class="fas" [ngClass]="sortAsc ? 'fa-sort-amount-up' : 'fa-sort-amount-down'"></i>
+    </button>
   </div>
 
   <!-- Filter panels -->
-  <div class="filter-panel" *ngIf="filterMode === 'date'">
-    <div class="field is-grouped">
-      <div class="control">
-        <label class="label">Desde</label>
-        <input type="date" class="input" #desde />
-      </div>
-      <div class="control">
-        <label class="label">Hasta</label>
-        <input type="date" class="input" #hasta />
-      </div>
-      <div class="control">
-        <label class="label"> </label>
-        <button class="button is-success" (click)="buscarPorFecha(desde.value, hasta.value)">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
   <div class="filter-panel" *ngIf="filterMode === 'number'">
     <div class="field is-grouped">
       <div class="control">
@@ -155,11 +156,14 @@
       <div class="card-header" (click)="toggleOrder(i)">
         <div class="card-header-title">
           <div class="order-header-info">
-            <span class="order-provider">{{ orden.proveedor.nombre }}</span>
-            <span class="order-number">OCP: {{ addSlice(orden.numero) }}</span>
-            <span class="order-status-badge" [ngClass]="orden.estado === 'cerrada' ? 'badge-closed' : 'badge-open'">
-              {{ orden.estado || 'Abierta' }}
-            </span>
+            <span class="order-number-emphasis">OCP: {{ addSlice(orden.numero) }}</span>
+            <div class="order-header-meta">
+              <span class="order-provider">{{ orden.proveedor.nombre }}</span>
+              <span class="order-creation-date">{{ orden.createdAt | date:'dd/MM/yyyy' }}</span>
+              <span class="order-status-badge" [ngClass]="orden.estado === 'Cerrada' ? 'badge-closed' : 'badge-open'">
+                {{ orden.estado || 'Abierta' }}
+              </span>
+            </div>
           </div>
         </div>
         <div class="order-header-actions">

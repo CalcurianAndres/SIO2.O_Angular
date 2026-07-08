@@ -62,9 +62,16 @@ export class OrdenesComponent {
   public filterMode: string = 'home';
   public ordenExpandida: boolean[] = [];
   public cargando = false;
+  public sortAsc = false;
+  public fechaDesde = '';
+  public fechaHasta = '';
 
   get ordenesCerradas(): number {
-    return this.api.orden?.filter((o) => o.estado === 'cerrada').length || 0;
+    return this.api.orden?.filter((o) => o.estado === 'Cerrada').length || 0;
+  }
+
+  get ordenesActivas(): number {
+    return this.api.orden?.filter((o) => o.estado !== 'Cerrada').length || 0;
   }
 
   get proveedoresUnicas(): string[] {
@@ -86,8 +93,33 @@ export class OrdenesComponent {
   }
 
   get ordenesVisibles(): any[] {
-    if (this.filtrados.length > 0) return this.filtrados;
-    return this.api.orden || [];
+    let lista = this.filtrados.length > 0 ? this.filtrados : (this.api.orden || []);
+
+    // 1. Filtro por estado: home = solo activas
+    if (this.filterMode === 'home') {
+      lista = lista.filter((o) => o.estado !== 'Cerrada');
+    }
+
+    // 2. Filtro por fecha (siempre se aplica si ambas fechas están definidas)
+    if (this.fechaDesde && this.fechaHasta) {
+      const inicio = new Date(this.fechaDesde + 'T00:00:00');
+      const fin = new Date(this.fechaHasta + 'T23:59:59');
+      lista = lista.filter((orden) => {
+        const fechaOrden = new Date(orden.createdAt);
+        return fechaOrden >= inicio && fechaOrden <= fin;
+      });
+    }
+
+    // 3. Ordenar por número
+    lista = [...lista].sort((a, b) =>
+      this.sortAsc ? a.numero - b.numero : b.numero - a.numero,
+    );
+
+    return lista;
+  }
+
+  toggleSort() {
+    this.sortAsc = !this.sortAsc;
   }
 
   setFilter(mode: string) {
@@ -102,32 +134,6 @@ export class OrdenesComponent {
 
   formatear_cifras(valor: number) {
     return this.decimalPipe.transform(valor, '1.0-2');
-  }
-
-  buscarPorFecha(desde: string, hasta: string) {
-    const inicio = new Date(desde + 'T00:00:00');
-    const fin = new Date(hasta + 'T23:59:59');
-
-    this.filtrados = this.api.orden.filter((orden) => {
-      const fechaOrden = new Date(orden.createdAt);
-      return fechaOrden >= inicio && fechaOrden <= fin;
-    });
-  }
-
-  buscarPorFecha_cliente(desde, hasta) {
-    const OrdenesPorClientes = {};
-    const filtracion = this.api.orden.filter((orden) => {
-      const fechaOrden = new Date(orden.recepcion);
-      return fechaOrden >= new Date(desde) && fechaOrden <= new Date(hasta);
-    });
-    filtracion.forEach((orden) => {
-      const { cliente } = orden;
-      if (!OrdenesPorClientes[cliente.nombre]) {
-        OrdenesPorClientes[cliente.nombre] = [];
-      }
-      OrdenesPorClientes[cliente.nombre].push(orden);
-    });
-    this.PorClientes = Object.entries(OrdenesPorClientes);
   }
 
   search() {
@@ -158,8 +164,6 @@ export class OrdenesComponent {
       );
     });
   }
-
-  public PorClientes: any = [];
 
   cerrar() {
     this.Orden = {

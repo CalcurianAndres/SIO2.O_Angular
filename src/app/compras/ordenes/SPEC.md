@@ -26,19 +26,22 @@ Módulo de Compras para gestionar órdenes de compra a proveedores de materiales
 │                  │   Mes    │ │   Año    │ │              │  │
 │                  └──────────┘ └──────────┘ └──────────────┘  │
 ├──────────────────────────────────────────────────────────────┤
-│ [ Todas ] [ Por fecha ] [ Por N° ] [ Por proveedor ]         │
+│ [Desde ██] [Hasta ██] [✕]  ← siempre visible               │
+├──────────────────────────────────────────────────────────────┤
+│ [ Activas ] [ Por N° ] [ Por proveedor ] [ ↕ ]              │
 │ ┌─ filtros dinámicos según pestaña activa ─────────────────┐ │
-│ │ date → [Desde] [Hasta] [🔍]                              │ │
 │ │ number → [Buscar por número...]                          │ │
 │ │ client → [<select proveedores>]                          │ │
+│ │ fabricante → [<select fabricantes>]                      │ │
 │ └──────────────────────────────────────────────────────────┘ │
 ├──────────────────────────────────────────────────────────────┤
 │ ┌──────────────────────────────────────────────────────────┐ │
-│ │ Proveedor          OCP: XX-XXXXX   [Abierta] [📥] [⌄]  │ │
+│ │ OCP: 26-00001     (grande, azul, negrita, monospace)    │ │
+│ │ Proveedor          [Abierta/Cerrada]   [📥] [⌄]        │ │
 │ │ ┌─ tabla expandible ──────────────────────────────────┐ │ │
 │ │ │ Producto | Código | Cantidad | Prec.Unit | BaseImp │ │ │
 │ │ │ ...                                                │ │ │
-│ │ │ Sub-Total | I.V.A (16%) | Neto                     │ │ │
+│ │ │ Sub-Total | I.V.A (X%) | Neto                      │ │ │
 │ │ └────────────────────────────────────────────────────┘ │ │
 │ └──────────────────────────────────────────────────────────┘ │
 │ ┌─── skeleton (loading, 3 cards) ──────────────────────────┐ │
@@ -69,24 +72,31 @@ Módulo de Compras para gestionar órdenes de compra a proveedores de materiales
 | `Orden` | `object` | Modelo de datos de la nueva orden en creación |
 | `filtrados` | `any[]` | Órdenes filtradas (por fecha, número o proveedor) |
 | `searchTerm` | `string` | Término de búsqueda para filtro por número |
-| `filterMode` | `'home'\|'date'\|'number'\|'client'` | Pestaña de filtro activa |
+| `filterMode` | `'home'\|'number'\|'client'\|'fabricante'` | Pestaña de filtro activa |
 | `ordenExpandida` | `boolean[]` | Array de estados expandido/colapsado por orden |
 | `cargando` | `boolean` | Estado de carga inicial |
-| `PorClientes` | `any[]` | Órdenes agrupadas por cliente (para filtro combinado) |
+| `sortAsc` | `boolean` | Dirección de ordenamiento (default `false` = newest first) |
+| `fechaDesde` | `string` | Fecha inicial del filtro por rango (siempre visible) |
+| `fechaHasta` | `string` | Fecha final del filtro por rango (siempre visible) |
 
 **Getters**:
-- `ordenesCerradas` — count de órdenes con `estado === 'cerrada'`
+- `ordenesCerradas` — count de órdenes con `estado === 'Cerrada'`
+- `ordenesActivas` — count de órdenes con `estado !== 'Cerrada'`
 - `proveedoresUnicas` — set de nombres de proveedores únicos (para el select del filtro)
-- `ordenesVisibles` — si hay filtrados activos los retorna, si no retorna `api.orden`
+- `fabricantesUnicas` — set de nombres/alias de fabricantes únicos (desde pedido.material.fabricante)
+- `ordenesVisibles` — retorna lista filtrada + ordenada:
+  1. Filtra por estado si `filterMode === 'home'` (solo activas)
+  2. Filtra por rango de `createdAt` si `fechaDesde` y `fechaHasta` están definidas
+  3. Ordena por `numero` (desc si `sortAsc === false`, asc si `sortAsc === true`)
 
 **Métodos clave**:
 - `setFilter(mode)` — cambia el modo de filtro y resetea búsqueda
+- `toggleSort()` — alterna `sortAsc` (asc/desc)
 - `toggleOrder(n)` — expande/colapsa la card de orden en índice n
-- `buscarPorFecha(desde, hasta)` — filtra por rango de `createdAt`
-- `buscarPorFecha_cliente(desde, hasta)` — filtra por rango de `recepcion` y agrupa por cliente
 - `search()` — filtra por número de OC (limpia guiones)
 - `filtrarPorProveedor(target)` — filtra por nombre de proveedor
-- `addSlice(n)` — formatea número `24001` → `24-001`
+- `filtrarPorFabricante(target)` — filtra por alias/nombre de fabricante desde `pedido.material.fabricante`
+- `addSlice(n)` — formatea número `2600001` → `26-00001`
 - `calcularTotalIva(orden)` — suma `(iva/100) * precio * cantidad` de cada pedido
 - `calcularTotalNeto(orden)` — suma `precio * cantidad` de cada pedido
 - `DescargarPDF(orden)` — genera PDF con pdfmake-wrapper (logo, datos proveedor, tabla materiales, totales, condiciones)
@@ -141,6 +151,7 @@ Módulo de Compras para gestionar órdenes de compra a proveedores de materiales
 |-------------------|---------|-------------|
 | `CLIENTE:BuscarOrdenesPoligrafica` | _(sin payload)_ | Solicita todas las órdenes activas con población completa |
 | `CLIENTE:NuevaOrdenPoligrafica` | `OrdenPoligrafica` | Crea nueva orden con auto-incremento de número |
+| `CLIENTE:CerrarOrdenPoligrafica` (reservado) | `{_id}` | Cierra una OCP manualmente (futuro) |
 
 | Servidor → Cliente | Payload | Descripción |
 |-------------------|---------|-------------|
@@ -188,6 +199,8 @@ ordenPoligrafica.find({borrado: false})
   proveedor: { type: ObjectId, ref: 'proveedor' },
   borrado: Boolean,         // soft delete, default false
   iva: { type: Number, default: 16 },
+  estado: { type: String, enum: ['Abierta', 'Cerrada'], default: 'Abierta' },
+  fecha_cierre: Date,       // fecha en que se cerró la orden
   pedido: [{
     material: { type: ObjectId, ref: 'material' },
     bobina: { type: Boolean, default: false },
@@ -195,6 +208,8 @@ ordenPoligrafica.find({borrado: false})
     precio: Number,
     alto: Number,
     ancho: Number,
+    gramaje: String,
+    calibre: String,
     unidad: { type: String, enum: ['L', 'kg', 'Und', 't'] }
   }],
   pago: String,             // "Contado" | "Crédito"
@@ -357,9 +372,20 @@ El número de orden se genera automáticamente mediante un hook `pre('save')` en
 ## 12. Bugs conocidos / issues
 
 - `OpoligraficaService` no tiene evento `SERVER:OrdenesPoligrafica` tipado — `this.orden` es `any`.
-- No hay campo `estado` en el modelo Mongoose `orden-poligrafica.js`, pero el frontend referencia `orden.estado === 'cerrada'` — todas las órdenes existentes mostrarán siempre "Abierta".
-- `ordenesCerradas` siempre será 0 porque no hay forma de cerrar una orden desde el frontend (no hay endpoint ni UI para cambiar estado).
-- El método `buscarPorFecha_cliente(desde, hasta)` está definido en `OrdenesComponent` pero referencia `orden.recepcion` y `orden.cliente` — campos que no existen en el modelo `ordenPoligrafica` (son del modelo `ocompra`). Este método es un dead code copy-paste.
+
+## 13. Changelog
+
+| Fecha | Cambio |
+|-------|--------|
+| 2026-07-08 | Se agregó campo `estado` (enum Abierta/Cerrada) + `fecha_cierre` al modelo |
+| 2026-07-08 | Se agregó `.sort({ numero: -1 })` al backend para newest first |
+| 2026-07-08 | Se agregó auto-cierre de OCP al enviar todos los materiales a almacén (`almacenEvents.js`) |
+| 2026-07-08 | Se renombró tab "Todas" → "Activas", solo muestra órdenes no cerradas |
+| 2026-07-08 | Se agregó toggle de ordenamiento ascendente/descendente |
+| 2026-07-08 | Filtro por rango de fecha siempre visible (removido de pestaña) |
+| 2026-07-08 | Énfasis en N° OCP en header de card (fuente grande, monospace, color accent) |
+| 2026-07-08 | Se cambió orden de header: N° OCP primero, proveedor debajo |
+| 2026-07-08 | Se eliminó `buscarPorFecha_cliente` (dead code) y `PorClientes` |
 - `NuevoOrdenComponent.proveedores_()` usa `setTimeout(500ms)` antes de buscar el proveedor — posible race condition si el servicio no ha actualizado `proveedores` aún.
 - `addMaterial()` en `NuevoOrdenComponent` pushea `this.material` por referencia y luego lo resetea — si algún otro componente modificara `material.nombre`, afectaría al item ya agregado en el pedido.
 - El `min` del datepicker de entrega usa `getToday()` pero el backend guarda como string, no como Date — no hay validación de fecha real.
