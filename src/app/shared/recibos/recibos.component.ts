@@ -32,6 +32,7 @@ export class RecibosComponent {
         { fecha: '23/06/2026', horas: 8, descripcion: 'Corrección del bug de datos fantasma en modal de empleado mediante separación en dos componentes independientes, y corrección de la tasa BCV para que se obtenga directamente de la API en lugar de la base de datos cacheada' },
         { fecha: '03/07/2026', horas: 8, descripcion: 'Implementación de formato numérico global con punto en miles y coma en decimales en todos los campos del sistema (sueldos, montos, precios, medidas, pesos, tasas y colorimetría), ordenamiento alfabético de cargos, y corrección de alineación del selector de mes en la vista mensual del calendario de horarios' },
         { fecha: '07/07/2026', horas: 8, descripcion: 'Corrección visual en pantalla de especificaciones técnicas del laboratorio, ajuste de color de iconos según guía de diseño del sistema, y corrección de duplicidad de datos en estadísticas de notas de entrega del sistema SIO v1' },
+        { fecha: '08/07/2026', horas: 8, descripcion: 'Mejoras en órdenes de compra: ocultación de campos dimensionales para materiales no sustrato, rediseño del listado con énfasis en número de orden, ordenamiento ascendente/descendente, filtro de órdenes activas, rango de fecha permanente y cierre automático al enviar materiales a almacén' },
       ]),
   );
 
