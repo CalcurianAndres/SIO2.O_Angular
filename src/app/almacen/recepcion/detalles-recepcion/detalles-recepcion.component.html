@@ -7,14 +7,15 @@
     </div>
     <div class="modal-card-body" *ngIf="detalle">
       <p class="title" *ngIf="lista">
-        {{ lista.materiales[n][0].material.nombre }} ({{ lista.materiales[n][0].material.fabricante.alias }})
+        {{ lista.materiales[n][0].material.nombre }} ({{ lista.materiales[n][0].material.fabricante.alias }})
       </p>
       <div class="columns">
         <div class="column">
           <div class="field">
             <label for="" class="label">Fabricación</label>
             <div class="control">
-              <input type="date" class="input" width="30%" [max]="Hoy" [(ngModel)]="lista.fabricacion[n]" />
+              <input type="date" class="input" width="30%" [max]="Hoy" [(ngModel)]="lista.fabricacion[n]"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </div>
           </div>
         </div>
@@ -22,7 +23,8 @@
           <div class="field">
             <label for="" class="label">Documento</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.documento" />
+              <input type="text" class="input" [(ngModel)]="lista.documento"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </div>
           </div>
         </div>
@@ -30,7 +32,8 @@
           <div class="field">
             <label for="" class="label">OC</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.OC" />
+              <input type="text" class="input" [(ngModel)]="lista.OC"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </div>
           </div>
         </div>
@@ -38,7 +41,8 @@
           <div class="field">
             <label for="" class="label">Transportista</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.transportista" />
+              <input type="text" class="input" [(ngModel)]="lista.transportista"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </div>
           </div>
         </div>
@@ -57,15 +61,18 @@
         <tbody>
           <tr *ngFor="let material of lista.materiales[n]; index as i">
             <td>
-              <input type="text" class="input" [(ngModel)]="material.codigo" />
+              <input type="text" class="input" [(ngModel)]="material.codigo"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </td>
             <td>
-              <input type="text" class="input" [(ngModel)]="material.lote" />
+              <input type="text" class="input" [(ngModel)]="material.lote"
+                [readonly]="!esEditable" [class.is-static]="!esEditable" />
             </td>
             <td>
               <div class="field has-addons">
                 <div class="contro">
-                  <input type="number" class="input" [(ngModel)]="material.neto" />
+                  <input type="number" class="input" [(ngModel)]="material.neto"
+                    [readonly]="!esEditable" [class.is-static]="!esEditable" />
                 </div>
               </div>
             </td>

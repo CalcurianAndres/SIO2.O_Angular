@@ -21,6 +21,22 @@
   ></app-section-header>
   <br />
 
+  <!-- Warehouse tabs -->
+  <div class="tabs is-boxed warehouse-tabs">
+    <ul>
+      <li [ngClass]="{ 'is-active': selectedAlmacenId === '' }" (click)="seleccionarAlmacen('')">
+        <a>Almacén principal</a>
+      </li>
+      <li
+        *ngFor="let alm of api.almacenes"
+        [ngClass]="{ 'is-active': selectedAlmacenId === alm._id }"
+        (click)="seleccionarAlmacen(alm._id)"
+      >
+        <a>{{ alm.nombre }}</a>
+      </li>
+    </ul>
+  </div>
+
   <!-- KPI Cards -->
   <div class="columns is-variable is-2">
     <div class="column">

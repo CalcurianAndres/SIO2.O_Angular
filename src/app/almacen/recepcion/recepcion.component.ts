@@ -40,9 +40,7 @@ export class RecepcionComponent implements OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      if (this.api.recepciones?.length > 0) {
-        this.cargando = false;
-      }
+      this.cargando = false;
     }, 800);
   }
 
@@ -66,14 +64,21 @@ export class RecepcionComponent implements OnInit {
   get filteredRecepciones(): any[] {
     if (!this.api.recepciones) return [];
     let list = this.api.recepciones.filter(
-      (r) => r.status === 'Por notificar' || r.status === 'Notificado' || r.status === 'En observacion',
+      (r) =>
+        r.status === 'Por notificar' ||
+        r.status === 'Notificado' ||
+        r.status === 'En observacion' ||
+        r.status === 'Verificado' ||
+        r.status === 'Finalizado',
     );
     if (this.filterMode === 'pendientes') {
       list = list.filter((r) => r.status === 'Por notificar');
     } else if (this.filterMode === 'notificadas') {
       list = list.filter((r) => r.status === 'Notificado');
     } else if (this.filterMode === 'observacion') {
-      list = list.filter((r) => r.status === 'En observacion');
+      list = list.filter((r) => r.status === 'En observacion' || r.status === 'Verificado');
+    } else if (this.filterMode === 'finalizadas') {
+      list = list.filter((r) => r.status === 'Finalizado');
     }
     return list;
   }
@@ -599,25 +604,193 @@ export class RecepcionComponent implements OnInit {
 
   // Función para notificar una recepción
   notificar(id: string) {
-    this.api.NoticarRecepcion(id); // Notifica la recepción con el ID proporcionado
-    setTimeout(() => {
+    const recepcion = this.api.recepciones?.find((r: any) => r._id === id);
+
+    if (!recepcion) {
+      this.api.NoticarRecepcion(id);
+      setTimeout(() => {
+        Swal.fire({
+          text: this.api.mensaje.mensaje,
+          icon: this.api.mensaje.icon,
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000,
+        });
+      }, 1000);
+      return;
+    }
+
+    const todosSaltanLab = recepcion.materiales?.every((materiales: any[]) => {
+      const prim = materiales?.[0];
+      return prim?.bobina === true || prim?.unidad === 't' || !!prim?.almacen_id || !!recepcion.almacen_id;
+    });
+
+    if (todosSaltanLab) {
+      const todasBobinas: any[] = [];
+      const todosMateriales: any[] = [];
+
+      recepcion.materiales.forEach((materiales: any[]) => {
+        const prim = materiales[0];
+        const esBobina = prim?.bobina === true || prim?.unidad === 't';
+
+        if (esBobina) {
+          const items = materiales.map((item: any) => {
+            const bobina: any = {
+              ...item,
+              material: item.material?._id || item.material,
+              oc: item.oc?._id || item.oc,
+              almacen_id: item.almacen_id || recepcion.almacen_id || null,
+              seccion_id: item.seccion_id || recepcion.seccion_id || null,
+            };
+            if (!this.convertidora) {
+              delete bobina.convertidora;
+            } else {
+              bobina.convertidora = this.convertidora;
+            }
+            return bobina;
+          });
+          todasBobinas.push(...items);
+        } else {
+          materiales.forEach((m: any) => {
+            m.material = m.material?._id || m.material;
+            m.recepcion = recepcion._id;
+            m.almacen_id = m.almacen_id || recepcion.almacen_id || undefined;
+            m.seccion_id = m.seccion_id || recepcion.seccion_id || undefined;
+          });
+          todosMateriales.push(...materiales);
+        }
+      });
+
+      if (todasBobinas.length > 0) {
+        this.bobinas.guardarBobina(todasBobinas);
+      }
+
+      if (todosMateriales.length > 0) {
+        this.almacen.GuardarAlmacen(todosMateriales);
+      }
+
+      recepcion.status = 'Finalizado';
+      this.api.GuardarRecepcion(recepcion);
+
       Swal.fire({
-        text: this.api.mensaje.mensaje, // Muestra un mensaje
-        icon: this.api.mensaje.icon, // Muestra un ícono
+        text: 'Material enviado al almacén automáticamente',
+        icon: 'success',
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
         timerProgressBar: true,
-        timer: 5000, // Configuración de la notificación
+        timer: 5000,
       });
-    }, 1000); // Espera 1 segundo antes de mostrar la notificación
-    console.log(id); // Imprime el ID en consola
+    } else {
+      this.api.NoticarRecepcion(id);
+      setTimeout(() => {
+        Swal.fire({
+          text: this.api.mensaje.mensaje,
+          icon: this.api.mensaje.icon,
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 5000,
+        });
+      }, 1000);
+    }
   }
 
   // Función para verificar una recepción
   checkar(id: string) {
     console.log(id); // Imprime el ID en consola
     this.api.checkearRecepcion(id); // Realiza la verificación de la recepción con el ID proporcionado
+  }
+
+  // Función para verificar recepción (cambia de "En observacion" a "Verificado")
+  verificar(recepcion: any) {
+    Swal.fire({
+      title: '¿Verificar recepción?',
+      input: 'textarea',
+      inputLabel: 'Observaciones (opcional)',
+      inputPlaceholder: 'Ingrese observaciones...',
+      showCancelButton: true,
+      confirmButtonText: 'Verificar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3e8ed0',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        recepcion.status = 'Verificado';
+        this.api.GuardarRecepcion(recepcion);
+        Swal.fire({
+          text: 'Recepción verificada',
+          icon: 'success',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 3000,
+        });
+      }
+    });
+  }
+
+  // Función para revertir recepción a "Por notificar"
+  revertirAPorNotificar(recepcion: any) {
+    Swal.fire({
+      title: '¿Volver a "Por notificar"?',
+      text: 'La recepción será devuelta para corrección',
+      input: 'textarea',
+      inputLabel: 'Motivo de la reversión (obligatorio)',
+      inputPlaceholder: 'Describa el motivo...',
+      inputValidator: (value) => {
+        if (!value) return 'El motivo es obligatorio';
+        return null;
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Sí, revertir',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#f14668',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.revertirAPorNotificar(recepcion._id, result.value).then(() => {
+          Swal.fire({
+            text: 'Recepción devuelta a "Por notificar"',
+            icon: 'success',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+        }).catch((err) => {
+          Swal.fire({
+            text: err.mensaje || 'Error al revertir',
+            icon: 'error',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+        });
+      }
+    });
+  }
+
+  // Función para eliminar una recepción finalizada
+  eliminar(id: string) {
+    Swal.fire({
+      title: '¿Eliminar recepción?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#f14668',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.EliminarRecepcion(id);
+      }
+    });
   }
 
   ProductoNoConforme(recepcion, materiales, observacion) {
@@ -1019,7 +1192,9 @@ export class RecepcionComponent implements OnInit {
       ...item,
       material: item.material._id,
       oc: item.oc._id,
-      convertidora: this.convertidora,
+      convertidora: this.convertidora || null,
+      almacen_id: item.almacen_id || recepcion.almacen_id || null,
+      seccion_id: item.seccion_id || recepcion.seccion_id || null,
     }));
     this.bobinas_ = itemsModificados;
     this.reception = recepcion;
@@ -1028,10 +1203,10 @@ export class RecepcionComponent implements OnInit {
   guardar_Bobinas() {
     const data = this.bobinas_.map((item) => ({
       ...item,
-      convertidora: this.convertidora,
+      convertidora: this.convertidora || null,
     }));
 
-    this.reception.status = 'Terminado';
+    this.reception.status = 'Finalizado';
 
     this.api.GuardarRecepcion(this.reception);
     this.bobinas.guardarBobina(data);

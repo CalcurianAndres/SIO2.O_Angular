@@ -22,6 +22,7 @@ import { NewConvertidoraComponent } from './bobinas/new-convertidora/new-convert
 import { NewBobinaComponent } from './bobinas/new-bobina/new-bobina.component';
 import { DescuentoBobinaComponent } from './recepcion/nueva-recepcion/descuento-bobina/descuento-bobina.component';
 import { ProductoTerminadoComponent } from './producto-terminado/producto-terminado.component';
+import { AlmacenesComponent } from './almacenes/almacenes.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ProductoTerminadoComponent } from './producto-terminado/producto-termin
     NewBobinaComponent,
     DescuentoBobinaComponent,
     ProductoTerminadoComponent,
+    AlmacenesComponent,
   ],
   imports: [
     CommonModule,

@@ -26,8 +26,11 @@
       <button class="delete red_cross" aria-label="close" [disabled]="guardando" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body">
+
+      <!-- ==================== SECCIÓN 1: DOCUMENTO ==================== -->
+      <h6 class="section-label"><i class="fas fa-file-invoice"></i> Documento</h6>
       <div class="columns is-multiline">
-        <div class="column is-4">
+        <div class="column is-5">
           <div class="field">
             <label class="label">Proveedor</label>
             <div class="control has-icons-left">
@@ -41,12 +44,12 @@
             </div>
           </div>
         </div>
-        <div class="column is-2" *ngIf="proveedor_">
+        <div class="column is-3" *ngIf="proveedor_">
           <div class="field">
             <label class="label">Tipo</label>
             <div class="control has-icons-left">
               <div class="select is-fullwidth">
-                <select [(ngModel)]="tipo_documento">
+                <select class="tipo-select" [(ngModel)]="tipo_documento">
                   <option value="F - ">F</option>
                   <option value="N - ">N</option>
                 </select>
@@ -55,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="column is-3" *ngIf="proveedor_">
+        <div class="column is-4" *ngIf="proveedor_">
           <div class="field">
             <label class="label">Nº Documento</label>
             <div class="control has-icons-left">
@@ -66,265 +69,291 @@
         </div>
       </div>
 
-      <hr class="modal-divider" />
+      <!-- ==================== SECCIÓN 2: CONTROL FISCAL ==================== -->
+      <ng-container *ngIf="documento_">
+        <hr class="modal-divider" />
+        <h6 class="section-label"><i class="fas fa-qrcode"></i> Control fiscal</h6>
+        <div class="columns is-multiline">
+          <div class="column is-5">
+            <div class="field">
+              <label class="label">N Control</label>
+              <div class="control has-icons-left">
+                <input type="text" class="input" [(ngModel)]="control" (keydown)="generarNumeroDeControl()"
+                  [disabled]="!esProveedorVenezolano"
+                  [title]="!esProveedorVenezolano ? 'Solo disponible para proveedores venezolanos' : ''" />
+                <span class="icon is-small is-left"><i class="fas fa-qrcode"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4" *ngIf="control">
+            <div class="field">
+              <label class="label">Base Imponible (Bs)</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="baseImponible" />
+                <span class="icon is-small is-left"><i class="fas fa-dollar-sign"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
-      <div class="columns is-multiline">
-        <div class="column is-3" *ngIf="documento_">
-          <div class="field">
-            <label class="label">Control</label>
-            <div class="control has-icons-left">
-              <input type="text" class="input" [(ngModel)]="control" (keydown)="generarNumeroDeControl()" />
-              <span class="icon is-small is-left"><i class="fas fa-qrcode"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-3" *ngIf="control">
-          <div class="field">
-            <label class="label">Base Imponible (Bs)</label>
-            <div class="control has-icons-left">
-              <input
-                type="number"
-                class="input right-aligned-input"
-                [(ngModel)]="inputValue"
-                (keyup)="onInputChange($event)"
-                (change)="keyUpEvent($event.target)"
-                (keydown)="keyDownEvent($event)"
-              />
-              <span class="icon is-small is-left"><i class="fas fa-dollar-sign"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- ==================== SECCIÓN 3: RECEPCIÓN ==================== -->
+      <ng-container *ngIf="baseImponible > 0 || control">
+        <hr class="modal-divider" />
+        <h6 class="section-label"><i class="fas fa-truck"></i> Recepción</h6>
 
-      <hr class="modal-divider" />
-
-      <div class="columns is-multiline">
-        <div class="column is-3" *ngIf="inputValue != '0,00' || control">
-          <div class="field">
-            <label class="label">Fecha recepción</label>
-            <div class="control has-icons-left">
-              <input type="date" class="input" [(ngModel)]="f_recepcion" [max]="today" />
-              <span class="icon is-small is-left"><i class="fas fa-calendar-alt"></i></span>
+        <div class="columns is-multiline">
+          <div class="column is-3">
+            <div class="field">
+              <label class="label">Fecha recepción</label>
+              <div class="control has-icons-left">
+                <input type="date" class="input" [(ngModel)]="f_recepcion" [max]="today" />
+                <span class="icon is-small is-left"><i class="fas fa-calendar-alt"></i></span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="column is-3" *ngIf="f_recepcion">
-          <div class="field">
-            <label class="label">Transportista</label>
-            <div class="control has-icons-left">
-              <input type="text" class="input" [(ngModel)]="transportista_" />
-              <span class="icon is-small is-left"><i class="fas fa-truck"></i></span>
+          <div class="column is-4" *ngIf="f_recepcion">
+            <div class="field">
+              <label class="label">Transportista</label>
+              <div class="control has-icons-left">
+                <input type="text" class="input" [(ngModel)]="transportista_" />
+                <span class="icon is-small is-left"><i class="fas fa-truck"></i></span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="column is-3" *ngIf="transportista_ && !conversion">
-          <div class="field">
-            <label class="label">OC</label>
-            <div class="control has-icons-left">
-              <div class="select is-fullwidth">
-                <select (change)="seleccionarOC($event.target)" [(ngModel)]="OC__">
-                  <option
-                    value="{{ i }}"
-                    *ngFor="let orden of OC_Poligrafica.filtrarPorProveedor(proveedor_); index as i"
+          <div class="column is-4" *ngIf="transportista_ && !conversion">
+            <div class="field">
+              <label class="label">OC</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select (change)="seleccionarOC($event.target)" [(ngModel)]="OC__">
+                    <option
+                      value="{{ i }}"
+                      *ngFor="let orden of OC_Poligrafica.filtrarPorProveedor(proveedor_); index as i"
+                    >
+                      {{ formatOrderNumber(orden.numero) }}
+                    </option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-shopping-cart"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-4" *ngIf="transportista_ && conversion">
+            <div class="field">
+              <label class="label">Conversión</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select
+                    (change)="
+                      seleccionarOC_();
+                      material_selected_in_OC = bobinas.conversiones[OC__].material._id;
+                      lote_ = bobinas.conversiones[OC__].lote;
+                      f_fabricacion = bobinas.conversiones[OC__].fabricacion;
+                      showInfo()
+                    "
+                    [(ngModel)]="OC__"
                   >
-                    {{ formatOrderNumber(orden.numero) }}
-                  </option>
-                </select>
+                    <option value="{{ i }}" *ngFor="let orden of bobinas.conversiones; index as i">
+                      {{ formatOrderNumber(orden.conversion) }}
+                    </option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-exchange-alt"></i></span>
               </div>
-              <span class="icon is-small is-left"><i class="fas fa-shopping-cart"></i></span>
             </div>
-          </div>
-        </div>
-        <div class="column is-3" *ngIf="transportista_ && conversion">
-          <div class="field">
-            <label class="label">Conversión</label>
-            <div class="control has-icons-left">
-              <div class="select is-fullwidth">
-                <select
-                  (change)="
-                    seleccionarOC_();
-                    material_selected_in_OC = bobinas.conversiones[OC__].material._id;
-                    lote_ = bobinas.conversiones[OC__].lote;
-                    f_fabricacion = bobinas.conversiones[OC__].fabricacion;
-                    showInfo()
-                  "
-                  [(ngModel)]="OC__"
-                >
-                  <option value="{{ i }}" *ngFor="let orden of bobinas.conversiones; index as i">
-                    {{ formatOrderNumber(orden.conversion) }}
-                  </option>
-                </select>
-              </div>
-              <span class="icon is-small is-left"><i class="fas fa-exchange-alt"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="modal-divider" />
-
-      <div class="columns is-multiline">
-        <div class="column is-4" *ngIf="OC__ && conversion">
-          <label class="label">Material</label>
-          <p class="mt-1">
-            {{ bobinas.conversiones[OC__].material.nombre }} {{ bobinas.conversiones[OC__].material.gramaje }}g/m² -
-            {{ bobinas.conversiones[OC__].material.calibre }}pt
-          </p>
-        </div>
-        <div class="column is-3" *ngIf="OC__ && !conversion">
-          <div class="field">
-            <label class="label">Material</label>
-            <div class="control has-icons-left">
-              <div class="select is-fullwidth">
-                <select [(ngModel)]="material_selected_in_OC" (change)="mostrarMaterial($event.target)">
-                  <option value="{{ n }}" *ngFor="let materiales of Poligrafica_OC.pedido; index as n">
-                    {{ materiales.material.nombre }}
-                    <ng-container *ngIf="materiales.material.gramaje">
-                      {{ materiales.material.gramaje }}g/m² - {{ materiales.material.calibre }}pt
-                    </ng-container>
-                  </option>
-                </select>
-              </div>
-              <span class="icon is-small is-left"><i class="fas fa-cube"></i></span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="column is-2"
-          *ngIf="material_selected_in_OC && Poligrafica_OC.pedido[material_selected_in_OC].material.gramaje"
-        >
-          <div class="field">
-            <label class="label">Ancho</label>
-            <div class="control has-icons-left">
-              <input type="number" class="input" [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].ancho" />
-              <span class="icon is-small is-left"><i class="fas fa-arrows-alt-h"></i></span>
-            </div>
-          </div>
-        </div>
-        <div
-          class="column is-2"
-          *ngIf="material_selected_in_OC && Poligrafica_OC.pedido[material_selected_in_OC].material.gramaje"
-        >
-          <div class="field">
-            <label class="label">Largo</label>
-            <div class="control has-icons-left">
-              <input type="number" class="input" [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].largo" />
-              <span class="icon is-small is-left"><i class="fas fa-arrows-alt-v"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-2" *ngIf="material_selected_in_OC && !conversion">
-          <div class="field">
-            <label class="label">Lote</label>
-            <div class="control has-icons-left">
-              <input type="text" class="input" [(ngModel)]="lote_" />
-              <span class="icon is-small is-left"><i class="fas fa-tag"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-2" *ngIf="material_selected_in_OC && conversion">
-          <div class="field">
-            <label class="label">Lote</label>
-            <p class="mt-1">
-              <strong>{{ lote_ }}</strong>
-            </p>
           </div>
         </div>
 
-        <div class="column is-2" *ngIf="lote_ && !conversion">
-          <div class="field">
-            <label class="label">Cantidad {{ Poligrafica_OC.pedido[material_selected_in_OC].unidad }}</label>
-            <div class="control has-icons-left">
-              <input
-                type="number"
-                class="input"
-                [value]="Poligrafica_OC.pedido[material_selected_in_OC].cantidad"
-                [(ngModel)]="cantidad_"
-              />
-              <span class="icon is-small is-left"><i class="fas fa-boxes"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-2" *ngIf="lote_ && conversion">
-          <div class="field">
-            <label class="label">Cantidad Und.</label>
-            <div class="control has-icons-left">
-              <input type="number" class="input" [(ngModel)]="cantidad_" />
-              <span class="icon is-small is-left"><i class="fas fa-boxes"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="modal-divider" />
-
-      <div class="columns is-multiline" *ngIf="cantidad_">
-        <div class="column is-2">
-          <div class="field">
-            <label class="label">Fecha fabricación</label>
-            <div class="control has-icons-left">
-              <input type="date" [max]="_Hoy_" class="input" [(ngModel)]="f_fabricacion" [disabled]="conversion" />
-              <span class="icon is-small is-left"><i class="fas fa-calendar-day"></i></span>
-            </div>
-          </div>
-        </div>
-        <div class="column is-2" *ngIf="!conversion">
-          <div class="field">
-            <label class="label">Presentación</label>
-            <div class="control has-icons-left">
-              <div class="select is-fullwidth">
-                <select [(ngModel)]="presentacion_">
-                  <option value="Lata">Lata</option>
-                  <option value="Paleta">Paleta</option>
-                  <option value="Paquete">Paquete</option>
-                  <option value="Env. Plastico">Env. Plástico</option>
-                  <option value="bobinas">Bobina</option>
-                </select>
+        <!-- Almacén / Sección -->
+        <div class="columns is-multiline" *ngIf="transportista_">
+          <div class="column is-5">
+            <div class="field">
+              <label class="label">Almacén</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="selectedAlmacenId">
+                    <option value="">Almacén principal</option>
+                    <option *ngFor="let a of almacenService.almacenes" [value]="a._id">{{ a.nombre }}</option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-warehouse"></i></span>
               </div>
-              <span class="icon is-small is-left"><i class="fas fa-box-open"></i></span>
             </div>
           </div>
-        </div>
-        <div class="column is-2" *ngIf="conversion">
-          <div class="field">
-            <label class="label">Presentación</label>
-            <div class="control has-icons-left">
-              <div class="select is-fullwidth">
-                <select [(ngModel)]="presentacion_">
-                  <option value="Paleta">Paleta</option>
-                </select>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Sección</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="selectedSeccionId">
+                    <option value="">Sin sección</option>
+                    <option *ngFor="let s of seccionesFiltradas" [value]="s._id">{{ s.nombre }}</option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-layer-group"></i></span>
               </div>
-              <span class="icon is-small is-left"><i class="fas fa-box-open"></i></span>
             </div>
           </div>
         </div>
-        <div class="column is-2" *ngIf="cantidad_ && !conversion">
-          <div class="field">
-            <label class="label">Neto / und({{ Poligrafica_OC.pedido[material_selected_in_OC].unidad }})</label>
-            <div class="control has-icons-left">
-              <input type="number" class="input" [(ngModel)]="neto_" />
-              <span class="icon is-small is-left"><i class="fas fa-weight"></i></span>
+      </ng-container>
+
+      <!-- ==================== SECCIÓN 4: MATERIAL ==================== -->
+      <ng-container *ngIf="OC__">
+        <hr class="modal-divider" />
+        <h6 class="section-label"><i class="fas fa-cube"></i> Material</h6>
+        <div class="columns is-multiline">
+          <div class="column is-5" *ngIf="conversion">
+            <div class="field">
+              <label class="label">Material</label>
+              <p class="mt-1">
+                {{ bobinas.conversiones[OC__].material.nombre }}
+                {{ bobinas.conversiones[OC__].material.gramaje }}g/m² -
+                {{ bobinas.conversiones[OC__].material.calibre }}pt
+              </p>
+            </div>
+          </div>
+          <div class="column is-5" *ngIf="!conversion">
+            <div class="field">
+              <label class="label">Material</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="material_selected_in_OC" (change)="mostrarMaterial($event.target)">
+                    <option value="{{ n }}" *ngFor="let materiales of Poligrafica_OC.pedido; index as n">
+                      {{ materiales.material.nombre }}
+                      <ng-container *ngIf="materiales.material.gramaje">
+                        {{ materiales.material.gramaje }}g/m² - {{ materiales.material.calibre }}pt
+                      </ng-container>
+                    </option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-cube"></i></span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="column is-2"
+            *ngIf="material_selected_in_OC && Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje && Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'"
+          >
+            <div class="field">
+              <label class="label">Ancho</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].ancho" />
+                <span class="icon is-small is-left"><i class="fas fa-arrows-alt-h"></i></span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="column is-2"
+            *ngIf="material_selected_in_OC && Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje && Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'"
+          >
+            <div class="field">
+              <label class="label">Largo</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="Poligrafica_OC.pedido[material_selected_in_OC].largo" />
+                <span class="icon is-small is-left"><i class="fas fa-arrows-alt-v"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3" *ngIf="material_selected_in_OC && !conversion">
+            <div class="field">
+              <label class="label">Lote</label>
+              <div class="control has-icons-left">
+                <input type="text" class="input" [(ngModel)]="lote_" />
+                <span class="icon is-small is-left"><i class="fas fa-tag"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3" *ngIf="material_selected_in_OC && conversion">
+            <div class="field">
+              <label class="label">Lote</label>
+              <p class="mt-1"><strong>{{ lote_ }}</strong></p>
             </div>
           </div>
         </div>
-        <div class="column is-2" *ngIf="cantidad_ && conversion">
-          <div class="field">
-            <label class="label">Neto / und(Und)</label>
-            <div class="control has-icons-left">
-              <input type="number" class="input" [(ngModel)]="neto_" />
-              <span class="icon is-small is-left"><i class="fas fa-weight"></i></span>
+      </ng-container>
+
+      <!-- ==================== SECCIÓN 5: CANTIDADES ==================== -->
+      <ng-container *ngIf="lote_">
+        <hr class="modal-divider" />
+        <h6 class="section-label"><i class="fas fa-boxes"></i> Cantidades</h6>
+        <div class="columns is-multiline">
+          <div class="column is-3" *ngIf="!conversion">
+            <div class="field">
+              <label class="label">Cantidad {{ Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad }}</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="cantidad_" />
+                <span class="icon is-small is-left"><i class="fas fa-boxes"></i></span>
+              </div>
             </div>
           </div>
+          <div class="column is-3" *ngIf="conversion">
+            <div class="field">
+              <label class="label">Cantidad Und.</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="cantidad_" />
+                <span class="icon is-small is-left"><i class="fas fa-boxes"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3" *ngIf="cantidad_">
+            <div class="field">
+              <label class="label">Fecha fabricación</label>
+              <div class="control has-icons-left">
+                <input type="date" [max]="_Hoy_" class="input" [(ngModel)]="f_fabricacion" [disabled]="conversion" />
+                <span class="icon is-small is-left"><i class="fas fa-calendar-day"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3" *ngIf="cantidad_ && !conversion">
+            <div class="field">
+              <label class="label">Presentación</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="presentacion_">
+                    <option value="Lata">Lata</option>
+                    <option value="Paleta">Paleta</option>
+                    <option value="Paquete">Paquete</option>
+                    <option value="Env. Plastico">Env. Plástico</option>
+                    <option value="bobinas">Bobina</option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-box-open"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-3" *ngIf="cantidad_ && conversion">
+            <div class="field">
+              <label class="label">Presentación</label>
+              <div class="control has-icons-left">
+                <div class="select is-fullwidth">
+                  <select [(ngModel)]="presentacion_">
+                    <option value="Paleta">Paleta</option>
+                  </select>
+                </div>
+                <span class="icon is-small is-left"><i class="fas fa-box-open"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-2" *ngIf="cantidad_">
+            <div class="field">
+              <label class="label">Neto / und</label>
+              <div class="control has-icons-left">
+                <input type="number" class="input" [(ngModel)]="neto_" />
+                <span class="icon is-small is-left"><i class="fas fa-weight"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="column is-1" *ngIf="cantidad_ && neto_">
+            <label class="label">&nbsp;</label>
+            <button class="button is-info" (click)="addMaterial()">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
         </div>
-        <div class="column is-1" *ngIf="cantidad_ && neto_">
-          <label class="label">&nbsp;</label>
-          <button class="button is-info" (click)="addMaterial()">
-            <span class="icon">
-              <i class="fas fa-plus"></i>
-            </span>
-          </button>
-        </div>
-      </div>
+      </ng-container>
+
+      <!-- ==================== INFO / VISTA PREVIA ==================== -->
       <span class="informacion" [innerHTML]="sobranteTexto"></span><br />
       <span class="informacion">{{ infoTexto }}</span>
 
@@ -346,7 +375,7 @@
             </button>
           </div>
           <div class="control" *ngIf="revisado && conversion">
-            <button class="button is-small is-info" (click)="task(Listado_[0].material.grupo.nombre, true)">
+            <button class="button is-small is-info" (click)="task(Listado_[0].material.nombre, true)">
               <span class="icon"><i class="fas fa-tasks"></i></span>
               <span>Control</span>
             </button>
@@ -375,48 +404,60 @@
           </div>
         </div>
       </span>
+
+      <!-- ==================== CARD: LOTES AGREGADOS ==================== -->
+      <div class="card mt-4" *ngIf="lotes_guardados.length > 0">
+        <div class="card-header" style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color, #e0e0e0)">
+          <span class="section-label" style="margin-bottom: 0">
+            <i class="fas fa-list"></i> Lotes pendientes de guardar
+          </span>
+          <span class="tag is-info is-light ml-2">{{ lotes_guardados.length }} lote(s)</span>
+        </div>
+        <div class="card-content" style="padding: 0">
+          <table class="table is-fullwidth is-hoverable" style="margin-bottom: 0">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Registro</th>
+                <th>OC</th>
+                <th>Lote</th>
+                <th style="width: 40px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lote of lotes_guardados; index as i">
+                <td>
+                  {{ lote[0].nombre }}
+                  <span class="has-text-grey is-size-7" *ngIf="lote[0].ancho">
+                    ({{ lote[0].ancho }}x{{ lote[0].largo }})
+                  </span>
+                </td>
+                <td [innerHTML]="registro_lotes[i]"></td>
+                <td>{{ lote[0].oc?.numero || '-' }}</td>
+                <td>{{ lote[0].lote || '-' }}</td>
+                <td>
+                  <button class="delete is-small" (click)="eliminarLote(i)" title="Eliminar lote"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding: 0.75rem 1rem; justify-content: flex-end; gap: 0.5rem">
+          <button class="button is-success" (click)="NuevoGuardarRegistro()" *ngIf="!conversion" [disabled]="guardando">
+            <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
+            <span>{{ guardando ? 'Guardando…' : 'Guardar' }}</span>
+          </button>
+          <button class="button is-success" (click)="descuento = true" *ngIf="conversion" [disabled]="guardando">
+            <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
+            <span>{{ guardando ? 'Guardando…' : 'Descontar Bobinas' }}</span>
+          </button>
+        </div>
+      </div>
+
     </div>
+
     <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem">
       <button class="button" (click)="cerrar()">Cancelar</button>
-    </footer>
-  </div>
-  <div class="modal-card animate__animated animate__fadeInUp long" *ngIf="registro_lotes.length > 0">
-    <div class="modal-card-head">
-      <p class="modal-card-title fuente"><i class="fas fa-list"></i> Lotes pendientes de guardar</p>
-    </div>
-    <div class="modal-card-body bg">
-      <table class="table is-fullwidth is-hoverable">
-        <thead>
-          <tr>
-            <th>Material</th>
-            <th>Registro</th>
-            <th>OC</th>
-            <th>Lote</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let registro of registro_lotes; index as i">
-            <td>
-              {{ lotes_guardados[i][0].nombre }} ({{ lotes_guardados[i][0].ancho }}x{{ lotes_guardados[i][0].largo }})
-            </td>
-            <td [innerHTML]="registro"></td>
-            <td *ngIf="lotes_guardados[i][0].oc">{{ lotes_guardados[i][0].oc.numero }}</td>
-            <td *ngIf="lotes_guardados[i][0].lote">{{ lotes_guardados[i][0].lote }}</td>
-            <td><i class="fas fa-trash-alt red"></i></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem">
-      <button class="button is-success" (click)="NuevoGuardarRegistro()" *ngIf="!conversion" [disabled]="guardando">
-        <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
-        <span>{{ guardando ? 'Guardando…' : 'Guardar' }}</span>
-      </button>
-      <button class="button is-success" (click)="descuento = true" *ngIf="conversion" [disabled]="guardando">
-        <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
-        <span>{{ guardando ? 'Guardando…' : 'Descontar Bobinas' }}</span>
-      </button>
     </footer>
   </div>
 </div>

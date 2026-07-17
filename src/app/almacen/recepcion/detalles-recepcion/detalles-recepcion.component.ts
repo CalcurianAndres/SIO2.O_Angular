@@ -12,6 +12,7 @@ export class DetallesRecepcionComponent {
   @Input() detalle!: any;
   @Input() n!: any;
   @Input() lista!: any;
+  @Input() recepcion!: any;
   @Output() onCloseModal = new EventEmitter();
 
   currentDate = new Date();
@@ -19,6 +20,10 @@ export class DetallesRecepcionComponent {
   month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
   day = String(this.currentDate.getDate()).padStart(2, '0');
   Hoy = `${this.year}-${this.month}-${this.day}`;
+
+  get esEditable(): boolean {
+    return this.recepcion?.status === 'Por notificar';
+  }
 
   cerrar() {
     this.onCloseModal.emit();

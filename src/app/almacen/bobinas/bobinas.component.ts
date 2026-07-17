@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BobinasService } from 'src/app/services/bobinas.service';
+import { AlmacenService } from 'src/app/services/almacen.service';
 
 @Component({
   selector: 'app-bobinas',
@@ -18,7 +19,10 @@ export class BobinasComponent {
   public currentPage = 1;
   public Math: any = Math;
 
-  constructor(public api: BobinasService) {}
+  constructor(
+    public api: BobinasService,
+    public almacenSvc: AlmacenService,
+  ) {}
 
   showInfo(i) {
     this.clicked[i] = !this.clicked[i];
@@ -115,5 +119,32 @@ export class BobinasComponent {
 
   buscarPorFecha() {
     this.currentPage = 1;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // Agrupación de bobinas por almacén (TASK-074)
+  // ══════════════════════════════════════════════════════
+
+  getBobinasPorAlmacen(almacenId: string | null): any[] {
+    if (!this.api.bobinas) return [];
+    return this.api.bobinas.filter((b: any) => {
+      const id = b.almacen_id?._id || b.almacen_id;
+      return String(id || null) === String(almacenId || null);
+    });
+  }
+
+  get almacenesConBobinas(): any[] {
+    if (!this.api.bobinas) return [];
+
+    const externosConBobinas = (this.almacenSvc.almacenes || []).filter(
+      (a: any) => this.getBobinasPorAlmacen(a._id).length > 0,
+    );
+
+    const principalTieneBobinas = this.getBobinasPorAlmacen(null).length > 0;
+
+    return [
+      ...(principalTieneBobinas ? [{ _id: null, nombre: 'Almacén principal', fijo: true }] : []),
+      ...externosConBobinas,
+    ];
   }
 }

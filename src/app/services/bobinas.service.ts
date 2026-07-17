@@ -58,10 +58,6 @@ export class BobinasService {
     this.socket.io.emit('CLIENTE:NuevaBobina', data);
   }
 
-  bobinaPorConvertidora(conv: any) {
-    return this.bobinas.filter((b: any) => b.convertidora === conv);
-  }
-
   guardarConversion(data: any) {
     this.socket.io.emit('CLIENTE:NuevaConversion', data);
   }

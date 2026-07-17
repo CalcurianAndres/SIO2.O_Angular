@@ -177,6 +177,14 @@
   background: color-mix(in srgb, var(--status-warning) 18%, transparent);
   color: var(--status-warning);
 }
+.badge-cyan {
+  background: color-mix(in srgb, var(--status-info) 18%, transparent);
+  color: var(--status-info);
+}
+.badge-success {
+  background: color-mix(in srgb, var(--status-success) 18%, transparent);
+  color: var(--status-success);
+}
 
 // --- Table inside details ---
 .order-details table {

@@ -4,6 +4,7 @@ import { FabricantesService } from 'src/app/services/fabricantes.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { RecepcionService } from 'src/app/services/recepcion.service';
+import { AlmacenService } from 'src/app/services/almacen.service';
 import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import Swal from 'sweetalert2';
@@ -30,10 +31,32 @@ export class NuevaRecepcionComponent implements OnChanges {
   public infoTexto: string = '';
   public sobranteTexto: string = '';
 
+  get esProveedorVenezolano(): boolean {
+    const prov = this.proveedores.proveedores.find(p => p._id === this.proveedor_);
+    return prov?.pais === 'Venezuela' || !prov?.pais;
+  }
+
+  get seccionesFiltradas(): any[] {
+    if (!this.selectedAlmacenId) {
+      // Almacén principal: secciones sin almacen_id asignado
+      return this.almacenService.secciones.filter((s: any) => !s.almacen_id);
+    }
+    return this.almacenService.secciones.filter(
+      (s: any) => s.almacen_id === this.selectedAlmacenId
+    );
+  }
+
   ngOnChanges(): void {
+    const proveedoresConOCPActiva = new Set(
+      this.OC_Poligrafica.orden
+        .filter((o: any) => o.estado === 'Abierta')
+        .map((o: any) => o.proveedor?._id)
+    );
     this.opcionesProveedor = [
-      ...this.proveedores.proveedores.map((p) => ({ ...p, tipo: 'proveedor' })),
-      ...this.bobinas.convertidora.map((c) => ({ ...c, tipo: 'convertidora' })),
+      ...this.proveedores.proveedores
+        .filter((p: any) => proveedoresConOCPActiva.has(p._id))
+        .map((p: any) => ({ ...p, tipo: 'proveedor' })),
+      ...this.bobinas.convertidora.map((c: any) => ({ ...c, tipo: 'convertidora' })),
     ];
     this.guardando = false;
     this.infoTexto = '';
@@ -47,6 +70,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     public OC_Poligrafica: OpoligraficaService,
     public api: RecepcionService,
     public bobinas: BobinasService,
+    public almacenService: AlmacenService,
   ) {}
 
   @Input() nueva!: boolean;
@@ -58,8 +82,9 @@ export class NuevaRecepcionComponent implements OnChanges {
   public control = '';
   public proveedor_ = '';
   public OC__;
-  public inputValue: string = '0,00';
-  public textoSinFormato = '';
+  public baseImponible = 0;
+  public selectedAlmacenId = '';
+  public selectedSeccionId = '';
   public cantidad_ = 0;
   public neto_ = 0;
   public presentacion_;
@@ -149,11 +174,21 @@ export class NuevaRecepcionComponent implements OnChanges {
     const selectedId = this.proveedor_;
     const seleccion = this.opcionesProveedor.find((p) => p._id === selectedId);
     this.conversion = seleccion?.tipo === 'convertidora';
-    this.OC__ = ''; // según tu lógica
+    this.OC__ = '';
+    // Si el proveedor no es venezolano, N Control no aplica → se auto-asigna 'N/A'
+    // para que el flujo del formulario continúe (el siguiente input depende de *ngIf="control")
+    if (!this.esProveedorVenezolano) {
+      this.control = 'N/A';
+    } else {
+      this.control = '';
+    }
   }
 
   seleccionarOC(e) {
     this.Poligrafica_OC = this.OC_Poligrafica.filtrarPorProveedor(this.proveedor_)[e.value];
+    if (this.Poligrafica_OC?.pedido?.length === 1) {
+      this.material_selected_in_OC = '0';
+    }
     console.log(this.Poligrafica_OC);
   }
 
@@ -268,53 +303,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.control = nuevoValor;
   }
 
-  keyDownEvent(e: KeyboardEvent): boolean {
-    // Permitir la tecla para borrar
-    if (e.key === 'Backspace') return true;
-    // Permitir flecha izquierda
-    if (e.key === 'ArrowLeft') return true;
-    // Permitir flecha derecha
-    if (e.key === 'ArrowRight') return true;
-    // Bloquear tecla de espacio
-    if (e.key === ' ') return false;
-    // Bloquear tecla si no es un número o una coma
-    if (isNaN(Number(e.key))) return false;
-    return true;
-  }
 
-  keyUpEvent(numeros: any): void {
-    numeros.value = numeros.value
-      // Borrar todos los espacios en blanco
-      .replace(/\s/g, '');
-    // Guardar el texto sin formato en la variable textoSinFormato
-    this.textoSinFormato = numeros.value;
-    numeros.value = numeros.value;
-    // // Agregar un espacio cada dos números
-    // .replace(/\D/g, '')
-    // .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-    // // Borrar espacio al final
-    // .trim();
-
-    console.log(this.textoSinFormato);
-  }
-
-  onInputChange(event: any) {
-    let newValue = event.target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
-    if (newValue.charAt(0) === '0' && newValue.charAt(1) !== '.') {
-      newValue = newValue.slice(1);
-    }
-    if (newValue.length > 2) {
-      let format = newValue.slice('0', -2);
-      format = format.replace(/\D/g, '');
-      format = format.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      newValue = format + ',' + newValue.slice(-2); // Agregar el punto decimal
-    } else if (newValue.length === 2) {
-      newValue = '0,' + newValue; // Agregar el punto decimal al inicio si solo hay 2 dígitos
-    } else {
-      newValue = '0,0' + newValue; // Agregar ceros adicionales si solo hay 1 dígito
-    }
-    this.inputValue = newValue;
-  }
 
   calcularLatasYSobrante(cantidadTotal: number, pesoNetoPorLata: number) {
     // Calcular la cantidad de latas y el sobrante
@@ -327,36 +316,40 @@ export class NuevaRecepcionComponent implements OnChanges {
     // Agregar la lata con sobrante (si existe)
 
     if (!this.conversion) {
+      const pedido = this.Poligrafica_OC.pedido[this.material_selected_in_OC];
+
       if (sobrante > 0) {
         datosLatas.push({
-          material: this.Poligrafica_OC.pedido[this.material_selected_in_OC].material,
-          nombre: this.Poligrafica_OC.pedido[this.material_selected_in_OC].material.nombre,
+          material: pedido.material,
+          nombre: pedido.material.nombre,
           presentacion: this.presentacion_,
           lote: this.lote_,
           codigo: 1,
           neto: sobrante.toFixed(2),
-          unidad: this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad,
-          ancho: this.Poligrafica_OC.pedido[this.material_selected_in_OC].ancho,
-          largo: this.Poligrafica_OC.pedido[this.material_selected_in_OC].largo,
+          unidad: pedido.unidad,
+          ancho: pedido.ancho,
+          largo: pedido.largo,
           fabricacion: this.f_fabricacion,
           oc: this.Poligrafica_OC,
+          bobina: pedido.bobina,
         });
       }
 
       // Agregar las latas restantes
       for (let i = 1; i <= cantidadLatas; i++) {
         datosLatas.push({
-          material: this.Poligrafica_OC.pedido[this.material_selected_in_OC].material,
-          nombre: this.Poligrafica_OC.pedido[this.material_selected_in_OC].material.nombre,
+          material: pedido.material,
+          nombre: pedido.material.nombre,
           presentacion: this.presentacion_,
           lote: this.lote_,
           codigo: 1 + datosLatas.length, // Ajustar el número para la lata con sobrante
           neto: pesoNetoPorLata,
-          unidad: this.Poligrafica_OC.pedido[this.material_selected_in_OC].unidad,
-          ancho: this.Poligrafica_OC.pedido[this.material_selected_in_OC].ancho,
-          largo: this.Poligrafica_OC.pedido[this.material_selected_in_OC].largo,
+          unidad: pedido.unidad,
+          ancho: pedido.ancho,
+          largo: pedido.largo,
           fabricacion: this.f_fabricacion,
           oc: this.Poligrafica_OC,
+          bobina: pedido.bobina,
         });
       }
     } else {
@@ -414,12 +407,14 @@ export class NuevaRecepcionComponent implements OnChanges {
       proveedor: this.proveedor_,
       documento: `${this.tipo_documento}${this.documento_}`,
       control: this.control,
-      precio: this.textoSinFormato,
+      precio: this.baseImponible,
       recepcion: this.f_recepcion,
       transportista: this.transportista_,
       OC: this.Poligrafica_OC.numero,
+      almacen_id: this.selectedAlmacenId || undefined,
+      seccion_id: this.selectedSeccionId || undefined,
       materiales: this.lotes_guardados.map((grupo) => {
-        return grupo.map((lote) => ({
+        return grupo.map((lote: any) => ({
           material: lote.material._id,
           nombre: lote.nombre,
           presentacion: lote.presentacion,
@@ -431,6 +426,9 @@ export class NuevaRecepcionComponent implements OnChanges {
           unidad: lote.unidad,
           fabricacion: lote.fabricacion,
           oc: lote.oc._id,
+          bobina: lote.bobina,
+          almacen_id: lote.almacen_id || undefined,
+          seccion_id: lote.seccion_id || undefined,
         }));
       }),
     };
@@ -439,7 +437,9 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.tipo_documento = 'F - ';
     this.documento_ = '';
     this.control = '';
-    this.textoSinFormato = '';
+    this.baseImponible = 0;
+    this.selectedAlmacenId = '';
+    this.selectedSeccionId = '';
     this.f_recepcion = '';
     this.transportista_ = '';
     this.guardando = true;
@@ -483,8 +483,14 @@ export class NuevaRecepcionComponent implements OnChanges {
   public indice_oc;
   public cantidad_entregada;
   _guardar() {
-    this.registro_lotes.push(this.contarPresentaciones(this.Listado_));
-    this.lotes_guardados.push(this.Listado_);
+    const loteConUbicacion = this.Listado_.map((item: any) => {
+      const extra: any = {};
+      if (this.selectedAlmacenId) extra.almacen_id = this.selectedAlmacenId;
+      if (this.selectedSeccionId) extra.seccion_id = this.selectedSeccionId;
+      return { ...item, ...extra };
+    });
+    this.registro_lotes.push(this.contarPresentaciones(loteConUbicacion));
+    this.lotes_guardados.push(loteConUbicacion);
     this.indice_oc = this.OC__;
     this.cantidad_entregada = this.cantidad_;
     this.OC__ = '';
@@ -497,6 +503,11 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.revisado = false;
     this.sobranteTexto = '';
     this.done = false;
+  }
+
+  eliminarLote(i: number) {
+    this.lotes_guardados.splice(i, 1);
+    this.registro_lotes.splice(i, 1);
   }
 
   calcularRecepcion() {}

@@ -83,6 +83,24 @@ cd SIO2.O_Angular && npm install --legacy-peer-deps && npm start   # :4200
 # http://localhost
 ```
 
+## Session Log — 2026-07-14
+
+### Goal
+TASK-074: Agrupar bobinas por almacén en `/almacen/bobinas`, manteniendo KPIs y tabla de Conversiones.
+
+### Code changes
+- **`bobinas.component.ts`**: Injected `AlmacenService`; added `getBobinasPorAlmacen()` and `almacenesConBobinas` getter to group bobinas by warehouse (principal + externals).
+- **`bobinas.component.html`**: Replaced the "Convertidoras con bobinas" accordion with an "Almacenes con bobinas" accordion. Principal warehouse shown as a fixed card with `is-info is-light` tag; external warehouses shown only if they contain bobinas.
+- **`services/bobinas.service.ts`**: Removed obsolete `bobinaPorConvertidora()` method.
+- **`recepcion/nueva-recepcion/nueva-recepcion.component.html`**: Fixed warehouse dropdown to include "Almacén principal" as selectable option; section dropdown now visible for principal warehouse too.
+- **`recepcion/nueva-recepcion/nueva-recepcion.component.ts`**: Propagated OC `bobina` flag into reception lots and payload.
+- **`recepcion/recepcion.component.ts`**: Fixed routing: material goes to `bobinas` when OC `bobina` flag is true or `unidad === 't'`; supplier bobinas use `convertidora: null`.
+
+### Key decisions
+- Reused existing Bulma utility classes (`ml-2`, `mr-2`) and accordion styles (`order-card`, `order-details`, `chevron-btn`).
+- No changes to SCSS; no hardcoded colors.
+- The backend now populates `almacen_id` and `seccion_id` in `SERVER:Bobinas`.
+
 ## Session Log — 2026-05-25
 
 ### Goal

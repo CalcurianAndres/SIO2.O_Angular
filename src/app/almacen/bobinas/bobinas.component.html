@@ -209,14 +209,19 @@
 
   <br />
 
-  <!-- Convertidoras with bobinas -->
-  <ng-container *ngFor="let conv of api.convertidora; index as i">
+  <!-- Almacenes con bobinas -->
+  <ng-container *ngFor="let alm of almacenesConBobinas; index as i">
     <div class="card order-card animate__animated animate__fadeInUp">
       <div class="card-header" (click)="showInfo(i)">
         <div class="card-header-title">
-          <span class="order-provider"><i class="fas fa-industry"></i> {{ conv.nombre }}</span>
+          <span class="order-provider">
+            <i class="fas" [ngClass]="alm.fijo ? 'fa-home' : 'fa-warehouse'"></i>
+            {{ alm.nombre }}
+            <span *ngIf="alm.fijo" class="tag is-info is-light ml-2">Principal</span>
+          </span>
         </div>
         <div class="card-header-icon">
+          <span class="tag is-light mr-2"> {{ getBobinasPorAlmacen(alm._id).length }} bobinas </span>
           <i
             class="fas fa-chevron-up chevron-btn"
             [ngClass]="{ 'rotate-down': !clicked[i], 'rotate-up': clicked[i] }"
@@ -233,15 +238,17 @@
                 <th>Peso (t)</th>
                 <th>Ancho</th>
                 <th>Material</th>
+                <th *ngIf="!alm.fijo">Sección</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let bobina of api.bobinaPorConvertidora(conv._id)">
+              <tr *ngFor="let bobina of getBobinasPorAlmacen(alm._id)">
                 <td>{{ bobina.codigo }}</td>
                 <td>{{ bobina.lote }}</td>
                 <td>{{ bobina.neto }}</td>
                 <td>{{ bobina.ancho }}</td>
                 <td>{{ bobina.material.nombre }}</td>
+                <td *ngIf="!alm.fijo">{{ bobina.seccion_id?.nombre || '—' }}</td>
               </tr>
             </tbody>
           </table>

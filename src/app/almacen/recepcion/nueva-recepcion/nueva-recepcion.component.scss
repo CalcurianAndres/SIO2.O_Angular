@@ -11,8 +11,24 @@ table tr th {
   background-color: transparent;
 }
 
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted, #7a8a9e);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .right-aligned-input {
   text-align: right;
+}
+
+.tipo-select {
+  min-width: 130px;
 }
 
 .informacion {

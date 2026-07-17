@@ -88,6 +88,49 @@ export class RecepcionService {
     this.socket.io.emit('CLIENTE:CheckeoDeMaterial', id);
   }
 
+  EliminarRecepcion(id: string) {
+    this.socket.io.emit('CLIENTE:EliminarRecepcion', id);
+  }
+
+  /**
+   * Revierte una recepción a estado "Por notificar"
+   * @param recepcionId ID de la recepción
+   * @param motivo Motivo de la reversión (obligatorio)
+   * @returns Promesa que resuelve cuando se completa la operación
+   */
+  revertirAPorNotificar(recepcionId: string, motivo: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const handler = (respuesta: any) => {
+        this.socket.io.off('SERVIDOR:enviaMensaje', handler);
+        if (respuesta.icon === 'success') {
+          resolve(respuesta);
+        } else {
+          reject(respuesta);
+        }
+      };
+      this.socket.io.on('SERVIDOR:enviaMensaje', handler);
+      this.socket.io.emit('CLIENTE:RevertirAPorNotificar', { recepcionId, motivo });
+    });
+  }
+
+  /**
+   * Verifica si una recepción es editable (solo en estado "Por notificar")
+   * @param recepcion Recepción a evaluar
+   * @returns true si el status es "Por notificar"
+   */
+  esEditable(recepcion: any): boolean {
+    return recepcion?.status === 'Por notificar';
+  }
+
+  /**
+   * Verifica si una recepción puede ser revertida
+   * @param recepcion Recepción a evaluar
+   * @returns true si el status es "Notificado" o "En observacion"
+   */
+  puedeRevertir(recepcion: any): boolean {
+    return ['Notificado', 'En observacion'].includes(recepcion?.status);
+  }
+
   filtrarMaterialesPorGrupoYAnalisis(nombreGrupo: string, materia?: any) {
     console.log(materia);
     const materialesFiltrados: any[] = [];

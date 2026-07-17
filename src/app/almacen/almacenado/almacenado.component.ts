@@ -14,6 +14,7 @@ export class AlmacenadoComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizes: number[] = [10, 25, 50, 100];
   public cargando: boolean = true;
+  public selectedAlmacenId: string = '';
 
   public listado!: any;
   public Inventario: boolean = false;
@@ -51,6 +52,7 @@ export class AlmacenadoComponent implements OnInit {
   private agruparStockPorMaterial(): { id: string; total: number }[] {
     const map = new Map<string, number>();
     for (const item of this.api.Almacen) {
+      if (!this.matchAlmacen(item)) continue;
       const id = item.material?._id;
       if (!id) continue;
       map.set(id, (map.get(id) || 0) + Number(item.neto));
@@ -93,12 +95,23 @@ export class AlmacenadoComponent implements OnInit {
     this.currentPage = 1;
   }
 
+  seleccionarAlmacen(id: string) {
+    this.selectedAlmacenId = id;
+    this.currentPage = 1;
+  }
+
+  matchAlmacen(item: any): boolean {
+    if (!this.selectedAlmacenId) {
+      return !item.almacen_id;
+    }
+    return String(item.almacen_id) === this.selectedAlmacenId;
+  }
+
   getStockForGroup(grupoId: string): number {
     if (!this.api.Almacen) return 0;
-    return this.api.Almacen.filter((item) => item.material?.grupo?._id === grupoId).reduce(
-      (sum, item) => sum + Number(item.neto),
-      0,
-    );
+    return this.api.Almacen.filter(
+      (item) => item.material?.grupo?._id === grupoId && this.matchAlmacen(item),
+    ).reduce((sum, item) => sum + Number(item.neto), 0);
   }
 
   getStockStatus(grupoId: string): { label: string; class: string } {
@@ -116,7 +129,7 @@ export class AlmacenadoComponent implements OnInit {
     console.log(id);
     const sumByMaterialId: any = [];
     this.Inventario = true;
-    this.listado = this.api.BuscarPorGrupo(id);
+    this.listado = this.api.BuscarPorGrupo(id).filter((item: any) => this.matchAlmacen(item));
     this.sumarMateriales();
     this.Materiales_totales = agruparMaterialesPorNombreYId(this.listado);
     console.log(this.Materiales_totales);

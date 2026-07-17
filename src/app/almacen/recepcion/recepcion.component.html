@@ -1,6 +1,6 @@
 <app-nueva-recepcion [nueva]="nueva" (onCloseModal)="nueva = false"> </app-nueva-recepcion>
 
-<app-detalles-recepcion [detalle]="detalle" [lista]="Material_selected" [n]="n_word" (onCloseModal)="detalle = false">
+<app-detalles-recepcion [detalle]="detalle" [lista]="Material_selected" [recepcion]="Material_selected" [n]="n_word" (onCloseModal)="detalle = false">
 </app-detalles-recepcion>
 
 <app-edicion-recepcion [edicion]="edicion" [lista]="Material_selected" [n]="n_word" (onCloseModal)="edicion = false">
@@ -71,6 +71,9 @@
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'observacion' }" (click)="setFilter('observacion')">
       <i class="fas fa-eye"></i> Observación
     </button>
+    <button class="filter-tab" [ngClass]="{ active: filterMode === 'finalizadas' }" (click)="setFilter('finalizadas')">
+      <i class="fas fa-check-double"></i> Finalizadas
+    </button>
   </div>
 
   <!-- Loading state -->
@@ -112,7 +115,9 @@
                 [ngClass]="{
                   'badge-danger': recepcion.status === 'Por notificar',
                   'badge-info': recepcion.status === 'Notificado',
-                  'badge-warning': recepcion.status === 'En observacion'
+                  'badge-warning': recepcion.status === 'En observacion',
+                  'badge-cyan': recepcion.status === 'Verificado',
+                  'badge-success': recepcion.status === 'Finalizado'
                 }"
                 >{{ recepcion.status }}</span
               >
@@ -139,6 +144,27 @@
               (click)="$event.stopPropagation(); DescargarFormato(recepcion)"
               *ngIf="recepcion.status === 'En observacion'"
               title="Descargar"
+            ></i>
+            <i
+              class="fas fa-check-circle"
+              style="color: var(--status-success); cursor: pointer; padding: 0.25rem"
+              (click)="$event.stopPropagation(); verificar(recepcion)"
+              *ngIf="recepcion.status === 'En observacion'"
+              title="Verificar"
+            ></i>
+            <i
+              class="fas fa-undo"
+              style="color: var(--status-warning); cursor: pointer; padding: 0.25rem"
+              (click)="$event.stopPropagation(); revertirAPorNotificar(recepcion)"
+              *ngIf="recepcion.status === 'Notificado' || recepcion.status === 'En observacion'"
+              title="Volver a Por notificar"
+            ></i>
+            <i
+              class="fas fa-trash"
+              style="color: var(--status-danger); cursor: pointer; padding: 0.25rem"
+              (click)="$event.stopPropagation(); eliminar(recepcion._id)"
+              *ngIf="recepcion.status === 'Finalizado'"
+              title="Eliminar"
             ></i>
             <i
               class="fas fa-chevron-up chevron-btn"
@@ -242,7 +268,7 @@
                   <button
                     class="button is-small is-success is-light"
                     (click)="$event.stopPropagation(); EnviarAlmacen(index, i)"
-                    *ngIf="materiales[0]?.material?.grupo?.otro || poseeAnalisis(materiales[0]?.lote)"
+                    *ngIf="materiales[0]?.unidad === 't' || materiales[0]?.material?.grupo?.otro || poseeAnalisis(materiales[0]?.lote)"
                     title="Enviar a almacén"
                   >
                     <span class="icon is-small"><i class="fas fa-warehouse"></i></span>

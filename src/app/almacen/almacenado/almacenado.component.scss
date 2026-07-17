@@ -60,3 +60,18 @@
   color: #fff;
   border-color: var(--accent-blue);
 }
+
+.warehouse-tabs {
+  margin-bottom: 0;
+}
+.warehouse-tabs a {
+  color: var(--text-muted);
+}
+.warehouse-tabs li.is-active a {
+  background: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+}
+.warehouse-tabs li:not(.is-active) a:hover {
+  color: var(--text-primary);
+}

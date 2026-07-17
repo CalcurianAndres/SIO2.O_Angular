@@ -7,8 +7,11 @@ import { WebSocketService } from './web-socket.service';
 export class AlmacenService {
   Almacen: any;
   Registro: any;
+  almacenes: any[] = [];
   constructor(private socket: WebSocketService) {
     this.BuscarAlmacen();
+    this.BuscarAlmacenesExt();
+    this.BuscarSecciones();
   }
 
   BuscarAlmacen() {
@@ -75,5 +78,37 @@ export class AlmacenService {
 
   AsignacionDeMaterial(data, asignacion) {
     this.socket.io.emit('CLIENTE:Asignacion', data, asignacion);
+  }
+
+  BuscarAlmacenesExt() {
+    this.socket.io.on('SERVER:Almacenes', (data: any) => {
+      this.almacenes = data;
+    });
+    this.socket.io.emit('CLIENTE:BuscarAlmacenes');
+  }
+
+  GuardarAlmacenExt(data: any) {
+    this.socket.io.emit('CLIENTE:NuevoAlmacenExt', data);
+  }
+
+  EliminarAlmacenExt(id: string) {
+    this.socket.io.emit('CLIENTE:EliminarAlmacenExt', { _id: id });
+  }
+
+  secciones: any[] = [];
+
+  BuscarSecciones() {
+    this.socket.io.on('SERVER:Secciones', (data: any) => {
+      this.secciones = data;
+    });
+    this.socket.io.emit('CLIENTE:BuscarSecciones');
+  }
+
+  GuardarSeccion(data: any) {
+    this.socket.io.emit('CLIENTE:NuevaSeccion', data);
+  }
+
+  EliminarSeccion(data: any) {
+    this.socket.io.emit('CLIENTE:EliminarSeccion', data);
   }
 }
