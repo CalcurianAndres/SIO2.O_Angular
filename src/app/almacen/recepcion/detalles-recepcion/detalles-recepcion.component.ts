@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RecepcionService } from 'src/app/services/recepcion.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalles-recepcion',
@@ -7,13 +9,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./detalles-recepcion.component.scss'],
 })
 export class DetallesRecepcionComponent {
-  constructor() {}
+  constructor(public api: RecepcionService) {}
 
   @Input() detalle!: any;
   @Input() n!: any;
   @Input() lista!: any;
   @Input() recepcion!: any;
   @Output() onCloseModal = new EventEmitter();
+
+  guardando = false;
 
   currentDate = new Date();
   year = this.currentDate.getFullYear();
@@ -27,5 +31,23 @@ export class DetallesRecepcionComponent {
 
   cerrar() {
     this.onCloseModal.emit();
+  }
+
+  async guardar() {
+    this.guardando = true;
+    this.api.GuardarRecepcion(this.recepcion);
+    setTimeout(() => {
+      Swal.fire({
+        text: this.api.mensaje?.mensaje || 'Recepción actualizada',
+        icon: this.api.mensaje?.icon || 'success',
+        timer: 3000,
+        timerProgressBar: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+      });
+      this.guardando = false;
+      this.onCloseModal.emit();
+    }, 800);
   }
 }

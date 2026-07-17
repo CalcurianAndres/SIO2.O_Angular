@@ -80,5 +80,12 @@
         </tbody>
       </table>
     </div>
+    <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem" *ngIf="esEditable">
+      <button class="button" (click)="cerrar()">Cancelar</button>
+      <button class="button is-success" (click)="guardar()" [disabled]="guardando">
+        <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>
+        <span>{{ guardando ? 'Guardando…' : 'Guardar' }}</span>
+      </button>
+    </footer>
   </div>
 </div>
