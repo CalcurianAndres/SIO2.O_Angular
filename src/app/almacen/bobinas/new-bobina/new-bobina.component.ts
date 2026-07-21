@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BobinasService } from 'src/app/services/bobinas.service';
+import { AlmacenService } from 'src/app/services/almacen.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
-import { Cell, Img, PdfMakeWrapper, Stack, Table, Txt } from 'pdfmake-wrapper';
+import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import pdfFonts from '../../../../assets/fonts/custom';
 import { LoginService } from 'src/app/services/login.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,6 +16,7 @@ import Swal from 'sweetalert2';
 export class NewBobinaComponent {
   constructor(
     public api: BobinasService,
+    public almacenSvc: AlmacenService,
     public materiales: MaterialesService,
     public login: LoginService,
   ) {}
@@ -21,13 +24,14 @@ export class NewBobinaComponent {
   @Input() nueva: any;
   @Output() onCloseModal = new EventEmitter();
 
-  public sustrato;
+  public sustrato = '';
   public ancho = 0;
   public largo = 0;
   public hojas = 0;
   public peso = 0;
   public lote = '';
   public fabricacion = '';
+  public almacen = '';
   public convertidora = '';
   public observacion = '';
 
@@ -37,28 +41,48 @@ export class NewBobinaComponent {
 
   guardarData() {}
 
+  get almacenesConBobinas(): any[] {
+    if (!this.api.bobinas) return [];
+    const externos = (this.almacenSvc.almacenes || []).filter(
+      (a: any) => this.getBobinasPorAlmacen(a._id).length > 0,
+    );
+    const principalTieneBobinas = this.getBobinasPorAlmacen(null).length > 0;
+    return [
+      ...(principalTieneBobinas ? [{ _id: null, nombre: 'Almacén principal' }] : []),
+      ...externos,
+    ];
+  }
+
+  getBobinasPorAlmacen(almacenId: string | null): any[] {
+    if (!this.api.bobinas) return [];
+    return this.api.bobinas.filter((b: any) => {
+      const id = b.almacen_id?._id || b.almacen_id;
+      return String(id || null) === String(almacenId || null);
+    });
+  }
+
   buscarSustratosDeBobinas() {
-    const bobinasFiltradas = this.api.bobinas.filter((b) => b.convertidora === this.convertidora);
+    const bobinasFiltradas = this.getBobinasPorAlmacen(this.almacen);
     const idsMaterialesUsados = [...new Set(bobinasFiltradas.map((b) => b.material._id))];
-    const materialesFiltrados = this.materiales.materiales.filter((m) => idsMaterialesUsados.includes(m._id));
-    return materialesFiltrados;
-  }
-
-  agregarFabricacion() {
-    this.fabricacion = this.api.bobinas.filter((b: any) => b.lote === this.lote)[0].fabricacion;
-  }
-
-  disabled() {
-    return !this.sustrato || this.ancho < 1 || this.largo < 1 || this.hojas < 1 || this.peso <= 0 || !this.observacion;
+    return this.materiales.materiales.filter((m) => idsMaterialesUsados.includes(m._id));
   }
 
   buscarAnchos() {
-    return [...new Set(this.api.bobinas.map((b) => b.ancho))];
+    const bobinasFiltradas = this.getBobinasPorAlmacen(this.almacen);
+    return [...new Set(bobinasFiltradas.map((b) => b.ancho))];
+  }
+
+  agregarFabricacion() {
+    const bobina = this.api.bobinas.find((b: any) => b.lote === this.lote);
+    if (bobina) this.fabricacion = bobina.fabricacion;
+  }
+
+  disabled() {
+    return !this.almacen || !this.convertidora || !this.sustrato || this.ancho < 1 || this.largo < 1 || this.hojas < 1 || this.peso <= 0 || !this.observacion;
   }
 
   calcularToneladas() {
     const gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
-
     const pesoKg = (gramaje * (this.ancho / 100) * (this.largo / 100) * this.hojas) / 1000;
     this.peso = Number((pesoKg / 1000).toFixed(2));
   }
@@ -69,17 +93,33 @@ export class NewBobinaComponent {
 
   calcularHojasDesdeToneladas() {
     const gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
-
     const anchoM = this.ancho / 100;
     const largoM = this.largo / 100;
-
     const hojas = (this.peso * 1_000_000) / (gramaje * anchoM * largoM);
-    this.hojas = Math.floor(hojas); // redondear hacia abajo a entero
+    this.hojas = Math.floor(hojas);
   }
 
   obtenerLotes(e: any) {}
 
+  resetForm() {
+    this.sustrato = '';
+    this.ancho = 0;
+    this.largo = 0;
+    this.hojas = 0;
+    this.peso = 0;
+    this.almacen = '';
+    this.convertidora = '';
+    this.observacion = '';
+    this.fabricacion = '';
+    this.lote = '';
+  }
+
   async generatePdf() {
+    const convertidoraData = this.api.convertidora?.find((c: any) => c._id === this.convertidora);
+    const materialData = this.materiales.materiales.find((m: any) => m._id === this.sustrato);
+    const hoy = new Date().toLocaleDateString('es-ES');
+    const usuarioNombre = `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`;
+
     const data = {
       convertidora: this.convertidora,
       material: this.sustrato,
@@ -90,10 +130,30 @@ export class NewBobinaComponent {
       cantidad: this.hojas,
       observacion: this.observacion,
       fabricacion: this.fabricacion,
-      usuario: `${this.login.usuario.Nombre} ${this.login.usuario.Apellido}`,
+      almacen_id: this.almacen || null,
+      usuario: usuarioNombre,
     };
 
+    // Limpiar respuesta anterior y enviar guardado
+    this.api.conversionGuardada = null;
     this.api.guardarConversion(data);
+
+    // Esperar la respuesta del backend (máx 3 segundos)
+    const esperarConversion = (): Promise<any> => {
+      return new Promise((resolve) => {
+        let intentos = 0;
+        const intervalo = setInterval(() => {
+          intentos++;
+          if (this.api.conversionGuardada || intentos >= 30) {
+            clearInterval(intervalo);
+            resolve(this.api.conversionGuardada);
+          }
+        }, 100);
+      });
+    };
+
+    const guardada = await esperarConversion();
+    const numConversion = guardada?.conversion;
 
     setTimeout(() => {
       Swal.fire({
@@ -106,19 +166,9 @@ export class NewBobinaComponent {
         timerProgressBar: true,
       });
 
-      this.sustrato = '';
-      this.ancho = 0;
-      this.largo = 0;
-      this.hojas = 0;
-      this.peso = 0;
-      this.convertidora = '';
-      this.observacion = '';
-      this.fabricacion = '';
-
+      this.resetForm();
       this.onCloseModal.emit();
     }, 1000);
-
-    const material = this.materiales.materiales.find((m: any) => m._id === this.sustrato).nombre;
 
     PdfMakeWrapper.setFonts(pdfFonts, {
       Gilroy: {
@@ -137,35 +187,17 @@ export class NewBobinaComponent {
 
     PdfMakeWrapper.useFont('Gilroy');
 
-    async function loadImageAsBase64(imagePath: string): Promise<string> {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        fetch(imagePath)
-          .then((response) => response.blob())
-          .then((blob) => {
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => resolve(reader.result as string);
-          })
-          .catch((error) => reject(error));
-      });
-    }
-
-    // Precargar la imagen en base64
-    const base64Image = await loadImageAsBase64('../../assets/poli_cintillo.png');
-
     const pdf = new PdfMakeWrapper();
 
-    // Configuración de metadatos
     pdf.info({
-      title: 'AL-DEV-001', // Título del documento
-      author: 'Poligrafica de Venezuela',
-      subject: '67e2b1a475a1fd4fe9393386',
-      keywords: 'PDF, Reporte, Ventas',
+      title: 'Solicitud de Conversión',
+      author: environment.company.nombre,
+      subject: 'Conversión de material',
     });
 
     pdf.pageOrientation('portrait');
 
-    // Define el header para que se repita en cada página
+    // ══════════ HEADER ══════════
     pdf.add(
       new Table([
         [
@@ -174,7 +206,7 @@ export class NewBobinaComponent {
             .rowSpan(4).end,
           new Cell(
             new Txt(`
-                    SOLICITUD DE CONVERSIÓN`).bold().end,
+SOLICITUD DE CONVERSIÓN`).bold().end,
           )
             .alignment('center')
             .fontSize(11)
@@ -189,8 +221,7 @@ export class NewBobinaComponent {
         [
           new Cell(new Txt('').end).end,
           new Cell(new Txt('').end).end,
-          new Cell(new Txt('Fecha de Revision: 12/03/2025').end).fillColor('#dedede').fontSize(5).alignment('center')
-            .end,
+          new Cell(new Txt(`Fecha: ${hoy}`).end).fillColor('#dedede').fontSize(5).alignment('center').end,
         ],
         [
           new Cell(new Txt('').end).end,
@@ -199,15 +230,20 @@ export class NewBobinaComponent {
         ],
       ])
         .layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => '#555',
+          vLineColor: () => '#555',
         })
         .widths(['25%', '50%', '25%']).end,
     );
 
     pdf.add(new Txt(' ').fontSize(10).end);
+
+    // ══════════ CONVERTIDORA + CONVERSIÓN ══════════
+    const convNombre = convertidoraData?.nombre || '—';
+    const convRif = convertidoraData?.rif || '';
+    const convDireccion = convertidoraData?.direccion || '';
 
     pdf.add(
       new Table([
@@ -221,7 +257,7 @@ export class NewBobinaComponent {
             .fillColor('#a5acb2').end,
         ],
         [
-          new Cell(new Txt('Convertidora:').fontSize(5.7).end).border([true, true, true, false]).end,
+          new Cell(new Txt('Nombre:').fontSize(5.7).end).border([true, true, true, false]).end,
           new Cell(new Txt('').end).border([false]).end,
           new Cell(
             new Txt([
@@ -231,40 +267,53 @@ export class NewBobinaComponent {
           ).border([true, true, true, false]).end,
         ],
         [
-          new Cell(new Txt('Convertidora Finlandia, C.A.').fontSize(11).end)
+          new Cell(new Txt(convNombre).fontSize(11).end)
+            .margin([0, -7, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt('').end).border([false]).end,
+          new Cell(new Txt(`${numConversion || '—'}`).alignment('center').fontSize(22).bold().end)
+            .margin([0, -5, 0, 0])
+            .border([true, false, true, true]).end,
+        ],
+        [
+          new Cell(new Txt('RIF:').fontSize(5.7).end).border([true, true, true, false]).end,
+          new Cell(new Txt('').end).border([false]).end,
+          new Cell(new Txt('Fecha:').fontSize(5.7).end).border([true, true, true, false]).end,
+        ],
+        [
+          new Cell(new Txt(convRif || '—').fontSize(11).end)
             .margin([0, -3, 0, 0])
             .border([true, false, true, true]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('25009').alignment('center').fontSize(22).bold().end)
-            .margin([0, -15, 0, -3])
+          new Cell(new Txt(hoy).fontSize(11).end)
+            .margin([0, -3, 0, 0])
             .border([true, false, true, true]).end,
         ],
         [
           new Cell(new Txt('Dirección:').fontSize(5.7).end).border([true, true, true, false]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('Fecha:').fontSize(5.7).end).border([true, true, true, false]).end,
+          new Cell(new Txt('').end).border([false]).end,
         ],
         [
-          new Cell(
-            new Txt('La apoteosica ciudad de Guatire, Tierra de caballeros y buenas costumbres.').fontSize(11).end,
-          )
+          new Cell(new Txt(convDireccion || '—').fontSize(11).end)
             .margin([0, -3, 0, 0])
             .border([true, false, true, true]).end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('20/05/2025').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt('').end).border([false]).end,
         ],
       ])
         .layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => '#555',
+          vLineColor: () => '#555',
         })
         .widths(['74%', '1%', '25%']).end,
     );
 
     pdf.add(new Txt(' ').fontSize(10).end);
 
+    // ══════════ DETALLES ══════════
     pdf.add(
       new Table([
         [
@@ -274,10 +323,10 @@ export class NewBobinaComponent {
         ],
       ])
         .layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => '#555',
+          vLineColor: () => '#555',
         })
         .widths(['100%']).end,
     );
@@ -298,26 +347,26 @@ export class NewBobinaComponent {
           new Cell(new Txt('Hojas (und):').fontSize(5.7).end).border([true, true, true, false]).end,
         ],
         [
-          new Cell(new Txt(material).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('300').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('70').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('150').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('25,09').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt('100.000').fontSize(15).bold().end).margin([0, -3, 0, 0]).border([true, false, true, true])
-            .end,
+          new Cell(new Txt(materialData?.nombre || '—').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${materialData?.gramaje || '—'}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${this.ancho}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${this.largo}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${this.peso}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(`${this.hojas}`).fontSize(15).bold().end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
       ])
         .layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => '#555',
+          vLineColor: () => '#555',
         })
         .widths(['50%', '10%', '8%', '8%', '8%', '16%']).end,
     );
 
     pdf.add(new Txt(' ').fontSize(10).end);
 
+    // ══════════ OBSERVACIONES + ELABORADO POR ══════════
     pdf.add(
       new Table([
         [
@@ -330,14 +379,14 @@ export class NewBobinaComponent {
             .fillColor('#a5acb2').end,
         ],
         [
-          new Cell(new Txt('Garantizar las hojas solicitadas').fontSize(11).end).border([true, false, true, false]).end,
+          new Cell(new Txt(this.observacion || '—').fontSize(11).end).border([true, false, true, false]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
           new Cell(new Txt('NOMBRE:').fontSize(5.7).end).border([true, false, true, false]).end,
         ],
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
-          new Cell(new Txt('Andrés Calcurian:').fontSize(11).end)
+          new Cell(new Txt(usuarioNombre).fontSize(11).end)
             .margin([0, -3, 0, 0])
             .border([true, false, true, false]).end,
         ],
@@ -359,14 +408,14 @@ export class NewBobinaComponent {
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, true]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
-          new Cell(new Txt('18/03/2025').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(hoy).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
       ])
         .layout({
-          hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
-          hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
-          vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#555',
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => '#555',
+          vLineColor: () => '#555',
         })
         .widths(['69%', '1%', '30%']).end,
     );

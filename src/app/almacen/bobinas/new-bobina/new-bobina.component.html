@@ -8,81 +8,86 @@
     <div class="modal-card-body">
       <div class="columns">
         <div class="column">
-          <span class="title"> Convertidora </span>
+          <span class="title">Almacén y convertidora</span>
           <hr />
           <div class="field is-grouped">
             <div class="control">
-              <label for="" class="label">Convertidora</label>
+              <label class="label">Almacén</label>
               <div class="select">
-                <select [(ngModel)]="convertidora">
-                  <option value="{{ convertidora._id }}" *ngFor="let convertidora of api.convertidora">
-                    {{ convertidora.nombre }}
+                <select [(ngModel)]="almacen" (change)="sustrato = ''; ancho = 0; lote = ''">
+                  <option value="">— Seleccionar —</option>
+                  <option *ngFor="let alm of almacenesConBobinas" [value]="alm._id || ''">
+                    {{ alm.nombre }}
                   </option>
                 </select>
               </div>
             </div>
-            <div class="control">
-              <label for="" class="label">Compra local</label>
-              <input type="checkbox" name="" id="" class="checkbox" />
+            <div class="control" *ngIf="almacen">
+              <label class="label">Convertidora</label>
+              <div class="select">
+                <select [(ngModel)]="convertidora">
+                  <option value="">— Seleccionar —</option>
+                  <option *ngFor="let c of api.convertidora" [value]="c._id">
+                    {{ c.nombre }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
-          <div class="field is-grouped">
-            <div class="control" *ngIf="convertidora">
-              <label for="" class="label">Sustrato</label>
+          <span class="title" *ngIf="almacen">Detalle</span>
+          <hr *ngIf="almacen" />
+          <div class="field is-grouped" *ngIf="almacen">
+            <div class="control">
+              <label class="label">Sustrato</label>
               <div class="select">
-                <select [(ngModel)]="sustrato" (change)="obtenerLotes($event.target)">
-                  <option value="{{ material._id }}" *ngFor="let material of buscarSustratosDeBobinas()">
+                <select [(ngModel)]="sustrato" (change)="ancho = 0; lote = ''">
+                  <option value="">— Seleccionar —</option>
+                  <option *ngFor="let material of buscarSustratosDeBobinas()" [value]="material._id">
                     {{ material.nombre }} {{ material.gramaje }}(g/m²) {{ material.calibre }}pt
                   </option>
                 </select>
               </div>
             </div>
             <div class="control" *ngIf="sustrato">
-              <label for="" class="label">Ancho (cm)</label>
+              <label class="label">Ancho (cm)</label>
               <div class="select">
-                <select [(ngModel)]="ancho">
-                  <option value="{{ ancho }}" *ngFor="let ancho of buscarAnchos()">{{ ancho }}</option>
+                <select [(ngModel)]="ancho" (change)="lote = ''">
+                  <option value="0">— Seleccionar —</option>
+                  <option *ngFor="let a of buscarAnchos()" [value]="a">{{ a }}</option>
                 </select>
               </div>
             </div>
-            <!-- <div class="control">
-                            <label for="" class="label">Ancho (cm)</label>
-                            <input type="text" class="input" style="width: 150px;">
-                        </div> -->
           </div>
           <div class="field is-grouped">
-            <div class="control">
-              <label for="" class="label">Lote</label>
+            <div class="control" *ngIf="ancho > 0">
+              <label class="label">Lote</label>
               <div class="select">
                 <select [(ngModel)]="lote" (change)="agregarFabricacion()">
-                  <option value="{{ lote }}" *ngFor="let lote of api.ObtenerLotes(convertidora, sustrato, ancho)">
-                    {{ lote }}
+                  <option value="">— Seleccionar —</option>
+                  <option *ngFor="let l of api.ObtenerLotes(almacen, sustrato, ancho)" [value]="l">
+                    {{ l }}
                   </option>
                 </select>
               </div>
             </div>
-            <div class="control">
-              <label for="" class="label">Largo (cm)</label>
-              <input type="number" name="" id="" class="input" style="width: 90px" [(ngModel)]="largo" />
+            <div class="control" *ngIf="lote">
+              <label class="label">Largo (cm)</label>
+              <input type="number" class="input" style="width: 90px" [(ngModel)]="largo" />
             </div>
-            <div class="control">
-              <label for="" class="label">Hojas (und)</label>
+            <div class="control" *ngIf="lote">
+              <label class="label">Hojas (und)</label>
               <input
                 type="number"
-                name=""
-                id=""
                 class="input"
                 style="width: 90px"
                 [(ngModel)]="hojas"
                 (input)="calcularToneladas()"
               />
             </div>
-            <div class="control">
-              <label for="" class="label">Peso (t)</label>
+            <div class="control" *ngIf="lote">
+              <label class="label">Peso (t)</label>
               <input
                 type="number"
-                name=""
-                id=""
                 class="input"
                 style="width: 90px"
                 [(ngModel)]="peso"
@@ -90,9 +95,9 @@
               />
             </div>
           </div>
-          <div class="field">
+          <div class="field" *ngIf="lote">
             <div class="control">
-              <label for="" class="label">Observación</label>
+              <label class="label">Observación</label>
               <textarea
                 class="textarea"
                 placeholder="Escribe una observación"
@@ -107,7 +112,7 @@
           </button>
         </div>
         <div class="column">
-          <div class="dimenciones" [style.width.px]="calcularWidth()">
+          <div class="dimenciones" [style.width.px]="calcularWidth()" *ngIf="largo > 0 && ancho > 0">
             <div class="top-label">← {{ largo }} →</div>
             <div class="right-label">↑<br />{{ ancho.toString()[0] }}<br />{{ ancho.toString()[1] }}<br />↓</div>
           </div>

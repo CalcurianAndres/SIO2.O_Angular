@@ -10,48 +10,43 @@ export class BobinasService {
   public conversiones!: any;
   public bobinas!: any;
   public mensaje!: Mensaje;
+  public conversionGuardada: any = null;
 
   constructor(private socket: WebSocketService) {
-    this.buscarConvertidora();
+    this.buscarDatos();
   }
 
-  buscarConvertidora() {
+  buscarDatos() {
     this.socket.io.emit('CLIENTE:BuscarConvertidora');
-
     this.socket.io.on('SERVER:Convertidora', (data) => {
       this.convertidora = data;
-      console.log(this.convertidora);
     });
 
     this.socket.io.emit('CLIENTE:BuscarBobinas');
-
     this.socket.io.on('SERVER:Bobinas', (data) => {
       this.bobinas = data;
-    });
-
-    this.socket.io.on('SERVER:Convertidora', (data) => {
-      this.convertidora = data;
     });
 
     this.socket.io.on('SERVIDOR:enviaMensaje', (data) => {
       this.mensaje = data;
     });
 
-    this.socket.io.emit('CLIENTE:BuscarBobinas');
-
-    this.socket.io.on('SERVER:Bobinas', (data) => {
-      this.bobinas = data;
-    });
-
     this.socket.io.emit('CLIENTE:BuscarConversion');
-
     this.socket.io.on('SERVER: conversiones', (data) => {
       this.conversiones = data;
+    });
+
+    this.socket.io.on('SERVIDOR:ConversionGuardada', (data) => {
+      this.conversionGuardada = data;
     });
   }
 
   guardarConvertidora(data: any) {
     this.socket.io.emit('CLIENTE:NuevaConvertidora', data);
+  }
+
+  eliminarConvertidora(data: any) {
+    this.socket.io.emit('CLIENTE:EliminarConvertidora', data);
   }
 
   guardarBobina(data: any) {
@@ -66,16 +61,17 @@ export class BobinasService {
     this.socket.io.emit('CLIENTE:EditarBobinas', data);
   }
 
-  ObtenerLotes(convertidora: any, material: any, ancho: any) {
+  ObtenerLotes(almacenId: any, material: any, ancho: any) {
     const lotesFiltrados = this.bobinas
-      .filter((b: any) => b.convertidora === convertidora && b.material._id === material && b.ancho === Number(ancho))
+      .filter((b: any) => {
+        const bAlmacenId = b.almacen_id?._id || b.almacen_id;
+        return String(bAlmacenId || null) === String(almacenId || null)
+          && b.material._id === material
+          && b.ancho === Number(ancho);
+      })
       .map((b: any) => b.lote);
 
-    // Eliminar duplicados por el _id del lote
-    const lotesUnicos = lotesFiltrados.filter(
-      (lote: any, index: number, self: any[]) => self.findIndex((l) => l._id === lote._id) === index,
-    );
-
+    const lotesUnicos = [...new Set(lotesFiltrados)];
     return lotesUnicos;
   }
 }

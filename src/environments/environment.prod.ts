@@ -14,4 +14,9 @@ export const environment = {
   apiUrl: base ? `${base}/api` : '/api',
   imgUrl: base ? `${base}/api` : '/api',
   wsUrl: base,
+  company: {
+    nombre: 'Poligráfica de Venezuela',
+    rif: 'J-XXXXXXXXX',
+    direccion: 'Guatire, Estado Miranda',
+  },
 };

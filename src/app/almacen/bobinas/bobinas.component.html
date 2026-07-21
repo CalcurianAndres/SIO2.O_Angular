@@ -1,5 +1,3 @@
-<app-new-convertidora [nueva]="convertidora" (onCloseModal)="convertidora = false"> </app-new-convertidora>
-
 <app-new-bobina [nueva]="bobina" (onCloseModal)="bobina = false"> </app-new-bobina>
 
 <app-page-layout>
@@ -10,245 +8,391 @@
     color="orange"
   ></app-section-header>
 
-  <!-- Top bar: buttons + KPI cards -->
-  <div class="columns is-variable is-4">
-    <div class="column">
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-info" (click)="convertidora = true">
-            <span class="icon"><i class="fas fa-plus-circle"></i></span>
-            <span>Nueva Convertidora</span>
-          </button>
-        </div>
-        <div class="control">
-          <button class="button is-info" (click)="bobina = true">
-            <span class="icon"><i class="fas fa-plus-circle"></i></span>
-            <span>Nueva Conversión</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="column is-9">
-      <div class="columns is-variable is-2">
-        <div class="column">
-          <div class="kpi-card kpi-orange">
-            <div class="kpi-number">{{ kpiMes }}</div>
-            <div class="kpi-label">Conversiones <strong>Mes</strong></div>
-            <div class="kpi-period">{{ mesActual }} {{ yearActual }}</div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="kpi-card kpi-green">
-            <div class="kpi-number">{{ kpiAno }}</div>
-            <div class="kpi-label">Conversiones <strong>Año</strong></div>
-            <div class="kpi-period">{{ yearActual }}</div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="kpi-card kpi-blue">
-            <div class="kpi-number">{{ kpiRendimiento }} t</div>
-            <div class="kpi-label"><strong>Rendimiento</strong> promedio</div>
-            <div class="kpi-period">por conversión</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Filter tabs -->
+  <!-- Tabs -->
   <div class="filter-tabs">
-    <button class="filter-tab" [ngClass]="{ active: filterMode === 'home' }" (click)="setFilter('home')">
-      <i class="fas fa-list"></i> Todas
+    <button
+      class="filter-tab"
+      [ngClass]="{ active: activeTab === 'conversiones' }"
+      (click)="activeTab = 'conversiones'"
+    >
+      <i class="fas fa-exchange-alt"></i> Conversiones
     </button>
     <button
       class="filter-tab"
-      [ngClass]="{ active: filterMode === 'convertidora' }"
-      (click)="setFilter('convertidora')"
+      [ngClass]="{ active: activeTab === 'convertidoras' }"
+      (click)="activeTab = 'convertidoras'"
     >
-      <i class="fas fa-industry"></i> Por convertidora
-    </button>
-    <button class="filter-tab" [ngClass]="{ active: filterMode === 'fecha' }" (click)="setFilter('fecha')">
-      <i class="fas fa-calendar-day"></i> Por fecha
+      <i class="fas fa-industry"></i> Convertidoras
     </button>
   </div>
 
-  <!-- Filter panels -->
-  <div class="filter-panel" *ngIf="filterMode === 'convertidora'">
-    <div class="field is-grouped">
-      <div class="control is-expanded">
-        <label class="label">Convertidora</label>
-        <div class="select is-fullwidth">
-          <select [(ngModel)]="filterConvertidora" (change)="currentPage = 1">
-            <option value="">— Todas —</option>
-            <option *ngFor="let c of api.convertidora" [value]="c._id">{{ c.nombre }}</option>
-          </select>
+  <!-- ═══════════════ TAB CONVERSIONES ═══════════════ -->
+  <ng-container *ngIf="activeTab === 'conversiones'">
+    <!-- Top bar: button + KPI cards -->
+    <div class="columns is-variable is-4">
+      <div class="column">
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-info" (click)="bobina = true">
+              <span class="icon"><i class="fas fa-plus-circle"></i></span>
+              <span>Nueva Conversión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="column is-9">
+        <div class="columns is-variable is-2">
+          <div class="column">
+            <div class="kpi-card kpi-orange">
+              <div class="kpi-number">{{ kpiMes }}</div>
+              <div class="kpi-label">Conversiones <strong>Mes</strong></div>
+              <div class="kpi-period">{{ mesActual }} {{ yearActual }}</div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="kpi-card kpi-green">
+              <div class="kpi-number">{{ kpiAno }}</div>
+              <div class="kpi-label">Conversiones <strong>Año</strong></div>
+              <div class="kpi-period">{{ yearActual }}</div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="kpi-card kpi-blue">
+              <div class="kpi-number">{{ kpiRendimiento }} t</div>
+              <div class="kpi-label"><strong>Rendimiento</strong> promedio</div>
+              <div class="kpi-period">por conversión</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="filter-panel" *ngIf="filterMode === 'fecha'">
-    <div class="field is-grouped">
-      <div class="control">
-        <label class="label">Desde</label>
-        <input type="date" class="input" [(ngModel)]="desde" />
-      </div>
-      <div class="control">
-        <label class="label">Hasta</label>
-        <input type="date" class="input" [(ngModel)]="hasta" />
-      </div>
-      <div class="control">
-        <label class="label">&nbsp;</label>
-        <button class="button is-success" (click)="buscarPorFecha()">
-          <i class="fas fa-search"></i>
-        </button>
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab" [ngClass]="{ active: filterMode === 'home' }" (click)="setFilter('home')">
+        <i class="fas fa-list"></i> Todas
+      </button>
+      <button
+        class="filter-tab"
+        [ngClass]="{ active: filterMode === 'convertidora' }"
+        (click)="setFilter('convertidora')"
+      >
+        <i class="fas fa-industry"></i> Por convertidora
+      </button>
+      <button class="filter-tab" [ngClass]="{ active: filterMode === 'fecha' }" (click)="setFilter('fecha')">
+        <i class="fas fa-calendar-day"></i> Por fecha
+      </button>
+    </div>
+
+    <!-- Filter panels -->
+    <div class="filter-panel" *ngIf="filterMode === 'convertidora'">
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <label class="label">Convertidora</label>
+          <div class="select is-fullwidth">
+            <select [(ngModel)]="filterConvertidora" (change)="currentPage = 1">
+              <option value="">— Todas —</option>
+              <option *ngFor="let c of api.convertidora" [value]="c._id">{{ c.nombre }}</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <br />
+    <div class="filter-panel" *ngIf="filterMode === 'fecha'">
+      <div class="field is-grouped">
+        <div class="control">
+          <label class="label">Desde</label>
+          <input type="date" class="input" [(ngModel)]="desde" />
+        </div>
+        <div class="control">
+          <label class="label">Hasta</label>
+          <input type="date" class="input" [(ngModel)]="hasta" />
+        </div>
+        <div class="control">
+          <label class="label">&nbsp;</label>
+          <button class="button is-success" (click)="buscarPorFecha()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
 
-  <!-- Loading state -->
-  <ng-container *ngIf="!api.conversiones">
-    <div class="skeleton-list">
-      <div *ngFor="let _ of [].constructor(4)" class="card skeleton-order-card">
-        <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
+    <br />
+
+    <!-- Loading state -->
+    <ng-container *ngIf="!api.conversiones">
+      <div class="skeleton-list">
+        <div *ngFor="let _ of [].constructor(4)" class="card skeleton-order-card">
+          <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
+          <div class="card-content">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line" style="width: 60%"></div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Empty state -->
+    <ng-container *ngIf="api.conversiones && conversionesFiltradas.length === 0">
+      <div class="empty-state">
+        <i class="fas fa-warehouse empty-icon"></i>
+        <p class="empty-title">No hay conversiones registradas</p>
+        <p class="empty-hint" *ngIf="filterMode !== 'home'">No se encontraron conversiones con los filtros actuales</p>
+        <p class="empty-hint" *ngIf="filterMode === 'home'">Haz clic en "Nueva Conversión" para crear la primera</p>
+      </div>
+    </ng-container>
+
+    <!-- Conversiones table -->
+    <ng-container *ngIf="api.conversiones && conversionesFiltradas.length > 0">
+      <div class="card">
         <div class="card-content">
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line" style="width: 60%"></div>
+          <span class="title is-5"><i class="fas fa-exchange-alt"></i> Conversiones</span>
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr>
+                  <th>Estado</th>
+                  <th>Lote</th>
+                  <th>Material</th>
+                  <th class="has-text-centered">Cantidad (und)</th>
+                  <th class="has-text-centered">Peso (t)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let conv of paginatedConversiones">
+                  <td>
+                    <span class="tag is-success">{{ conv.status }}</span>
+                  </td>
+                  <td>{{ conv.lote }}</td>
+                  <td>
+                    {{ conv.material.nombre }} ({{ conv.ancho }}x{{ conv.largo }}) {{ conv.material.gramaje }}g/m² -
+                    {{ conv.material.calibre }}pt
+                  </td>
+                  <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
+                  <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="columns is-vcentered mt-3" *ngIf="totalPages > 1">
+            <div class="column is-narrow">
+              <div class="select is-small">
+                <select [(ngModel)]="pageSize" (change)="currentPage = 1">
+                  <option value="10">10/pág</option>
+                  <option value="25">25/pág</option>
+                  <option value="50">50/pág</option>
+                  <option value="100">100/pág</option>
+                </select>
+              </div>
+            </div>
+            <div class="column">
+              <nav class="pagination is-small is-right">
+                <a
+                  class="pagination-previous"
+                  [class.is-disabled]="currentPage === 1"
+                  (click)="currentPage > 1 && pageChanged(currentPage - 1)"
+                  >Anterior</a
+                >
+                <a
+                  class="pagination-next"
+                  [class.is-disabled]="currentPage === totalPages"
+                  (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
+                  >Siguiente</a
+                >
+                <ul class="pagination-list">
+                  <li *ngFor="let p of [].constructor(Math.min(totalPages, 10)); let idx = index">
+                    <a
+                      class="pagination-link"
+                      [class.is-current]="currentPage === idx + 1"
+                      (click)="pageChanged(idx + 1)"
+                      >{{ idx + 1 }}</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <br />
+
+    <!-- Almacenes con bobinas -->
+    <ng-container *ngFor="let alm of almacenesConBobinas; index as i">
+      <div class="card order-card animate__animated animate__fadeInUp">
+        <div class="card-header" (click)="showInfo(i)">
+          <div class="card-header-title">
+            <span class="order-provider">
+              <i class="fas" [ngClass]="alm.fijo ? 'fa-home' : 'fa-warehouse'"></i>
+              {{ alm.nombre }}
+              <span *ngIf="alm.fijo" class="tag is-info is-light ml-2">Principal</span>
+            </span>
+          </div>
+          <div class="card-header-icon">
+            <span class="tag is-light mr-2"> {{ getBobinasPorAlmacen(alm._id).length }} bobinas </span>
+            <i
+              class="fas fa-chevron-up chevron-btn"
+              [ngClass]="{ 'rotate-down': !clicked[i], 'rotate-up': clicked[i] }"
+            ></i>
+          </div>
+        </div>
+        <div class="card-content order-details" [ngClass]="{ active: clicked[i] }">
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Lote</th>
+                  <th>Peso (t)</th>
+                  <th>Ancho</th>
+                  <th>Material</th>
+                  <th *ngIf="!alm.fijo">Sección</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let bobina of getBobinasPorAlmacen(alm._id)">
+                  <td>{{ bobina.codigo }}</td>
+                  <td>{{ bobina.lote }}</td>
+                  <td>{{ bobina.neto }}</td>
+                  <td>{{ bobina.ancho }}</td>
+                  <td>{{ bobina.material.nombre }}</td>
+                  <td *ngIf="!alm.fijo">{{ bobina.seccion_id?.nombre || '—' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- ═══════════════ TAB CONVERTIDORAS ═══════════════ -->
+  <ng-container *ngIf="activeTab === 'convertidoras'">
+    <!-- Formulario nueva convertidora -->
+    <div class="card mb-4">
+      <div class="card-content">
+        <span class="title is-5"><i class="fas fa-plus-circle"></i> Nueva convertidora</span>
+        <div class="columns is-multiline mt-3">
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Nombre *</label>
+              <input type="text" class="input" placeholder="Nombre de la convertidora" [(ngModel)]="nuevaConvertidora.nombre" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">RIF</label>
+              <input type="text" class="input" placeholder="J-XXXXXXXXX" [(ngModel)]="nuevaConvertidora.rif" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Teléfono</label>
+              <input type="text" class="input" placeholder="0212-0000000" [(ngModel)]="nuevaConvertidora.telefono" />
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="field">
+              <label class="label">Dirección</label>
+              <input type="text" class="input" placeholder="Dirección completa" [(ngModel)]="nuevaConvertidora.direccion" />
+            </div>
+          </div>
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Contacto</label>
+              <input type="text" class="input" placeholder="Nombre del contacto" [(ngModel)]="nuevaConvertidora.contacto" />
+            </div>
+          </div>
+          <div class="column is-2">
+            <div class="field">
+              <label class="label">&nbsp;</label>
+              <button class="button is-info is-fullwidth" (click)="agregarConvertidora()" [disabled]="!nuevaConvertidora.nombre.trim()">
+                <span class="icon"><i class="fas fa-plus"></i></span>
+                <span>Agregar</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </ng-container>
 
-  <!-- Empty state -->
-  <ng-container *ngIf="api.conversiones && conversionesFiltradas.length === 0">
-    <div class="empty-state">
-      <i class="fas fa-warehouse empty-icon"></i>
-      <p class="empty-title">No hay conversiones registradas</p>
-      <p class="empty-hint" *ngIf="filterMode !== 'home'">No se encontraron conversiones con los filtros actuales</p>
-      <p class="empty-hint" *ngIf="filterMode === 'home'">Haz clic en "Nueva Conversión" para crear la primera</p>
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="api.convertidora && api.convertidora.length === 0">
+      <i class="fas fa-industry empty-icon"></i>
+      <p class="empty-title">No hay convertidoras registradas</p>
+      <p class="empty-hint">Completa el formulario上方 para crear la primera</p>
     </div>
-  </ng-container>
 
-  <!-- Conversiones table -->
-  <ng-container *ngIf="api.conversiones && conversionesFiltradas.length > 0">
-    <div class="card">
+    <!-- Convertidoras table -->
+    <div class="card" *ngIf="api.convertidora && api.convertidora.length > 0">
       <div class="card-content">
-        <span class="title is-5"><i class="fas fa-exchange-alt"></i> Conversiones</span>
         <div class="table-container">
           <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
               <tr>
-                <th>Estado</th>
-                <th>Lote</th>
-                <th>Material</th>
-                <th class="has-text-centered">Cantidad (und)</th>
-                <th class="has-text-centered">Peso (t)</th>
+                <th>Nombre</th>
+                <th>RIF</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Contacto</th>
+                <th class="has-text-centered" style="width: 120px">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let conv of paginatedConversiones">
+              <tr *ngFor="let c of api.convertidora">
+                <!-- Nombre -->
                 <td>
-                  <span class="tag is-success">{{ conv.status }}</span>
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">{{ c.nombre }}</ng-container>
+                  <input *ngIf="editingConvertidoraId === c._id" type="text" class="input is-small"
+                    [(ngModel)]="editingConvertidora.nombre" (keyup.enter)="guardarEdicion(c)" (keyup.escape)="cancelarEdicion()" />
                 </td>
-                <td>{{ conv.lote }}</td>
+                <!-- RIF -->
                 <td>
-                  {{ conv.material.nombre }} ({{ conv.ancho }}x{{ conv.largo }}) {{ conv.material.gramaje }}g/m² -
-                  {{ conv.material.calibre }}pt
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">{{ c.rif || '—' }}</ng-container>
+                  <input *ngIf="editingConvertidoraId === c._id" type="text" class="input is-small"
+                    [(ngModel)]="editingConvertidora.rif" (keyup.enter)="guardarEdicion(c)" (keyup.escape)="cancelarEdicion()" />
                 </td>
-                <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
-                <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="columns is-vcentered mt-3" *ngIf="totalPages > 1">
-          <div class="column is-narrow">
-            <div class="select is-small">
-              <select [(ngModel)]="pageSize" (change)="currentPage = 1">
-                <option value="10">10/pág</option>
-                <option value="25">25/pág</option>
-                <option value="50">50/pág</option>
-                <option value="100">100/pág</option>
-              </select>
-            </div>
-          </div>
-          <div class="column">
-            <nav class="pagination is-small is-right">
-              <a
-                class="pagination-previous"
-                [class.is-disabled]="currentPage === 1"
-                (click)="currentPage > 1 && pageChanged(currentPage - 1)"
-                >Anterior</a
-              >
-              <a
-                class="pagination-next"
-                [class.is-disabled]="currentPage === totalPages"
-                (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
-                >Siguiente</a
-              >
-              <ul class="pagination-list">
-                <li *ngFor="let p of [].constructor(Math.min(totalPages, 10)); let idx = index">
-                  <a
-                    class="pagination-link"
-                    [class.is-current]="currentPage === idx + 1"
-                    (click)="pageChanged(idx + 1)"
-                    >{{ idx + 1 }}</a
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
-  <br />
-
-  <!-- Almacenes con bobinas -->
-  <ng-container *ngFor="let alm of almacenesConBobinas; index as i">
-    <div class="card order-card animate__animated animate__fadeInUp">
-      <div class="card-header" (click)="showInfo(i)">
-        <div class="card-header-title">
-          <span class="order-provider">
-            <i class="fas" [ngClass]="alm.fijo ? 'fa-home' : 'fa-warehouse'"></i>
-            {{ alm.nombre }}
-            <span *ngIf="alm.fijo" class="tag is-info is-light ml-2">Principal</span>
-          </span>
-        </div>
-        <div class="card-header-icon">
-          <span class="tag is-light mr-2"> {{ getBobinasPorAlmacen(alm._id).length }} bobinas </span>
-          <i
-            class="fas fa-chevron-up chevron-btn"
-            [ngClass]="{ 'rotate-down': !clicked[i], 'rotate-up': clicked[i] }"
-          ></i>
-        </div>
-      </div>
-      <div class="card-content order-details" [ngClass]="{ active: clicked[i] }">
-        <div class="table-container">
-          <table class="table is-fullwidth is-striped">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Lote</th>
-                <th>Peso (t)</th>
-                <th>Ancho</th>
-                <th>Material</th>
-                <th *ngIf="!alm.fijo">Sección</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let bobina of getBobinasPorAlmacen(alm._id)">
-                <td>{{ bobina.codigo }}</td>
-                <td>{{ bobina.lote }}</td>
-                <td>{{ bobina.neto }}</td>
-                <td>{{ bobina.ancho }}</td>
-                <td>{{ bobina.material.nombre }}</td>
-                <td *ngIf="!alm.fijo">{{ bobina.seccion_id?.nombre || '—' }}</td>
+                <!-- Dirección -->
+                <td>
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">{{ c.direccion || '—' }}</ng-container>
+                  <input *ngIf="editingConvertidoraId === c._id" type="text" class="input is-small"
+                    [(ngModel)]="editingConvertidora.direccion" (keyup.enter)="guardarEdicion(c)" (keyup.escape)="cancelarEdicion()" />
+                </td>
+                <!-- Teléfono -->
+                <td>
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">{{ c.telefono || '—' }}</ng-container>
+                  <input *ngIf="editingConvertidoraId === c._id" type="text" class="input is-small"
+                    [(ngModel)]="editingConvertidora.telefono" (keyup.enter)="guardarEdicion(c)" (keyup.escape)="cancelarEdicion()" />
+                </td>
+                <!-- Contacto -->
+                <td>
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">{{ c.contacto || '—' }}</ng-container>
+                  <input *ngIf="editingConvertidoraId === c._id" type="text" class="input is-small"
+                    [(ngModel)]="editingConvertidora.contacto" (keyup.enter)="guardarEdicion(c)" (keyup.escape)="cancelarEdicion()" />
+                </td>
+                <!-- Acciones -->
+                <td class="has-text-centered">
+                  <ng-container *ngIf="editingConvertidoraId !== c._id">
+                    <button class="button is-small is-link is-outlined mr-1" (click)="iniciarEdicion(c)">
+                      <span class="icon"><i class="fas fa-pencil-alt"></i></span>
+                    </button>
+                    <button class="button is-small is-danger is-outlined" (click)="eliminarConvertidora(c)">
+                      <span class="icon"><i class="fas fa-trash"></i></span>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="editingConvertidoraId === c._id">
+                    <button class="button is-small is-success mr-1" (click)="guardarEdicion(c)">
+                      <span class="icon"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="button is-small is-light" (click)="cancelarEdicion()">
+                      <span class="icon"><i class="fas fa-times"></i></span>
+                    </button>
+                  </ng-container>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -256,33 +400,4 @@
       </div>
     </div>
   </ng-container>
-
-  <br />
-
-  <!-- Statistics -->
-  <div class="card" *ngIf="api.convertidora?.length > 0">
-    <div class="card-content">
-      <span class="title is-5"><i class="fas fa-chart-bar"></i> Estadísticas</span>
-      <div class="columns">
-        <div class="column" *ngFor="let conv of api.convertidora; index as i">
-          <div class="card">
-            <div class="card-content">
-              <div class="subtitle is-6">{{ conv.nombre }}</div>
-              <table class="table is-fullwidth is-striped">
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Convertidas (und)</th>
-                    <th>Peso convertido (t)</th>
-                    <th>% rendimiento</th>
-                    <th>Conversiones</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </app-page-layout>

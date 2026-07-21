@@ -33,6 +33,7 @@ export class RecibosComponent {
         { fecha: '03/07/2026', horas: 8, descripcion: 'Formato numérico global, ordenamiento cargos, calendario' },
         { fecha: '07/07/2026', horas: 8, descripcion: 'Correcciones UI laboratorio + duplicidad NE SIO v1' },
         { fecha: '08/07/2026', horas: 8, descripcion: 'OCP: campos selectivos + listado rediseñado + auto-close' },
+        { fecha: '21/07/2026', horas: 8, descripcion: 'Reestructura del módulo de conversiones y convertidoras' },
       ]),
   );
 
