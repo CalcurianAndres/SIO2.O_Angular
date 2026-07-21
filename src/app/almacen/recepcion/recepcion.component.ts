@@ -498,6 +498,7 @@ export class RecepcionComponent implements OnInit {
       confirmButtonText: 'Guardar',
       confirmButtonColor: '#48c78e',
       cancelButtonColor: '#f14668',
+      didClose: () => this.limpiarBackdropSwal(),
       preConfirm: () => {
         const textElement = document.getElementById('swal-input1') as HTMLTextAreaElement | null;
         const statusElement = document.getElementById('swal-input2') as HTMLSelectElement | null;
@@ -528,15 +529,17 @@ export class RecepcionComponent implements OnInit {
       this.api.GuardarReclamos(data);
       this.api.GuardarRecepcion(recepcion);
 
-      Swal.fire({
-        title: 'Se generó reclamo',
-        icon: 'success',
-        toast: true,
-        position: 'top-end',
-        timer: 5000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-      });
+      setTimeout(() => {
+        Swal.fire({
+          title: 'Se generó reclamo',
+          icon: 'success',
+          toast: true,
+          position: 'top-end',
+          timer: 5000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      }, 150);
     }
   };
 
@@ -575,6 +578,7 @@ export class RecepcionComponent implements OnInit {
       title: 'Motivo',
       text: observacion,
       showConfirmButton: false,
+      didClose: () => this.limpiarBackdropSwal(),
     });
   }
 
@@ -706,7 +710,18 @@ export class RecepcionComponent implements OnInit {
   }
 
   // Función para verificar recepción (cambia de "En observacion" a "Verificado")
+  private cerrarSwalSiAbierto(): void {
+    if (Swal.isVisible()) {
+      Swal.close();
+    }
+  }
+
+  private limpiarBackdropSwal(): void {
+    document.querySelectorAll('.swal2-backdrop, .swal2-container').forEach((el) => el.remove());
+  }
+
   verificar(recepcion: any) {
+    this.cerrarSwalSiAbierto();
     Swal.fire({
       title: '¿Verificar recepción?',
       input: 'textarea',
@@ -716,25 +731,29 @@ export class RecepcionComponent implements OnInit {
       confirmButtonText: 'Verificar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#3e8ed0',
+      didClose: () => this.limpiarBackdropSwal(),
     }).then((result) => {
       if (result.isConfirmed) {
         recepcion.status = 'Verificado';
         this.api.GuardarRecepcion(recepcion);
-        Swal.fire({
-          text: 'Recepción verificada',
-          icon: 'success',
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 3000,
-        });
+        setTimeout(() => {
+          Swal.fire({
+            text: 'Recepción verificada',
+            icon: 'success',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+        }, 150);
       }
     });
   }
 
   // Función para revertir recepción a "Por notificar"
   revertirAPorNotificar(recepcion: any) {
+    this.cerrarSwalSiAbierto();
     Swal.fire({
       title: '¿Volver a "Por notificar"?',
       text: 'La recepción será devuelta para corrección',
@@ -749,28 +768,33 @@ export class RecepcionComponent implements OnInit {
       confirmButtonText: 'Sí, revertir',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#f14668',
+      didClose: () => this.limpiarBackdropSwal(),
     }).then((result) => {
       if (result.isConfirmed) {
         this.api.revertirAPorNotificar(recepcion._id, result.value).then(() => {
-          Swal.fire({
-            text: 'Recepción devuelta a "Por notificar"',
-            icon: 'success',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 3000,
-          });
+          setTimeout(() => {
+            Swal.fire({
+              text: 'Recepción devuelta a "Por notificar"',
+              icon: 'success',
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+          }, 150);
         }).catch((err) => {
-          Swal.fire({
-            text: err.mensaje || 'Error al revertir',
-            icon: 'error',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 3000,
-          });
+          setTimeout(() => {
+            Swal.fire({
+              text: err.mensaje || 'Error al revertir',
+              icon: 'error',
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+          }, 150);
         });
       }
     });
@@ -786,6 +810,7 @@ export class RecepcionComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#f14668',
+      didClose: () => this.limpiarBackdropSwal(),
     }).then((result) => {
       if (result.isConfirmed) {
         this.api.EliminarRecepcion(id);

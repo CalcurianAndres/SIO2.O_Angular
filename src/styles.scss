@@ -875,6 +875,15 @@ input[type='checkbox'].checkbox:disabled:checked {
   z-index: 20000 !important;
 }
 
+// Fix: backdrop leak — Chrome sometimes leaves .swal2-backdrop as an invisible
+// full-screen overlay after closing a Swal modal, blocking all pointer events.
+body:not(.swal2-shown) .swal2-backdrop {
+  display: none !important;
+}
+body:not(.swal2-shown) .swal2-container {
+  display: none !important;
+}
+
 // ─── Flag icon in button-is-static ───
 .flag-icon {
   height: 1.1em;

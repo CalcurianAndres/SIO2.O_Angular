@@ -44,7 +44,7 @@ registerLocaleData(localeEs);
     DashboardModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: true,
+      enabled: false,
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
