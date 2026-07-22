@@ -32,7 +32,11 @@ export class RecibosComponent {
         { fecha: '23/06/2026', horas: 8, descripcion: 'Bug modal empleado + tasa BCV directa de API' },
         { fecha: '03/07/2026', horas: 8, descripcion: 'Formato numérico global, ordenamiento cargos, calendario' },
         { fecha: '07/07/2026', horas: 8, descripcion: 'Correcciones UI laboratorio + duplicidad NE SIO v1' },
-        { fecha: '08/07/2026', horas: 8, descripcion: 'OCP: campos selectivos + listado rediseñado + auto-close' },
+        { fecha: '08/07/2026', horas: 8, descripcion: 'OCP rediseño + recepción: skip-lab, tabs almacenes, soft-delete' },
+        { fecha: '09/07/2026', horas: 8, descripcion: 'Secciones del almacén principal sin crear documento nuevo' },
+        { fecha: '14/07/2026', horas: 8, descripcion: 'Secciones del almacén principal + bobinas agrupadas por almacén' },
+        { fecha: '16/07/2026', horas: 8, descripcion: 'Nuevo flujo de estados recepción (Verificado, revertir)' },
+        { fecha: '17/07/2026', horas: 8, descripcion: 'Simplificar recibos, guardar detalles recepción, fix SweetAlert2' },
         { fecha: '21/07/2026', horas: 8, descripcion: 'Reestructura del módulo de conversiones y convertidoras' },
       ]),
   );
