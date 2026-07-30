@@ -109,9 +109,10 @@ export class AlmacenadoComponent implements OnInit {
 
   getStockForGroup(grupoId: string): number {
     if (!this.api.Almacen) return 0;
-    return this.api.Almacen.filter(
-      (item) => item.material?.grupo?._id === grupoId && this.matchAlmacen(item),
-    ).reduce((sum, item) => sum + Number(item.neto), 0);
+    return this.api.Almacen.filter((item) => item.material?.grupo?._id === grupoId && this.matchAlmacen(item)).reduce(
+      (sum, item) => sum + Number(item.neto),
+      0,
+    );
   }
 
   getStockStatus(grupoId: string): { label: string; class: string } {

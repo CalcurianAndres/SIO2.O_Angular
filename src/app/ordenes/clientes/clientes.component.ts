@@ -196,10 +196,7 @@ export class ClientesComponent implements AfterViewInit {
     });
 
     if (almacenes.length > 1) {
-      this.mapaDetalle.fitBounds(
-        L.latLngBounds(almacenes.map((a) => [a.lat, a.lng])),
-        { padding: [30, 30] },
-      );
+      this.mapaDetalle.fitBounds(L.latLngBounds(almacenes.map((a) => [a.lat, a.lng])), { padding: [30, 30] });
     } else {
       this.mapaDetalle.setView([almacenes[0].lat, almacenes[0].lng], 8);
     }

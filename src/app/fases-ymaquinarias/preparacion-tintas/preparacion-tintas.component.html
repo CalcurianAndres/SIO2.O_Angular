@@ -63,7 +63,9 @@
             <ng-container *ngFor="let formula of formulas_; index as i">
               <span class="preparacion">
                 Formula {{ i + 1 }} <i class="fas fa-edit green" (click)="editar(formula)"></i>
-                <button type="button" class="btn-action-icon" title="Eliminar"><i class="fas fa-trash-alt icon-danger"></i></button>
+                <button type="button" class="btn-action-icon" title="Eliminar">
+                  <i class="fas fa-trash-alt icon-danger"></i>
+                </button>
               </span>
               <br />
               <table class="table is-fullwidth is-striped">

@@ -66,19 +66,43 @@
         <tr>
           <th (click)="fabToggleSort('nombre')" class="sortable" style="cursor: pointer">
             Nombre
-            <i class="fas" [ngClass]="fabSortColumn === 'nombre' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                fabSortColumn === 'nombre' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="fabToggleSort('alias')" class="sortable" style="cursor: pointer">
             Alias
-            <i class="fas" [ngClass]="fabSortColumn === 'alias' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                fabSortColumn === 'alias' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="fabToggleSort('identificacion_fiscal')" class="sortable" style="cursor: pointer">
             Identificación fiscal
-            <i class="fas" [ngClass]="fabSortColumn === 'identificacion_fiscal' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                fabSortColumn === 'identificacion_fiscal'
+                  ? fabSortDirection === 'asc'
+                    ? 'fa-sort-up'
+                    : 'fa-sort-down'
+                  : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="fabToggleSort('tipo')" class="has-text-centered sortable" style="cursor: pointer">
             Tipo
-            <i class="fas" [ngClass]="fabSortColumn === 'tipo' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                fabSortColumn === 'tipo' ? (fabSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th class="has-text-centered">Acciones</th>
         </tr>
@@ -177,19 +201,43 @@
         <tr>
           <th (click)="provToggleSort('nombre')" class="sortable" style="cursor: pointer">
             Nombre
-            <i class="fas" [ngClass]="provSortColumn === 'nombre' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                provSortColumn === 'nombre' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="provToggleSort('rif')" class="sortable" style="cursor: pointer">
             RIF
-            <i class="fas" [ngClass]="provSortColumn === 'rif' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                provSortColumn === 'rif' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="provToggleSort('pais')" class="sortable" style="cursor: pointer">
             País
-            <i class="fas" [ngClass]="provSortColumn === 'pais' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                provSortColumn === 'pais' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+              "
+            ></i>
           </th>
           <th (click)="provToggleSort('contactos')" class="sortable" style="cursor: pointer">
             Contactos
-            <i class="fas" [ngClass]="provSortColumn === 'contactos' ? (provSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+            <i
+              class="fas"
+              [ngClass]="
+                provSortColumn === 'contactos'
+                  ? provSortDirection === 'asc'
+                    ? 'fa-sort-up'
+                    : 'fa-sort-down'
+                  : 'fa-sort'
+              "
+            ></i>
           </th>
           <th class="has-text-centered">Acciones</th>
         </tr>

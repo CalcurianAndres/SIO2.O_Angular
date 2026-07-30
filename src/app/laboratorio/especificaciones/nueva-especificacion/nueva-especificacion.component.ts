@@ -150,7 +150,8 @@ export class NuevaEspecificacionComponent {
     if (this.Edicion) return `Editar — ${texto}`;
     if (this.Edicion_cajas) return `Editar — ${texto}`;
     if (this.EDITAR_OTROS) return `Editar — ${texto}`;
-    if (this.NUEVO_SUSTRATO || this.NUEVA_ESPECIFICACION || this.NUEVA_CAJA || this.NUEVO_PADS || this.NUEVO_OTROS) return texto;
+    if (this.NUEVO_SUSTRATO || this.NUEVA_ESPECIFICACION || this.NUEVA_CAJA || this.NUEVO_PADS || this.NUEVO_OTROS)
+      return texto;
     return 'Especificación';
   }
 

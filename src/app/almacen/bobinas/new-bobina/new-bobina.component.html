@@ -23,12 +23,12 @@
               </div>
             </div>
             <div class="control" *ngIf="almacen">
-              <label class="label">Convertidora</label>
+              <label class="label">Proveedor (Servicio Conversión)</label>
               <div class="select">
                 <select [(ngModel)]="convertidora">
                   <option value="">— Seleccionar —</option>
                   <option *ngFor="let c of api.convertidora" [value]="c._id">
-                    {{ c.nombre }}
+                    {{ c.nombre }} {{ c.rif ? '(' + c.rif + ')' : '' }}
                   </option>
                 </select>
               </div>
@@ -91,7 +91,6 @@
                 class="input"
                 style="width: 90px"
                 [(ngModel)]="peso"
-                (input)="calcularHojasDesdeToneladas()"
               />
             </div>
           </div>

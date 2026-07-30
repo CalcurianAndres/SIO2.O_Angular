@@ -26,7 +26,6 @@
       <button class="delete red_cross" aria-label="close" [disabled]="guardando" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body">
-
       <!-- ==================== SECCIÓN 1: DOCUMENTO ==================== -->
       <h6 class="section-label"><i class="fas fa-file-invoice"></i> Documento</h6>
       <div class="columns is-multiline">
@@ -78,9 +77,14 @@
             <div class="field">
               <label class="label">N Control</label>
               <div class="control has-icons-left">
-                <input type="text" class="input" [(ngModel)]="control" (keydown)="generarNumeroDeControl()"
+                <input
+                  type="text"
+                  class="input"
+                  [(ngModel)]="control"
+                  (keydown)="generarNumeroDeControl()"
                   [disabled]="!esProveedorVenezolano"
-                  [title]="!esProveedorVenezolano ? 'Solo disponible para proveedores venezolanos' : ''" />
+                  [title]="!esProveedorVenezolano ? 'Solo disponible para proveedores venezolanos' : ''"
+                />
                 <span class="icon is-small is-left"><i class="fas fa-qrcode"></i></span>
               </div>
             </div>
@@ -233,7 +237,11 @@
           </div>
           <div
             class="column is-2"
-            *ngIf="material_selected_in_OC && Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje && Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'"
+            *ngIf="
+              material_selected_in_OC &&
+              Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje &&
+              Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'
+            "
           >
             <div class="field">
               <label class="label">Ancho</label>
@@ -245,7 +253,11 @@
           </div>
           <div
             class="column is-2"
-            *ngIf="material_selected_in_OC && Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje && Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'"
+            *ngIf="
+              material_selected_in_OC &&
+              Poligrafica_OC?.pedido[material_selected_in_OC]?.material?.gramaje &&
+              Poligrafica_OC?.pedido[material_selected_in_OC]?.unidad !== 't'
+            "
           >
             <div class="field">
               <label class="label">Largo</label>
@@ -267,7 +279,9 @@
           <div class="column is-3" *ngIf="material_selected_in_OC && conversion">
             <div class="field">
               <label class="label">Lote</label>
-              <p class="mt-1"><strong>{{ lote_ }}</strong></p>
+              <p class="mt-1">
+                <strong>{{ lote_ }}</strong>
+              </p>
             </div>
           </div>
         </div>
@@ -453,7 +467,6 @@
           </button>
         </div>
       </div>
-
     </div>
 
     <footer class="modal-card-foot" style="justify-content: flex-end; gap: 0.5rem">

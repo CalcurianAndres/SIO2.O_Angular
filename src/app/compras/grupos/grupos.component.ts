@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { GruposService } from 'src/app/services/grupos.service';
 import { MaterialesService } from 'src/app/services/materiales.service';
 import { ProductosService } from 'src/app/services/productos.service';
+import { ServiciosService } from 'src/app/services/servicios.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,8 +12,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./grupos.component.scss'],
 })
 export class GruposComponent {
+  activeTab: 'grupos' | 'servicios' = 'grupos';
   nuevo: boolean = false;
   editar: boolean = false;
+  nuevo_servicio: boolean = false;
+  editar_servicio: boolean = false;
+  servicio_data: any = null;
   material: boolean = false;
   nuevo_material: boolean = false;
   editar_material: boolean = false;
@@ -25,6 +30,7 @@ export class GruposComponent {
   selectedGrupo: any = null;
 
   searchTerm: string = '';
+  servicioSearchTerm: string = '';
   pageSize: number = 10;
   currentPage: number = 1;
   pageSizes: number[] = [10, 25, 50, 100];
@@ -43,6 +49,7 @@ export class GruposComponent {
     public api: GruposService,
     public materiales: MaterialesService,
     public productos: ProductosService,
+    public servicios: ServiciosService,
   ) {}
 
   get filteredGrupos(): any[] {
@@ -133,9 +140,7 @@ export class GruposComponent {
 
     const nameMap = new Map<string, any[]>();
     for (const mat of all) {
-      const key = grupo.trato
-        ? `${mat.nombre || ''}|${mat.gramaje || ''}|${mat.calibre || ''}`
-        : `${mat.nombre || ''}`;
+      const key = grupo.trato ? `${mat.nombre || ''}|${mat.gramaje || ''}|${mat.calibre || ''}` : `${mat.nombre || ''}`;
       if (!nameMap.has(key)) nameMap.set(key, []);
       nameMap.get(key)!.push(mat);
     }
@@ -343,5 +348,75 @@ export class GruposComponent {
 
   cerrarMateriales() {
     this.material = false;
+  }
+
+  // ==================
+  // SERVICIOS methods
+  // ==================
+
+  get filteredServicios(): any[] {
+    if (!this.servicioSearchTerm) return this.servicios.servicios;
+    const term = this.servicioSearchTerm.toLowerCase();
+    return this.servicios.servicios.filter((s: any) => s.nombre?.toLowerCase().includes(term));
+  }
+
+  EditarServicio(serv: any) {
+    this.servicio_data = serv;
+    this.editar_servicio = true;
+  }
+
+  cerrarServicio() {
+    this.nuevo_servicio = false;
+    this.editar_servicio = false;
+    this.servicio_data = null;
+    this.cargando = true;
+    setTimeout(() => {
+      this.cargando = false;
+      Swal.fire({
+        title: this.servicios.mensaje.mensaje,
+        icon: this.servicios.mensaje.icon,
+        timer: 5000,
+        timerProgressBar: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+      });
+    }, 1000);
+  }
+
+  cerrarServicio_() {
+    this.nuevo_servicio = false;
+    this.editar_servicio = false;
+    this.servicio_data = null;
+  }
+
+  eliminarServicio(id: string) {
+    Swal.fire({
+      title: '¿Eliminar este servicio?',
+      text: 'El servicio se eliminará de manera permanente',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#48c78e',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: '#f03a5f',
+    }).then((resultado) => {
+      if (resultado.isConfirmed) {
+        this.cargando = true;
+        this.servicios.eliminarServicio(id);
+        setTimeout(() => {
+          this.cargando = false;
+          Swal.fire({
+            title: this.servicios.mensaje.mensaje,
+            icon: this.servicios.mensaje.icon,
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+          });
+        }, 1000);
+      }
+    });
   }
 }

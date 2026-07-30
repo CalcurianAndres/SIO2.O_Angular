@@ -65,9 +65,11 @@ export class BobinasService {
     const lotesFiltrados = this.bobinas
       .filter((b: any) => {
         const bAlmacenId = b.almacen_id?._id || b.almacen_id;
-        return String(bAlmacenId || null) === String(almacenId || null)
-          && b.material._id === material
-          && b.ancho === Number(ancho);
+        return (
+          String(bAlmacenId || null) === String(almacenId || null) &&
+          b.material._id === material &&
+          b.ancho === Number(ancho)
+        );
       })
       .map((b: any) => b.lote);
 

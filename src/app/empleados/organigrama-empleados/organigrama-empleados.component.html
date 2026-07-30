@@ -1,8 +1,4 @@
-<app-crear-trabajador
-  *ngIf="modalCrear"
-  (onCloseModal)="cerrarModalCrear()"
->
-</app-crear-trabajador>
+<app-crear-trabajador *ngIf="modalCrear" (onCloseModal)="cerrarModalCrear()"> </app-crear-trabajador>
 
 <app-editar-trabajador
   *ngIf="modalEditar && empleadoAEditar"
@@ -62,21 +58,13 @@
       <table class="table is-fullwidth is-hoverable baja-table">
         <thead>
           <tr>
-            <th class="sortable" (click)="toggleSort('nombre')">
-              Nombre <i [class]="getSortIcon('nombre')"></i>
-            </th>
-            <th class="sortable" (click)="toggleSort('cedula')">
-              Cédula <i [class]="getSortIcon('cedula')"></i>
-            </th>
-            <th class="sortable" (click)="toggleSort('cargo')">
-              Cargo <i [class]="getSortIcon('cargo')"></i>
-            </th>
+            <th class="sortable" (click)="toggleSort('nombre')">Nombre <i [class]="getSortIcon('nombre')"></i></th>
+            <th class="sortable" (click)="toggleSort('cedula')">Cédula <i [class]="getSortIcon('cedula')"></i></th>
+            <th class="sortable" (click)="toggleSort('cargo')">Cargo <i [class]="getSortIcon('cargo')"></i></th>
             <th class="sortable" (click)="toggleSort('departamento')">
               Departamento <i [class]="getSortIcon('departamento')"></i>
             </th>
-            <th class="sortable" (click)="toggleSort('fecha')">
-              Fecha de baja <i [class]="getSortIcon('fecha')"></i>
-            </th>
+            <th class="sortable" (click)="toggleSort('fecha')">Fecha de baja <i [class]="getSortIcon('fecha')"></i></th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -84,8 +72,13 @@
           <tr *ngFor="let emp of sortedBajaEmpleados">
             <td>
               <div class="emp-name-cell">
-                <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
-                  cssClass="emp-avatar-sm" width="32px" height="32px"></app-img-fallback>
+                <app-img-fallback
+                  tipo="empleado"
+                  [filename]="emp.datos_personales?.foto"
+                  cssClass="emp-avatar-sm"
+                  width="32px"
+                  height="32px"
+                ></app-img-fallback>
                 <span>{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
               </div>
             </td>
@@ -98,7 +91,11 @@
             <td>{{ formatFechaBaja(emp.fechaBaja) }}</td>
             <td>
               <div class="actions-cell">
-                <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
+                <i
+                  class="fas fa-info-circle blue_"
+                  title="Información"
+                  (click)="informacion = true; _informacion_ = emp"
+                ></i>
                 <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
                 <button class="button btn-action-icon is-small" title="Reactivar" (click)="reactivarTrabajador(emp)">
                   <span class="icon"><i class="fas fa-user-check icon-success"></i></span>
@@ -108,7 +105,7 @@
           </tr>
           <tr *ngIf="sortedBajaEmpleados.length === 0">
             <td colspan="6" class="has-text-centered empty-row">
-              <i class="fas fa-user-slash" style="opacity:0.3"></i>
+              <i class="fas fa-user-slash" style="opacity: 0.3"></i>
               <p>No hay empleados de baja</p>
             </td>
           </tr>
@@ -126,82 +123,113 @@
 
   <!-- ═══════════ DEPARTMENT CARDS — Solo activos ═══════════ -->
   <div *ngIf="filterMode === 'activos'">
-  <!-- Department cards -->
-  <div *ngFor="let dep of departamentos" class="card dep-card animate__animated animate__fadeInUp">
-    <div class="card-header" (click)="toggleExpand(dep)">
-      <div class="card-header-title">
-        <span class="dep-badge" [style.background-color]="dep.color"></span>
-        <span class="dep-name">{{ dep.nombre }}</span>
-        <span class="tag is-light">{{ obtenerEmpleadosDelDepartamento(dep).length }} empleados</span>
-        <span *ngIf="obtenerAreas(dep).length > 0" class="tag is-info is-light">{{ obtenerAreas(dep).length }} áreas</span>
-      </div>
-      <div class="card-header-actions">
-        <i class="fas fa-chevron-up chevron-btn" [ngClass]="expandedDepId === dep._id ? 'rotate-down' : 'rotate-up'"></i>
-      </div>
-    </div>
-
-    <!-- Card body (expandable) -->
-    <div class="card-content" [ngClass]="{ active: expandedDepId === dep._id }">
-      <div *ngIf="obtenerEmpleadosDelDepartamento(dep).length === 0" class="has-text-centered py-4">
-        <i class="fas fa-user-plus" style="font-size: 1.5rem; color: var(--text-muted); opacity: 0.4"></i>
-        <p class="mt-2" style="color: var(--text-muted); font-size: 0.85rem">No hay empleados en este departamento</p>
+    <!-- Department cards -->
+    <div *ngFor="let dep of departamentos" class="card dep-card animate__animated animate__fadeInUp">
+      <div class="card-header" (click)="toggleExpand(dep)">
+        <div class="card-header-title">
+          <span class="dep-badge" [style.background-color]="dep.color"></span>
+          <span class="dep-name">{{ dep.nombre }}</span>
+          <span class="tag is-light">{{ obtenerEmpleadosDelDepartamento(dep).length }} empleados</span>
+          <span *ngIf="obtenerAreas(dep).length > 0" class="tag is-info is-light"
+            >{{ obtenerAreas(dep).length }} áreas</span
+          >
+        </div>
+        <div class="card-header-actions">
+          <i
+            class="fas fa-chevron-up chevron-btn"
+            [ngClass]="expandedDepId === dep._id ? 'rotate-down' : 'rotate-up'"
+          ></i>
+        </div>
       </div>
 
-      <!-- Direct employees (no subunidad / department-level) -->
-      <div *ngIf="empleadosDirectos(dep).length > 0" class="direct-section">
-        <span class="direct-label"><i class="fas fa-user-tie mr-1"></i>Dirección / Gerencia</span>
-        <div class="emp-grid">
-          <div *ngFor="let emp of empleadosDirectos(dep)" class="emp-card">
-            <div class="emp-avatar-col">
-              <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
-                cssClass="emp-avatar" width="40px" height="40px"></app-img-fallback>
+      <!-- Card body (expandable) -->
+      <div class="card-content" [ngClass]="{ active: expandedDepId === dep._id }">
+        <div *ngIf="obtenerEmpleadosDelDepartamento(dep).length === 0" class="has-text-centered py-4">
+          <i class="fas fa-user-plus" style="font-size: 1.5rem; color: var(--text-muted); opacity: 0.4"></i>
+          <p class="mt-2" style="color: var(--text-muted); font-size: 0.85rem">No hay empleados en este departamento</p>
+        </div>
+
+        <!-- Direct employees (no subunidad / department-level) -->
+        <div *ngIf="empleadosDirectos(dep).length > 0" class="direct-section">
+          <span class="direct-label"><i class="fas fa-user-tie mr-1"></i>Dirección / Gerencia</span>
+          <div class="emp-grid">
+            <div *ngFor="let emp of empleadosDirectos(dep)" class="emp-card">
+              <div class="emp-avatar-col">
+                <app-img-fallback
+                  tipo="empleado"
+                  [filename]="emp.datos_personales?.foto"
+                  cssClass="emp-avatar"
+                  width="40px"
+                  height="40px"
+                ></app-img-fallback>
+              </div>
+              <div class="emp-info">
+                <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
+                <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
+              </div>
+              <div class="emp-actions">
+                <i
+                  class="fas fa-info-circle blue_"
+                  title="Información"
+                  (click)="informacion = true; _informacion_ = emp"
+                ></i>
+                <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
+                <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)">
+                  <span class="icon"><i class="fas fa-user-slash icon-danger"></i></span>
+                </button>
+              </div>
             </div>
-            <div class="emp-info">
-              <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
-              <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
-            </div>
-            <div class="emp-actions">
-              <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
-              <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
-              <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
+          </div>
+        </div>
+
+        <!-- Areas -->
+        <div *ngFor="let area of obtenerAreas(dep)" class="area-section">
+          <span class="area-label"><i class="fas fa-folder-open mr-1"></i>{{ area.nombre }}</span>
+          <div
+            *ngIf="empleadosDelArea(area, dep).length === 0"
+            class="has-text-centered py-3"
+            style="color: var(--text-muted); font-size: 0.85rem"
+          >
+            Sin empleados en esta área
+          </div>
+          <div class="emp-grid">
+            <div *ngFor="let emp of empleadosDelArea(area, dep)" class="emp-card">
+              <div class="emp-avatar-col">
+                <app-img-fallback
+                  tipo="empleado"
+                  [filename]="emp.datos_personales?.foto"
+                  cssClass="emp-avatar"
+                  width="40px"
+                  height="40px"
+                ></app-img-fallback>
+              </div>
+              <div class="emp-info">
+                <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
+                <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
+              </div>
+              <div class="emp-actions">
+                <i
+                  class="fas fa-info-circle blue_"
+                  title="Información"
+                  (click)="informacion = true; _informacion_ = emp"
+                ></i>
+                <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
+                <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)">
+                  <span class="icon"><i class="fas fa-user-slash icon-danger"></i></span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Areas -->
-      <div *ngFor="let area of obtenerAreas(dep)" class="area-section">
-        <span class="area-label"><i class="fas fa-folder-open mr-1"></i>{{ area.nombre }}</span>
-        <div *ngIf="empleadosDelArea(area, dep).length === 0" class="has-text-centered py-3" style="color: var(--text-muted); font-size: 0.85rem">
-          Sin empleados en esta área
-        </div>
-        <div class="emp-grid">
-          <div *ngFor="let emp of empleadosDelArea(area, dep)" class="emp-card">
-            <div class="emp-avatar-col">
-              <app-img-fallback tipo="empleado" [filename]="emp.datos_personales?.foto"
-                cssClass="emp-avatar" width="40px" height="40px"></app-img-fallback>
-            </div>
-            <div class="emp-info">
-              <span class="emp-name">{{ emp.datos_personales?.nombres }} {{ emp.datos_personales?.apellidos }}</span>
-              <span class="emp-cargo">{{ emp.contratacion?.cargo?.nombre }}</span>
-            </div>
-            <div class="emp-actions">
-              <i class="fas fa-info-circle blue_" title="Información" (click)="informacion = true; _informacion_ = emp"></i>
-              <i class="far fa-edit green" title="Editar" (click)="abrirModalEditar(emp)"></i>
-              <button class="button btn-action-icon" title="Dar de baja" (click)="darDeBajaTrabajador(emp)"><span class="icon"><i class="fas fa-user-slash icon-danger"></i></span></button>
-            </div>
-          </div>
-        </div>
+      <!-- Card footer -->
+      <div class="card-footer" *ngIf="expandedDepId === dep._id">
+        <button class="button is-success is-small" (click)="abrirModalCrear()">
+          <span class="icon"><i class="fas fa-plus-circle"></i></span>
+          <span>Nuevo Empleado</span>
+        </button>
       </div>
     </div>
-
-    <!-- Card footer -->
-    <div class="card-footer" *ngIf="expandedDepId === dep._id">
-      <button class="button is-success is-small" (click)="abrirModalCrear()">
-        <span class="icon"><i class="fas fa-plus-circle"></i></span>
-        <span>Nuevo Empleado</span>
-      </button>
-    </div>
-  </div>
   </div>
 </app-page-layout>

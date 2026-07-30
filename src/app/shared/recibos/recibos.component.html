@@ -70,27 +70,33 @@
                   *ngIf="editandoIndex === tareas.indexOf(t)"
                   class="input has-text-centered"
                   type="number"
-                  style="width: 80px; display: inline-block;"
+                  style="width: 80px; display: inline-block"
                   [(ngModel)]="editandoHoras"
                 />
                 <strong *ngIf="editandoIndex !== tareas.indexOf(t)">{{ t.horas }}</strong>
               </td>
-              <td class="has-text-right" style="white-space: nowrap;">
+              <td class="has-text-right" style="white-space: nowrap">
                 <button
                   *ngIf="editandoIndex !== tareas.indexOf(t)"
                   (click)="editarTarea(t)"
                   class="button is-info is-small is-light mr-1"
-                >Editar</button>
+                >
+                  Editar
+                </button>
                 <button
                   *ngIf="editandoIndex === tareas.indexOf(t)"
                   (click)="editarTarea(t)"
                   class="button is-success is-small is-light mr-1"
-                >Guardar</button>
+                >
+                  Guardar
+                </button>
                 <button
                   *ngIf="editandoIndex === tareas.indexOf(t)"
                   (click)="cancelarEdicion()"
                   class="button is-light is-small mr-1"
-                >Cancelar</button>
+                >
+                  Cancelar
+                </button>
                 <button (click)="eliminarTarea(t)" class="button is-danger is-small is-light">Eliminar</button>
               </td>
             </tr>
@@ -106,7 +112,11 @@
       </div>
 
       <div class="mt-5">
-        <button (click)="generarPDF()" class="button is-link is-large is-fullwidth" [disabled]="tareasFiltradas.length === 0">
+        <button
+          (click)="generarPDF()"
+          class="button is-link is-large is-fullwidth"
+          [disabled]="tareasFiltradas.length === 0"
+        >
           <span class="icon"><i class="fas fa-file-pdf"></i></span>
           <span>Descargar Recibo Profesional{{ mesSeleccionado !== 'todos' ? ' (' + nombreMesSel + ')' : '' }}</span>
         </button>

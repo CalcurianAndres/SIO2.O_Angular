@@ -612,15 +612,15 @@ export class AnalisisTintaComponent implements OnChanges {
               new Cell(new Txt('').bold().end).end,
               new Cell(new Txt('').bold().end).end,
               new Cell(new Txt('').bold().end).end,
-                            new Cell(
-                await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, { width: 150, margin: [8, 0] })
+              new Cell(
+                await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, {
+                  width: 150,
+                  margin: [8, 0],
+                }),
               )
                 .rowSpan(34)
                 .border([false, false])
                 .fontSize(8).end,
-
-
-
             ],
             [
               new Cell(new Txt('Transparencia / Opacidad').alignment('center').bold().end)
@@ -1771,7 +1771,10 @@ export class AnalisisTintaComponent implements OnChanges {
             new Cell(new Txt('').bold().end).end,
             new Cell(new Txt('').bold().end).end,
             new Cell(
-              await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, { width: 150, margin: [8, 0] })
+              await getImageSafe(`${environment.imgUrl}/imagen/analisis/${analisis.img}`, {
+                width: 150,
+                margin: [8, 0],
+              }),
             )
               .rowSpan(34)
               .border([false, false])

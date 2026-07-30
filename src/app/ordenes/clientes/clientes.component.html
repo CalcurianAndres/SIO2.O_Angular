@@ -65,19 +65,39 @@
               <tr>
                 <th (click)="toggleSort('nombre')" class="sortable" style="cursor: pointer">
                   Cliente
-                  <i class="fas" [ngClass]="sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th (click)="toggleSort('rif')" class="sortable" style="cursor: pointer">
                   RIF
-                  <i class="fas" [ngClass]="sortColumn === 'rif' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'rif' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th (click)="toggleSort('codigo')" class="sortable" style="cursor: pointer">
                   Código
-                  <i class="fas" [ngClass]="sortColumn === 'codigo' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'codigo' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th (click)="toggleSort('contactos')" class="has-text-centered sortable" style="cursor: pointer">
                   <i class="fas fa-address-book"></i>
-                  <i class="fas" [ngClass]="sortColumn === 'contactos' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'contactos' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
               </tr>
             </thead>

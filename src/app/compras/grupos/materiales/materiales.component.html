@@ -39,7 +39,9 @@
                 <td>{{ material.codigo || '-' }}</td>
                 <td class="has-text-centered">
                   <i class="far fa-edit green mr-2" title="Editar" (click)="editarMaterial(material)"></i>
-                  <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(material._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
+                  <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(material._id)">
+                    <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+                  </button>
                 </td>
               </tr>
             </tbody>

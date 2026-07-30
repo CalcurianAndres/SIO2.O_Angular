@@ -9,6 +9,7 @@ import { RecibosComponent } from './shared/recibos/recibos.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
     loadChildren: () => import('./Dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
@@ -58,6 +59,10 @@ const routes: Routes = [
   {
     path: 'recibos',
     component: RecibosComponent,
+  },
+  {
+    path: 'ui-showcase',
+    loadChildren: () => import('./ui-showcase/ui-showcase.module').then((m) => m.UiShowcaseModule),
   },
 ];
 

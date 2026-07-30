@@ -457,8 +457,9 @@
               <div *ngIf="showError" class="error-message">Cantidad solicitada supera cantidad en el almacén.</div>
             </td>
             <td>
-              <button class="button btn-action-icon" title="Eliminar"
-              (click)="eliminarMaterial(material._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
+              <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(material._id)">
+                <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+              </button>
             </td>
           </tr>
         </table>

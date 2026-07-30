@@ -32,7 +32,13 @@
       <div class="field">
         <label class="label">Identificación fiscal</label>
         <div class="control">
-          <input type="text" class="input" placeholder="Ej: 12345678A" [(ngModel)]="identificacion_fiscal" *ngIf="nuevo" />
+          <input
+            type="text"
+            class="input"
+            placeholder="Ej: 12345678A"
+            [(ngModel)]="identificacion_fiscal"
+            *ngIf="nuevo"
+          />
           <input type="text" class="input" [(ngModel)]="data.identificacion_fiscal" *ngIf="editar" />
         </div>
       </div>
@@ -66,9 +72,7 @@
             *ngIf="estados.length === 0 && !cargandoEstados"
             style="max-width: 180px"
           />
-          <p class="help" *ngIf="cargandoEstados">
-            <i class="fas fa-spinner fa-pulse"></i> Cargando…
-          </p>
+          <p class="help" *ngIf="cargandoEstados"><i class="fas fa-spinner fa-pulse"></i> Cargando…</p>
         </div>
         <div class="control" *ngIf="pais && estado">
           <button class="button is-info" (click)="nuevo ? addOrigen() : addOrigen_()">
@@ -82,7 +86,10 @@
         <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el origen
       </p>
       <div class="tags-list" *ngIf="nuevo ? origenes.length > 0 : (data?.origenes?.length ?? 0) > 0">
-        <span class="tag is-info is-light is-medium" *ngFor="let o of nuevo ? origenes : data?.origenes || []; index as i">
+        <span
+          class="tag is-info is-light is-medium"
+          *ngFor="let o of nuevo ? origenes : data?.origenes || []; index as i"
+        >
           <i class="fas fa-flag"></i> {{ o.pais }} ({{ o.estado }})
           <button class="delete is-small" (click)="nuevo ? deleteOrigen(i) : deleteOrigen_(i)"></button>
         </span>
@@ -178,7 +185,12 @@
           <label class="label">Identificación fiscal</label>
           <div class="control">
             <input type="text" class="input" placeholder="Opcional" [(ngModel)]="identificacion_fiscal" *ngIf="nuevo" />
-            <input type="text" class="input" [(ngModel)]="proveedor_directo_selected[0].identificacion_fiscal" *ngIf="proveedor_directo_abierto && !nuevo" />
+            <input
+              type="text"
+              class="input"
+              [(ngModel)]="proveedor_directo_selected[0].identificacion_fiscal"
+              *ngIf="proveedor_directo_abierto && !nuevo"
+            />
           </div>
         </div>
 
@@ -191,7 +203,11 @@
             <input type="text" class="input" placeholder="Nombre" [(ngModel)]="p_nombre" />
           </div>
           <div class="column">
-            <app-phone-input [value]="p_telefono" (valueChange)="p_telefono = $event" placeholder="Teléfono"></app-phone-input>
+            <app-phone-input
+              [value]="p_telefono"
+              (valueChange)="p_telefono = $event"
+              placeholder="Teléfono"
+            ></app-phone-input>
           </div>
           <div class="column">
             <input
@@ -215,7 +231,10 @@
             </button>
           </div>
         </div>
-        <p class="help is-danger" *ngIf="(p_nombre || p_telefono || p_correo || p_cargo) && nuevo ? p_contacto.length === 0 : false">
+        <p
+          class="help is-danger"
+          *ngIf="(p_nombre || p_telefono || p_correo || p_cargo) && nuevo ? p_contacto.length === 0 : false"
+        >
           <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
         </p>
         <p id="validationMessage" class="help is-danger" style="display: none"></p>

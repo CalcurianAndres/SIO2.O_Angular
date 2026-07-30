@@ -880,7 +880,9 @@ export class NewProductoComponent {
           [new Cell(new Txt('2.3 Diseño del producto').end).fillColor('#dedede').bold().border([false]).end],
           [
             new Cell(
-              await getImageSafe(`${environment.imgUrl}/imagen/producto/PRODUCTO_2_4_2024_15_42_39_494.png`, { width: 450 })
+              await getImageSafe(`${environment.imgUrl}/imagen/producto/PRODUCTO_2_4_2024_15_42_39_494.png`, {
+                width: 450,
+              }),
             )
               .alignment('center')
               .border([false])

@@ -14,8 +14,15 @@
           <div class="field">
             <label for="" class="label">Fabricación</label>
             <div class="control">
-              <input type="date" class="input" width="30%" [max]="Hoy" [(ngModel)]="lista.fabricacion[n]"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="date"
+                class="input"
+                width="30%"
+                [max]="Hoy"
+                [(ngModel)]="lista.fabricacion[n]"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </div>
           </div>
         </div>
@@ -23,8 +30,13 @@
           <div class="field">
             <label for="" class="label">Documento</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.documento"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="text"
+                class="input"
+                [(ngModel)]="lista.documento"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </div>
           </div>
         </div>
@@ -32,8 +44,13 @@
           <div class="field">
             <label for="" class="label">OC</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.OC"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="text"
+                class="input"
+                [(ngModel)]="lista.OC"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </div>
           </div>
         </div>
@@ -41,8 +58,13 @@
           <div class="field">
             <label for="" class="label">Transportista</label>
             <div class="control">
-              <input type="text" class="input" [(ngModel)]="lista.transportista"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="text"
+                class="input"
+                [(ngModel)]="lista.transportista"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </div>
           </div>
         </div>
@@ -61,18 +83,33 @@
         <tbody>
           <tr *ngFor="let material of lista.materiales[n]; index as i">
             <td>
-              <input type="text" class="input" [(ngModel)]="material.codigo"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="text"
+                class="input"
+                [(ngModel)]="material.codigo"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </td>
             <td>
-              <input type="text" class="input" [(ngModel)]="material.lote"
-                [readonly]="!esEditable" [class.is-static]="!esEditable" />
+              <input
+                type="text"
+                class="input"
+                [(ngModel)]="material.lote"
+                [readonly]="!esEditable"
+                [class.is-static]="!esEditable"
+              />
             </td>
             <td>
               <div class="field has-addons">
                 <div class="contro">
-                  <input type="number" class="input" [(ngModel)]="material.neto"
-                    [readonly]="!esEditable" [class.is-static]="!esEditable" />
+                  <input
+                    type="number"
+                    class="input"
+                    [(ngModel)]="material.neto"
+                    [readonly]="!esEditable"
+                    [class.is-static]="!esEditable"
+                  />
                 </div>
               </div>
             </td>

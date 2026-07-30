@@ -14,7 +14,9 @@
 .star-toggle i {
   cursor: pointer;
   font-size: 14px;
-  transition: color 0.4s, transform 0.3s ease;
+  transition:
+    color 0.4s,
+    transform 0.3s ease;
 }
 .star-toggle i:hover {
   transform: scale(1.2);
@@ -39,8 +41,7 @@
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   font-size: 0.9rem;
-  transition:
-    all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--border-color);
   background: var(--bg-card);
   color: var(--text-muted);
@@ -67,15 +68,13 @@
   background: linear-gradient(135deg, var(--accent-blue), color-mix(in srgb, var(--accent-blue) 80%, #000));
   color: #fff;
   border-color: var(--accent-blue);
-  box-shadow:
-    0 4px 14px color-mix(in srgb, var(--accent-blue) 40%, transparent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent-blue) 40%, transparent);
   z-index: 1;
   position: relative;
 }
 
 .year-btn.is-active-year:hover {
-  box-shadow:
-    0 6px 20px color-mix(in srgb, var(--accent-blue) 50%, transparent);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-blue) 50%, transparent);
   transform: translateY(-2px);
 }
 
@@ -305,7 +304,11 @@
 
 /* Día no laboral */
 .day.selected {
-  background: linear-gradient(145deg, color-mix(in srgb, var(--status-danger) 20%, var(--bg-card)), color-mix(in srgb, var(--status-danger) 12%, var(--bg-card)));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--status-danger) 20%, var(--bg-card)),
+    color-mix(in srgb, var(--status-danger) 12%, var(--bg-card))
+  );
   color: var(--status-danger);
   font-weight: 600;
   border-color: color-mix(in srgb, var(--status-danger) 35%, transparent);

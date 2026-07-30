@@ -70,6 +70,7 @@ export class Proveedores {
         cargo?: string;
       },
     ],
+    public servicios?: any,
     public pais?: string,
     public identificacion_fiscal?: string,
     public estado?: string,
@@ -80,6 +81,13 @@ export class Mensaje {
   constructor(
     public mensaje: string,
     public icon: SweetAlertIcon,
+  ) {}
+}
+
+export class Servicio {
+  constructor(
+    public nombre: string,
+    public _id?: string,
   ) {}
 }
 

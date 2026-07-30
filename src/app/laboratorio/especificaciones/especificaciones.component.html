@@ -120,19 +120,43 @@
               <tr>
                 <th class="is-clickable" (click)="toggleSort('nombre')">
                   Nombre
-                  <i class="fas" [ngClass]="sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'nombre' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th class="is-clickable" (click)="toggleSort('fabricante')">
                   Fabricante
-                  <i class="fas" [ngClass]="sortColumn === 'fabricante' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'fabricante'
+                        ? sortDirection === 'asc'
+                          ? 'fa-sort-up'
+                          : 'fa-sort-down'
+                        : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th class="is-clickable" (click)="toggleSort('serie')">
                   Serie
-                  <i class="fas" [ngClass]="sortColumn === 'serie' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'serie' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th class="is-clickable" (click)="toggleSort('origen')">
                   Origen
-                  <i class="fas" [ngClass]="sortColumn === 'origen' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  <i
+                    class="fas"
+                    [ngClass]="
+                      sortColumn === 'origen' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'
+                    "
+                  ></i>
                 </th>
                 <th class="has-text-centered">Acciones</th>
               </tr>
@@ -169,11 +193,19 @@
             </div>
             <div class="level-right">
               <nav class="pagination is-small" role="navigation" aria-label="pagination">
-                <a class="pagination-previous" [class.is-disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <a
+                  class="pagination-previous"
+                  [class.is-disabled]="currentPage === 1"
+                  (click)="goToPage(currentPage - 1)"
+                >
                   <span class="icon is-small"><i class="fas fa-chevron-left"></i></span>
                 </a>
                 <span class="mx-3 is-size-7 has-text-weight-medium">Pág {{ currentPage }} de {{ totalPages }}</span>
-                <a class="pagination-next" [class.is-disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                <a
+                  class="pagination-next"
+                  [class.is-disabled]="currentPage === totalPages"
+                  (click)="goToPage(currentPage + 1)"
+                >
                   <span class="icon is-small"><i class="fas fa-chevron-right"></i></span>
                 </a>
               </nav>

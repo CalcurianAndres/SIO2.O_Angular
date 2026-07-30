@@ -22,6 +22,16 @@
 >
 </app-nuevo-material>
 
+<app-nuevo-servicio
+  [nuevo]="nuevo_servicio"
+  [editar]="editar_servicio"
+  [data]="servicio_data"
+  [cargando]="cargando"
+  (onCloseModal)="cerrarServicio()"
+  (onCloseModal_)="cerrarServicio_()"
+>
+</app-nuevo-servicio>
+
 <app-page-layout>
   <app-section-header
     title="Grupo de materiales"
@@ -31,177 +41,305 @@
   >
   </app-section-header>
 
-  <button class="button is-info" (click)="AgregarNuevo()">
-    <span class="icon"><i class="fas fa-plus-circle"></i></span>
-    <span>Nuevo Grupo</span>
-  </button>
-
-  <br /><br />
-
-  <!-- Empty state -->
-  <div *ngIf="!cargando && api.grupos.length === 0" class="empty-state">
-    <i class="fas fa-cubes empty-icon"></i>
-    <p class="empty-title">Crea tu primer grupo</p>
-    <p class="empty-hint">Haz clic en el botón "Nuevo Grupo" para comenzar</p>
-    <i class="fas fa-arrow-up empty-arrow"></i>
+  <!-- Tabs -->
+  <div class="tabs is-boxed mb-4">
+    <ul>
+      <li [class.is-active]="activeTab === 'grupos'">
+        <a (click)="activeTab = 'grupos'">
+          <span class="icon"><i class="fas fa-shopping-cart"></i></span>
+          <span>Grupos</span>
+        </a>
+      </li>
+      <li [class.is-active]="activeTab === 'servicios'">
+        <a (click)="activeTab = 'servicios'">
+          <span class="icon"><i class="fas fa-cog"></i></span>
+          <span>Servicios</span>
+        </a>
+      </li>
+    </ul>
   </div>
 
-  <!-- Skeleton -->
-  <div *ngIf="cargando && api.grupos.length === 0" class="skeleton-list">
-    <div *ngFor="let _ of [].constructor(3)" class="card skeleton-card">
-      <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
-      <div class="card-content">
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line" style="width: 60%"></div>
-      </div>
-    </div>
-  </div>
+  <!-- ===================== -->
+  <!-- TAB: GRUPOS           -->
+  <!-- ===================== -->
+  <div *ngIf="activeTab === 'grupos'">
+    <button class="button is-info" (click)="AgregarNuevo()">
+      <span class="icon"><i class="fas fa-plus-circle"></i></span>
+      <span>Nuevo Grupo</span>
+    </button>
 
-  <!-- Cards -->
-  <div *ngIf="api.grupos.length > 0" class="cards-container">
-    <!-- Search -->
-    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
-      <div class="control has-icons-left">
-        <input
-          class="input"
-          type="text"
-          placeholder="Buscar grupo..."
-          [(ngModel)]="searchTerm"
-          (input)="onSearchChange()"
-        />
-        <span class="icon is-left"><i class="fas fa-search"></i></span>
-      </div>
+    <br /><br />
+
+    <!-- Empty state -->
+    <div *ngIf="!cargando && api.grupos.length === 0" class="empty-state">
+      <i class="fas fa-cubes empty-icon"></i>
+      <p class="empty-title">Crea tu primer grupo</p>
+      <p class="empty-hint">Haz clic en el botón "Nuevo Grupo" para comenzar</p>
+      <i class="fas fa-arrow-up empty-arrow"></i>
     </div>
 
-    <!-- Group cards -->
-    <div *ngFor="let grupo of paginatedGrupos" class="card grupo-card animate__animated animate__fadeInUp">
-      <div class="card-header" (click)="toggleExpand(grupo._id)">
-        <div class="card-header-title">
-          <i class="fas fa-shopping-cart grupo-icon"></i>
-          <span class="grupo-nombre">{{ grupo.nombre }}</span>
-          <span *ngIf="grupo.parcial" class="badge parcial-badge">
-            <i class="fas fa-glass-whiskey"></i> Parcial
-          </span>
-          <span *ngIf="!grupo.parcial" class="badge total-badge">
-            <i class="fas fa-box"></i> Total
-          </span>
+    <!-- Skeleton -->
+    <div *ngIf="cargando && api.grupos.length === 0" class="skeleton-list">
+      <div *ngFor="let _ of [].constructor(3)" class="card skeleton-card">
+        <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
+        <div class="card-content">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line" style="width: 60%"></div>
         </div>
-        <div class="card-header-actions">
-          <i class="far fa-edit green action-icon" title="Editar" (click)="$event.stopPropagation(); EditarGrupo(grupo)"></i>
-          <button class="button btn-action-icon" title="Eliminar" (click)="$event.stopPropagation(); eliminarGrupo(grupo._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
-          <span class="count-badge">
-            {{ getMaterialesDelGrupo(grupo._id).length }} <i class="fas fa-cube"></i>
-          </span>
-          <i
-            class="fas fa-chevron-up chevron-btn"
-            [ngClass]="expandedGrupoId === grupo._id ? 'rotate-down' : 'rotate-up'"
-          ></i>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div *ngIf="api.grupos.length > 0" class="cards-container">
+      <!-- Search -->
+      <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+        <div class="control has-icons-left">
+          <input
+            class="input"
+            type="text"
+            placeholder="Buscar grupo..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+          />
+          <span class="icon is-left"><i class="fas fa-search"></i></span>
         </div>
       </div>
 
-      <!-- Card body (expandable) -->
-      <div class="card-content" [ngClass]="{ active: expandedGrupoId === grupo._id }">
-        <div *ngIf="getMaterialesDelGrupo(grupo._id).length === 0" class="has-text-centered py-4">
-          <i class="fas fa-box-open" style="font-size: 1.5rem; color: var(--text-muted); opacity: 0.4"></i>
-          <p class="mt-2" style="color: var(--text-muted); font-size: 0.85rem">No hay materiales en este grupo</p>
+      <!-- Group cards -->
+      <div *ngFor="let grupo of paginatedGrupos" class="card grupo-card animate__animated animate__fadeInUp">
+        <div class="card-header" (click)="toggleExpand(grupo._id)">
+          <div class="card-header-title">
+            <i class="fas fa-shopping-cart grupo-icon"></i>
+            <span class="grupo-nombre">{{ grupo.nombre }}</span>
+            <span *ngIf="grupo.parcial" class="badge parcial-badge">
+              <i class="fas fa-glass-whiskey"></i> Parcial
+            </span>
+            <span *ngIf="!grupo.parcial" class="badge total-badge"> <i class="fas fa-box"></i> Total </span>
+          </div>
+          <div class="card-header-actions">
+            <i
+              class="far fa-edit green action-icon"
+              title="Editar"
+              (click)="$event.stopPropagation(); EditarGrupo(grupo)"
+            ></i>
+            <button
+              class="button btn-action-icon"
+              title="Eliminar"
+              (click)="$event.stopPropagation(); eliminarGrupo(grupo._id)"
+            >
+              <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+            </button>
+            <span class="count-badge"> {{ getMaterialesDelGrupo(grupo._id).length }} <i class="fas fa-cube"></i> </span>
+            <i
+              class="fas fa-chevron-up chevron-btn"
+              [ngClass]="expandedGrupoId === grupo._id ? 'rotate-down' : 'rotate-up'"
+            ></i>
+          </div>
         </div>
 
-        <div *ngIf="getMaterialesDelGrupo(grupo._id).length > 0" class="nested-accordion">
-          <!-- Level 1: By Material Name -->
-          <div *ngFor="let nameGroup of getNameGroups(grupo._id)" class="name-card">
-            <div class="name-header" (click)="toggleName(nameGroup.key)">
-              <i class="fas" [ngClass]="expandedNameKey === nameGroup.key ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
-              <span class="name-label">
-                <span *ngIf="grupo.trato && nameGroup.calibre">
-                  {{ nameGroup.name }} {{ nameGroup.calibre }}pt {{ nameGroup.gramaje }}g/m²
+        <!-- Card body (expandable) -->
+        <div class="card-content" [ngClass]="{ active: expandedGrupoId === grupo._id }">
+          <div *ngIf="getMaterialesDelGrupo(grupo._id).length === 0" class="has-text-centered py-4">
+            <i class="fas fa-box-open" style="font-size: 1.5rem; color: var(--text-muted); opacity: 0.4"></i>
+            <p class="mt-2" style="color: var(--text-muted); font-size: 0.85rem">No hay materiales en este grupo</p>
+          </div>
+
+          <div *ngIf="getMaterialesDelGrupo(grupo._id).length > 0" class="nested-accordion">
+            <!-- Level 1: By Material Name -->
+            <div *ngFor="let nameGroup of getNameGroups(grupo._id)" class="name-card">
+              <div class="name-header" (click)="toggleName(nameGroup.key)">
+                <i
+                  class="fas"
+                  [ngClass]="expandedNameKey === nameGroup.key ? 'fa-chevron-down' : 'fa-chevron-right'"
+                ></i>
+                <span class="name-label">
+                  <span *ngIf="grupo.trato && nameGroup.calibre">
+                    {{ nameGroup.name }} {{ nameGroup.calibre }}pt {{ nameGroup.gramaje }}g/m²
+                  </span>
+                  <span *ngIf="!grupo.trato || !nameGroup.calibre">{{ nameGroup.name }}</span>
                 </span>
-                <span *ngIf="!grupo.trato || !nameGroup.calibre">{{ nameGroup.name }}</span>
-              </span>
-              <span class="tag is-info is-light">{{ nameGroup.total }} und.</span>
-            </div>
+                <span class="tag is-info is-light">{{ nameGroup.total }} und.</span>
+              </div>
 
-            <!-- Level 2: By Brand -->
-            <div *ngIf="expandedNameKey === nameGroup.key" class="brands-container">
-              <div *ngFor="let brand of nameGroup.brands" class="brand-card">
-                <div class="brand-header" (click)="toggleBrand(nameGroup.key, brand.alias)">
-                  <i class="fas" [ngClass]="expandedBrandKey === (nameGroup.key + '|' + brand.alias) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
-                  <span class="brand-label">{{ brand.alias }}</span>
-                  <span class="tag is-info is-light">{{ brand.count }} und.</span>
-                </div>
+              <!-- Level 2: By Brand -->
+              <div *ngIf="expandedNameKey === nameGroup.key" class="brands-container">
+                <div *ngFor="let brand of nameGroup.brands" class="brand-card">
+                  <div class="brand-header" (click)="toggleBrand(nameGroup.key, brand.alias)">
+                    <i
+                      class="fas"
+                      [ngClass]="
+                        expandedBrandKey === nameGroup.key + '|' + brand.alias ? 'fa-chevron-down' : 'fa-chevron-right'
+                      "
+                    ></i>
+                    <span class="brand-label">{{ brand.alias }}</span>
+                    <span class="tag is-info is-light">{{ brand.count }} und.</span>
+                  </div>
 
-                <!-- Level 3: Detail table (sortable) -->
-                <div *ngIf="expandedBrandKey === (nameGroup.key + '|' + brand.alias)" class="detail-container">
-                  <table class="table is-fullwidth is-striped sub-table">
-                    <thead>
-                      <tr>
-                        <th class="is-clickable" (click)="matToggleSort('nombre')">
-                          Material
-                          <i class="fas" [ngClass]="matSortColumn === 'nombre' ? (matSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
-                        </th>
-                        <th class="is-clickable" (click)="matToggleSort('serie')">
-                          Serie
-                          <i class="fas" [ngClass]="matSortColumn === 'serie' ? (matSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
-                        </th>
-                        <th class="is-clickable" (click)="matToggleSort('codigo')">
-                          Código
-                          <i class="fas" [ngClass]="matSortColumn === 'codigo' ? (matSortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
-                        </th>
-                        <th class="has-text-centered">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let mat of getSortedItems(brand.items)">
-                        <td>
-                          <span *ngIf="grupo.trato && mat.calibre">
-                            {{ mat.nombre }} {{ mat.calibre }}pt {{ mat.gramaje }}g/m²
-                          </span>
-                          <span *ngIf="!grupo.trato || !mat.calibre">{{ mat.nombre }}</span>
-                        </td>
-                        <td>{{ mat.serie }}</td>
-                        <td>{{ mat.codigo || '-' }}</td>
-                        <td class="has-text-centered">
-                          <i class="far fa-edit green mr-2" title="Editar" (click)="selectedGrupo = grupo; EditarMaterial(mat)"></i>
-                          <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(mat._id)"><span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span></button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <!-- Level 3: Detail table (sortable) -->
+                  <div *ngIf="expandedBrandKey === nameGroup.key + '|' + brand.alias" class="detail-container">
+                    <table class="table is-fullwidth is-striped sub-table">
+                      <thead>
+                        <tr>
+                          <th class="is-clickable" (click)="matToggleSort('nombre')">
+                            Material
+                            <i
+                              class="fas"
+                              [ngClass]="
+                                matSortColumn === 'nombre'
+                                  ? matSortDirection === 'asc'
+                                    ? 'fa-sort-up'
+                                    : 'fa-sort-down'
+                                  : 'fa-sort'
+                              "
+                            ></i>
+                          </th>
+                          <th class="is-clickable" (click)="matToggleSort('serie')">
+                            Serie
+                            <i
+                              class="fas"
+                              [ngClass]="
+                                matSortColumn === 'serie'
+                                  ? matSortDirection === 'asc'
+                                    ? 'fa-sort-up'
+                                    : 'fa-sort-down'
+                                  : 'fa-sort'
+                              "
+                            ></i>
+                          </th>
+                          <th class="is-clickable" (click)="matToggleSort('codigo')">
+                            Código
+                            <i
+                              class="fas"
+                              [ngClass]="
+                                matSortColumn === 'codigo'
+                                  ? matSortDirection === 'asc'
+                                    ? 'fa-sort-up'
+                                    : 'fa-sort-down'
+                                  : 'fa-sort'
+                              "
+                            ></i>
+                          </th>
+                          <th class="has-text-centered">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let mat of getSortedItems(brand.items)">
+                          <td>
+                            <span *ngIf="grupo.trato && mat.calibre">
+                              {{ mat.nombre }} {{ mat.calibre }}pt {{ mat.gramaje }}g/m²
+                            </span>
+                            <span *ngIf="!grupo.trato || !mat.calibre">{{ mat.nombre }}</span>
+                          </td>
+                          <td>{{ mat.serie }}</td>
+                          <td>{{ mat.codigo || '-' }}</td>
+                          <td class="has-text-centered">
+                            <i
+                              class="far fa-edit green mr-2"
+                              title="Editar"
+                              (click)="selectedGrupo = grupo; EditarMaterial(mat)"
+                            ></i>
+                            <button class="button btn-action-icon" title="Eliminar" (click)="eliminarMaterial(mat._id)">
+                              <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Card footer -->
+        <div class="card-footer" *ngIf="expandedGrupoId === grupo._id">
+          <button class="button is-success is-small" (click)="selectedGrupo = grupo; NuevoMaterial()">
+            <span class="icon"><i class="fas fa-plus-circle"></i></span>
+            <span>Agregar Material</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Card footer -->
-      <div class="card-footer" *ngIf="expandedGrupoId === grupo._id">
-        <button class="button is-success is-small" (click)="selectedGrupo = grupo; NuevoMaterial()">
-          <span class="icon"><i class="fas fa-plus-circle"></i></span>
-          <span>Agregar Material</span>
-        </button>
+      <!-- Pagination -->
+      <div class="is-flex is-align-items-center is-justify-content-space-between mt-3">
+        <div class="is-flex is-align-items-center">
+          <span class="mr-2" style="font-size: 0.85rem; color: var(--text-muted)">Filas por página:</span>
+          <div class="select" style="width: auto">
+            <select (change)="changePageSize($event)" style="font-size: 0.85rem; padding: 2px 24px 2px 8px">
+              <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === pageSize">{{ size }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="is-flex is-align-items-center" style="gap: 4px">
+          <button class="button is-small" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span style="font-size: 0.85rem; color: var(--text-muted); padding: 0 8px">
+            Pág {{ currentPage }} de {{ totalPages }}
+          </span>
+          <button class="button is-small" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- TAB: SERVICIOS        -->
+  <!-- ===================== -->
+  <div *ngIf="activeTab === 'servicios'">
+    <button class="button is-info" (click)="nuevo_servicio = true">
+      <span class="icon"><i class="fas fa-plus-circle"></i></span>
+      <span>Nuevo Servicio</span>
+    </button>
+
+    <br /><br />
+
+    <!-- Empty state -->
+    <div *ngIf="!cargando && servicios.servicios.length === 0" class="empty-state">
+      <i class="fas fa-cog empty-icon"></i>
+      <p class="empty-title">No hay servicios registrados</p>
+      <p class="empty-hint">Haz clic en el botón "Nuevo Servicio" para comenzar</p>
+      <i class="fas fa-arrow-up empty-arrow"></i>
+    </div>
+
+    <!-- Skeleton -->
+    <div *ngIf="cargando && servicios.servicios.length === 0" class="skeleton-list">
+      <div *ngFor="let _ of [].constructor(3)" class="card skeleton-card">
+        <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
+        <div class="card-content">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line" style="width: 60%"></div>
+        </div>
       </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="is-flex is-align-items-center is-justify-content-space-between mt-3">
-      <div class="is-flex is-align-items-center">
-        <span class="mr-2" style="font-size: 0.85rem; color: var(--text-muted)">Filas por página:</span>
-        <div class="select" style="width: auto">
-          <select (change)="changePageSize($event)" style="font-size: 0.85rem; padding: 2px 24px 2px 8px">
-            <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === pageSize">{{ size }}</option>
-          </select>
+    <!-- Cards -->
+    <div *ngIf="servicios.servicios.length > 0" class="cards-container">
+      <!-- Search -->
+      <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+        <div class="control has-icons-left">
+          <input class="input" type="text" placeholder="Buscar servicio..." [(ngModel)]="servicioSearchTerm" />
+          <span class="icon is-left"><i class="fas fa-search"></i></span>
         </div>
       </div>
-      <div class="is-flex is-align-items-center" style="gap: 4px">
-        <button class="button is-small" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <span style="font-size: 0.85rem; color: var(--text-muted); padding: 0 8px">
-          Pág {{ currentPage }} de {{ totalPages }}
-        </span>
-        <button class="button is-small" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
-          <i class="fas fa-chevron-right"></i>
-        </button>
+
+      <!-- Service cards -->
+      <div *ngFor="let serv of filteredServicios" class="card grupo-card animate__animated animate__fadeInUp">
+        <div class="card-header">
+          <div class="card-header-title">
+            <i class="fas fa-cog grupo-icon"></i>
+            <span class="grupo-nombre">{{ serv.nombre }}</span>
+          </div>
+          <div class="card-header-actions">
+            <i class="far fa-edit green action-icon" title="Editar" (click)="EditarServicio(serv)"></i>
+            <button class="button btn-action-icon" title="Eliminar" (click)="eliminarServicio(serv._id)">
+              <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

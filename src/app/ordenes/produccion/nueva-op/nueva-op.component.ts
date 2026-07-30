@@ -209,7 +209,6 @@ export class NuevaOPComponent implements OnInit, OnChanges {
   maquina: any = [];
   fase: any = [];
 
-
   public coloresHex = {
     A: '#FFFF00', // Amarillo
     M: '#FF00FF', // Magenta

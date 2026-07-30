@@ -1,0 +1,20 @@
+<table [class]="tableClasses">
+  <thead>
+    <tr>
+      <th
+        *ngFor="let col of columns"
+        [class.is-clickable]="col.sortable"
+        [style.width]="col.width"
+        (click)="toggleSort(col)"
+      >
+        {{ col.label }}
+        <i *ngIf="col.sortable" class="fas" [ngClass]="getSortIcon(col)"></i>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+    </tr>
+  </tbody>
+</table>

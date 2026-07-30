@@ -50,39 +50,46 @@
     <!-- Search -->
     <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
       <div class="control has-icons-left">
-        <input
-          class="input"
-          type="text"
-          placeholder="Buscar proveedor..."
-          [(ngModel)]="searchTerm"
-        />
+        <input class="input" type="text" placeholder="Buscar proveedor..." [(ngModel)]="searchTerm" />
         <span class="icon is-left"><i class="fas fa-search"></i></span>
       </div>
     </div>
 
     <div class="grupo-grid">
-    <div *ngFor="let prov of filteredProveedores; index as i" class="card grupo-card animate__animated animate__fadeInUp">
-      <div class="card-header">
-        <div class="card-header-title">
-          <i class="fas fa-truck grupo-icon"></i>
-          <span class="grupo-nombre">{{ prov.nombre }}</span>
+      <div
+        *ngFor="let prov of filteredProveedores; index as i"
+        class="card grupo-card animate__animated animate__fadeInUp"
+      >
+        <div class="card-header">
+          <div class="card-header-title">
+            <i class="fas fa-truck grupo-icon"></i>
+            <span class="grupo-nombre">{{ prov.nombre }}</span>
+          </div>
         </div>
+        <div
+          class="card-content"
+          *ngIf="prov.pais"
+          style="padding: 8px 12px; font-size: 0.8rem; color: var(--text-muted)"
+        >
+          <i class="fas fa-globe-americas"></i> {{ prov.pais }}
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item" (click)="VerProveedor(prov)" title="Ver detalles">
+            <i class="fas fa-info-circle blue_"></i>
+          </a>
+          <a class="card-footer-item" (click)="EditarProveedor(prov)" title="Editar">
+            <i class="far fa-edit green"></i>
+          </a>
+          <button
+            type="button"
+            class="card-footer-item btn-action-icon"
+            title="Eliminar"
+            (click)="borrarFabricante(prov._id)"
+          >
+            <i class="fas fa-trash-alt icon-danger"></i>
+          </button>
+        </footer>
       </div>
-      <div class="card-content" *ngIf="prov.pais" style="padding: 8px 12px; font-size: 0.8rem; color: var(--text-muted)">
-        <i class="fas fa-globe-americas"></i> {{ prov.pais }}
-      </div>
-      <footer class="card-footer">
-        <a class="card-footer-item" (click)="VerProveedor(prov)" title="Ver detalles">
-          <i class="fas fa-info-circle blue_"></i>
-        </a>
-        <a class="card-footer-item" (click)="EditarProveedor(prov)" title="Editar">
-          <i class="far fa-edit green"></i>
-        </a>
-        <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="borrarFabricante(prov._id)">
-          <i class="fas fa-trash-alt icon-danger"></i>
-        </button>
-      </footer>
     </div>
-  </div>
   </div>
 </app-page-layout>

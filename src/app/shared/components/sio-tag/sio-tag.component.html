@@ -1,0 +1,5 @@
+<span [class]="tagClasses">
+  <i *ngIf="icon" class="fas" [ngClass]="icon" style="margin-right: 4px"></i>
+  {{ label }}
+  <button *ngIf="removable" class="delete is-small" (click)="remove()"></button>
+</span>

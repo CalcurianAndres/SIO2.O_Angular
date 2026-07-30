@@ -43,14 +43,9 @@ export class NewBobinaComponent {
 
   get almacenesConBobinas(): any[] {
     if (!this.api.bobinas) return [];
-    const externos = (this.almacenSvc.almacenes || []).filter(
-      (a: any) => this.getBobinasPorAlmacen(a._id).length > 0,
-    );
+    const externos = (this.almacenSvc.almacenes || []).filter((a: any) => this.getBobinasPorAlmacen(a._id).length > 0);
     const principalTieneBobinas = this.getBobinasPorAlmacen(null).length > 0;
-    return [
-      ...(principalTieneBobinas ? [{ _id: null, nombre: 'Almacén principal' }] : []),
-      ...externos,
-    ];
+    return [...(principalTieneBobinas ? [{ _id: null, nombre: 'Almacén principal' }] : []), ...externos];
   }
 
   getBobinasPorAlmacen(almacenId: string | null): any[] {
@@ -78,13 +73,27 @@ export class NewBobinaComponent {
   }
 
   disabled() {
-    return !this.almacen || !this.convertidora || !this.sustrato || this.ancho < 1 || this.largo < 1 || this.hojas < 1 || this.peso <= 0 || !this.observacion;
+    return (
+      !this.almacen ||
+      !this.convertidora ||
+      !this.sustrato ||
+      this.ancho < 1 ||
+      this.largo < 1 ||
+      this.hojas < 1 ||
+      this.peso <= 0 ||
+      !this.observacion
+    );
   }
 
   calcularToneladas() {
     const gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
+    if (!gramaje || !this.ancho || !this.largo || !this.hojas) {
+      this.peso = 0;
+      return;
+    }
     const pesoKg = (gramaje * (this.ancho / 100) * (this.largo / 100) * this.hojas) / 1000;
-    this.peso = Number((pesoKg / 1000).toFixed(2));
+    const toneladas = pesoKg / 1000;
+    this.peso = Math.round(toneladas * 100) / 100;
   }
 
   calcularWidth() {
@@ -95,6 +104,10 @@ export class NewBobinaComponent {
     const gramaje = this.materiales.materiales.find((m: any) => m._id === this.sustrato).gramaje;
     const anchoM = this.ancho / 100;
     const largoM = this.largo / 100;
+    if (!gramaje || !anchoM || !largoM || !this.peso) {
+      this.hojas = 0;
+      return;
+    }
     const hojas = (this.peso * 1_000_000) / (gramaje * anchoM * largoM);
     this.hojas = Math.floor(hojas);
   }
@@ -248,7 +261,7 @@ SOLICITUD DE CONVERSIÓN`).bold().end,
     pdf.add(
       new Table([
         [
-          new Cell(new Txt('CONVERTIDORA').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
+          new Cell(new Txt('PROVEEDOR').alignment('center').bold().fontSize(9).color('#FFFFFF').end)
             .border([false])
             .fillColor('#a5acb2').end,
           new Cell(new Txt('').end).border([false]).end,
@@ -267,9 +280,7 @@ SOLICITUD DE CONVERSIÓN`).bold().end,
           ).border([true, true, true, false]).end,
         ],
         [
-          new Cell(new Txt(convNombre).fontSize(11).end)
-            .margin([0, -7, 0, 0])
-            .border([true, false, true, true]).end,
+          new Cell(new Txt(convNombre).fontSize(11).end).margin([0, -7, 0, 0]).border([true, false, true, true]).end,
           new Cell(new Txt('').end).border([false]).end,
           new Cell(new Txt(`${numConversion || '—'}`).alignment('center').fontSize(22).bold().end)
             .margin([0, -5, 0, 0])
@@ -281,13 +292,10 @@ SOLICITUD DE CONVERSIÓN`).bold().end,
           new Cell(new Txt('Fecha:').fontSize(5.7).end).border([true, true, true, false]).end,
         ],
         [
-          new Cell(new Txt(convRif || '—').fontSize(11).end)
-            .margin([0, -3, 0, 0])
-            .border([true, false, true, true]).end,
+          new Cell(new Txt(convRif || '—').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
           new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt(hoy).fontSize(11).end)
-            .margin([0, -3, 0, 0])
-            .border([true, false, true, true]).end,
+          new Cell(new Txt(hoy).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
         ],
         [
           new Cell(new Txt('Dirección:').fontSize(5.7).end).border([true, true, true, false]).end,
@@ -347,12 +355,21 @@ SOLICITUD DE CONVERSIÓN`).bold().end,
           new Cell(new Txt('Hojas (und):').fontSize(5.7).end).border([true, true, true, false]).end,
         ],
         [
-          new Cell(new Txt(materialData?.nombre || '—').fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${materialData?.gramaje || '—'}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${this.ancho}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${this.largo}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${this.peso}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
-          new Cell(new Txt(`${this.hojas}`).fontSize(15).bold().end).margin([0, -3, 0, 0]).border([true, false, true, true]).end,
+          new Cell(new Txt(materialData?.nombre || '—').fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(`${materialData?.gramaje || '—'}`).fontSize(11).end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
+          new Cell(new Txt(`${this.ancho}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
+          new Cell(new Txt(`${this.largo}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
+          new Cell(new Txt(`${this.peso}`).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, true])
+            .end,
+          new Cell(new Txt(`${this.hojas}`).fontSize(15).bold().end)
+            .margin([0, -3, 0, 0])
+            .border([true, false, true, true]).end,
         ],
       ])
         .layout({
@@ -386,9 +403,8 @@ SOLICITUD DE CONVERSIÓN`).bold().end,
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,
           new Cell(new Txt('').fontSize(11).end).border([false]).end,
-          new Cell(new Txt(usuarioNombre).fontSize(11).end)
-            .margin([0, -3, 0, 0])
-            .border([true, false, true, false]).end,
+          new Cell(new Txt(usuarioNombre).fontSize(11).end).margin([0, -3, 0, 0]).border([true, false, true, false])
+            .end,
         ],
         [
           new Cell(new Txt('').fontSize(11).end).border([true, false, true, false]).end,

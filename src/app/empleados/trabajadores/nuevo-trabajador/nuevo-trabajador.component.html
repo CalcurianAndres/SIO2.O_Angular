@@ -100,7 +100,7 @@
                 <div class="field">
                   <label class="label">Altura (m)</label>
                   <div class="control">
-                     <input type="number" class="input" [(ngModel)]="copiaInterna.datos_personales.altura" />
+                    <input type="number" class="input" [(ngModel)]="copiaInterna.datos_personales.altura" />
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                 <div class="field">
                   <label class="label">Peso (kg)</label>
                   <div class="control">
-                     <input type="number" class="input" [(ngModel)]="copiaInterna.datos_personales.peso" />
+                    <input type="number" class="input" [(ngModel)]="copiaInterna.datos_personales.peso" />
                   </div>
                 </div>
               </div>
@@ -462,11 +462,11 @@
           </div>
           <div class="control" style="width: 120px">
             <label class="label">Título obtenido</label>
-              <input type="text" class="input" [(ngModel)]="copiaInterna.instruccion_academica.grado.titulo" />
+            <input type="text" class="input" [(ngModel)]="copiaInterna.instruccion_academica.grado.titulo" />
           </div>
           <div class="control" style="width: 60px">
             <label class="label">Año</label>
-              <input type="text" class="input" [(ngModel)]="copiaInterna.instruccion_academica.grado.ano" />
+            <input type="text" class="input" [(ngModel)]="copiaInterna.instruccion_academica.grado.ano" />
           </div>
         </div>
         <span class="section-label mt-3"><i class="fas fa-pen mr-1"></i>Cursos realizados</span>
@@ -595,7 +595,12 @@
           </div>
           <div class="control">
             <label class="label">Sueldo inicial (Bs.)</label>
-             <input type="number" class="input" [(ngModel)]="copiaInterna.contratacion.sueldo" placeholder="Ej: 5000.00" />
+            <input
+              type="number"
+              class="input"
+              [(ngModel)]="copiaInterna.contratacion.sueldo"
+              placeholder="Ej: 5000.00"
+            />
           </div>
         </div>
 
@@ -620,13 +625,14 @@
               <i class="fas fa-exclamation-triangle mr-1"></i>
               Ingrésela manualmente.
             </p>
-            <p class="help is-danger" *ngIf="tasaError">
-              <i class="fas fa-times-circle mr-1"></i> {{ tasaError }}
-            </p>
+            <p class="help is-danger" *ngIf="tasaError"><i class="fas fa-times-circle mr-1"></i> {{ tasaError }}</p>
           </div>
           <div class="control" *ngIf="tasaRequiereManual">
             <label class="label is-small">.</label>
-            <button class="button is-small is-info" (click)="tasaManual = copiaInterna.contratacion.tasa; guardarTasaManual()">
+            <button
+              class="button is-small is-info"
+              (click)="tasaManual = copiaInterna.contratacion.tasa; guardarTasaManual()"
+            >
               <span><i class="fas fa-save mr-1"></i></span> Guardar
             </button>
           </div>

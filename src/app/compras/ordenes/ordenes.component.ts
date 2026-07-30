@@ -93,7 +93,7 @@ export class OrdenesComponent {
   }
 
   get ordenesVisibles(): any[] {
-    let lista = this.filtrados.length > 0 ? this.filtrados : (this.api.orden || []);
+    let lista = this.filtrados.length > 0 ? this.filtrados : this.api.orden || [];
 
     // 1. Filtro por estado: home = solo activas
     if (this.filterMode === 'home') {
@@ -111,9 +111,7 @@ export class OrdenesComponent {
     }
 
     // 3. Ordenar por número
-    lista = [...lista].sort((a, b) =>
-      this.sortAsc ? a.numero - b.numero : b.numero - a.numero,
-    );
+    lista = [...lista].sort((a, b) => (this.sortAsc ? a.numero - b.numero : b.numero - a.numero));
 
     return lista;
   }
@@ -158,10 +156,7 @@ export class OrdenesComponent {
     }
     this.filtrados = this.api.orden.filter((orden) => {
       if (!orden.pedido) return false;
-      return orden.pedido.some(
-        (p: any) =>
-          (p.material?.fabricante?.alias || p.material?.fabricante?.nombre) === valor,
-      );
+      return orden.pedido.some((p: any) => (p.material?.fabricante?.alias || p.material?.fabricante?.nombre) === valor);
     });
   }
 
@@ -554,15 +549,15 @@ export class OrdenesComponent {
     async function generarOrden() {
       const pdf = new PdfMakeWrapper();
       PdfMakeWrapper.setFonts(pdffonts, {
-      Gilroy: {
-        normal: 'Gilroy-Light.otf',
-        bold: 'Gilroy-ExtraBold.otf',
-        italics: 'Gilroy-ExtraBold.otf',
-        bolditalics: 'Gilroy-ExtraBold.otf',
-      }
-    });
+        Gilroy: {
+          normal: 'Gilroy-Light.otf',
+          bold: 'Gilroy-ExtraBold.otf',
+          italics: 'Gilroy-ExtraBold.otf',
+          bolditalics: 'Gilroy-ExtraBold.otf',
+        },
+      });
 
-    PdfMakeWrapper.useFont('Gilroy');
+      PdfMakeWrapper.useFont('Gilroy');
       pdf.defaultStyle({ font: 'Gilroy' });
       pdf.pageOrientation('portrait');
       pdf.pageSize('LETTER');
@@ -578,10 +573,13 @@ export class OrdenesComponent {
             new Cell(
               new Stack([
                 new Txt(' ').fontSize(4).end,
-                new Txt('ORDEN DE COMPRA').fontSize(25).bold().color('#83929B').alignment('right').margin([0,0,0,0]).end,
+                new Txt('ORDEN DE COMPRA').fontSize(25).bold().color('#83929B').alignment('right').margin([0, 0, 0, 0])
+                  .end,
                 new Txt('PURCHASE ORDER').fontSize(20).color('#83929B').alignment('right').end,
               ]).end,
-            ).border([false]).alignment('right').end,
+            )
+              .border([false])
+              .alignment('right').end,
           ],
         ]).widths(['50%', '50%']).end,
       );
@@ -589,40 +587,54 @@ export class OrdenesComponent {
       pdf.add(
         new Table([
           [
-            new Cell(
-              new Txt('Calle Pantín, Galpón N°29, Urb. Chacao,\nEdo. Miranda. Venezuela.').fontSize(9).end
-            ).border([false, true, false, false]).alignment('left').end,
-            new Cell(
-              new Txt(`OCP-${orden.numero}`).fontSize(30).bold().color('white').end,
-            ).border([false, true, false, false]).fillColor('#83929B').alignment('center').end,
+            new Cell(new Txt('Calle Pantín, Galpón N°29, Urb. Chacao,\nEdo. Miranda. Venezuela.').fontSize(9).end)
+              .border([false, true, false, false])
+              .alignment('left').end,
+            new Cell(new Txt(`OCP-${orden.numero}`).fontSize(30).bold().color('white').end)
+              .border([false, true, false, false])
+              .fillColor('#83929B')
+              .alignment('center').end,
           ],
-        ]).layout({
+        ])
+          .layout({
             hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
             vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
             hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#83929B',
             vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#83929B',
           })
-.widths(['60%', '40%']).end,
+          .widths(['60%', '40%']).end,
       );
 
       pdf.add(new Txt(' ').fontSize(4).end);
-      pdf.add('\n')
-      pdf.add('\n')
+      pdf.add('\n');
+      pdf.add('\n');
       // ═══════════ 2. PROVEEDOR / CONDICIONES ═══════════
       pdf.add(
         new Table([
           [
             new Cell(
-              new Txt([{ text: 'PROVEEDOR', fontSize: 10, bold:true },
-                      { text: ' SUPPLIER', bold: false, fontSize: 10 }]).alignment('left').color('white').end,
-            ).fillColor('#9db0ba').margin([10,0,0,0]).end,
+              new Txt([
+                { text: 'PROVEEDOR', fontSize: 10, bold: true },
+                { text: ' SUPPLIER', bold: false, fontSize: 10 },
+              ])
+                .alignment('left')
+                .color('white').end,
+            )
+              .fillColor('#9db0ba')
+              .margin([10, 0, 0, 0]).end,
             new Cell(new Txt('').end).end,
             new Cell(
               new Txt([
-                {text:'CONDICIONES', fontSize: 10, bold:true},
-                {text:' TERMS', fontSize:10, bold:false}
-              ]).bold().fontSize(10).color('white').margin([0,0,10,0]).end,
-            ).fillColor('#9db0ba').alignment('right').end,
+                { text: 'CONDICIONES', fontSize: 10, bold: true },
+                { text: ' TERMS', fontSize: 10, bold: false },
+              ])
+                .bold()
+                .fontSize(10)
+                .color('white')
+                .margin([0, 0, 10, 0]).end,
+            )
+              .fillColor('#9db0ba')
+              .alignment('right').end,
           ],
           [
             new Cell(
@@ -633,10 +645,9 @@ export class OrdenesComponent {
                 new Txt(`
                 Atención Sr (a):
                 ${orden.proveedor?.contactos?.[0]?.nombre || ''}`).fontSize(10).end,
-                new Txt(
-                  orden.proveedor?.contactos?.[0]?.email ||
-                  orden.proveedor?.contactos?.[0]?.numero || ''
-                ).fontSize(10).color('#0066CC').end,
+                new Txt(orden.proveedor?.contactos?.[0]?.email || orden.proveedor?.contactos?.[0]?.numero || '')
+                  .fontSize(10)
+                  .color('#0066CC').end,
               ]).end,
             ).fontSize(9).end,
             new Cell(new Txt('').end).end,
@@ -645,48 +656,42 @@ export class OrdenesComponent {
                 new Txt(`Fecha de entrega / Shipping date:`).alignment('right').fontSize(10).end,
                 new Txt(entrega).fontSize(10).bold().alignment('right').end,
                 new Txt(`
-                Lugar de entrega / Delivery location:\n Poligráfica Industrial, C.A.\n Calle Pantín, Galpón N°29 Urb. Chacao,\n Edo. Miranda. Venezuela.`).alignment('right').fontSize(8).end,
+                Lugar de entrega / Delivery location:\n Poligráfica Industrial, C.A.\n Calle Pantín, Galpón N°29 Urb. Chacao,\n Edo. Miranda. Venezuela.`)
+                  .alignment('right')
+                  .fontSize(8).end,
                 new Txt(`
                 Comprador / Purchaser:\n ${usuario}`).fontSize(10).end,
               ]).end,
-            ).fontSize(0).alignment('right').end,
+            )
+              .fontSize(0)
+              .alignment('right').end,
           ],
-        ]).layout('noBorders').widths(['40%', '20%', '40%']).end,
+        ])
+          .layout('noBorders')
+          .widths(['40%', '20%', '40%']).end,
       );
 
       pdf.add(new Txt(' ').fontSize(4).end);
 
       // ═══════════ 3. TABLA PRINCIPAL DE ÍTEMES ═══════════
- const hCell = (txt, marginTop = 0) =>
-  new Cell(
-    new Txt(txt)
-      .bold()
-      .fontSize(9)
-      .color('white')
-      .alignment('center')
-      .margin([0, marginTop, 0, 0])
-      .end
-  ).fillColor('#9db0ba').alignment('center').end;
+      const hCell = (txt, marginTop = 0) =>
+        new Cell(new Txt(txt).bold().fontSize(9).color('white').alignment('center').margin([0, marginTop, 0, 0]).end)
+          .fillColor('#9db0ba')
+          .alignment('center').end;
 
-const itemsBody = [
-  [
-    hCell('POS.', 6),
-    hCell([
-      {text:'CANTIDAD', bold:true},
-      {text:'\nQTY.', bold:false}
-    ]),
-    hCell('DESCRIPCIÓN', 6),
-    hCell([
-      {text:'MON.'},
-      {text:'\nCCY', bold:false}
-    ]),
-    hCell([
-      {text:'PRECIO UNITARIO.'},
-      {text:'\nUNIT PRICE', bold:false}
-    ]),
-    hCell('TOTAL', 6)
-  ],
-];
+      const itemsBody = [
+        [
+          hCell('POS.', 6),
+          hCell([
+            { text: 'CANTIDAD', bold: true },
+            { text: '\nQTY.', bold: false },
+          ]),
+          hCell('DESCRIPCIÓN', 6),
+          hCell([{ text: 'MON.' }, { text: '\nCCY', bold: false }]),
+          hCell([{ text: 'PRECIO UNITARIO.' }, { text: '\nUNIT PRICE', bold: false }]),
+          hCell('TOTAL', 6),
+        ],
+      ];
 
       orden.pedido.forEach((item, index) => {
         const cantidad = `${item.cantidad} ${item.unidad || ''}`;
@@ -695,7 +700,9 @@ const itemsBody = [
 
         const descLines: any[] = [
           new Txt(item.material?.nombre || '').bold().fontSize(10).end,
-          new Txt(`Cal. ${item.calibre || item.material?.calibre || item.material?.color || ''} / ${item.gramaje || ''} g/m2`).fontSize(10).end,
+          new Txt(
+            `Cal. ${item.calibre || item.material?.calibre || item.material?.color || ''} / ${item.gramaje || ''} g/m2`,
+          ).fontSize(10).end,
         ];
 
         if (item.ancho && item.alto) {
@@ -745,8 +752,11 @@ const itemsBody = [
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('Subtotal:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
-            new Cell(new Txt(fmt(netos)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+            new Cell(new Txt('Subtotal:').bold().fontSize(10).end)
+              .border([false, true, false, false])
+              .alignment('right').end,
+            new Cell(new Txt(fmt(netos)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right')
+              .end,
           ],
           [
             new Cell(new Txt('Impuesto / Taxes:').fontSize(10).end).border([false]).alignment('right').end,
@@ -757,44 +767,54 @@ const itemsBody = [
             new Cell(new Txt(fmt(flete)).fontSize(10).end).border([false]).alignment('right').end,
           ],
           [
-            new Cell(new Txt('Total:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
-            new Cell(new Txt(fmt(netoTotal)).bold().fontSize(10).end).border([false, true, false, false]).alignment('right').end,
+            new Cell(new Txt('Total:').bold().fontSize(10).end).border([false, true, false, false]).alignment('right')
+              .end,
+            new Cell(new Txt(fmt(netoTotal)).bold().fontSize(10).end)
+              .border([false, true, false, false])
+              .alignment('right').end,
           ],
-        ]).layout({
+        ])
+          .layout({
             hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
             vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 2,
             hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#90b0ba',
             vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#9db0ba',
-          }).widths(['75%', '25%']).end,
+          })
+          .widths(['75%', '25%']).end,
       );
 
       // ═══════════ 5. FOOTER ═══════════
       pdf.add(new Txt(' ').fontSize(4).end);
       pdf.footer((currentPage, pageCount) => {
-      return new Table([
-        [
-          new Cell(new Txt('').end).border([false, false, false, true]).end,
-          new Cell(new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end)
-            .border([false, false, false, true]).alignment('right').end,
-        ],
-        [
-          new Cell(new Txt('').end).border([false]).end,
-          new Cell(new Txt('FCP-001').fontSize(7).end)
-            .border([false]).bold().alignment('right').end,
-        ],
-        [
-          new Cell(new Txt(`Descargado por: ${firmaTexto}`).fontSize(6).color('#999999').end)
-            .border([false]).alignment('left').end,
-          new Cell(new Txt(`N° de Revisión: 1 / Fecha: 03/05/2026`).fontSize(7).end)
-            .border([false]).alignment('right').end,
-        ],
-      ]).layout({
+        return new Table([
+          [
+            new Cell(new Txt('').end).border([false, false, false, true]).end,
+            new Cell(new Txt(`Página ${currentPage} / ${pageCount}`).fontSize(7).end)
+              .border([false, false, false, true])
+              .alignment('right').end,
+          ],
+          [
+            new Cell(new Txt('').end).border([false]).end,
+            new Cell(new Txt('FCP-001').fontSize(7).end).border([false]).bold().alignment('right').end,
+          ],
+          [
+            new Cell(new Txt(`Descargado por: ${firmaTexto}`).fontSize(6).color('#999999').end)
+              .border([false])
+              .alignment('left').end,
+            new Cell(new Txt(`N° de Revisión: 1 / Fecha: 03/05/2026`).fontSize(7).end)
+              .border([false])
+              .alignment('right').end,
+          ],
+        ])
+          .layout({
             hLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
             vLineWidth: (rowIndex?: number, node?: any, columnIndex?: number) => 0.5,
             hLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
             vLineColor: (rowIndex?: number, node?: any, columnIndex?: number) => '#cccccc',
-          }).widths(['50%', '50%']).margin([30,0,30,0]).end;
-});
+          })
+          .widths(['50%', '50%'])
+          .margin([30, 0, 30, 0]).end;
+      });
       pdf.permissions('SioDoc2026', {
         printing: 'highResolution',
         modifying: false,

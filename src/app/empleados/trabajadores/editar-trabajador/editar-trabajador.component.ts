@@ -160,9 +160,7 @@ export class EditarTrabajadorComponent implements OnInit, OnChanges, OnDestroy {
       this.cursos_realizados = JSON.parse(
         JSON.stringify(changes['empleado'].currentValue.instruccion_academica?.cursos || []),
       );
-      this.softwares = JSON.parse(
-        JSON.stringify(changes['empleado'].currentValue.manejo_herramientas?.otros || []),
-      );
+      this.softwares = JSON.parse(JSON.stringify(changes['empleado'].currentValue.manejo_herramientas?.otros || []));
       this.idiomas = JSON.parse(
         JSON.stringify(changes['empleado'].currentValue.instruccion_academica?.idiomas?.idiomas || []),
       );

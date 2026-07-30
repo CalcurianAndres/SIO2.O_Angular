@@ -771,31 +771,34 @@ export class RecepcionComponent implements OnInit {
       didClose: () => this.limpiarBackdropSwal(),
     }).then((result) => {
       if (result.isConfirmed) {
-        this.api.revertirAPorNotificar(recepcion._id, result.value).then(() => {
-          setTimeout(() => {
-            Swal.fire({
-              text: 'Recepción devuelta a "Por notificar"',
-              icon: 'success',
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            });
-          }, 150);
-        }).catch((err) => {
-          setTimeout(() => {
-            Swal.fire({
-              text: err.mensaje || 'Error al revertir',
-              icon: 'error',
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            });
-          }, 150);
-        });
+        this.api
+          .revertirAPorNotificar(recepcion._id, result.value)
+          .then(() => {
+            setTimeout(() => {
+              Swal.fire({
+                text: 'Recepción devuelta a "Por notificar"',
+                icon: 'success',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              });
+            }, 150);
+          })
+          .catch((err) => {
+            setTimeout(() => {
+              Swal.fire({
+                text: err.mensaje || 'Error al revertir',
+                icon: 'error',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              });
+            }, 150);
+          });
       }
     });
   }

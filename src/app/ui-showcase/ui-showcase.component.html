@@ -1,0 +1,222 @@
+<app-page-layout>
+  <app-section-header
+    title="Design System — Componentes SIO"
+    description="Catálogo interactivo de componentes reutilizables"
+    icon="fa-palette"
+    color="purple"
+  ></app-section-header>
+
+  <!-- ========== COLOR PALETTE ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-swatchbook"></i> Paleta de Colores</h3>
+    <p class="showcase-desc">Colores del sistema definidos como CSS custom properties en <code>:root</code>.</p>
+
+    <!-- Accent -->
+    <h4 class="showcase-subtitle">Accent</h4>
+    <div class="color-grid">
+      <div class="color-swatch" *ngFor="let c of accentColors">
+        <div class="swatch-block" [style.background]="c.var"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">{{ c.name }}</span>
+          <code class="swatch-hex">{{ c.hex }}</code>
+          <code class="swatch-var">{{ c.var }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <h4 class="showcase-subtitle">Status</h4>
+    <div class="color-grid">
+      <div class="color-swatch" *ngFor="let c of statusColors">
+        <div class="swatch-block" [style.background]="c.var"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">{{ c.name }}</span>
+          <code class="swatch-hex">{{ c.hex }}</code>
+          <code class="swatch-var">{{ c.var }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backgrounds -->
+    <h4 class="showcase-subtitle">Backgrounds</h4>
+    <div class="color-grid">
+      <div class="color-swatch" *ngFor="let c of bgColors">
+        <div class="swatch-block swatch-bordered" [style.background]="c.var"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">{{ c.name }}</span>
+          <code class="swatch-hex">{{ c.hex }}</code>
+          <code class="swatch-var">{{ c.var }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <h4 class="showcase-subtitle">Text</h4>
+    <div class="color-grid">
+      <div class="color-swatch" *ngFor="let c of textColors">
+        <div class="swatch-block swatch-bordered" [style.background]="c.var"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">{{ c.name }}</span>
+          <code class="swatch-hex">{{ c.hex }}</code>
+          <code class="swatch-var">{{ c.var }}</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-window-maximize"></i> Modal</h3>
+    <p class="showcase-desc">Modal estandarizado con header, body y botón cerrar. Tamaños: normal, wide, full.</p>
+    <div class="showcase-actions">
+      <app-sio-button variant="info" icon="fa-window-maximize" (onClick)="showModal = true; modalSize = 'normal'"
+        >Modal Normal</app-sio-button
+      >
+      <app-sio-button variant="info" icon="fa-expand" (onClick)="showModal = true; modalSize = 'wide'"
+        >Modal Wide</app-sio-button
+      >
+      <app-sio-button variant="info" icon="fa-arrows-alt" (onClick)="showModal = true; modalSize = 'full'"
+        >Modal Full</app-sio-button
+      >
+    </div>
+  </div>
+
+  <app-sio-modal
+    [visible]="showModal"
+    title="Ejemplo de Modal"
+    icon="fa-cog"
+    [size]="modalSize"
+    (onClose)="showModal = false"
+  >
+    <p>Este es el contenido del modal. Puede contener cualquier componente Angular.</p>
+    <div class="field mt-4">
+      <label class="label">Campo de ejemplo</label>
+      <div class="control">
+        <input type="text" class="input" placeholder="Escribe algo..." />
+      </div>
+    </div>
+  </app-sio-modal>
+
+  <!-- ========== TAGS ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-tag"></i> Tags</h3>
+    <p class="showcase-desc">Etiquetas con colores del sistema. Soportan icono, modo light y botón de eliminar.</p>
+    <div class="showcase-row">
+      <app-sio-tag label="Info" color="info"></app-sio-tag>
+      <app-sio-tag label="Success" color="success"></app-sio-tag>
+      <app-sio-tag label="Warning" color="warning"></app-sio-tag>
+      <app-sio-tag label="Danger" color="danger"></app-sio-tag>
+      <app-sio-tag label="Primary" color="primary"></app-sio-tag>
+    </div>
+    <div class="showcase-row mt-2">
+      <app-sio-tag label="Con icono" color="info" icon="fa-info-circle"></app-sio-tag>
+      <app-sio-tag label="Removible" color="danger" [removable]="true"></app-sio-tag>
+      <app-sio-tag label="Solid" color="success" [light]="false"></app-sio-tag>
+      <app-sio-tag label="Sin medium" color="warning" [medium]="false"></app-sio-tag>
+    </div>
+  </div>
+
+  <!-- ========== BUTTONS ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-hand-pointer"></i> Botones</h3>
+    <p class="showcase-desc">Botones con variantes de color, tamaño, icono, loading y outlined.</p>
+    <div class="showcase-row">
+      <app-sio-button variant="primary">Primary</app-sio-button>
+      <app-sio-button variant="success">Success</app-sio-button>
+      <app-sio-button variant="info">Info</app-sio-button>
+      <app-sio-button variant="danger">Danger</app-sio-button>
+      <app-sio-button variant="warning">Warning</app-sio-button>
+      <app-sio-button variant="link">Link</app-sio-button>
+    </div>
+    <div class="showcase-row mt-2">
+      <app-sio-button variant="info" size="small">Small</app-sio-button>
+      <app-sio-button variant="info" size="normal">Normal</app-sio-button>
+      <app-sio-button variant="info" size="large">Large</app-sio-button>
+    </div>
+    <div class="showcase-row mt-2">
+      <app-sio-button variant="success" icon="fa-save">Guardar</app-sio-button>
+      <app-sio-button variant="info" icon="fa-plus-circle">Agregar</app-sio-button>
+      <app-sio-button variant="danger" icon="fa-trash-alt">Eliminar</app-sio-button>
+      <app-sio-button variant="info" [loading]="btnLoading" (onClick)="simulateLoading()">{{
+        btnLoading ? 'Cargando...' : 'Simular carga'
+      }}</app-sio-button>
+    </div>
+    <div class="showcase-row mt-2">
+      <app-sio-button variant="info" [outlined]="true">Outlined</app-sio-button>
+      <app-sio-button variant="success" [outlined]="true">Outlined</app-sio-button>
+      <app-sio-button variant="danger" [outlined]="true">Outlined</app-sio-button>
+    </div>
+
+    <!-- Icon-only action buttons -->
+    <h4 class="showcase-subtitle">Botones de Acción (solo icono)</h4>
+    <p class="showcase-desc">Botones estándar de tabla: ver, editar, borrar. Solo icono, sin texto.</p>
+    <div class="showcase-row">
+      <app-sio-button variant="info" icon="fa-eye" size="small" (onClick)="onAction('ver')"></app-sio-button>
+      <app-sio-button variant="success" icon="fa-edit" size="small" (onClick)="onAction('editar')"></app-sio-button>
+      <app-sio-button variant="danger" icon="fa-trash-alt" size="small" (onClick)="onAction('borrar')"></app-sio-button>
+    </div>
+  </div>
+
+  <!-- ========== TABLE ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-table"></i> Tabla</h3>
+    <p class="showcase-desc">Tabla con striping, hover y columnas sorteables.</p>
+    <app-sio-table
+      [columns]="tableColumns"
+      [data]="tableData"
+      [sortColumn]="tableSort"
+      [sortDirection]="tableDir"
+      (onSort)="onTableSort($event)"
+    ></app-sio-table>
+  </div>
+
+  <!-- ========== KPI / STAT ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-chart-bar"></i> KPIs / Stat Cards</h3>
+    <p class="showcase-desc">
+      Tarjetas de indicadores con valor, label, icono y color. Ejemplo con 3 KPIs como en Grupos.
+    </p>
+    <div class="stat-grid">
+      <app-sio-stat [value]="42" label="Materiales activos" icon="fa-cubes" color="green"></app-sio-stat>
+      <app-sio-stat [value]="8" label="Grupos creados" icon="fa-shopping-cart" color="blue"></app-sio-stat>
+      <app-sio-stat [value]="3" label="Servicios" icon="fa-concierge-bell" color="orange"></app-sio-stat>
+    </div>
+  </div>
+
+  <!-- ========== ICONS ========== -->
+  <div class="showcase-section">
+    <h3 class="showcase-title"><i class="fas fa-icons"></i> Iconos</h3>
+    <p class="showcase-desc">Wrapper de FontAwesome con colores y tamaños del sistema.</p>
+    <div class="showcase-row" style="gap: 16px; align-items: flex-end">
+      <div class="icon-demo">
+        <app-sio-icon name="fa-cog" color="blue" size="large"></app-sio-icon><span>blue</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-check-circle" color="green" size="large"></app-sio-icon><span>green</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-times-circle" color="red" size="large"></app-sio-icon><span>red</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-exclamation-triangle" color="orange" size="large"></app-sio-icon><span>orange</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-star" color="purple" size="large"></app-sio-icon><span>purple</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-info-circle" color="muted" size="large"></app-sio-icon><span>muted</span>
+      </div>
+    </div>
+    <div class="showcase-row mt-2" style="gap: 16px; align-items: flex-end">
+      <div class="icon-demo">
+        <app-sio-icon name="fa-cog" color="blue" size="small"></app-sio-icon><span>small</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-cog" color="blue" size="normal"></app-sio-icon><span>normal</span>
+      </div>
+      <div class="icon-demo">
+        <app-sio-icon name="fa-cog" color="blue" size="large"></app-sio-icon><span>large</span>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

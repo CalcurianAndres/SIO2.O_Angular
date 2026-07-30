@@ -105,9 +105,7 @@
             [(ngModel)]="proveedor.estado"
             *ngIf="estados.length === 0 && !cargandoEstados && editar"
           />
-          <p class="help" *ngIf="cargandoEstados">
-            <i class="fas fa-spinner fa-pulse"></i> Cargando estados…
-          </p>
+          <p class="help" *ngIf="cargandoEstados"><i class="fas fa-spinner fa-pulse"></i> Cargando estados…</p>
         </div>
       </div>
 
@@ -120,7 +118,11 @@
           <input type="text" class="input" placeholder="Nombre" [(ngModel)]="contacto_nombre" />
         </div>
         <div class="column">
-            <app-phone-input [value]="contacto_numero" (valueChange)="contacto_numero = $event" placeholder="Teléfono"></app-phone-input>
+          <app-phone-input
+            [value]="contacto_numero"
+            (valueChange)="contacto_numero = $event"
+            placeholder="Teléfono"
+          ></app-phone-input>
         </div>
         <div class="column">
           <input type="email" class="input" placeholder="Correo" [(ngModel)]="contacto_email" />
@@ -138,13 +140,23 @@
           </button>
         </div>
       </div>
-      <p class="help is-danger" *ngIf="(contacto_nombre || contacto_numero || contacto_email || contacto_cargo) && nuevo ? contactos.length === 0 : false">
+      <p
+        class="help is-danger"
+        *ngIf="
+          (contacto_nombre || contacto_numero || contacto_email || contacto_cargo) && nuevo
+            ? contactos.length === 0
+            : false
+        "
+      >
         <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el contacto
       </p>
 
       <!-- Tags: contactos -->
       <div class="tags-list" *ngIf="(nuevo ? contactos : proveedor?.contactos)?.length > 0">
-        <span class="tag is-info is-light is-medium" *ngFor="let c of nuevo ? contactos : proveedor?.contactos || []; index as i">
+        <span
+          class="tag is-info is-light is-medium"
+          *ngFor="let c of nuevo ? contactos : proveedor?.contactos || []; index as i"
+        >
           <i class="fas fa-user"></i> {{ c.nombre }} – {{ c.numero }}
           <button
             class="delete is-small"
@@ -153,46 +165,127 @@
         </span>
       </div>
 
-      <!-- Sección: Fabricantes -->
+      <!-- Sección: Asociación -->
       <hr class="modal-divider" />
-      <label class="section-label"><i class="fas fa-industry"></i> Fabricantes que provee</label>
 
-      <div class="field is-grouped">
-        <div class="control is-expanded">
-          <div class="select is-fullwidth">
-            <select (change)="fabricante_selected($event.target)">
-              <option value="#">— Seleccionar fabricante —</option>
-              <option *ngFor="let f of fabricantes.fabricantes; index as i" [value]="i">
-                {{ f.alias || f.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="control">
-          <button class="button is-info" (click)="nuevo ? addFabricante() : addFabricante_()">
-            <i class="fas fa-plus"></i>
+      <!-- Toggle fabricantes / servicios -->
+      <div class="field">
+        <label class="section-label"><i class="fas fa-link"></i> ¿Qué provee?</label>
+        <div class="buttons has-addons mt-2">
+          <button
+            class="button"
+            [class.is-info]="tipoAsociacion === 'fabricantes'"
+            (click)="cambiarTipoAsociacion('fabricantes')"
+          >
+            <span class="icon"><i class="fas fa-industry"></i></span>
+            <span>Fabricantes</span>
+          </button>
+          <button
+            class="button"
+            [class.is-info]="tipoAsociacion === 'servicios'"
+            (click)="cambiarTipoAsociacion('servicios')"
+          >
+            <span class="icon"><i class="fas fa-cog"></i></span>
+            <span>Servicios</span>
           </button>
         </div>
       </div>
-      <p class="help is-danger" *ngIf="fabricante !== undefined && fabricante !== '' && fabricante !== '#' && nuevo ? fabricantes_array.length === 0 : false">
-        <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el fabricante
-      </p>
 
-      <!-- Tags: fabricantes -->
-      <div class="tags-list" *ngIf="(nuevo ? fabricantes_array_name : proveedor?.fabricantes)?.length > 0">
-        <span
-          class="tag is-info is-light is-medium"
-          *ngFor="
-            let f of nuevo ? fabricantes_array_name : getFabricanteNames(proveedor?.fabricantes || []);
-            index as i
+      <!-- Fabricantes (actual) -->
+      <div *ngIf="tipoAsociacion === 'fabricantes'">
+        <label class="section-label"><i class="fas fa-industry"></i> Fabricantes que provee</label>
+
+        <div class="field is-grouped">
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
+              <select (change)="fabricante_selected($event.target)">
+                <option value="#">— Seleccionar fabricante —</option>
+                <option *ngFor="let f of fabricantes.fabricantes; index as i" [value]="i">
+                  {{ f.alias || f.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button class="button is-info" (click)="nuevo ? addFabricante() : addFabricante_()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            fabricante !== undefined && fabricante !== '' && fabricante !== '#' && nuevo
+              ? fabricantes_array.length === 0
+              : false
           "
         >
-          <i class="fas fa-industry"></i> {{ f }}
-          <button
-            class="delete is-small"
-            (click)="nuevo ? EliminarFabricante(i) : proveedor.fabricantes.splice(i, 1)"
-          ></button>
-        </span>
+          <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el fabricante
+        </p>
+
+        <!-- Tags: fabricantes -->
+        <div class="tags-list" *ngIf="(nuevo ? fabricantes_array_name : proveedor?.fabricantes)?.length > 0">
+          <span
+            class="tag is-info is-light is-medium"
+            *ngFor="
+              let f of nuevo ? fabricantes_array_name : getFabricanteNames(proveedor?.fabricantes || []);
+              index as i
+            "
+          >
+            <i class="fas fa-industry"></i> {{ f }}
+            <button
+              class="delete is-small"
+              (click)="nuevo ? EliminarFabricante(i) : proveedor.fabricantes.splice(i, 1)"
+            ></button>
+          </span>
+        </div>
+      </div>
+
+      <!-- Servicios (nuevo) -->
+      <div *ngIf="tipoAsociacion === 'servicios'">
+        <label class="section-label"><i class="fas fa-cog"></i> Servicios que provee</label>
+
+        <div class="field is-grouped">
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
+              <select (change)="servicio_selected($event.target)">
+                <option value="#">— Seleccionar servicio —</option>
+                <option *ngFor="let s of servicios.servicios; index as i" [value]="i">
+                  {{ s.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button class="button is-info" (click)="nuevo ? addServicio() : addServicio_()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            fabricante !== undefined && fabricante !== '' && fabricante !== '#' && nuevo
+              ? servicios_array.length === 0
+              : false
+          "
+        >
+          <i class="fas fa-info-circle"></i> Presiona <strong>+</strong> para agregar el servicio
+        </p>
+
+        <!-- Tags: servicios -->
+        <div class="tags-list" *ngIf="(nuevo ? servicios_array_name : proveedor?.servicios)?.length > 0">
+          <span
+            class="tag is-info is-light is-medium"
+            *ngFor="let s of nuevo ? servicios_array_name : getServicioNames(proveedor?.servicios || []); index as i"
+          >
+            <i class="fas fa-cog"></i> {{ s }}
+            <button
+              class="delete is-small"
+              (click)="nuevo ? EliminarServicio(i) : proveedor.servicios.splice(i, 1)"
+            ></button>
+          </span>
+        </div>
       </div>
 
       <!-- Guardar button -->

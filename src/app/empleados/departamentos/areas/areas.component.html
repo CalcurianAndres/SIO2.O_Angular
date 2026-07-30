@@ -35,36 +35,31 @@
                   <span style="font-family: 'Gilroy'">
                     {{ area.nombre }}
                   </span>
-                    <div class="field is-grouped margin-right">
-                      <div class="control">
-                        <button
-                          class="button is-small"
-                          style="background-color: transparent; border: none; color: var(--accent-blue)"
-                          (click)="subareas = true; Areas = false; subunidad = area.nombre"
-                        >
-                          <span class="icon"><i class="fas fa-plus"></i></span>
-                        </button>
-                      </div>
-                      <div class="control">
-                        <button
-                          class="button is-small"
-                          style="background-color: transparent; border: none; color: var(--accent-green)"
-                          (click)="EditarSubUnidad(area)"
-                        >
-                          <span class="icon"><i class="fas fa-edit"></i></span>
-                        </button>
-                      </div>
-                      <div class="control">
-                        <button
-                          type="button"
-                          class="btn-action-icon"
-                          title="Eliminar"
-                          (click)="EliminarSubUnidad(area)"
-                        >
-                          <i class="fas fa-trash icon-danger"></i>
-                        </button>
-                      </div>
+                  <div class="field is-grouped margin-right">
+                    <div class="control">
+                      <button
+                        class="button is-small"
+                        style="background-color: transparent; border: none; color: var(--accent-blue)"
+                        (click)="subareas = true; Areas = false; subunidad = area.nombre"
+                      >
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                      </button>
                     </div>
+                    <div class="control">
+                      <button
+                        class="button is-small"
+                        style="background-color: transparent; border: none; color: var(--accent-green)"
+                        (click)="EditarSubUnidad(area)"
+                      >
+                        <span class="icon"><i class="fas fa-edit"></i></span>
+                      </button>
+                    </div>
+                    <div class="control">
+                      <button type="button" class="btn-action-icon" title="Eliminar" (click)="EliminarSubUnidad(area)">
+                        <i class="fas fa-trash icon-danger"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="card-content">

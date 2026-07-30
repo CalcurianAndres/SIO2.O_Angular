@@ -11,10 +11,8 @@
     </div>
 
     <div class="modal-card-body">
-
       <!-- ═══ VISTA: BÚSQUEDA ═══ -->
       <ng-container *ngIf="!showCreateForm">
-
         <!-- Input de búsqueda -->
         <div class="field">
           <div class="control has-icons-left">
@@ -40,11 +38,7 @@
 
         <!-- Grid de resultados -->
         <div class="pantone-grid" *ngIf="!loading && filteredPantones.length > 0">
-          <div
-            class="pantone-card"
-            *ngFor="let pantone of filteredPantones"
-            (click)="selectPantone(pantone)"
-          >
+          <div class="pantone-card" *ngFor="let pantone of filteredPantones" (click)="selectPantone(pantone)">
             <div class="pantone-swatch" [style.background-color]="getSwatchColor(pantone)"></div>
             <span class="pantone-code">{{ pantone.code }}</span>
             <span class="pantone-hex">#{{ pantone.hex }}</span>
@@ -55,7 +49,8 @@
         <div class="empty-state" *ngIf="!loading && filteredPantones.length === 0">
           <i class="fas fa-search fa-3x"></i>
           <p class="empty-text">
-            No se encontraron Pantones para "<strong>{{ searchQuery }}</strong>"
+            No se encontraron Pantones para "<strong>{{ searchQuery }}</strong
+            >"
           </p>
           <button class="button is-info" (click)="showCreate()">
             <span class="icon"><i class="fas fa-plus"></i></span>
@@ -71,7 +66,6 @@
 
       <!-- ═══ VISTA: REGISTRO ═══ -->
       <ng-container *ngIf="showCreateForm">
-
         <!-- Botón volver -->
         <button class="button is-light is-small back-btn" (click)="backToSearch()">
           <span class="icon"><i class="fas fa-arrow-left"></i></span>
@@ -90,12 +84,7 @@
             <div class="field">
               <label class="label">Código Pantone</label>
               <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  placeholder="Ej: Custom Red C"
-                  [(ngModel)]="form.code"
-                />
+                <input type="text" class="input" placeholder="Ej: Custom Red C" [(ngModel)]="form.code" />
               </div>
             </div>
 
@@ -109,12 +98,10 @@
                   [(ngModel)]="form.hex"
                   (ngModelChange)="onHexChange()"
                   maxlength="6"
-                  style="text-transform: uppercase; font-family: monospace;"
+                  style="text-transform: uppercase; font-family: monospace"
                 />
               </div>
-              <p class="help" *ngIf="form.hex && form.hex.length !== 6">
-                Debe tener exactamente 6 caracteres
-              </p>
+              <p class="help" *ngIf="form.hex && form.hex.length !== 6">Debe tener exactamente 6 caracteres</p>
             </div>
 
             <div class="field">
@@ -167,18 +154,13 @@
         <!-- Botones de acción -->
         <div class="create-actions">
           <button class="button" (click)="close()">Cancelar</button>
-          <button
-            class="button is-success"
-            [disabled]="!formValid || creating"
-            (click)="createPantone()"
-          >
+          <button class="button is-success" [disabled]="!formValid || creating" (click)="createPantone()">
             <span class="icon" *ngIf="creating"><i class="fas fa-spinner fa-pulse"></i></span>
             <span class="icon" *ngIf="!creating"><i class="fas fa-plus"></i></span>
             <span>{{ creating ? 'Creando...' : 'Crear Pantone' }}</span>
           </button>
         </div>
       </ng-container>
-
     </div>
   </div>
 </div>

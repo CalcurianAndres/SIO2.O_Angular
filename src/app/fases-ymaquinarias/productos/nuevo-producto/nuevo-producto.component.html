@@ -140,7 +140,7 @@
             <button class="delete is-small" (click)="confirmarEliminar(producto.sustrato, i, 'Sustrato')"></button>
           </span>
         </div>
-        
+
         <!-- Tintas -->
         <label class="label">3.4 Tintas aprobadas</label>
         <div class="columns is-multiline is-vcentered">
@@ -178,7 +178,7 @@
             <button class="delete is-small" (click)="confirmarEliminar(producto.tintas, i, 'Tinta')"></button>
           </span>
         </div>
-        
+
         <!-- Barnices -->
         <label class="label">3.6 Barnices aprobados</label>
         <div class="columns is-multiline is-vcentered">
@@ -414,10 +414,13 @@
         <div class="tags-list mb-3" *ngIf="producto.troqueladora?.length">
           <span *ngFor="let t of producto.troqueladora; index as i" class="tag is-info is-light is-medium">
             <i class="fas fa-cut mr-1"></i> {{ getNombreMaquina(t) }}
-            <button class="delete is-small" (click)="confirmarEliminar(producto.troqueladora, i, 'Troqueladora')"></button>
+            <button
+              class="delete is-small"
+              (click)="confirmarEliminar(producto.troqueladora, i, 'Troqueladora')"
+            ></button>
           </span>
         </div>
-        
+
         <!-- Guillotina -->
         <label class="label">Guillotina aprobada</label>
         <div class="columns is-multiline is-vcentered">
@@ -446,7 +449,7 @@
             <button class="delete is-small" (click)="confirmarEliminar(producto.guillotina, i, 'Guillotina')"></button>
           </span>
         </div>
-        
+
         <!-- Pegadora -->
         <label class="label">6.6 Pegadora aprobada</label>
         <div class="columns is-multiline is-vcentered">

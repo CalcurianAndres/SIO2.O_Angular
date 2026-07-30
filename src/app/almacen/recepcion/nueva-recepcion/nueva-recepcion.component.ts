@@ -32,7 +32,7 @@ export class NuevaRecepcionComponent implements OnChanges {
   public sobranteTexto: string = '';
 
   get esProveedorVenezolano(): boolean {
-    const prov = this.proveedores.proveedores.find(p => p._id === this.proveedor_);
+    const prov = this.proveedores.proveedores.find((p) => p._id === this.proveedor_);
     return prov?.pais === 'Venezuela' || !prov?.pais;
   }
 
@@ -41,16 +41,12 @@ export class NuevaRecepcionComponent implements OnChanges {
       // Almacén principal: secciones sin almacen_id asignado
       return this.almacenService.secciones.filter((s: any) => !s.almacen_id);
     }
-    return this.almacenService.secciones.filter(
-      (s: any) => s.almacen_id === this.selectedAlmacenId
-    );
+    return this.almacenService.secciones.filter((s: any) => s.almacen_id === this.selectedAlmacenId);
   }
 
   ngOnChanges(): void {
     const proveedoresConOCPActiva = new Set(
-      this.OC_Poligrafica.orden
-        .filter((o: any) => o.estado === 'Abierta')
-        .map((o: any) => o.proveedor?._id)
+      this.OC_Poligrafica.orden.filter((o: any) => o.estado === 'Abierta').map((o: any) => o.proveedor?._id),
     );
     this.opcionesProveedor = [
       ...this.proveedores.proveedores
@@ -302,8 +298,6 @@ export class NuevaRecepcionComponent implements OnChanges {
     }
     this.control = nuevoValor;
   }
-
-
 
   calcularLatasYSobrante(cantidadTotal: number, pesoNetoPorLata: number) {
     // Calcular la cantidad de latas y el sobrante

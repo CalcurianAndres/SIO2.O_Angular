@@ -128,7 +128,9 @@
             <div class="pantone-preview" *ngIf="selectedPantone">
               <div
                 class="swatch"
-                [style.background-color]="'rgb(' + selectedPantone.r + ',' + selectedPantone.g + ',' + selectedPantone.b + ')'"
+                [style.background-color]="
+                  'rgb(' + selectedPantone.r + ',' + selectedPantone.g + ',' + selectedPantone.b + ')'
+                "
               ></div>
               <span class="code">{{ selectedPantone.code }}</span>
               <span class="hex">#{{ selectedPantone.hex }}</span>

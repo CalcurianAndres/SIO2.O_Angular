@@ -688,7 +688,9 @@ export class ProductosComponent implements OnInit {
           [new Cell(new Txt('2.3 Diseño del producto').end).fillColor('#dedede').bold().border([false]).end],
           [
             new Cell(
-              await getImageSafe(`${environment.imgUrl}/imagen/producto/${producto.dimensiones.diseno}`, { width: 400 }),
+              await getImageSafe(`${environment.imgUrl}/imagen/producto/${producto.dimensiones.diseno}`, {
+                width: 400,
+              }),
             )
               .alignment('center')
               .border([false])

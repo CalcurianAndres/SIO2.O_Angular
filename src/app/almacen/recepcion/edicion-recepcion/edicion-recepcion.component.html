@@ -6,12 +6,10 @@
       <button class="delete red_cross" aria-label="close" (click)="cerrar()"></button>
     </div>
     <div class="modal-card-body" *ngIf="edicion">
-      <i class="fas fa-circle red"></i> <strong class="fuente">Producto:</strong> {{
-        lista.materiales[n][0].material.nombre
-      }} ({{ lista.materiales[n][0].material.fabricante.alias }}) <br />
-      <br /><i class="fas fa-circle red"></i> <strong class="fuente">Fabricación:</strong> {{
-        lista.fabricacion[n] | date: 'dd/MM/yyyy'
-      }}
+      <i class="fas fa-circle red"></i> <strong class="fuente">Producto:</strong>
+      {{ lista.materiales[n][0].material.nombre }} ({{ lista.materiales[n][0].material.fabricante.alias }}) <br />
+      <br /><i class="fas fa-circle red"></i> <strong class="fuente">Fabricación:</strong>
+      {{ lista.fabricacion[n] | date: 'dd/MM/yyyy' }}
       <br />
       <br /><i class="fas fa-circle red"></i> <strong class="fuente">Transportista:</strong> {{ lista.transportista }}
       <br /><br />

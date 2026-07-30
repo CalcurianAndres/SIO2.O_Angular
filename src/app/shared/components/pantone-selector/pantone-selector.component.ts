@@ -49,7 +49,7 @@ export class PantoneSelectorComponent implements OnChanges {
           // Llamar a la API
           this.loading = true;
           return this.pantoneService.search(query);
-        })
+        }),
       )
       .subscribe({
         next: (results) => {
@@ -105,9 +105,7 @@ export class PantoneSelectorComponent implements OnChanges {
       return this.allPantones;
     }
     const q = query.toLowerCase().trim();
-    return this.allPantones.filter(
-      (p) => p.code.toLowerCase().includes(q) || p.hex.toLowerCase().includes(q)
-    );
+    return this.allPantones.filter((p) => p.code.toLowerCase().includes(q) || p.hex.toLowerCase().includes(q));
   }
 
   /**

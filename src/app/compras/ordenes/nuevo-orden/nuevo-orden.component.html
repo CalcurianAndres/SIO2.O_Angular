@@ -43,7 +43,8 @@
               <select [(ngModel)]="material.material" (ngModelChange)="onMaterialChange($event)">
                 <option [ngValue]="null">— Seleccionar material —</option>
                 <option *ngFor="let s of Sustratos" [ngValue]="s._id">
-                  {{ s.nombre }}<ng-container *ngIf="s.grupo?.trato"> — {{ s.gramaje }}g {{ s.calibre }}pt</ng-container>
+                  {{ s.nombre
+                  }}<ng-container *ngIf="s.grupo?.trato"> — {{ s.gramaje }}g {{ s.calibre }}pt</ng-container>
                 </option>
               </select>
             </div>
@@ -97,7 +98,10 @@
             </div>
           </ng-container>
 
-          <div class="column is-narrow" *ngIf="(esSustrato && material.ancho) || (!esSustrato && material.precio && Number_(material.precio) > 0)">
+          <div
+            class="column is-narrow"
+            *ngIf="(esSustrato && material.ancho) || (!esSustrato && material.precio && Number_(material.precio) > 0)"
+          >
             <label class="label"> </label>
             <button class="button is-info" (click)="addMaterial()">
               <span class="icon"><i class="fas fa-plus"></i></span>
@@ -122,22 +126,29 @@
           <tbody>
             <tr *ngFor="let pedido of Orden.pedido; index as i">
               <td>
-                <div><strong>{{ pedido.nombre }}</strong></div>
+                <div>
+                  <strong>{{ pedido.nombre }}</strong>
+                </div>
                 <div style="margin-top: 2px">
                   <span *ngIf="pedido.ancho" class="tag is-light is-small">
-                    {{ pedido.ancho }}cm<ng-container *ngIf="pedido.alto && !pedido.bobina"> x {{ pedido.alto }}cm</ng-container>
+                    {{ pedido.ancho }}cm<ng-container *ngIf="pedido.alto && !pedido.bobina">
+                      x {{ pedido.alto }}cm</ng-container
+                    >
                   </span>
                   <span *ngIf="pedido.bobina" class="tag is-info is-small" style="margin-left: 4px">Bobina</span>
-                  <span *ngIf="pedido.gramaje && !pedido.ancho" class="tag is-light is-small">{{ pedido.gramaje }}g/m²</span>
-                  <span *ngIf="pedido.calibre && !pedido.ancho" class="tag is-light is-small" style="margin-left: 4px">{{ pedido.calibre }}pt</span>
+                  <span *ngIf="pedido.gramaje && !pedido.ancho" class="tag is-light is-small"
+                    >{{ pedido.gramaje }}g/m²</span
+                  >
+                  <span *ngIf="pedido.calibre && !pedido.ancho" class="tag is-light is-small" style="margin-left: 4px"
+                    >{{ pedido.calibre }}pt</span
+                  >
                 </div>
               </td>
               <td>{{ pedido.cantidad | number: '2.2-2' }}{{ pedido.unidad }}</td>
               <td>{{ Number_(pedido.precio) | number: '2.2-2' }}</td>
               <td>{{ Number_((pedido.precio * pedido.cantidad).toFixed(2)) | number: '2.2-2' }}</td>
               <td>
-                <button class="button btn-action-icon" title="Eliminar"
-                  (click)="borrar(i)">
+                <button class="button btn-action-icon" title="Eliminar" (click)="borrar(i)">
                   <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
                 </button>
               </td>

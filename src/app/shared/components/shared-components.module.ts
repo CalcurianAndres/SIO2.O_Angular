@@ -12,10 +12,50 @@ import { ImgFallbackComponent } from './img-fallback/img-fallback.component';
 import { BadgeListComponent } from './badge-list/badge-list.component';
 import { PhoneInputComponent } from './phone-input/phone-input.component';
 import { PantoneSelectorComponent } from './pantone-selector/pantone-selector.component';
+import { SioModalComponent } from './sio-modal/sio-modal.component';
+import { SioTagComponent } from './sio-tag/sio-tag.component';
+import { SioButtonComponent } from './sio-button/sio-button.component';
+import { SioTableComponent } from './sio-table/sio-table.component';
+import { SioStatComponent } from './sio-stat/sio-stat.component';
+import { SioIconComponent } from './sio-icon/sio-icon.component';
 
 @NgModule({
-  declarations: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent, PhoneInputComponent, PantoneSelectorComponent],
+  declarations: [
+    SectionHeaderComponent,
+    PageLayoutComponent,
+    AppModalComponent,
+    ToastComponent,
+    SkeletonComponent,
+    StepWizardComponent,
+    ImgFallbackComponent,
+    BadgeListComponent,
+    PhoneInputComponent,
+    PantoneSelectorComponent,
+    SioModalComponent,
+    SioTagComponent,
+    SioButtonComponent,
+    SioTableComponent,
+    SioStatComponent,
+    SioIconComponent,
+  ],
   imports: [CommonModule, RouterModule, FormsModule],
-  exports: [SectionHeaderComponent, PageLayoutComponent, AppModalComponent, ToastComponent, SkeletonComponent, StepWizardComponent, ImgFallbackComponent, BadgeListComponent, PhoneInputComponent, PantoneSelectorComponent],
+  exports: [
+    SectionHeaderComponent,
+    PageLayoutComponent,
+    AppModalComponent,
+    ToastComponent,
+    SkeletonComponent,
+    StepWizardComponent,
+    ImgFallbackComponent,
+    BadgeListComponent,
+    PhoneInputComponent,
+    PantoneSelectorComponent,
+    SioModalComponent,
+    SioTagComponent,
+    SioButtonComponent,
+    SioTableComponent,
+    SioStatComponent,
+    SioIconComponent,
+  ],
 })
 export class SharedComponentsModule {}

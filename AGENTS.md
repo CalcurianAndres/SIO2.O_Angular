@@ -25,6 +25,7 @@ npm run lint && npm run format && npm run lint:fix  # run in order
 - **Lazy modules**: compras, almacen, laboratorio, fases-ymaquinarias, ordenes, empleados, dashboard, login.
 - **Never duplicate component declarations** across modules (Angular 16 throws).
 - **Shared components** (`<app-page-layout>`, `<app-section-header>`, `<app-modal>`, `<app-toast>`, `<app-breadcrumb>`, `<app-skeleton>`) register in `SharedComponentsModule`, not `SharedModule`. Import `SharedModule` in feature modules.
+- **SIO Design System** (`app-sio-modal`, `app-sio-tag`, `app-sio-button`, `app-sio-table`, `app-sio-stat`, `app-sio-icon`) — 6 componentes reutilizables en `SharedComponentsModule`. Showcase en `/ui-showcase`.
 - **Locale**: `es-ES`. `noImplicitAny: false` — `any` allowed without annotation.
 - Import paths use **relative** `../shared/...`, not `src/app/...`.
 

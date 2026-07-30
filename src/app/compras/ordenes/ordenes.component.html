@@ -81,7 +81,11 @@
     <button class="filter-tab" [ngClass]="{ active: filterMode === 'fabricante' }" (click)="setFilter('fabricante')">
       <i class="fas fa-industry"></i> Por fabricante
     </button>
-    <button class="filter-tab sort-tab" (click)="toggleSort()" title="{{ sortAsc ? 'Más vieja primero' : 'Más nueva primero' }}">
+    <button
+      class="filter-tab sort-tab"
+      (click)="toggleSort()"
+      title="{{ sortAsc ? 'Más vieja primero' : 'Más nueva primero' }}"
+    >
       <i class="fas" [ngClass]="sortAsc ? 'fa-sort-amount-up' : 'fa-sort-amount-down'"></i>
     </button>
   </div>
@@ -159,7 +163,7 @@
             <span class="order-number-emphasis">OCP: {{ addSlice(orden.numero) }}</span>
             <div class="order-header-meta">
               <span class="order-provider">{{ orden.proveedor.nombre }}</span>
-              <span class="order-creation-date">{{ orden.createdAt | date:'dd/MM/yyyy' }}</span>
+              <span class="order-creation-date">{{ orden.createdAt | date: 'dd/MM/yyyy' }}</span>
               <span class="order-status-badge" [ngClass]="orden.estado === 'Cerrada' ? 'badge-closed' : 'badge-open'">
                 {{ orden.estado || 'Abierta' }}
               </span>
@@ -191,10 +195,14 @@
           <tbody>
             <tr *ngFor="let material of orden.pedido">
               <td>
-                <div><strong>{{ material.material.nombre }}</strong> ({{ material.material.fabricante.alias }})</div>
+                <div>
+                  <strong>{{ material.material.nombre }}</strong> ({{ material.material.fabricante.alias }})
+                </div>
                 <div style="margin-top: 2px">
                   <span *ngIf="material.ancho" class="tag is-light is-small">
-                    {{ material.ancho }}cm<ng-container *ngIf="material.alto && !material.bobina"> x {{ material.alto }}cm</ng-container>
+                    {{ material.ancho }}cm<ng-container *ngIf="material.alto && !material.bobina">
+                      x {{ material.alto }}cm</ng-container
+                    >
                   </span>
                   <span *ngIf="material.bobina" class="tag is-info is-small" style="margin-left: 4px">Bobina</span>
                   <span *ngIf="material.material.gramaje && !material.ancho" class="tag is-light is-small">

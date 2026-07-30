@@ -17,9 +17,7 @@ export class StepWizardComponent {
   }
 
   get progressPercentage(): number {
-    return this.totalSteps > 1
-      ? Math.round(((this.currentStep - 1) / (this.totalSteps - 1)) * 100)
-      : 100;
+    return this.totalSteps > 1 ? Math.round(((this.currentStep - 1) / (this.totalSteps - 1)) * 100) : 100;
   }
 
   goToStep(n: number): void {

@@ -22,6 +22,7 @@ import { NuevoOrdenComponent } from './ordenes/nuevo-orden/nuevo-orden.component
 import { NoConformidadesComponent } from './no-conformidades/no-conformidades.component';
 import { NuevaConformidadComponent } from './no-conformidades/nueva-conformidad/nueva-conformidad.component';
 import { FabricantesProveedoresComponent } from './fabricantes-proveedores/fabricantes-proveedores.component';
+import { NuevoServicioComponent } from './servicios/nuevo-servicio/nuevo-servicio.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { FabricantesProveedoresComponent } from './fabricantes-proveedores/fabri
     NoConformidadesComponent,
     NuevaConformidadComponent,
     FabricantesProveedoresComponent,
+    NuevoServicioComponent,
   ],
   imports: [
     CommonModule,

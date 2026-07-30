@@ -28,9 +28,7 @@ export class PantoneService {
    * @returns Observable con array de Pantones ordenados por código
    */
   getAll(): Observable<Pantone[]> {
-    return this.http.get<Pantone[]>(BASE_URL).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Pantone[]>(BASE_URL).pipe(catchError(this.handleError));
   }
 
   /**
@@ -42,11 +40,11 @@ export class PantoneService {
     if (!query || query.trim() === '') {
       return this.getAll();
     }
-    return this.http.get<Pantone[]>(`${BASE_URL}/search`, {
-      params: { q: query }
-    }).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Pantone[]>(`${BASE_URL}/search`, {
+        params: { q: query },
+      })
+      .pipe(catchError(this.handleError));
   }
 
   /**
@@ -58,13 +56,13 @@ export class PantoneService {
     return this.http.get<Pantone>(`${BASE_URL}/${encodeURIComponent(code)}`).pipe(
       catchError((err) => {
         if (err.status === 404) {
-          return new Observable<Pantone | null>(observer => {
+          return new Observable<Pantone | null>((observer) => {
             observer.next(null);
             observer.complete();
           });
         }
         return this.handleError(err);
-      })
+      }),
     );
   }
 
@@ -86,7 +84,7 @@ export class PantoneService {
           return throwError(() => new Error(errorMsg));
         }
         return this.handleError(err);
-      })
+      }),
     );
   }
 
@@ -95,7 +93,7 @@ export class PantoneService {
    */
   private handleError(error: any): Observable<never> {
     let errorMessage = 'Error al comunicarse con el servidor';
-    
+
     if (error.error?.error) {
       errorMessage = error.error.error;
     } else if (error.message) {

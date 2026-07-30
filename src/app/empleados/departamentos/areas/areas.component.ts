@@ -87,9 +87,7 @@ export class AreasComponent {
   }
 
   EliminarSubUnidad(area) {
-    const hijos = this.Areas_creadas.filter(
-      (a) => a.sup === area.nombre && a.departamento === area.departamento,
-    );
+    const hijos = this.Areas_creadas.filter((a) => a.sup === area.nombre && a.departamento === area.departamento);
     Swal.fire({
       icon: 'question',
       title: '¿Eliminar subunidad?',

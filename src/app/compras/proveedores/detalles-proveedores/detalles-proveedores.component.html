@@ -59,6 +59,16 @@
       <p class="empty-hint" *ngIf="!proveedor.fabricantes || proveedor.fabricantes.length === 0">
         Sin fabricantes asociados
       </p>
+
+      <!-- Servicios -->
+      <hr class="modal-divider" />
+      <label class="section-label"><i class="fas fa-cogs"></i> Servicios que ofrece</label>
+      <div class="tags-list" *ngIf="proveedor.servicios && proveedor.servicios.length > 0">
+        <span class="tag is-warning is-light" *ngFor="let s of proveedor.servicios">
+          <i class="fas fa-cog"></i> {{ s.nombre }}
+        </span>
+      </div>
+      <p class="empty-hint" *ngIf="!proveedor.servicios || proveedor.servicios.length === 0">Sin servicios asociados</p>
     </div>
   </div>
 </div>

@@ -44,7 +44,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let horario of api.horarios">
-        <td><strong>{{ horario.nombre }}</strong></td>
+        <td>
+          <strong>{{ horario.nombre }}</strong>
+        </td>
         <td>{{ horario.de }} a {{ horario.a }}</td>
         <td>de {{ horario.inicio }} a {{ horario.fin }}</td>
         <td class="has-text-centered">
@@ -78,11 +80,7 @@
       <i class="fas fa-chevron-left year-arrow"></i>
       <span class="year-label">{{ currentYear - 1 }}</span>
     </button>
-    <button
-      class="button year-btn is-active-year"
-      (click)="selectYear(currentYear)"
-      title="Año actual"
-    >
+    <button class="button year-btn is-active-year" (click)="selectYear(currentYear)" title="Año actual">
       <span class="year-current">{{ currentYear }}</span>
     </button>
     <button
@@ -127,10 +125,7 @@
 
   <!-- Calendario con animación al cambiar año/vista -->
   <div class="card calendar-card">
-    <div
-      class="calendar-container"
-      [@calendarAnimation]="currentYear + '-' + vistaMensual"
-    >
+    <div class="calendar-container" [@calendarAnimation]="currentYear + '-' + vistaMensual">
       <!-- Vista anual: 12 meses -->
       <ng-container *ngIf="!vistaMensual">
         <div class="month" *ngFor="let month of months; let m = index">

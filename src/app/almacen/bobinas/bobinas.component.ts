@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { BobinasService } from 'src/app/services/bobinas.service';
 import { AlmacenService } from 'src/app/services/almacen.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bobinas',
@@ -18,12 +17,6 @@ export class BobinasComponent {
   public pageSize = 25;
   public currentPage = 1;
   public Math: any = Math;
-
-  public activeTab: string = 'conversiones';
-
-  public nuevaConvertidora = { nombre: '', rif: '', direccion: '', telefono: '', contacto: '' };
-  public editingConvertidoraId: string | null = null;
-  public editingConvertidora = { nombre: '', rif: '', direccion: '', telefono: '', contacto: '' };
 
   constructor(
     public api: BobinasService,
@@ -99,8 +92,18 @@ export class BobinasComponent {
 
   get mesActual(): string {
     const meses = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
     return meses[new Date().getMonth()];
   }
@@ -139,89 +142,5 @@ export class BobinasComponent {
       ...(principalTieneBobinas ? [{ _id: null, nombre: 'Almacén principal', fijo: true }] : []),
       ...externosConBobinas,
     ];
-  }
-
-  // ══════════════════════════════════════════════════════
-  // CRUD Convertidoras
-  // ══════════════════════════════════════════════════════
-
-  agregarConvertidora() {
-    const nombre = this.nuevaConvertidora.nombre.trim();
-    if (!nombre) return;
-    this.api.guardarConvertidora({ ...this.nuevaConvertidora });
-    this.nuevaConvertidora = { nombre: '', rif: '', direccion: '', telefono: '', contacto: '' };
-    setTimeout(() => {
-      Swal.fire({
-        text: this.api.mensaje.mensaje,
-        icon: this.api.mensaje.icon,
-        toast: true,
-        position: 'top-end',
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-    }, 500);
-  }
-
-  iniciarEdicion(c: any) {
-    this.editingConvertidoraId = c._id;
-    this.editingConvertidora = {
-      nombre: c.nombre,
-      rif: c.rif || '',
-      direccion: c.direccion || '',
-      telefono: c.telefono || '',
-      contacto: c.contacto || '',
-    };
-  }
-
-  guardarEdicion(c: any) {
-    const nombre = this.editingConvertidora.nombre.trim();
-    if (!nombre) return;
-    this.api.guardarConvertidora({ _id: c._id, ...this.editingConvertidora });
-    this.cancelarEdicion();
-    setTimeout(() => {
-      Swal.fire({
-        text: this.api.mensaje.mensaje,
-        icon: this.api.mensaje.icon,
-        toast: true,
-        position: 'top-end',
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-    }, 500);
-  }
-
-  cancelarEdicion() {
-    this.editingConvertidoraId = null;
-    this.editingConvertidora = { nombre: '', rif: '', direccion: '', telefono: '', contacto: '' };
-  }
-
-  eliminarConvertidora(c: any) {
-    Swal.fire({
-      title: `¿Eliminar "${c.nombre}"?`,
-      text: 'Esta acción no se puede deshacer',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: 'var(--status-danger, #f14668)',
-      cancelButtonColor: 'var(--text-muted, #7a7a7a)',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.api.eliminarConvertidora({ _id: c._id });
-        setTimeout(() => {
-          Swal.fire({
-            text: this.api.mensaje.mensaje,
-            icon: this.api.mensaje.icon,
-            toast: true,
-            position: 'top-end',
-            timer: 3000,
-            showConfirmButton: false,
-            timerProgressBar: true,
-          });
-        }, 500);
-      }
-    });
   }
 }

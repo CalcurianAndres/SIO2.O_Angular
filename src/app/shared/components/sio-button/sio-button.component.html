@@ -1,0 +1,5 @@
+<button [class]="buttonClasses" [disabled]="disabled || loading" (click)="click()">
+  <span class="icon" *ngIf="loading"><i class="fas fa-spinner fa-pulse"></i></span>
+  <span class="icon" *ngIf="!loading && icon"><i class="fas" [ngClass]="icon"></i></span>
+  <span><ng-content></ng-content></span>
+</button>

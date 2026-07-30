@@ -40,9 +40,7 @@ export class NuevoOrdenComponent {
 
   get fabricantesFiltrados(): any[] {
     if (!this.fabricantesIDs.length) return this.fabricantes.fabricantes || [];
-    return (this.fabricantes.fabricantes || []).filter((f: any) =>
-      this.fabricantesIDs.includes(String(f._id))
-    );
+    return (this.fabricantes.fabricantes || []).filter((f: any) => this.fabricantesIDs.includes(String(f._id)));
   }
 
   proveedores_(e) {
@@ -79,8 +77,8 @@ export class NuevoOrdenComponent {
     }
     this.esSustrato = material.grupo?.trato === true;
     this.material.nombre = material.nombre;
-    this.material.gramaje = this.esSustrato ? (material.gramaje || '') : '';
-    this.material.calibre = this.esSustrato ? (material.calibre || '') : '';
+    this.material.gramaje = this.esSustrato ? material.gramaje || '' : '';
+    this.material.calibre = this.esSustrato ? material.calibre || '' : '';
     this.material.unidad = this.material.unidad || 'Und';
     this.material.alto = '';
     this.material.ancho = '';

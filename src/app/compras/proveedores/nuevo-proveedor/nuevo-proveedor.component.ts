@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FabricantesService } from 'src/app/services/fabricantes.service';
+import { ServiciosService } from 'src/app/services/servicios.service';
 import { Proveedores } from '../../models/modelos-compra';
 import { PaisesService } from 'src/app/services/paises.service';
 import { take } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-nuevo-proveedor',
@@ -35,6 +37,9 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
   public contactos: any = [];
   public fabricantes_array: any = [];
   public fabricantes_array_name: any = [];
+  public servicios_array: any = [];
+  public servicios_array_name: string[] = [];
+  public tipoAsociacion: 'fabricantes' | 'servicios' = 'fabricantes';
   public guardando: boolean = false;
 
   get formValido(): boolean {
@@ -44,13 +49,20 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
       if (!this.estado) return false;
       if (!this.rif && !this.identificacion_fiscal) return false;
       if (this.contactos.length === 0) return false;
-      if (this.fabricantes_array.length === 0) return false;
+      if (this.tipoAsociacion === 'fabricantes' && this.fabricantes_array.length === 0) return false;
+      if (this.tipoAsociacion === 'servicios' && this.servicios_array.length === 0) return false;
     } else {
       if (!this.proveedor?.nombre || !this.proveedor?.direccion || !this.proveedor?.pais) return false;
       if (!this.proveedor?.estado) return false;
       if (!this.proveedor?.rif && !this.proveedor?.identificacion_fiscal) return false;
       if (!this.proveedor?.contactos || (this.proveedor.contactos as any[]).length === 0) return false;
-      if (!this.proveedor?.fabricantes || this.proveedor.fabricantes.length === 0) return false;
+      if (
+        this.tipoAsociacion === 'fabricantes' &&
+        (!this.proveedor?.fabricantes || this.proveedor.fabricantes.length === 0)
+      )
+        return false;
+      if (this.tipoAsociacion === 'servicios' && (!this.proveedor?.servicios || this.proveedor.servicios.length === 0))
+        return false;
     }
     return true;
   }
@@ -60,6 +72,7 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
 
   constructor(
     public fabricantes: FabricantesService,
+    public servicios: ServiciosService,
     private paisesService: PaisesService,
   ) {}
 
@@ -84,9 +97,17 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
       this.contactos = [];
       this.fabricantes_array = [];
       this.fabricantes_array_name = [];
+      this.servicios_array = [];
+      this.servicios_array_name = [];
+      this.tipoAsociacion = 'fabricantes';
     }
     if (changes['editar']?.currentValue) {
       this.guardando = false;
+      if (this.proveedor?.servicios && this.proveedor.servicios.length > 0) {
+        this.tipoAsociacion = 'servicios';
+      } else {
+        this.tipoAsociacion = 'fabricantes';
+      }
     }
   }
 
@@ -98,10 +119,13 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
     this.cargandoEstados = true;
     const paisObj = this.listaPaises.find((p) => p.nombre === pais);
     const paisApi = paisObj?.nombreEn || pais;
-    this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
-      this.estados = states;
-      this.cargandoEstados = false;
-    });
+    this.paisesService
+      .getEstados(paisApi)
+      .pipe(take(1))
+      .subscribe((states) => {
+        this.estados = states;
+        this.cargandoEstados = false;
+      });
   }
 
   cerrar() {
@@ -115,6 +139,9 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
     this.contactos = [];
     this.fabricantes_array = [];
     this.fabricantes_array_name = [];
+    this.servicios_array = [];
+    this.servicios_array_name = [];
+    this.tipoAsociacion = 'fabricantes';
     this.onCloseModal.emit();
   }
 
@@ -129,6 +156,9 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
     this.contactos = [];
     this.fabricantes_array = [];
     this.fabricantes_array_name = [];
+    this.servicios_array = [];
+    this.servicios_array_name = [];
+    this.tipoAsociacion = 'fabricantes';
     this.onCloseModal_.emit();
   }
 
@@ -183,6 +213,69 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
     return fabricantes?.map((f: any) => f.alias || f.nombre) || [];
   }
 
+  addServicio() {
+    if (!this.servicios_array.includes(this.servicios.servicios[this.fabricante]._id)) {
+      this.servicios_array.push(this.servicios.servicios[this.fabricante]._id);
+      this.servicios_array_name.push(this.servicios.servicios[this.fabricante].nombre);
+      this.fabricante = '';
+    }
+  }
+
+  addServicio_() {
+    if (!this.proveedor.servicios.includes(this.servicios.servicios[this.fabricante])) {
+      this.proveedor.servicios.push(this.servicios.servicios[this.fabricante]);
+      this.fabricante = '';
+    }
+  }
+
+  EliminarServicio(i: number) {
+    this.servicios_array.splice(i, 1);
+    this.servicios_array_name.splice(i, 1);
+  }
+
+  servicio_selected(e: any | null) {
+    if (e.value != '#') {
+      this.fabricante = e.value;
+    }
+  }
+
+  getServicioNames(servicios: any[]): string[] {
+    return servicios?.map((s: any) => s.nombre) || [];
+  }
+
+  cambiarTipoAsociacion(tipo: 'fabricantes' | 'servicios') {
+    if (tipo === this.tipoAsociacion) return;
+    const tieneFab = this.nuevo ? this.fabricantes_array.length > 0 : this.proveedor?.fabricantes?.length > 0;
+    const tieneServ = this.nuevo ? this.servicios_array.length > 0 : this.proveedor?.servicios?.length > 0;
+    if (tieneFab || tieneServ) {
+      Swal.fire({
+        title: '¿Cambiar tipo de asociación?',
+        text: 'Se eliminarán las asociaciones actuales al cambiar de tipo',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#48c78e',
+        confirmButtonText: 'Cambiar',
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#f03a5f',
+      }).then((resultado) => {
+        if (resultado.isConfirmed) {
+          if (this.nuevo) {
+            this.fabricantes_array = [];
+            this.fabricantes_array_name = [];
+            this.servicios_array = [];
+            this.servicios_array_name = [];
+          } else {
+            this.proveedor.fabricantes = [];
+            this.proveedor.servicios = [];
+          }
+          this.tipoAsociacion = tipo;
+        }
+      });
+    } else {
+      this.tipoAsociacion = tipo;
+    }
+  }
+
   NuevoContacto() {
     this.contactos.push({
       nombre: this.contacto_nombre,
@@ -211,8 +304,7 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
 
   GuardarProveedor() {
     this.guardando = true;
-    const data: Proveedores = {
-      fabricantes: this.fabricantes_array,
+    const data: any = {
       nombre: this.nombre,
       direccion: this.direccion,
       rif: this.rif,
@@ -221,13 +313,24 @@ export class NuevoProveedorComponent implements OnInit, OnChanges {
       estado: this.estado || undefined,
       identificacion_fiscal: this.identificacion_fiscal || undefined,
     };
+    if (this.tipoAsociacion === 'fabricantes') {
+      data.fabricantes = this.fabricantes_array;
+    } else {
+      data.servicios = this.servicios_array;
+    }
     this.api.nuevoProveedor(data);
     this.cerrar();
   }
 
   EditarProveedor() {
     this.guardando = true;
-    this.proveedor.fabricantes = this.proveedor.fabricantes.map((e: any) => e._id);
+    if (this.tipoAsociacion === 'fabricantes') {
+      this.proveedor.fabricantes = this.proveedor.fabricantes.map((e: any) => e._id);
+      this.proveedor.servicios = [];
+    } else {
+      this.proveedor.servicios = this.proveedor.servicios.map((e: any) => e._id);
+      this.proveedor.fabricantes = [];
+    }
     this.api.editarProveedores(this.proveedor);
     this.cerrar();
   }

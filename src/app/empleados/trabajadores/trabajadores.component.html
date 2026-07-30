@@ -1,8 +1,4 @@
-<app-crear-trabajador
-  *ngIf="modalCrear"
-  (onCloseModal)="cerrarModalCrear()"
->
-</app-crear-trabajador>
+<app-crear-trabajador *ngIf="modalCrear" (onCloseModal)="cerrarModalCrear()"> </app-crear-trabajador>
 
 <app-editar-trabajador
   *ngIf="modalEditar && empleadoAEditar"
@@ -27,8 +23,9 @@
   <br />
   <button class="button is-info" (click)="abrirModalCrear()">
     <span class="icon"><i class="fas fa-plus-circle"></i></span>
-    <span>Empleado</span></button
-  >  <br />
+    <span>Empleado</span>
+  </button>
+  <br />
   <br />
   <div class="tabs">
     <ul>
@@ -42,7 +39,6 @@
   </div>
   <div class="Departamentos">
     <div class="card dep" *ngFor="let cargos of sortedListaTrabajadores">
-
       <!-- ── Activos ── -->
       <ng-container *ngIf="!cargos.borrado">
         <div class="card_designed">
@@ -50,8 +46,13 @@
             <div class="columns">
               <div class="column is-4">
                 <figure class="image is-75x75 profile_pic">
-                  <app-img-fallback tipo="empleado" [filename]="cargos.datos_personales.foto"
-                    cssClass="is-rounded" width="75px" height="75px"></app-img-fallback>
+                  <app-img-fallback
+                    tipo="empleado"
+                    [filename]="cargos.datos_personales.foto"
+                    cssClass="is-rounded"
+                    width="75px"
+                    height="75px"
+                  ></app-img-fallback>
                 </figure>
               </div>
               <div class="column">
@@ -73,7 +74,14 @@
             ><i class="fas fa-info-circle blue_" (click)="informacion = true; _informacion_ = cargos"></i
           ></a>
           <a class="card-footer-item"><i class="far fa-edit green" (click)="abrirModalEditar(cargos)"></i></a>
-          <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="eliminarTrabajador(cargos)"><i class="fas fa-trash-alt icon-danger"></i></button>
+          <button
+            type="button"
+            class="card-footer-item btn-action-icon"
+            title="Eliminar"
+            (click)="eliminarTrabajador(cargos)"
+          >
+            <i class="fas fa-trash-alt icon-danger"></i>
+          </button>
         </footer>
       </ng-container>
 
@@ -84,8 +92,13 @@
             <div class="columns">
               <div class="column is-4">
                 <figure class="image is-48x48 profile_pic">
-                  <app-img-fallback tipo="empleado" [filename]="cargos.datos_personales.foto"
-                    cssClass="is-rounded is-grayscale" width="48px" height="48px"></app-img-fallback>
+                  <app-img-fallback
+                    tipo="empleado"
+                    [filename]="cargos.datos_personales.foto"
+                    cssClass="is-rounded is-grayscale"
+                    width="48px"
+                    height="48px"
+                  ></app-img-fallback>
                 </figure>
               </div>
               <div class="column">
@@ -114,7 +127,6 @@
           <a class="card-footer-item"><i class="far fa-edit green" (click)="abrirModalEditar(cargos)"></i></a>
         </footer>
       </ng-container>
-
     </div>
   </div>
 </app-page-layout>

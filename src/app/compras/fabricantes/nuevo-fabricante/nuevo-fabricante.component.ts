@@ -171,10 +171,13 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
     this.cargandoEstados = true;
     const paisObj = this.listaPaises.find((p) => p.nombre === pais);
     const paisApi = paisObj?.nombreEn || pais;
-    this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
-      this.estados = states;
-      this.cargandoEstados = false;
-    });
+    this.paisesService
+      .getEstados(paisApi)
+      .pipe(take(1))
+      .subscribe((states) => {
+        this.estados = states;
+        this.cargandoEstados = false;
+      });
   }
 
   onPaisChange_() {
@@ -185,10 +188,13 @@ export class NuevoFabricanteComponent implements OnInit, OnChanges {
     this.cargandoEstados = true;
     const paisObj = this.listaPaises.find((p) => p.nombre === pais);
     const paisApi = paisObj?.nombreEn || pais;
-    this.paisesService.getEstados(paisApi).pipe(take(1)).subscribe((states) => {
-      this.estados = states;
-      this.cargandoEstados = false;
-    });
+    this.paisesService
+      .getEstados(paisApi)
+      .pipe(take(1))
+      .subscribe((states) => {
+        this.estados = states;
+        this.cargandoEstados = false;
+      });
   }
 
   addOrigen() {

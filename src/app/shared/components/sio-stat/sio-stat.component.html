@@ -1,0 +1,12 @@
+<div class="card stat-card" [ngClass]="'stat-' + color">
+  <div class="card-content">
+    <div class="stat-header">
+      <span class="stat-number">{{ value }}</span>
+      <div class="stat-icon-bg">
+        <i class="fas" [ngClass]="icon"></i>
+      </div>
+    </div>
+    <div class="stat-label">{{ label }}</div>
+    <div class="stat-detail" *ngIf="detail">{{ detail }}</div>
+  </div>
+</div>

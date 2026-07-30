@@ -1,6 +1,12 @@
 <app-nueva-recepcion [nueva]="nueva" (onCloseModal)="nueva = false"> </app-nueva-recepcion>
 
-<app-detalles-recepcion [detalle]="detalle" [lista]="Material_selected" [recepcion]="Material_selected" [n]="n_word" (onCloseModal)="detalle = false">
+<app-detalles-recepcion
+  [detalle]="detalle"
+  [lista]="Material_selected"
+  [recepcion]="Material_selected"
+  [n]="n_word"
+  (onCloseModal)="detalle = false"
+>
 </app-detalles-recepcion>
 
 <app-edicion-recepcion [edicion]="edicion" [lista]="Material_selected" [n]="n_word" (onCloseModal)="edicion = false">
@@ -268,7 +274,11 @@
                   <button
                     class="button is-small is-success is-light"
                     (click)="$event.stopPropagation(); EnviarAlmacen(index, i)"
-                    *ngIf="materiales[0]?.unidad === 't' || materiales[0]?.material?.grupo?.otro || poseeAnalisis(materiales[0]?.lote)"
+                    *ngIf="
+                      materiales[0]?.unidad === 't' ||
+                      materiales[0]?.material?.grupo?.otro ||
+                      poseeAnalisis(materiales[0]?.lote)
+                    "
                     title="Enviar a almacén"
                   >
                     <span class="icon is-small"><i class="fas fa-warehouse"></i></span>
