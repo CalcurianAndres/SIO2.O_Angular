@@ -59,6 +59,16 @@ export class RecibosComponent {
           horas: 8,
           descripcion: 'Conversión de convertidoras a proveedores con servicio + fix cálculo peso',
         },
+        {
+          fecha: '30/07/2026',
+          horas: 8,
+          descripcion: 'Conversión de convertidoras a proveedores + fix cálculo peso y race condition',
+        },
+        {
+          fecha: '31/07/2026',
+          horas: 8,
+          descripcion: 'Descuento de bobina con histórico y mejoras en UI de módulos',
+        },
       ]),
   );
 
