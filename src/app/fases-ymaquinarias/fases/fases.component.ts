@@ -25,6 +25,14 @@ export class FasesComponent {
   public editar: boolean = false;
   public info: boolean = false;
   public cargando: boolean = true;
+  public searchTerm: string = '';
+
+  get filteredFases(): any[] {
+    const list = this.api.fases || [];
+    if (!this.searchTerm) return list;
+    const term = this.searchTerm.toLowerCase();
+    return list.filter((f: any) => f.nombre.toLowerCase().includes(term));
+  }
 
   filas() {
     return Math.ceil(this.api.fases.length / 5);

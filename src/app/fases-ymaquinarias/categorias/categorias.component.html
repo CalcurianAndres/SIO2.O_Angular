@@ -24,43 +24,40 @@
   <div *ngIf="!cargando && api.categorias.length === 0" class="empty-state">
     <i class="fas fa-tag empty-icon"></i>
     <p class="empty-title">No hay categorías registradas</p>
-    <p class="empty-hint">Haz clic en el botón "Categoría" para comenzar</p>
+    <p class="empty-hint">Haz clic en el botón "Nueva Categoría" para comenzar</p>
     <i class="fas fa-arrow-up empty-arrow"></i>
   </div>
 
   <!-- Skeleton -->
-  <div *ngIf="cargando && api.categorias.length === 0" class="grupo-grid">
-    <div *ngFor="let _ of [].constructor(5)" class="card skeleton-card">
-      <div class="card-header skeleton-header"></div>
-      <div class="card-content">
-        <div class="skeleton-line skeleton-line-short"></div>
-      </div>
-      <div class="card-footer skeleton-footer"></div>
+  <div *ngIf="cargando && api.categorias.length === 0" class="skeleton-list">
+    <div *ngFor="let _ of [].constructor(3)" class="card skeleton-card">
+      <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
     </div>
   </div>
 
-  <!-- Card grid -->
-  <div *ngIf="api.categorias.length > 0" class="grupo-grid">
-    <div *ngFor="let cat of api.categorias; index as i" class="card grupo-card animate__animated animate__fadeInUp">
+  <!-- Cards -->
+  <div *ngIf="api.categorias.length > 0" class="cards-container">
+    <!-- Search -->
+    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+      <div class="control has-icons-left">
+        <input class="input" type="text" placeholder="Buscar categoría..." [(ngModel)]="searchTerm" />
+        <span class="icon is-left"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <div *ngFor="let cat of filteredCategorias; index as i" class="card grupo-card animate__animated animate__fadeInUp">
       <div class="card-header">
         <div class="card-header-title">
           <i class="fas fa-tag grupo-icon"></i>
           <span class="grupo-nombre">{{ cat.nombre }}</span>
         </div>
+        <div class="card-header-actions">
+          <i class="far fa-edit green action-icon" title="Editar" (click)="editarInfo(cat)"></i>
+          <button class="button btn-action-icon" title="Eliminar" (click)="borrarCategoria(cat._id)">
+            <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+          </button>
+        </div>
       </div>
-      <footer class="card-footer">
-        <a class="card-footer-item" (click)="editarInfo(cat)" title="Editar">
-          <i class="far fa-edit green"></i>
-        </a>
-        <button
-          type="button"
-          class="card-footer-item btn-action-icon"
-          title="Eliminar"
-          (click)="borrarCategoria(cat._id)"
-        >
-          <i class="fas fa-trash-alt icon-danger"></i>
-        </button>
-      </footer>
     </div>
   </div>
 </app-page-layout>

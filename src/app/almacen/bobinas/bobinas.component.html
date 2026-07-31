@@ -1,4 +1,10 @@
 <app-new-bobina [nueva]="bobina" (onCloseModal)="bobina = false"> </app-new-bobina>
+<app-descuento-rapido
+  [mostrar]="descuentoRapido"
+  [bobina]="bobinaSeleccionada"
+  (onCloseModal)="cerrarDescuento()"
+  (onDescuento)="cerrarDescuento()"
+></app-descuento-rapido>
 
 <app-page-layout>
   <app-section-header
@@ -138,12 +144,13 @@
                 <th>Material</th>
                 <th class="has-text-centered">Cantidad (und)</th>
                 <th class="has-text-centered">Peso (t)</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let conv of paginatedConversiones">
                 <td>
-                  <span class="tag is-success">{{ conv.status }}</span>
+                  <span class="tag" [ngClass]="conv.status === 'Lista' ? 'is-success' : 'is-warning'">{{ conv.status }}</span>
                 </td>
                 <td>{{ conv.convertidora?.nombre || '—' }}</td>
                 <td>{{ conv.lote }}</td>
@@ -153,6 +160,16 @@
                 </td>
                 <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
                 <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
+                <td class="has-text-right">
+                  <button
+                    class="button is-small is-ghost"
+                    title="Marcar como lista"
+                    (click)="marcarConversionLista(conv)"
+                    *ngIf="conv.status !== 'Lista'"
+                  >
+                    <span class="icon"><i class="fas fa-check-circle" style="color: var(--accent-green)"></i></span>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -233,6 +250,7 @@
                 <th>Ancho</th>
                 <th>Material</th>
                 <th *ngIf="!alm.fijo">Sección</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -243,6 +261,16 @@
                 <td>{{ bobina.ancho }}</td>
                 <td>{{ bobina.material.nombre }}</td>
                 <td *ngIf="!alm.fijo">{{ bobina.seccion_id?.nombre || '—' }}</td>
+                <td class="has-text-right">
+                  <button
+                    class="button is-small is-ghost"
+                    title="Descontar bobina"
+                    (click)="abrirDescuento(bobina)"
+                    [disabled]="!bobina.neto || +bobina.neto <= 0"
+                  >
+                    <span class="icon"><i class="fas fa-cut" style="color: var(--accent-blue)"></i></span>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

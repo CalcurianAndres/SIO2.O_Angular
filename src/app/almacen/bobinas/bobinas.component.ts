@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BobinasService } from 'src/app/services/bobinas.service';
 import { AlmacenService } from 'src/app/services/almacen.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bobinas',
@@ -17,6 +18,9 @@ export class BobinasComponent {
   public pageSize = 25;
   public currentPage = 1;
   public Math: any = Math;
+
+  public descuentoRapido = false;
+  public bobinaSeleccionada: any = null;
 
   constructor(
     public api: BobinasService,
@@ -118,6 +122,34 @@ export class BobinasComponent {
 
   buscarPorFecha() {
     this.currentPage = 1;
+  }
+
+  abrirDescuento(bobina: any) {
+    this.bobinaSeleccionada = bobina;
+    this.descuentoRapido = true;
+  }
+
+  cerrarDescuento() {
+    this.descuentoRapido = false;
+    this.bobinaSeleccionada = null;
+  }
+
+  marcarConversionLista(conv: any) {
+    Swal.fire({
+      title: '¿Marcar conversión como lista?',
+      text: `Conversión ${conv.conversion} — Lote ${conv.lote}`,
+      showDenyButton: true,
+      confirmButtonColor: '#48c78e',
+      confirmButtonText: 'Sí, marcar',
+      denyButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.editarConversion({ _id: conv._id, status: 'Lista' });
+        setTimeout(() => {
+          Swal.fire({ text: 'Conversión marcada como lista', icon: 'success', timer: 2000, showConfirmButton: false });
+        }, 500);
+      }
+    });
   }
 
   // ══════════════════════════════════════════════════════

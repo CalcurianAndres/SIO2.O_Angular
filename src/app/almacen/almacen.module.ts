@@ -20,6 +20,7 @@ import { NoConformeComponent } from './recepcion/no-conforme/no-conforme.compone
 import { BobinasComponent } from './bobinas/bobinas.component';
 import { NewBobinaComponent } from './bobinas/new-bobina/new-bobina.component';
 import { DescuentoBobinaComponent } from './recepcion/nueva-recepcion/descuento-bobina/descuento-bobina.component';
+import { DescuentoRapidoComponent } from './bobinas/descuento-rapido/descuento-rapido.component';
 import { ProductoTerminadoComponent } from './producto-terminado/producto-terminado.component';
 import { AlmacenesComponent } from './almacenes/almacenes.component';
 
@@ -40,6 +41,7 @@ import { AlmacenesComponent } from './almacenes/almacenes.component';
     BobinasComponent,
     NewBobinaComponent,
     DescuentoBobinaComponent,
+    DescuentoRapidoComponent,
     ProductoTerminadoComponent,
     AlmacenesComponent,
   ],

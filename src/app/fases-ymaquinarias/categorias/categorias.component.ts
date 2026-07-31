@@ -17,6 +17,14 @@ export class CategoriasComponent {
   public nueva: boolean = false;
   public editar: boolean = false;
   public cargando: boolean = true;
+  public searchTerm: string = '';
+
+  get filteredCategorias(): any[] {
+    const list = this.api.categorias || [];
+    if (!this.searchTerm) return list;
+    const term = this.searchTerm.toLowerCase();
+    return list.filter((c: any) => c.nombre.toLowerCase().includes(term));
+  }
 
   nuevaCategoria() {
     this.nueva = true;

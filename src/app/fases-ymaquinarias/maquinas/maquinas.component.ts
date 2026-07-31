@@ -22,6 +22,18 @@ export class MaquinasComponent {
   public editar: boolean = false;
   public selectedFases: any = [];
   public cargando: boolean = true;
+  public searchTerm: string = '';
+
+  get filteredMaquinas(): any[] {
+    const list = this.api.maquinas || [];
+    if (!this.searchTerm) return list;
+    const term = this.searchTerm.toLowerCase();
+    return list.filter((m: any) =>
+      m.nombre.toLowerCase().includes(term) ||
+      (m.marca && m.marca.toLowerCase().includes(term)) ||
+      (m.modelo && m.modelo.toLowerCase().includes(term))
+    );
+  }
 
   public data = {
     nombre: '',

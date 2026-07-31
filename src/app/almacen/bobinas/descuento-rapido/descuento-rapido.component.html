@@ -1,0 +1,172 @@
+<div class="modal" [ngClass]="{ 'is-active': mostrar }">
+  <div class="modal-background" (click)="cerrar()"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title">
+        <i class="fas fa-cut"></i> Descontar Bobina
+      </p>
+      <button class="delete" aria-label="close" (click)="cerrar()"></button>
+    </div>
+    <div class="modal-card-body" *ngIf="bobina">
+      <!-- Info de la bobina -->
+      <div class="box info-box">
+        <div class="columns is-multiline is-variable is-2">
+          <div class="column is-3">
+            <span class="info-label">Código</span>
+            <span class="info-value">{{ bobina.codigo }}</span>
+          </div>
+          <div class="column is-3">
+            <span class="info-label">Lote</span>
+            <span class="info-value">{{ bobina.lote }}</span>
+          </div>
+          <div class="column is-3">
+            <span class="info-label">Material</span>
+            <span class="info-value">{{ bobina.material?.nombre }}</span>
+          </div>
+          <div class="column is-3">
+            <span class="info-label">Peso actual</span>
+            <span class="info-value has-text-weight-bold">{{ bobina.neto }} t</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversion disponible -->
+      <div class="field" *ngIf="conversionesRelacionadas.length > 0">
+        <label class="label">Conversión (lote: {{ bobina.lote }})</label>
+        <div class="select is-fullwidth">
+          <select (change)="seleccionarConversion($event)">
+            <option value="">Seleccionar conversión...</option>
+            <option *ngFor="let c of conversionesRelacionadas; let i = index" [value]="i">
+              Conv. {{ c.conversion }} — {{ c.ancho }}x{{ c.largo }}cm — {{ c.cantidad }} hojas (restantes: {{ restantesConversion(c) }})
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="conversionesRelacionadas.length === 0" class="notification is-warning is-light">
+        <i class="fas fa-exclamation-triangle"></i>
+        No se encontró conversión para el lote <strong>{{ bobina.lote }}</strong>.
+        Se usará el ancho de la bobina ({{ bobina.ancho }}).
+      </div>
+
+      <!-- Resumen de hojas de la conversión -->
+      <div class="notification is-light mt-3" *ngIf="conversionSeleccionada"
+        [ngClass]="excedeConversion ? 'is-danger' : (hojasYaConsumidas > 0 ? 'is-info' : 'is-link')">
+        <div class="columns is-mobile is-vcentered">
+          <div class="column">
+            <p class="has-text-weight-bold">
+              Conversión {{ conversionSeleccionada.conversion }}
+            </p>
+            <p class="is-size-7">
+              Total: {{ hojasConversion }} hojas |
+              Ya consumidas: {{ hojasYaConsumidas }} |
+              Restantes: {{ hojasRestantes }}
+            </p>
+          </div>
+          <div class="column is-narrow">
+            <span class="tag is-size-7"
+              [ngClass]="excedeConversion ? 'is-danger' : (hojasYaConsumidas > 0 ? 'is-info' : 'is-link')">
+              {{ hojasYaConsumidas }} / {{ hojasConversion }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos calculados -->
+      <div class="columns is-variable is-2 mt-3" *ngIf="conversionSeleccionada || ancho > 0">
+        <div class="column is-4">
+          <span class="info-label">Ancho</span>
+          <span class="info-value">{{ ancho }} cm</span>
+        </div>
+        <div class="column is-4">
+          <span class="info-label">Largo</span>
+          <span class="info-value">{{ largo }} cm</span>
+        </div>
+        <div class="column is-4">
+          <span class="info-label">Gramaje</span>
+          <span class="info-value">{{ gramaje }} g/m²</span>
+        </div>
+      </div>
+
+      <!-- Input: hojas a descontar -->
+      <div class="field mt-4">
+        <label class="label is-large">Hojas a descontar</label>
+        <div class="control has-icons-left">
+          <input
+            type="number"
+            class="input is-medium"
+            placeholder="Cantidad de hojas"
+            [(ngModel)]="hojas"
+            (ngModelChange)="calcularPeso()"
+            [min]="0"
+            [max]="hojasRestantes"
+          />
+          <span class="icon is-left"><i class="fas fa-file"></i></span>
+        </div>
+      </div>
+
+      <!-- Resultado del calculo -->
+      <div class="notification is-info is-light mt-3" *ngIf="pesoCalculado > 0">
+        <div class="columns is-vcentered">
+          <div class="column">
+            <p class="has-text-weight-bold is-size-5">
+              <i class="fas fa-calculator"></i>
+              Peso a descontar: <span class="has-text-weight-bold">{{ pesoCalculado }} t</span>
+            </p>
+            <p class="is-size-7 has-text-grey mt-1">
+              {{ bobina.neto }} t − {{ pesoCalculado }} t =
+              <strong>{{ pesoRestanteBobina | number: '1.4-4' }} t</strong> restantes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Histórico de descuentos de la conversión -->
+      <div class="historial-section mt-4" *ngIf="conversionSeleccionada">
+        <p class="has-text-weight-bold is-size-6 mb-2">
+          <i class="fas fa-history"></i> Histórico de descuentos
+        </p>
+        <p class="is-size-7 has-text-grey mb-2" *ngIf="historialConversion.length === 0">
+          Sin descuentos previos para esta conversión.
+        </p>
+        <table class="table is-fullwidth is-striped is-hoverable historial-table" *ngIf="historialConversion.length > 0">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th class="has-text-right">Hojas</th>
+              <th class="has-text-right">Peso (t)</th>
+              <th>Usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of historialConversion">
+              <td>{{ h.fecha | date:'dd/MM/yy HH:mm' }}</td>
+              <td class="has-text-right">{{ h.hojas }}</td>
+              <td class="has-text-right">{{ h.peso | number: '1.4-4' }}</td>
+              <td>{{ h.usuario }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="has-text-weight-bold">
+              <td>Total consumido</td>
+              <td class="has-text-right">{{ hojasYaConsumidas }}</td>
+              <td class="has-text-right has-text-danger">—</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Botones -->
+      <div class="field mt-4">
+        <div class="buttons">
+          <button class="button is-success" [disabled]="pesoCalculado <= 0 || hojas <= 0" (click)="descontar()">
+            <span class="icon"><i class="fas fa-check"></i></span>
+            <span>Descontar {{ pesoCalculado }} t</span>
+          </button>
+          <button class="button" (click)="cerrar()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

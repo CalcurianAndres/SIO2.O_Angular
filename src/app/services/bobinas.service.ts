@@ -61,6 +61,10 @@ export class BobinasService {
     this.socket.io.emit('CLIENTE:EditarBobinas', data);
   }
 
+  editarConversion(data: any) {
+    this.socket.io.emit('CLIENTE:EditarConversion', data);
+  }
+
   ObtenerLotes(almacenId: any, material: any, ancho: any) {
     const lotesFiltrados = this.bobinas
       .filter((b: any) => {

@@ -32,47 +32,41 @@
   <div *ngIf="!cargando && api.fases.length === 0" class="empty-state">
     <i class="fas fa-industry empty-icon"></i>
     <p class="empty-title">No hay fases registradas</p>
-    <p class="empty-hint">Haz clic en el botón "Fase" para comenzar</p>
+    <p class="empty-hint">Haz clic en el botón "Nueva Fase" para comenzar</p>
     <i class="fas fa-arrow-up empty-arrow"></i>
   </div>
 
   <!-- Skeleton -->
-  <div *ngIf="cargando && api.fases.length === 0" class="grupo-grid">
-    <div *ngFor="let _ of [].constructor(5)" class="card skeleton-card">
-      <div class="card-header skeleton-header"></div>
-      <div class="card-content">
-        <div class="skeleton-line skeleton-line-short"></div>
-      </div>
-      <div class="card-footer skeleton-footer"></div>
+  <div *ngIf="cargando && api.fases.length === 0" class="skeleton-list">
+    <div *ngFor="let _ of [].constructor(3)" class="card skeleton-card">
+      <div class="card-header"><div class="skeleton-line" style="width: 40%"></div></div>
     </div>
   </div>
 
-  <!-- Card grid -->
-  <div *ngIf="api.fases.length > 0" class="grupo-grid">
-    <div *ngFor="let fase of api.fases; index as i" class="card grupo-card animate__animated animate__fadeInUp">
+  <!-- Cards -->
+  <div *ngIf="api.fases.length > 0" class="cards-container">
+    <!-- Search -->
+    <div class="field" style="max-width: 320px; margin-bottom: 0.75rem">
+      <div class="control has-icons-left">
+        <input class="input" type="text" placeholder="Buscar fase..." [(ngModel)]="searchTerm" />
+        <span class="icon is-left"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
+    <div *ngFor="let fase of filteredFases; index as i" class="card grupo-card animate__animated animate__fadeInUp">
       <div class="card-header">
         <div class="card-header-title">
           <i class="fas fa-industry grupo-icon"></i>
           <span class="grupo-nombre">{{ fase.nombre }}</span>
-          <span *ngIf="fase.parcial" class="badge parcial-badge" title="Fase parcial">
-            <i class="fas fa-glass-whiskey"></i>
-          </span>
+        </div>
+        <div class="card-header-actions">
+          <i class="fas fa-info-circle action-icon" title="Ver detalles" (click)="seleccion(i)"></i>
+          <i class="far fa-edit green action-icon" title="Editar" (click)="Editar(i)"></i>
+          <button class="button btn-action-icon" title="Eliminar" (click)="borrarFase(fase._id)">
+            <span class="icon"><i class="fas fa-trash-alt icon-danger"></i></span>
+          </button>
         </div>
       </div>
-      <div class="card-content" *ngIf="fase.descripcion">
-        <p class="grupo-descripcion">{{ fase.descripcion }}</p>
-      </div>
-      <footer class="card-footer">
-        <a class="card-footer-item" (click)="seleccion(i)" title="Ver detalles">
-          <i class="fas fa-info-circle blue_"></i>
-        </a>
-        <a class="card-footer-item" (click)="Editar(i)" title="Editar">
-          <i class="far fa-edit green"></i>
-        </a>
-        <button type="button" class="card-footer-item btn-action-icon" title="Eliminar" (click)="borrarFase(fase._id)">
-          <i class="fas fa-trash-alt icon-danger"></i>
-        </button>
-      </footer>
     </div>
   </div>
 </app-page-layout>
