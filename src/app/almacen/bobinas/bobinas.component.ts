@@ -22,6 +22,9 @@ export class BobinasComponent {
   public descuentoRapido = false;
   public bobinaSeleccionada: any = null;
 
+  public historialModal = false;
+  public conversionHistorial: any = null;
+
   constructor(
     public api: BobinasService,
     public almacenSvc: AlmacenService,
@@ -150,6 +153,47 @@ export class BobinasComponent {
         }, 500);
       }
     });
+  }
+
+  // ══════════════════════════════════════════════════════
+  // Histórico de descuentos por conversión
+  // ══════════════════════════════════════════════════════
+
+  abrirHistorial(conv: any) {
+    this.conversionHistorial = conv;
+    this.historialModal = true;
+  }
+
+  cerrarHistorial() {
+    this.historialModal = false;
+    this.conversionHistorial = null;
+  }
+
+  get historialConversion(): any[] {
+    if (!this.conversionHistorial || !this.api.bobinas) return [];
+    const convId = this.conversionHistorial._id;
+    const entradas: any[] = [];
+    for (const b of this.api.bobinas) {
+      if (!b.historial_descuentos) continue;
+      for (const h of b.historial_descuentos) {
+        if (h.conversion === convId) {
+          entradas.push({ ...h, bobinaCodigo: b.codigo, bobinaLote: b.lote });
+        }
+      }
+    }
+    return entradas.sort((a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+  }
+
+  get historialResumen(): { hojasConsumidas: number; pesoDescontado: number; hojasRestantes: number } {
+    if (!this.conversionHistorial) return { hojasConsumidas: 0, pesoDescontado: 0, hojasRestantes: 0 };
+    const hojasConsumidas = this.historialConversion.reduce((sum: number, h: any) => sum + Number(h.hojas || 0), 0);
+    const pesoDescontado = this.historialConversion.reduce((sum: number, h: any) => sum + Number(h.peso || 0), 0);
+    const totalConversion = Number(this.conversionHistorial.cantidad || 0);
+    return {
+      hojasConsumidas,
+      pesoDescontado: Math.round(pesoDescontado * 10000) / 10000,
+      hojasRestantes: Math.max(0, totalConversion - hojasConsumidas),
+    };
   }
 
   // ══════════════════════════════════════════════════════

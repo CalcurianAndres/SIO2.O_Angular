@@ -6,6 +6,104 @@
   (onDescuento)="cerrarDescuento()"
 ></app-descuento-rapido>
 
+<!-- Modal Histórico por Conversión -->
+<div class="modal" [ngClass]="{ 'is-active': historialModal }">
+  <div class="modal-background" (click)="cerrarHistorial()"></div>
+  <div class="modal-card animate__animated animate__fadeInUp">
+    <div class="modal-card-head">
+      <p class="modal-card-title">
+        <i class="fas fa-clock"></i> Histórico — Conversión {{ conversionHistorial?.conversion }}
+      </p>
+      <button class="delete" aria-label="close" (click)="cerrarHistorial()"></button>
+    </div>
+    <div class="modal-card-body" *ngIf="conversionHistorial">
+      <!-- Info de la conversión -->
+      <div class="box info-box">
+        <div class="columns is-multiline is-variable is-2">
+          <div class="column is-3">
+            <span class="info-label">Proveedor</span>
+            <span class="info-value">{{ conversionHistorial.convertidora?.nombre || '—' }}</span>
+          </div>
+          <div class="column is-2">
+            <span class="info-label">Lote</span>
+            <span class="info-value">{{ conversionHistorial.lote }}</span>
+          </div>
+          <div class="column is-3">
+            <span class="info-label">Material</span>
+            <span class="info-value">{{ conversionHistorial.material?.nombre }} ({{ conversionHistorial.ancho }}×{{ conversionHistorial.largo }})</span>
+          </div>
+          <div class="column is-2">
+            <span class="info-label">Cantidad</span>
+            <span class="info-value">{{ conversionHistorial.cantidad | number: '1.0-0' }} hojas</span>
+          </div>
+          <div class="column is-2">
+            <span class="info-label">Peso</span>
+            <span class="info-value">{{ conversionHistorial.peso | number: '1.4-4' }} t</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen de consumo -->
+      <div class="notification is-light"
+        [ngClass]="historialResumen.hojasRestantes === 0 ? 'is-success' : (historialResumen.hojasConsumidas > 0 ? 'is-info' : 'is-link')">
+        <div class="columns is-mobile is-vcentered">
+          <div class="column">
+            <p class="has-text-weight-bold">Consumo de la conversión</p>
+            <p class="is-size-7">
+              Consumidas: {{ historialResumen.hojasConsumidas }} hojas |
+              Restantes: {{ historialResumen.hojasRestantes }} hojas |
+              Peso descontado: {{ historialResumen.pesoDescontado | number: '1.4-4' }} t
+            </p>
+          </div>
+          <div class="column is-narrow">
+            <span class="tag is-size-7"
+              [ngClass]="historialResumen.hojasRestantes === 0 ? 'is-success' : (historialResumen.hojasConsumidas > 0 ? 'is-info' : 'is-link')">
+              {{ historialResumen.hojasConsumidas }} / {{ conversionHistorial.cantidad }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de histórico -->
+      <p class="is-size-7 has-text-grey mb-2" *ngIf="historialConversion.length === 0">
+        Sin descuentos registrados para esta conversión.
+      </p>
+      <table class="table is-fullwidth is-striped is-hoverable historial-table" *ngIf="historialConversion.length > 0">
+        <thead>
+          <tr>
+            <th>Bobina</th>
+            <th>Fecha</th>
+            <th class="has-text-right">Hojas</th>
+            <th class="has-text-right">Peso (t)</th>
+            <th>Usuario</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let h of historialConversion">
+            <td>{{ h.bobinaCodigo }}</td>
+            <td>{{ h.fecha | date:'dd/MM/yy HH:mm' }}</td>
+            <td class="has-text-right">{{ h.hojas }}</td>
+            <td class="has-text-right">{{ h.peso | number: '1.4-4' }}</td>
+            <td>{{ h.usuario }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="has-text-weight-bold">
+            <td>Total</td>
+            <td></td>
+            <td class="has-text-right">{{ historialResumen.hojasConsumidas }}</td>
+            <td class="has-text-right has-text-danger">{{ historialResumen.pesoDescontado | number: '1.4-4' }}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="modal-card-foot">
+      <button class="button" (click)="cerrarHistorial()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <app-page-layout>
   <app-section-header
     title="Bobinas"
@@ -138,6 +236,7 @@
           <table class="table is-fullwidth is-striped is-hoverable">
             <thead>
               <tr>
+                <th>Nº</th>
                 <th>Estado</th>
                 <th>Proveedor</th>
                 <th>Lote</th>
@@ -149,6 +248,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let conv of paginatedConversiones">
+                <td><span class="conv-number">{{ conv.conversion }}</span></td>
                 <td>
                   <span class="tag" [ngClass]="conv.status === 'Lista' ? 'is-success' : 'is-warning'">{{ conv.status }}</span>
                 </td>
@@ -161,6 +261,13 @@
                 <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
                 <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
                 <td class="has-text-right">
+                  <button
+                    class="button is-small is-ghost"
+                    title="Histórico de descuentos"
+                    (click)="abrirHistorial(conv)"
+                  >
+                    <span class="icon"><i class="fas fa-clock" style="color: var(--accent-blue)"></i></span>
+                  </button>
                   <button
                     class="button is-small is-ghost"
                     title="Marcar como lista"
