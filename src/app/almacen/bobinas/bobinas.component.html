@@ -252,15 +252,15 @@
                 <td>
                   <span class="tag" [ngClass]="conv.status === 'Lista' ? 'is-success' : 'is-warning'">{{ conv.status }}</span>
                 </td>
-                <td>{{ conv.convertidora?.nombre || '—' }}</td>
-                <td>{{ conv.lote }}</td>
+                <td class="cell-nowrap">{{ conv.convertidora?.nombre || '—' }}</td>
+                <td class="cell-nowrap">{{ conv.lote }}</td>
                 <td>
                   {{ conv.material.nombre }} ({{ conv.ancho }}x{{ conv.largo }}) {{ conv.material.gramaje }}g/m² -
                   {{ conv.material.calibre }}pt
                 </td>
                 <td class="has-text-centered">{{ conv.cantidad | number: '2.2-2' }}</td>
                 <td class="has-text-centered">{{ conv.peso | number: '2.2-2' }}</td>
-                <td class="has-text-right">
+                <td class="has-text-right cell-actions">
                   <button
                     class="button is-small is-ghost"
                     title="Histórico de descuentos"

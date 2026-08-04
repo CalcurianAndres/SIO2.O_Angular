@@ -222,6 +222,15 @@
   white-space: nowrap;
 }
 
+/* ── Table cell no-wrap ── */
+.cell-nowrap {
+  white-space: nowrap;
+}
+.cell-actions {
+  white-space: nowrap;
+  width: 1%;
+}
+
 /* ── Modal histórico ── */
 .info-box {
   background: var(--bg-secondary);

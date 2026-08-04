@@ -44,7 +44,7 @@ export class BobinasComponent {
 
   get conversionesFiltradas(): any[] {
     if (!this.api.conversiones) return [];
-    let items = [...this.api.conversiones];
+    let items = this.api.conversiones.filter((c: any) => c.status !== 'Lista');
     if (this.filterMode === 'convertidora' && this.filterConvertidora) {
       items = items.filter((c) => c.convertidora === this.filterConvertidora);
     }

@@ -22,35 +22,38 @@ export function parseNumber(raw: string | number): number | null {
   const input = raw.trim();
   if (!input) return null;
 
-  const hasDot = input.includes('.');
-  const hasComma = input.includes(',');
+  const negative = input.startsWith('-');
+  const abs = negative ? input.substring(1) : input;
+
+  const hasDot = abs.includes('.');
+  const hasComma = abs.includes(',');
 
   let intPart: string;
   let decPart = '';
 
   if (hasDot && hasComma) {
-    const lastSepIdx = Math.max(input.lastIndexOf('.'), input.lastIndexOf(','));
-    intPart = input.substring(0, lastSepIdx).replace(/[.,]/g, '').replace(/\D/g, '');
-    decPart = input
+    const lastSepIdx = Math.max(abs.lastIndexOf('.'), abs.lastIndexOf(','));
+    intPart = abs.substring(0, lastSepIdx).replace(/[.,]/g, '').replace(/\D/g, '');
+    decPart = abs
       .substring(lastSepIdx + 1)
       .replace(/\D/g, '')
       .substring(0, DEFAULT_DECIMALS);
   } else if (hasComma) {
-    intPart = input.substring(0, input.lastIndexOf(',')).replace(/\D/g, '');
-    decPart = input
-      .substring(input.lastIndexOf(',') + 1)
+    intPart = abs.substring(0, abs.lastIndexOf(',')).replace(/\D/g, '');
+    decPart = abs
+      .substring(abs.lastIndexOf(',') + 1)
       .replace(/\D/g, '')
       .substring(0, DEFAULT_DECIMALS);
   } else if (hasDot) {
-    intPart = input.replace(/\./g, '').replace(/\D/g, '');
+    intPart = abs.replace(/\./g, '').replace(/\D/g, '');
   } else {
-    intPart = input.replace(/\D/g, '');
+    intPart = abs.replace(/\D/g, '');
   }
 
   if (!intPart) return null;
 
   const cleaned = decPart ? intPart + '.' + decPart : intPart;
-  const parsed = parseFloat(cleaned);
+  const parsed = parseFloat((negative ? '-' : '') + cleaned);
   return isNaN(parsed) ? null : parsed;
 }
 
@@ -84,52 +87,57 @@ export function formatRawInput(raw: string): string {
   if (!raw) return '';
 
   const trimmed = raw.trim();
-  const hasDot = trimmed.includes('.');
-  const hasComma = trimmed.includes(',');
+  const negative = trimmed.startsWith('-');
+  const abs = negative ? trimmed.substring(1) : trimmed;
+
+  const hasDot = abs.includes('.');
+  const hasComma = abs.includes(',');
 
   let intDigits: string;
   let decDigits = '';
   let hasDecimal = false;
 
   if (hasDot && hasComma) {
-    const lastSepIdx = Math.max(trimmed.lastIndexOf('.'), trimmed.lastIndexOf(','));
-    intDigits = trimmed.substring(0, lastSepIdx).replace(/[.,]/g, '').replace(/\D/g, '');
-    decDigits = trimmed
+    const lastSepIdx = Math.max(abs.lastIndexOf('.'), abs.lastIndexOf(','));
+    intDigits = abs.substring(0, lastSepIdx).replace(/[.,]/g, '').replace(/\D/g, '');
+    decDigits = abs
       .substring(lastSepIdx + 1)
       .replace(/\D/g, '')
       .substring(0, DEFAULT_DECIMALS);
     hasDecimal = true;
   } else if (hasComma) {
-    intDigits = trimmed.substring(0, trimmed.lastIndexOf(',')).replace(/\D/g, '');
-    decDigits = trimmed
-      .substring(trimmed.lastIndexOf(',') + 1)
+    intDigits = abs.substring(0, abs.lastIndexOf(',')).replace(/\D/g, '');
+    decDigits = abs
+      .substring(abs.lastIndexOf(',') + 1)
       .replace(/\D/g, '')
       .substring(0, DEFAULT_DECIMALS);
     hasDecimal = true;
   } else if (hasDot) {
-    intDigits = trimmed.replace(/\./g, '').replace(/\D/g, '');
+    intDigits = abs.replace(/\./g, '').replace(/\D/g, '');
 
-    if (trimmed.endsWith('.') && intDigits.length > 0) {
+    if (abs.endsWith('.') && intDigits.length > 0) {
       hasDecimal = true;
     }
   } else {
-    intDigits = trimmed.replace(/\D/g, '');
+    intDigits = abs.replace(/\D/g, '');
   }
 
+  const prefix = negative ? '-' : '';
+
   if (!intDigits) {
-    if (hasDecimal) return '0,';
-    return '';
+    if (hasDecimal) return prefix + '0,';
+    return negative ? '-' : '';
   }
 
   const formattedInt = addThousandsDots(intDigits);
 
   if (hasDecimal && decDigits.length > 0) {
-    return formattedInt + ',' + decDigits;
+    return prefix + formattedInt + ',' + decDigits;
   }
 
   if (hasDecimal) {
-    return formattedInt + ',';
+    return prefix + formattedInt + ',';
   }
 
-  return formattedInt;
+  return prefix + formattedInt;
 }

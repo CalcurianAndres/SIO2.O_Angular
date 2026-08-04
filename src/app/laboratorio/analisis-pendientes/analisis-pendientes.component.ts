@@ -180,7 +180,7 @@ export class AnalisisPendientesComponent {
 
     const seen = new Set();
     for (const recepcion of this.recepciones.recepciones) {
-      if (recepcion.status !== 'En observacion') continue;
+      if (recepcion.status !== 'Verificado') continue;
       for (const grupoMateriales of recepcion.materiales) {
         if (!this.verificarSiSerealizoAnalisis(grupoMateriales)) continue;
         if (grupoMateriales[0]?.presentacion === 'bobinas') continue;
@@ -424,7 +424,7 @@ export class AnalisisPendientesComponent {
     if (!this.fabricante_selected) return;
     this.Materiales = [];
     for (const recepcion of this.recepciones.recepciones || []) {
-      if (recepcion.status !== 'En observacion') continue;
+      if (recepcion.status !== 'Verificado') continue;
       for (const grupoMateriales of recepcion.materiales) {
         const mat = grupoMateriales[0];
         if (mat?.material?.fabricante?.alias?.toLowerCase().includes(this.fabricante_selected.toLowerCase())) {
