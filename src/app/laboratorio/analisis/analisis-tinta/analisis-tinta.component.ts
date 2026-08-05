@@ -69,8 +69,7 @@ export class AnalisisTintaComponent implements OnChanges {
   public rollDrag = {
     id: null as string | null,
     active: false,
-    x: 0,
-    y: 0,
+    el: null as HTMLElement | null,
     startX: 0,
     startY: 0,
   };
@@ -294,12 +293,12 @@ export class AnalisisTintaComponent implements OnChanges {
       return {
         estandar: {
           id: 'e' + idx,
-          style: 'background-color: rgb(' + eRgb[0] + ',' + eRgb[1] + ',' + eRgb[2] + ')',
+          bg: 'rgb(' + eRgb[0] + ',' + eRgb[1] + ',' + eRgb[2] + ')',
           lab: 'L ' + fmt(est.l) + '   a ' + fmt(est.a) + '   b ' + fmt(est.b),
         },
         muestra: {
           id: 'm' + idx,
-          style: 'background-color: rgb(' + mRgb[0] + ',' + mRgb[1] + ',' + mRgb[2] + ')',
+          bg: 'rgb(' + mRgb[0] + ',' + mRgb[1] + ',' + mRgb[2] + ')',
           lab: 'L ' + fmt(mus.l) + '   a ' + fmt(mus.a) + '   b ' + fmt(mus.b),
         },
       };
@@ -312,51 +311,46 @@ export class AnalisisTintaComponent implements OnChanges {
     this.rollosEstandar = [r1.estandar, r2.estandar, r3.estandar];
     this.rollosMuestra = [r1.muestra, r2.muestra, r3.muestra];
 
-    this.rollDrag = { id: null, active: false, x: 0, y: 0, startX: 0, startY: 0 };
+    this.rollDrag = { id: null, active: false, el: null, startX: 0, startY: 0 };
 
     this.RollDownModal = true;
   }
 
   onRollDown(e: PointerEvent, id: string) {
+    const el = e.currentTarget as HTMLElement;
     this.rollDrag.active = true;
     this.rollDrag.id = id;
-    this.rollDrag.startX = e.clientX - this.rollDrag.x;
-    this.rollDrag.startY = e.clientY - this.rollDrag.y;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    this.rollDrag.el = el;
+    this.rollDrag.startX = e.clientX;
+    this.rollDrag.startY = e.clientY;
+    el.classList.add('dragging');
+    el.setPointerCapture(e.pointerId);
   }
 
   onRollMove(e: PointerEvent) {
-    if (!this.rollDrag.active) {
+    if (!this.rollDrag.active || !this.rollDrag.el) {
       return;
     }
-    this.rollDrag.x = e.clientX - this.rollDrag.startX;
-    this.rollDrag.y = e.clientY - this.rollDrag.startY;
+    const dx = e.clientX - this.rollDrag.startX;
+    const dy = e.clientY - this.rollDrag.startY;
+    this.rollDrag.el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
   }
 
   onRollUp(e?: PointerEvent) {
     if (!this.rollDrag.active) {
       return;
     }
+    const el = this.rollDrag.el;
     this.rollDrag.active = false;
-    this.rollDrag.x = 0;
-    this.rollDrag.y = 0;
-    if (e) {
-      const el = e.currentTarget as HTMLElement;
-      if (el.hasPointerCapture(e.pointerId)) {
+    if (el) {
+      el.classList.remove('dragging');
+      el.style.transform = 'translate(0px, 0px)';
+      if (e && el.hasPointerCapture(e.pointerId)) {
         el.releasePointerCapture(e.pointerId);
       }
     }
-  }
-
-  getRollTransform(id: string): string {
-    if (this.rollDrag.id === id) {
-      return 'translate(' + this.rollDrag.x + 'px, ' + this.rollDrag.y + 'px)';
-    }
-    return 'translate(0px, 0px)';
-  }
-
-  isRollDragging(id: string): boolean {
-    return this.rollDrag.active && this.rollDrag.id === id;
+    this.rollDrag.id = null;
+    this.rollDrag.el = null;
   }
 
   guardar(resultado?: string) {

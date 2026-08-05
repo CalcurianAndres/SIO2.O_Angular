@@ -1170,9 +1170,7 @@
           <div
             class="swatch"
             *ngFor="let r of rollosEstandar; let i = index"
-            [style]="r.style"
-            [style.transform]="getRollTransform(r.id)"
-            [class.dragging]="isRollDragging(r.id)"
+            [style.background-color]="r.bg"
             (pointerdown)="onRollDown($event, r.id)"
             (pointermove)="onRollMove($event)"
             (pointerup)="onRollUp($event)"
@@ -1188,9 +1186,7 @@
           <div
             class="swatch"
             *ngFor="let r of rollosMuestra; let i = index"
-            [style]="r.style"
-            [style.transform]="getRollTransform(r.id)"
-            [class.dragging]="isRollDragging(r.id)"
+            [style.background-color]="r.bg"
             (pointerdown)="onRollDown($event, r.id)"
             (pointermove)="onRollMove($event)"
             (pointerup)="onRollUp($event)"
