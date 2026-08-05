@@ -1188,11 +1188,29 @@
 
 <div class="modal" [ngClass]="{ 'is-active': compare }">
   <div class="modal-background"></div>
-  <div class="modal-content">
+  <div class="compare-panel">
     <button class="delete red_cross cerrar" aria-label="close" (click)="compare = false"></button>
-    <div class="muestreo">
-      <div class="estandar" [style]="estandar">Estándar</div>
-      <div class="muestra" [style]="muestra">Muestra</div>
+    <div class="compare-head">
+      <span class="compare-title">Comparación de color</span>
+    </div>
+    <div class="compare-labels">
+      <span class="chip">Estándar</span>
+      <span class="chip">Muestra</span>
+    </div>
+    <div
+      class="compare-stage"
+      (pointerdown)="onDragStart($event)"
+      (pointermove)="onDragMove($event)"
+      (pointerup)="onDragEnd($event)"
+      (pointerleave)="onDragEnd()"
+    >
+      <div class="layer" [style]="estandar"></div>
+      <div class="layer" [style]="muestra" [style.clip-path]="'inset(0 0 0 ' + splitPos + '%)'"></div>
+      <div class="divider" [style.left.%]="splitPos">
+        <span class="divider-grip">⇔</span>
+      </div>
+      <span class="lab-tag lab-tag-estandar">{{ labEstandar }}</span>
+      <span class="lab-tag lab-tag-muestra">{{ labMuestra }}</span>
     </div>
   </div>
 </div>

@@ -43,6 +43,10 @@ export class AnalisisTintaComponent implements OnChanges {
   public muestra = 'background-color: rgb(255,255,255)';
   public compare = false;
   public selecccion = 0;
+  public splitPos = 50;
+  public dragging = false;
+  public labEstandar = '';
+  public labMuestra = '';
 
   tipoAnalisis(e: any) {
     if (e.value === 'true') {
@@ -197,51 +201,64 @@ export class AnalisisTintaComponent implements OnChanges {
       return lab2rgb([l, a, b]);
     };
 
+    const fmt = (v: any) => (parseFloat(v) || 0).toFixed(1);
+
+    let estandarLab: any;
+    let muestraLab: any;
+
     switch (dato) {
       case 'C1':
-        const estandar = lab2rgbSafe([
-          this.Analisis.carton.estandar_1.l,
-          this.Analisis.carton.estandar_1.a,
-          this.Analisis.carton.estandar_1.b,
-        ]);
-        this.estandar = 'background-color: rgb(' + estandar[0] + ',' + estandar[1] + ',' + estandar[2] + ')';
-        const muestra = lab2rgbSafe([
-          this.Analisis.carton.muestra_1.l,
-          this.Analisis.carton.muestra_1.a,
-          this.Analisis.carton.muestra_1.b,
-        ]);
-        this.muestra = 'background-color: rgb(' + muestra[0] + ',' + muestra[1] + ',' + muestra[2] + ')';
+        estandarLab = this.Analisis.carton.estandar_1;
+        muestraLab = this.Analisis.carton.muestra_1;
         break;
       case 'C2':
-        const estandar2 = lab2rgbSafe([
-          this.Analisis.carton.estandar_2.l,
-          this.Analisis.carton.estandar_2.a,
-          this.Analisis.carton.estandar_2.b,
-        ]);
-        this.estandar = 'background-color: rgb(' + estandar2[0] + ',' + estandar2[1] + ',' + estandar2[2] + ')';
-        const muestra2 = lab2rgbSafe([
-          this.Analisis.carton.muestra_2.l,
-          this.Analisis.carton.muestra_2.a,
-          this.Analisis.carton.muestra_2.b,
-        ]);
-        this.muestra = 'background-color: rgb(' + muestra2[0] + ',' + muestra2[1] + ',' + muestra2[2] + ')';
+        estandarLab = this.Analisis.carton.estandar_2;
+        muestraLab = this.Analisis.carton.muestra_2;
         break;
       case 'C3':
-        const estandar3 = lab2rgbSafe([
-          this.Analisis.carton.estandar_3.l,
-          this.Analisis.carton.estandar_3.a,
-          this.Analisis.carton.estandar_3.b,
-        ]);
-        this.estandar = 'background-color: rgb(' + estandar3[0] + ',' + estandar3[1] + ',' + estandar3[2] + ')';
-        const muestra3 = lab2rgbSafe([
-          this.Analisis.carton.muestra_3.l,
-          this.Analisis.carton.muestra_3.a,
-          this.Analisis.carton.muestra_3.b,
-        ]);
-        this.muestra = 'background-color: rgb(' + muestra3[0] + ',' + muestra3[1] + ',' + muestra3[2] + ')';
+        estandarLab = this.Analisis.carton.estandar_3;
+        muestraLab = this.Analisis.carton.muestra_3;
         break;
     }
+
+    const estandar = lab2rgbSafe([estandarLab.l, estandarLab.a, estandarLab.b]);
+    this.estandar = 'background-color: rgb(' + estandar[0] + ',' + estandar[1] + ',' + estandar[2] + ')';
+    const muestra = lab2rgbSafe([muestraLab.l, muestraLab.a, muestraLab.b]);
+    this.muestra = 'background-color: rgb(' + muestra[0] + ',' + muestra[1] + ',' + muestra[2] + ')';
+
+    this.labEstandar = 'L ' + fmt(estandarLab.l) + '   a ' + fmt(estandarLab.a) + '   b ' + fmt(estandarLab.b);
+    this.labMuestra = 'L ' + fmt(muestraLab.l) + '   a ' + fmt(muestraLab.a) + '   b ' + fmt(muestraLab.b);
+
+    this.splitPos = 50;
     this.compare = true;
+  }
+
+  onDragStart(e: PointerEvent) {
+    this.dragging = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    this.updateSplit(e);
+  }
+
+  onDragMove(e: PointerEvent) {
+    if (this.dragging) {
+      this.updateSplit(e);
+    }
+  }
+
+  onDragEnd(e?: PointerEvent) {
+    this.dragging = false;
+    if (e) {
+      const el = e.currentTarget as HTMLElement;
+      if (el.hasPointerCapture(e.pointerId)) {
+        el.releasePointerCapture(e.pointerId);
+      }
+    }
+  }
+
+  updateSplit(e: PointerEvent) {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const pct = ((e.clientX - rect.left) / rect.width) * 100;
+    this.splitPos = Math.max(0, Math.min(100, pct));
   }
 
   move() {
