@@ -12,10 +12,6 @@
   width: 50%;
 }
 
-.long_ {
-  width: 50%;
-}
-
 .square {
   width: 70px;
   height: 70px;
@@ -139,11 +135,108 @@
   right: 12px;
 }
 
-.roll {
-  display: block;
-  height: 250px;
+.rolldown-panel {
+  position: relative;
+  width: 780px;
+  max-width: 95vw;
+  background: var(--bg-card);
+}
+
+.rolldown-head {
+  background: var(--bg-card);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rolldown-title {
+  font-family: 'Gilroy', sans-serif;
+  color: var(--text-heading);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.rolldown-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rolldown-body {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+}
+
+.paper-strip {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+}
+
+.strip-title {
+  font-family: 'Gilroy', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.strip-swatches {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.swatch {
+  position: relative;
+  height: 180px;
   width: 100%;
-  margin-bottom: 15px;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.swatch.dragging {
+  transition: none;
+  z-index: 20;
+  cursor: grabbing;
+}
+
+.swatch-index {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-family: 'Gilroy', sans-serif;
+  font-size: 10px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+.swatch-lab {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-family: monospace;
+  font-size: 11px;
+  padding: 3px 8px;
+  white-space: pre;
+  pointer-events: none;
 }
 
 .modal .cerrar {

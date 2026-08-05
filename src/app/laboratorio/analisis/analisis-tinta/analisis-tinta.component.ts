@@ -62,19 +62,17 @@ export class AnalisisTintaComponent implements OnChanges {
     }
   }
 
-  public RollDown = {
-    descarga_1: {
-      muestra: '',
-      estandar: '',
-    },
-    descarga_2: {
-      muestra: '',
-      estandar: '',
-    },
-    descarga_3: {
-      muestra: '',
-      estandar: '',
-    },
+  public rollosEstandar: any[] = [];
+  public rollosMuestra: any[] = [];
+  public rollDownFuente = '';
+
+  public rollDrag = {
+    id: null as string | null,
+    active: false,
+    x: 0,
+    y: 0,
+    startX: 0,
+    startY: 0,
   };
 
   public RollDownModal = false;
@@ -278,6 +276,9 @@ export class AnalisisTintaComponent implements OnChanges {
   ShowRollDown(n) {
     // 0 = carton
     // 1 = papel
+    const fuente = n === 0 ? this.Analisis.carton : this.Analisis.papel;
+    this.rollDownFuente = n === 0 ? 'Cartón' : 'Papel';
+
     const lab2rgbSafe = (lab: any[]) => {
       const l = parseFloat(lab[0]) || 0;
       const a = parseFloat(lab[1]) || 0;
@@ -285,100 +286,77 @@ export class AnalisisTintaComponent implements OnChanges {
       return lab2rgb([l, a, b]);
     };
 
-    switch (n) {
-      case 0:
-        const estandar = lab2rgbSafe([
-          this.Analisis.carton.estandar_1.l,
-          this.Analisis.carton.estandar_1.a,
-          this.Analisis.carton.estandar_1.b,
-        ]);
-        const muestra = lab2rgbSafe([
-          this.Analisis.carton.muestra_1.l,
-          this.Analisis.carton.muestra_1.a,
-          this.Analisis.carton.muestra_1.b,
-        ]);
-        const estandar2 = lab2rgbSafe([
-          this.Analisis.carton.estandar_2.l,
-          this.Analisis.carton.estandar_2.a,
-          this.Analisis.carton.estandar_2.b,
-        ]);
-        const muestra2 = lab2rgbSafe([
-          this.Analisis.carton.muestra_2.l,
-          this.Analisis.carton.muestra_2.a,
-          this.Analisis.carton.muestra_2.b,
-        ]);
-        const estandar3 = lab2rgbSafe([
-          this.Analisis.carton.estandar_3.l,
-          this.Analisis.carton.estandar_3.a,
-          this.Analisis.carton.estandar_3.b,
-        ]);
-        const muestra3 = lab2rgbSafe([
-          this.Analisis.carton.muestra_3.l,
-          this.Analisis.carton.muestra_3.a,
-          this.Analisis.carton.muestra_3.b,
-        ]);
+    const fmt = (v: any) => (parseFloat(v) || 0).toFixed(1);
 
-        this.RollDown.descarga_1.estandar =
-          'background-color: rgb(' + estandar[0] + ',' + estandar[1] + ',' + estandar[2] + ')';
-        this.RollDown.descarga_1.muestra =
-          'background-color: rgb(' + muestra[0] + ',' + muestra[1] + ',' + muestra[2] + ')';
-        this.RollDown.descarga_2.estandar =
-          'background-color: rgb(' + estandar2[0] + ',' + estandar2[1] + ',' + estandar2[2] + ')';
-        this.RollDown.descarga_2.muestra =
-          'background-color: rgb(' + muestra2[0] + ',' + muestra2[1] + ',' + muestra2[2] + ')';
-        this.RollDown.descarga_3.estandar =
-          'background-color: rgb(' + estandar3[0] + ',' + estandar3[1] + ',' + estandar3[2] + ')';
-        this.RollDown.descarga_3.muestra =
-          'background-color: rgb(' + muestra3[0] + ',' + muestra3[1] + ',' + muestra3[2] + ')';
-        break;
-      case 1:
-        const estandar_ = lab2rgbSafe([
-          this.Analisis.papel.estandar_1.l,
-          this.Analisis.papel.estandar_1.a,
-          this.Analisis.papel.estandar_1.b,
-        ]);
-        const muestra_ = lab2rgbSafe([
-          this.Analisis.papel.muestra_1.l,
-          this.Analisis.papel.muestra_1.a,
-          this.Analisis.papel.muestra_1.b,
-        ]);
-        const estandar2_ = lab2rgbSafe([
-          this.Analisis.papel.estandar_2.l,
-          this.Analisis.papel.estandar_2.a,
-          this.Analisis.papel.estandar_2.b,
-        ]);
-        const muestra2_ = lab2rgbSafe([
-          this.Analisis.papel.muestra_2.l,
-          this.Analisis.papel.muestra_2.a,
-          this.Analisis.papel.muestra_2.b,
-        ]);
-        const estandar3_ = lab2rgbSafe([
-          this.Analisis.papel.estandar_3.l,
-          this.Analisis.papel.estandar_3.a,
-          this.Analisis.papel.estandar_3.b,
-        ]);
-        const muestra3_ = lab2rgbSafe([
-          this.Analisis.papel.muestra_3.l,
-          this.Analisis.papel.muestra_3.a,
-          this.Analisis.papel.muestra_3.b,
-        ]);
+    const build = (est: any, mus: any, idx: number) => {
+      const eRgb = lab2rgbSafe([est.l, est.a, est.b]);
+      const mRgb = lab2rgbSafe([mus.l, mus.a, mus.b]);
+      return {
+        estandar: {
+          id: 'e' + idx,
+          style: 'background-color: rgb(' + eRgb[0] + ',' + eRgb[1] + ',' + eRgb[2] + ')',
+          lab: 'L ' + fmt(est.l) + '   a ' + fmt(est.a) + '   b ' + fmt(est.b),
+        },
+        muestra: {
+          id: 'm' + idx,
+          style: 'background-color: rgb(' + mRgb[0] + ',' + mRgb[1] + ',' + mRgb[2] + ')',
+          lab: 'L ' + fmt(mus.l) + '   a ' + fmt(mus.a) + '   b ' + fmt(mus.b),
+        },
+      };
+    };
 
-        this.RollDown.descarga_1.estandar =
-          'background-color: rgb(' + estandar_[0] + ',' + estandar_[1] + ',' + estandar_[2] + ')';
-        this.RollDown.descarga_1.muestra =
-          'background-color: rgb(' + muestra_[0] + ',' + muestra_[1] + ',' + muestra_[2] + ')';
-        this.RollDown.descarga_2.estandar =
-          'background-color: rgb(' + estandar2_[0] + ',' + estandar2_[1] + ',' + estandar2_[2] + ')';
-        this.RollDown.descarga_2.muestra =
-          'background-color: rgb(' + muestra2_[0] + ',' + muestra2_[1] + ',' + muestra2_[2] + ')';
-        this.RollDown.descarga_3.estandar =
-          'background-color: rgb(' + estandar3_[0] + ',' + estandar3_[1] + ',' + estandar3_[2] + ')';
-        this.RollDown.descarga_3.muestra =
-          'background-color: rgb(' + muestra3_[0] + ',' + muestra3_[1] + ',' + muestra3_[2] + ')';
-        break;
-    }
+    const r1 = build(fuente.estandar_1, fuente.muestra_1, 1);
+    const r2 = build(fuente.estandar_2, fuente.muestra_2, 2);
+    const r3 = build(fuente.estandar_3, fuente.muestra_3, 3);
+
+    this.rollosEstandar = [r1.estandar, r2.estandar, r3.estandar];
+    this.rollosMuestra = [r1.muestra, r2.muestra, r3.muestra];
+
+    this.rollDrag = { id: null, active: false, x: 0, y: 0, startX: 0, startY: 0 };
 
     this.RollDownModal = true;
+  }
+
+  onRollDown(e: PointerEvent, id: string) {
+    this.rollDrag.active = true;
+    this.rollDrag.id = id;
+    this.rollDrag.startX = e.clientX - this.rollDrag.x;
+    this.rollDrag.startY = e.clientY - this.rollDrag.y;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  }
+
+  onRollMove(e: PointerEvent) {
+    if (!this.rollDrag.active) {
+      return;
+    }
+    this.rollDrag.x = e.clientX - this.rollDrag.startX;
+    this.rollDrag.y = e.clientY - this.rollDrag.startY;
+  }
+
+  onRollUp(e?: PointerEvent) {
+    if (!this.rollDrag.active) {
+      return;
+    }
+    this.rollDrag.active = false;
+    this.rollDrag.x = 0;
+    this.rollDrag.y = 0;
+    if (e) {
+      const el = e.currentTarget as HTMLElement;
+      if (el.hasPointerCapture(e.pointerId)) {
+        el.releasePointerCapture(e.pointerId);
+      }
+    }
+  }
+
+  getRollTransform(id: string): string {
+    if (this.rollDrag.id === id) {
+      return 'translate(' + this.rollDrag.x + 'px, ' + this.rollDrag.y + 'px)';
+    }
+    return 'translate(0px, 0px)';
+  }
+
+  isRollDragging(id: string): boolean {
+    return this.rollDrag.active && this.rollDrag.id === id;
   }
 
   guardar(resultado?: string) {

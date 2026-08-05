@@ -1157,29 +1157,47 @@
 
 <div class="modal" [ngClass]="{ 'is-active': RollDownModal }">
   <div class="modal-background"></div>
-  <div class="columns long_">
+  <div class="rolldown-panel">
     <button class="delete red_cross cerrar" aria-label="close" (click)="RollDownModal = false"></button>
-    <div class="column">
-      <div class="card">
-        <div class="modal-card-head">
-          <p class="modal-card-title fuente">Estándar</p>
-        </div>
-        <div class="card-content">
-          <div class="roll" [style]="RollDown.descarga_1.estandar"></div>
-          <div class="roll" [style]="RollDown.descarga_2.estandar"></div>
-          <div class="roll" [style]="RollDown.descarga_3.estandar"></div>
+    <div class="rolldown-head">
+      <span class="rolldown-title">Roll Down · {{ rollDownFuente }}</span>
+      <span class="rolldown-subtitle">Arrastra una muestra para compararla; al soltarla vuelve a su lugar</span>
+    </div>
+    <div class="rolldown-body">
+      <div class="paper-strip">
+        <div class="strip-title">Estándar</div>
+        <div class="strip-swatches">
+          <div
+            class="swatch"
+            *ngFor="let r of rollosEstandar; let i = index"
+            [style]="r.style"
+            [style.transform]="getRollTransform(r.id)"
+            [class.dragging]="isRollDragging(r.id)"
+            (pointerdown)="onRollDown($event, r.id)"
+            (pointermove)="onRollMove($event)"
+            (pointerup)="onRollUp($event)"
+          >
+            <span class="swatch-index">Descarga {{ i + 1 }}</span>
+            <span class="swatch-lab">{{ r.lab }}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="column">
-      <div class="card">
-        <div class="modal-card-head">
-          <p class="modal-card-title fuente">Muestra</p>
-        </div>
-        <div class="card-content">
-          <div class="roll" id="muestra1" [style]="RollDown.descarga_1.muestra"></div>
-          <div class="roll" id="muestra2" [style]="RollDown.descarga_2.muestra"></div>
-          <div class="roll" id="muestra3" [style]="RollDown.descarga_3.muestra"></div>
+      <div class="paper-strip">
+        <div class="strip-title">Muestra</div>
+        <div class="strip-swatches">
+          <div
+            class="swatch"
+            *ngFor="let r of rollosMuestra; let i = index"
+            [style]="r.style"
+            [style.transform]="getRollTransform(r.id)"
+            [class.dragging]="isRollDragging(r.id)"
+            (pointerdown)="onRollDown($event, r.id)"
+            (pointermove)="onRollMove($event)"
+            (pointerup)="onRollUp($event)"
+          >
+            <span class="swatch-index">Descarga {{ i + 1 }}</span>
+            <span class="swatch-lab">{{ r.lab }}</span>
+          </div>
         </div>
       </div>
     </div>
