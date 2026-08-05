@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { rgb2lab, lab2rgb, deltaE } from 'rgb-lab';
+import { deltaE2000, deltaECMC } from './delta-e.util';
 import { AnalisisService } from 'src/app/services/analisis.service';
 import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
 import { Cell, Img, PdfMakeWrapper, Stack, Table, Txt } from 'pdfmake-wrapper';
@@ -47,6 +48,7 @@ export class AnalisisTintaComponent implements OnChanges {
   public dragging = false;
   public labEstandar = '';
   public labMuestra = '';
+  public deltaEMode: 'e2000' | 'cmc' = 'e2000';
 
   tipoAnalisis(e: any) {
     if (e.value === 'true') {
@@ -259,17 +261,56 @@ export class AnalisisTintaComponent implements OnChanges {
   }
 
   move() {
-    const l = parseFloat(this.Analisis.carton.estandar_1.l) || 0;
-    const a = parseFloat(this.Analisis.carton.estandar_1.a) || 0;
-    const b = parseFloat(this.Analisis.carton.estandar_1.b) || 0;
-    const rgb_converted = lab2rgb([l, a, b]);
+    this.recalcular();
   }
 
   move2() {
-    const l = parseFloat(this.Analisis.carton.muestra_1.l) || 0;
-    const a = parseFloat(this.Analisis.carton.muestra_1.a) || 0;
-    const b = parseFloat(this.Analisis.carton.muestra_1.b) || 0;
-    const rgb_converted = lab2rgb([l, a, b]);
+    this.recalcular();
+  }
+
+  setDeltaEMode(mode: 'e2000' | 'cmc') {
+    this.deltaEMode = mode;
+    this.recalcular();
+  }
+
+  private calcularDeltas(estandar: any, muestra: any) {
+    const l1 = parseFloat(estandar.l) || 0;
+    const a1 = parseFloat(estandar.a) || 0;
+    const b1 = parseFloat(estandar.b) || 0;
+    const l2 = parseFloat(muestra.l) || 0;
+    const a2 = parseFloat(muestra.a) || 0;
+    const b2 = parseFloat(muestra.b) || 0;
+
+    let de: number;
+    if (this.deltaEMode === 'e2000') {
+      de = deltaE2000(l1, a1, b1, l2, a2, b2);
+    } else {
+      de = deltaECMC(l1, a1, b1, l2, a2, b2);
+    }
+
+    muestra.ll = (l2 - l1).toFixed(2);
+    muestra.aa = (a2 - a1).toFixed(2);
+    muestra.bb = (b2 - b1).toFixed(2);
+    muestra.e = de.toFixed(2);
+  }
+
+  recalcular() {
+    const c = this.Analisis.carton;
+    for (let i = 1; i <= 3; i++) {
+      const est = c['estandar_' + i];
+      const mus = c['muestra_' + i];
+      if (est && mus) {
+        this.calcularDeltas(est, mus);
+      }
+    }
+    const p = this.Analisis.papel;
+    for (let i = 1; i <= 3; i++) {
+      const est = p['estandar_' + i];
+      const mus = p['muestra_' + i];
+      if (est && mus) {
+        this.calcularDeltas(est, mus);
+      }
+    }
   }
 
   ShowRollDown(n) {
