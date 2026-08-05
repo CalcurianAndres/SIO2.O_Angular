@@ -1,68 +1,62 @@
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Self,
-  Renderer2,
-} from '@angular/core';
-import { NgControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Directive, ElementRef, HostListener, Input, Renderer2, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DEFAULT_DECIMALS, formatNumber, formatRawInput, parseNumber } from './utils/number-format.utils';
 
 /**
  * Aplica automáticamente a todo <input type="number"> del sistema.
  * Cambia type="text" internamente para permitir formato 1.234,56.
- * Sincroniza bidireccional: display formateado ↔ modelo número puro.
+ * Actúa como ControlValueAccessor (tiene prioridad sobre NumberValueAccessor):
+ * la vista muestra el valor formateado ("12,34") y el modelo recibe siempre
+ * el número puro con sus decimales (12.34).
  * Excluye implícitamente teléfonos (type="text" en <app-phone-input>).
  */
 @Directive({
   selector: 'input[type="number"]',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NumberFormatDirective),
+      multi: true,
+    },
+  ],
 })
-export class NumberFormatDirective implements OnInit, OnDestroy {
+export class NumberFormatDirective implements ControlValueAccessor {
   @Input() decimals: number = DEFAULT_DECIMALS;
 
   private el: HTMLInputElement;
-  private internalUpdate = false;
   private userEditing = false;
   private userTouched = false;
   private userHasDecimal = false;
-  private subs = new Subscription();
+  private lastValue: number | null = null;
+
+  private onChangeFn: (value: number | null) => void = () => {};
+  private onTouchedFn: () => void = () => {};
 
   constructor(
     elementRef: ElementRef<HTMLInputElement>,
     private renderer: Renderer2,
-    @Optional() @Self() private ngControl: NgControl,
   ) {
     this.el = elementRef.nativeElement;
-  }
-
-  ngOnInit(): void {
     this.renderer.setAttribute(this.el, 'type', 'text');
     this.renderer.setAttribute(this.el, 'inputmode', 'decimal');
-
-    if (this.ngControl?.control) {
-      const initial = this.ngControl.control.value;
-      if (initial != null && initial !== '') {
-        this.setDisplayValue(formatNumber(initial, this.decimals, true));
-      }
-
-      this.subs.add(
-        this.ngControl.control.valueChanges.subscribe((value) => {
-          if (this.internalUpdate || this.userEditing || document.activeElement === this.el) {
-            return;
-          }
-          this.setDisplayValue(formatNumber(value, this.decimals, true));
-        }),
-      );
-    }
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
+  writeValue(value: number | string | null | undefined): void {
+    this.lastValue = this.toNumber(value);
+    if (document.activeElement === this.el) return;
+    this.setDisplayValue(formatNumber(this.lastValue, this.decimals, true));
+  }
+
+  registerOnChange(fn: (value: number | null) => void): void {
+    this.onChangeFn = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouchedFn = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.renderer.setProperty(this.el, 'disabled', isDisabled);
   }
 
   @HostListener('focus')
@@ -73,19 +67,13 @@ export class NumberFormatDirective implements OnInit, OnDestroy {
 
   @HostListener('input', ['$event.target.value'])
   onInput(raw: string): void {
-    if (this.internalUpdate) return;
-
     this.userEditing = true;
     this.userTouched = true;
     this.userHasDecimal = /[,.]\d+/.test(raw);
 
     const parsed = parseNumber(raw);
-
-    if (this.ngControl?.control && parsed !== null) {
-      this.internalUpdate = true;
-      this.ngControl.control.setValue(parsed, { emitEvent: false, emitModelToViewChange: false });
-      this.internalUpdate = false;
-    }
+    this.lastValue = parsed;
+    this.onChangeFn(parsed);
 
     this.setFormattedDisplay(formatRawInput(raw), raw);
   }
@@ -93,13 +81,18 @@ export class NumberFormatDirective implements OnInit, OnDestroy {
   @HostListener('blur')
   onBlur(): void {
     this.userEditing = false;
+    this.onTouchedFn();
 
     if (!this.userTouched) return;
 
-    if (this.ngControl?.control) {
-      const val = this.ngControl.control.value;
-      this.setDisplayValue(formatNumber(val, this.decimals, this.userHasDecimal));
-    }
+    this.setDisplayValue(formatNumber(this.lastValue, this.decimals, this.userHasDecimal));
+  }
+
+  private toNumber(value: number | string | null | undefined): number | null {
+    if (typeof value === 'number') return isNaN(value) ? null : value;
+    if (value === null || value === undefined || value === '') return null;
+    const parsed = parseFloat(String(value));
+    return isNaN(parsed) ? null : parsed;
   }
 
   private setDisplayValue(value: string | undefined): void {
