@@ -69,6 +69,21 @@ export class RecibosComponent {
           horas: 8,
           descripcion: 'Descuento de bobina con histórico y mejoras en UI de módulos',
         },
+        {
+          fecha: '04/08/2026',
+          horas: 8,
+          descripcion: 'Mejoras en módulo de laboratorio y bobinas',
+        },
+        {
+          fecha: '05/08/2026',
+          horas: 8,
+          descripcion: 'Desarrollo de análisis de tinta interactivo con comparación de colores',
+        },
+        {
+          fecha: '07/08/2026',
+          horas: 8,
+          descripcion: 'Análisis de tinta: comparación ΔE en rollos y configuración de usuario admin',
+        },
       ]),
   );
 
