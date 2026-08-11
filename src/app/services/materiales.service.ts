@@ -134,4 +134,14 @@ export class MaterialesService {
 
     return materialesFiltrados;
   }
+
+  buscarCinta(): any | null {
+    if (!this.materiales) return null;
+    return this.materiales.find((m: any) => m.grupo?.nombre === 'Cinta') || null;
+  }
+
+  buscarMetrosPorRollo(): number {
+    const cinta = this.buscarCinta();
+    return Number(cinta?.capacidad) || 100;
+  }
 }

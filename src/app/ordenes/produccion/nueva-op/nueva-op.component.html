@@ -124,31 +124,56 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Lote único validation -->
+        <div class="notification mt-3" [ngClass]="{ 'is-success is-light': loteSuficiente, 'is-danger is-light': !loteSuficiente && OP.sustrato.sustrato && mensajeLote }" *ngIf="mensajeLote">
+          <p><i class="fas" [ngClass]="{ 'fa-check-circle': loteSuficiente, 'fa-exclamation-triangle': !loteSuficiente }"></i> {{ mensajeLote }}</p>
+        </div>
+        <div class="table-container mt-2" *ngIf="lotesDisponibles.length > 0">
+          <table class="table is-fullwidth is-striped is-narrow">
+            <thead>
+              <tr>
+                <th><i class="fas fa-barcode mr-1"></i>Lote</th>
+                <th><i class="fas fa-box mr-1"></i>Neto</th>
+                <th><i class="fas fa-cubes mr-1"></i>Almacén</th>
+                <th><i class="fas fa-map-marker-alt mr-1"></i>Sección</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lote of lotesDisponibles" class="is-selected">
+                <td><strong>{{ lote.lote }}</strong></td>
+                <td>{{ lote.neto | number }}</td>
+                <td>{{ lote.almacen_id?.nombre || 'Principal' }}</td>
+                <td>{{ lote.seccion_id?.nombre || '-' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Step 3: Tintas -->
       <div *ngIf="currentStep === 3" class="step-panel animate__animated animate__fadeIn">
         <span class="section-label"><i class="fas fa-palette mr-1"></i>Tintas</span>
         <table class="table is-fullwidth is-striped mt-2" *ngIf="producto">
-          <ng-container *ngFor="let colores of producto.pre_impresion.pelicula; index as i">
+          <ng-container *ngFor="let colorEntry of Tintas; let i = index">
             <tr>
-              <th class="is-selected">{{ colores.color }}</th>
+              <th class="is-selected">{{ colorEntry[0] }}</th>
             </tr>
             <tr>
               <td>
                 <div class="field has-addons">
                   <div class="control is-expanded">
                     <div class="select is-fullwidth">
-                      <select (change)="onTintaChange(colores.color, $event)">
+                      <select (change)="onTintaChange(i, $event)">
                         <option value="#">Seleccionar Tinta</option>
                         <option
-                          *ngFor="let tinta of producto.pre_impresion.pelicula[i].tintas"
-                          value="{{ i }}_{{ tinta.tinta._id }}_{{ tinta.cantidad }}"
-                          [disabled]="isDisabled(tinta)"
+                          *ngFor="let tinta of colorEntry[1]"
+                          value="{{ tinta._id }}_{{ TintasPlanas[i]?.cantidad }}"
+                          [disabled]="isDisabled({cantidad: TintasPlanas[i]?.cantidad, tinta: tinta})"
                         >
-                          {{ tinta.tinta.nombre }} {{ tinta.tinta.serie }} - Necesario:
-                          {{ Necesario(tinta.cantidad) | number }}kg - Almacén:
-                          {{ buscarEnAlmacenDirecto(tinta.tinta._id) | number }}kg
+                          {{ tinta.nombre }} {{ tinta.serie }} - Necesario:
+                          {{ Necesario(TintasPlanas[i]?.cantidad) | number }}kg - Almacén:
+                          {{ buscarEnAlmacenDirecto(tinta._id) | number }}kg
                         </option>
                       </select>
                     </div>
@@ -156,8 +181,8 @@
                   <div
                     class="control"
                     *ngIf="
-                      selectedTintas[colores.color] &&
-                      !isDisabled({ tinta: { tinta: { _id: selectedTintas[colores.color] } } })
+                      OP.tinta[i]?.tinta &&
+                      !isDisabled({ tinta: { tinta: { _id: OP.tinta[i].tinta } } })
                     "
                   >
                     <button class="button is-success is-light">
@@ -261,38 +286,20 @@
             <p class="mt-1">{{ producto.post_impresion.caja.cabida[0] }} Und / Caja.</p>
             <p>
               <strong class="gilroy">Total:</strong>
-              {{ calcularCajas(producto.post_impresion.caja.cabida[0]) | number }} caja(s)
+              {{ totalCajas | number }} caja(s)
             </p>
             <p class="mt-2"><strong class="gilroy">Cinta de embalaje:</strong></p>
-            <p>
-              {{
-                CalcularMetros(producto.post_impresion.caja.nombre) *
-                  calcularCajas(producto.post_impresion.caja.cabida[0]) | number
-              }}
-              mts.
-            </p>
+            <p>{{ totalCintaMetros | number }} mts.</p>
             <p>
               <strong class="gilroy">Total:</strong>
-              {{
-                (CalcularMetros(producto.post_impresion.caja.nombre) *
-                  calcularCajas(producto.post_impresion.caja.cabida[0])) /
-                  100
-              }}
-              rollos.
+              {{ rollosCinta }} rollo(s) de {{ metrosPorRollo }}m c/u.
             </p>
           </div>
-          <div class="column">
+          <div class="column" *ngIf="usaPads">
             <strong class="gilroy">Pads</strong>
-            <div class="columns mt-1">
-              <div class="column">
-                (2) Nº 11<br />
-                <strong class="gilroy">Total:</strong> 250
-              </div>
-              <div class="column">
-                (4) Nº 9<br />
-                <strong class="gilroy">Total:</strong> 1000
-              </div>
-            </div>
+            <p class="mt-1">
+              <strong class="gilroy">Total:</strong> {{ totalPads | number }} pads
+            </p>
           </div>
         </div>
       </div>

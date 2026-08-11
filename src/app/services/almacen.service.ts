@@ -44,6 +44,28 @@ export class AlmacenService {
     return this.Almacen.filter((x) => x.material._id === id);
   }
 
+  buscarLotesSuficientes(materialId: string, cantidadRequerida: number): any[] {
+    const entradas = this.Almacen.filter((item: any) => item.material?._id === materialId && !item.borrado);
+
+    const agrupados = new Map<string, any>();
+    for (const item of entradas) {
+      const key = item.lote || 'Sin lote';
+      if (!agrupados.has(key)) {
+        agrupados.set(key, {
+          lote: item.lote,
+          material: item.material,
+          neto: 0,
+          almacen_id: item.almacen_id,
+          seccion_id: item.seccion_id,
+        });
+      }
+      const grupo = agrupados.get(key);
+      grupo.neto += Number(item.neto);
+    }
+
+    return Array.from(agrupados.values()).filter((g) => g.neto >= cantidadRequerida);
+  }
+
   BuscarCantidadEnAlmacen(material: string) {
     const totalNeto = this.Almacen.filter((item) => item.material._id === material) // Filtrar los materiales que coinciden con el _id
       .reduce((sum, item) => sum + Number(item.neto), 0); // Sumar los valores de neto

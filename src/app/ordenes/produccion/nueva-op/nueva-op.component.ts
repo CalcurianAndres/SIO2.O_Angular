@@ -183,6 +183,8 @@ export class NuevaOPComponent implements OnInit, OnChanges {
 
   public color_selected;
   public tintas_added: any = [];
+  public TintasPlanas: any[] = [];
+  public colorIndexMap: { [color: string]: number } = {};
 
   public Ordenes: any;
   public productos: any;
@@ -253,30 +255,84 @@ export class NuevaOPComponent implements OnInit, OnChanges {
 
   currentDate!: string;
 
+  // === Nuevas propiedades para reestructura wizard ===
+  public loteSuficiente: boolean = false;
+  public mensajeLote: string = '';
+  public lotesDisponibles: any[] = [];
+  public totalCajas: number = 0;
+  public totalCintaMetros: number = 0;
+  public rollosCinta: number = 0;
+  public metrosPorRollo: number = 100;
+  public totalPads: number = 0;
+  public usaPads: boolean = false;
+  public cintaMaterial: any = null;
+
+  validarLoteSustrato() {
+    if (!this.OP.sustrato.sustrato) {
+      this.loteSuficiente = false;
+      this.mensajeLote = '';
+      this.lotesDisponibles = [];
+      return;
+    }
+
+    const cantidadRequerida = Number(this.OP.hojas) + Number(this.OP.demasia);
+    if (!cantidadRequerida || cantidadRequerida <= 0) {
+      this.loteSuficiente = false;
+      this.mensajeLote = 'Defina cantidad y montaje primero.';
+      this.lotesDisponibles = [];
+      return;
+    }
+
+    this.lotesDisponibles = this.almacen.buscarLotesSuficientes(this.OP.sustrato.sustrato, cantidadRequerida);
+
+    if (this.lotesDisponibles.length === 0) {
+      this.loteSuficiente = false;
+      this.mensajeLote = `No hay lote único con ${cantidadRequerida.toLocaleString()} uds. Disponibles: ${this.almacen.BuscarCantidadEnAlmacen(this.OP.sustrato.sustrato).toLocaleString()} uds.`;
+    } else {
+      this.loteSuficiente = true;
+      this.mensajeLote = `Lote suficiente encontrado: ${this.lotesDisponibles[0].lote} (${this.lotesDisponibles[0].neto.toLocaleString()} uds)`;
+    }
+  }
+
+  calcularEmpaque() {
+    if (!this.producto || !this.OP.cantidad) return;
+
+    const cabida = this.producto.post_impresion?.caja?.cabida?.[0];
+    if (!cabida || cabida <= 0) return;
+
+    this.totalCajas = Math.ceil(this.OP.cantidad / cabida);
+
+    this.cintaMaterial = this.materiales.buscarCinta();
+    this.metrosPorRollo = this.materiales.buscarMetrosPorRollo();
+    const metrajePorCaja = Number(this.producto.post_impresion?.caja?.metraje_cinta_por_caja) || 0.15;
+    this.totalCintaMetros = Number((this.totalCajas * metrajePorCaja).toFixed(2));
+    this.rollosCinta = Math.ceil(this.totalCintaMetros / this.metrosPorRollo);
+
+    this.usaPads = this.producto.post_impresion?.caja?.pads?.usa_pads || false;
+    const padsPorUnidad = this.producto.post_impresion?.caja?.pads?.pads_por_unidad || 0;
+    this.totalPads = this.usaPads ? this.OP.cantidad * padsPorUnidad : 0;
+  }
+
   agregarColor() {
     this.tintas_added.push(this.producto.materia_prima.tintas[this.color_selected]);
     console.log(this.tintas_added);
   }
 
-  selectedTintas: { [key: string]: boolean } = {};
-
-  onTintaChange(tintaId: string, event: any) {
-    const selected = (event.target as HTMLSelectElement).value !== '#';
-    this.selectedTintas[tintaId] = selected;
-
-    const value = event.target.value;
-
-    const n = value.split('_');
-
-    if (!this.OP.tinta[n[0]]) {
-      this.OP.tinta[n[0]] = {
-        tinta: '',
-        cantidad: 0,
-      };
+  onTintaChange(colorIndex: number, event: any) {
+    const value = (event.target as HTMLSelectElement).value;
+    if (value === '#') {
+      this.OP.tinta[colorIndex] = { tinta: '', cantidad: 0 };
+      return;
     }
 
-    this.OP.tinta[n[0]].tinta = n[1];
-    this.OP.tinta[n[0]].cantidad = Number(this.Necesario(n[2]).toFixed(2));
+    const partes = value.split('_');
+    const tintaId = partes[0];
+    const cantidad = Number(partes[1]);
+
+    this.OP.tinta[colorIndex] = {
+      tinta: tintaId,
+      cantidad: Number(this.Necesario(cantidad).toFixed(2)),
+    };
 
     console.log(this.OP);
   }
@@ -313,6 +369,9 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     this.almacenado = this.almacen.BuscarCantidadEnAlmacen(e.value);
 
     this.OP.sustrato.cantidad = this.OP.hojas + this.OP.demasia;
+
+    this.validarLoteSustrato();
+    this.calcularEmpaque();
     console.log(this.OP);
   }
 
@@ -339,6 +398,8 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     console.log(this.producto.pre_impresion.tamano_sustrato.montajes[this.OP.montaje].ejemplares);
     this.OP.ejemplares = this.producto.pre_impresion.tamano_sustrato.montajes[this.OP.montaje].ejemplares;
     this.OP.hojas = Math.ceil(this.OP.cantidad / this.OP.ejemplares);
+    this.validarLoteSustrato();
+    this.calcularEmpaque();
   }
 
   calcularHojas_() {
@@ -724,28 +785,33 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     this.producto = this.productos[e.value].producto;
     this.OP.producto = this.producto;
 
+    // Agrupar tintas por color para display
     const TintasPorColor = {};
-    // Recorremos el arreglo original
-    this.producto.materia_prima.tintas.forEach((tintas) => {
-      const { color } = tintas.tinta;
+    this.producto.materia_prima.tintas.forEach((t) => {
+      const color = t.tinta?.color || 'S/C';
+      if (!TintasPorColor[color]) TintasPorColor[color] = [];
+      TintasPorColor[color].push(t.tinta);
+    });
+    this.Tintas = Object.entries(TintasPorColor);
 
-      // Si el proveedor no existe en el objeto, lo creamos
-      if (!TintasPorColor[color]) {
-        TintasPorColor[color] = [];
-      }
+    // Estructura plana con cantidades para cálculos
+    this.TintasPlanas = this.producto.materia_prima.tintas;
 
-      // Agregamos el material al proveedor correspondiente
-      TintasPorColor[color].push(tintas.tinta);
+    // Mapa color → índice en OP.tinta
+    this.colorIndexMap = {};
+    this.Tintas.forEach((entry, i) => {
+      this.colorIndexMap[entry[0]] = i;
     });
 
-    // Convertimos el objeto en un arreglo de proveedores
-    const arregloCategorizado: any = Object.entries(TintasPorColor);
-    this.Tintas = arregloCategorizado;
+    // Inicializar OP.tinta con tantos slots como colores
+    this.OP.tinta = this.Tintas.map(() => ({ tinta: '', cantidad: 0 }));
 
     console.log(this.Tintas);
 
     this.OP.cantidad = this.productos[e.value].cantidad;
     this.calcularHojas();
+    this.validarLoteSustrato();
+    this.calcularEmpaque();
   }
 
   Limitar(inicio, fin) {}
@@ -946,6 +1012,20 @@ export class NuevaOPComponent implements OnInit, OnChanges {
       }
     }
 
+    this.OP.despachos = this.despachos.value.map((d: any) => ({
+      lugar: d.lugar,
+      fecha: d.fecha,
+      cantidad: d.cantidad,
+      oc: d.oc,
+    }));
+
+    this.OP.empaque = {
+      total_cajas: this.totalCajas,
+      total_cinta_metros: this.totalCintaMetros,
+      rollos_cinta: this.rollosCinta,
+      total_pads: this.totalPads,
+    };
+
     const requisicion = {
       status: 'Por Asignar',
       materiales: [
@@ -1006,7 +1086,26 @@ export class NuevaOPComponent implements OnInit, OnChanges {
         },
       },
       hojas: 0,
+      despachos: [],
+      empaque: {
+        total_cajas: 0,
+        total_cinta_metros: 0,
+        rollos_cinta: 0,
+        total_pads: 0,
+      },
     };
+
+    this.loteSuficiente = false;
+    this.mensajeLote = '';
+    this.lotesDisponibles = [];
+    this.totalCajas = 0;
+    this.totalCintaMetros = 0;
+    this.rollosCinta = 0;
+    this.totalPads = 0;
+    this.usaPads = false;
+    this.cintaMaterial = null;
+    this.TintasPlanas = [];
+    this.colorIndexMap = {};
 
     this.onCloseModal.emit();
   };
