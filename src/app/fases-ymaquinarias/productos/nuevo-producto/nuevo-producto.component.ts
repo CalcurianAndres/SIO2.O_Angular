@@ -101,6 +101,7 @@ export class NuevoProductoComponent {
   pegadora_selected = '';
   tinta_selected = { tinta: '', cantidad: 0 };
   barniz_selected = { barniz: '', cantidad: 0 };
+  caja_selected = '';
   seleccion_tinta = false;
 
   Impresion_(maquina, fase_) {
@@ -149,6 +150,13 @@ export class NuevoProductoComponent {
       if (idx === -1) this.producto.barnices.push({ ...this.barniz_selected });
       this.barniz_selected = { barniz: '', cantidad: 0 };
     }
+  }
+
+  AlmacenarCaja() {
+    if (this.caja_selected && !this.producto.caja.includes(this.caja_selected)) {
+      this.producto.caja.push(this.caja_selected);
+    }
+    this.caja_selected = '';
   }
 
   AlmacenarMaquina() {
@@ -209,6 +217,11 @@ export class NuevoProductoComponent {
   }
 
   getNombreTinta(id): string {
+    const m = this.materiales.materiales?.find((x) => x._id === id);
+    return m ? `${m.nombre} (${m.fabricante?.alias})` : id;
+  }
+
+  getNombreCaja(id): string {
     const m = this.materiales.materiales?.find((x) => x._id === id);
     return m ? `${m.nombre} (${m.fabricante?.alias})` : id;
   }
@@ -295,7 +308,10 @@ export class NuevoProductoComponent {
         guillotina: p.guillotina || [],
         pegadora: p.pegadora || [],
         pegamento: p.pegamento || [],
-        caja: { nombre: p.caja?.[0] || '', cabida: p.unidades_por_caja ? [s(p.unidades_por_caja)] : [] },
+        caja: {
+          nombre: this.materiales.materiales?.find((x) => x._id === p.caja?.[0])?.nombre || p.caja?.[0] || '',
+          cabida: p.unidades_por_caja ? [s(p.unidades_por_caja)] : [],
+        },
         distribucion: {
           aerea: p.vista_aerea || '',
           v3d: p.vista_3d || '',

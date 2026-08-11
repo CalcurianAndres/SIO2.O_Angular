@@ -190,7 +190,7 @@
                   <ng-container *ngFor="let b of materiales.materiales">
                     <option
                       [value]="b._id"
-                      *ngIf="b.grupo?.nombre === 'Barniz de aceite' || b.grupo?.nombre === 'Barniz Acuoso'"
+                      *ngIf="b.grupo?.nombre === 'Barniz de aceite' || b.grupo?.nombre === 'Barniz Acuoso' || b.grupo?.nombre === 'Barniz'"
                     >
                       {{ b.nombre }} ({{ b.fabricante?.alias }})
                     </option>
@@ -480,13 +480,39 @@
         </div>
 
         <hr class="modal-divider" />
-        <div class="columns is-multiline">
-          <div class="column is-4">
-            <div class="field">
-              <label class="label">6.8 Tipo de caja</label>
-              <input class="input" type="text" placeholder="Ej: Caja corrugada" [(ngModel)]="producto.caja[0]" />
+
+        <!-- Caja -->
+        <label class="label">6.8 Tipo de caja</label>
+        <div class="columns is-multiline is-vcentered">
+          <div class="column is-6">
+            <div class="control has-icons-left">
+              <div class="select is-fullwidth">
+                <select [(ngModel)]="caja_selected">
+                  <option value="" disabled selected>Seleccione caja</option>
+                  <ng-container *ngFor="let c of materiales.materiales">
+                    <option [value]="c._id" *ngIf="c.grupo?.nombre === 'Cajas corrugada'">
+                      {{ c.nombre }} ({{ c.fabricante?.alias }})
+                    </option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="icon is-small is-left"><i class="fas fa-box"></i></div>
             </div>
           </div>
+          <div class="column is-2">
+            <button class="button is-success" (click)="AlmacenarCaja()" [disabled]="!caja_selected">
+              <span class="icon"><i class="fas fa-plus"></i></span>
+            </button>
+          </div>
+        </div>
+        <div class="tags-list mb-3" *ngIf="producto.caja?.length">
+          <span *ngFor="let cj of producto.caja; index as i" class="tag is-info is-light is-medium">
+            <i class="fas fa-box mr-1"></i> {{ getNombreCaja(cj) }}
+            <button class="delete is-small" (click)="confirmarEliminar(producto.caja, i, 'Caja')"></button>
+          </span>
+        </div>
+
+        <div class="columns is-multiline">
           <div class="column is-4">
             <div class="field">
               <label class="label">6.11 Unidades por caja</label>

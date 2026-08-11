@@ -215,11 +215,7 @@
           >
             CIEDE2000
           </button>
-          <button
-            class="delta-toggle-btn"
-            [class.is-selected]="deltaEMode === 'cmc'"
-            (click)="setDeltaEMode('cmc')"
-          >
+          <button class="delta-toggle-btn" [class.is-selected]="deltaEMode === 'cmc'" (click)="setDeltaEMode('cmc')">
             ΔC
           </button>
         </div>
@@ -264,7 +260,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_1.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -272,7 +273,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_1.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -280,7 +286,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_1.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_1.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -310,7 +321,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_1.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -318,7 +334,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_1.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -326,7 +347,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_1.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_1.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -372,7 +398,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_2.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -380,7 +411,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_2.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -388,7 +424,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_2.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_2.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -418,7 +459,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_2.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -426,7 +472,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_2.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -434,7 +485,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_2.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_2.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -480,7 +536,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_3.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -488,7 +549,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_3.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -496,7 +562,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.estandar_3.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.estandar_3.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -526,7 +597,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_3.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -534,7 +610,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_3.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -542,7 +623,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.carton.muestra_3.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.carton.muestra_3.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -590,7 +676,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_1.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -598,7 +689,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_1.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -606,7 +702,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_1.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_1.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -636,7 +737,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_1.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -644,7 +750,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_1.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -652,7 +763,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_1.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_1.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -698,7 +814,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_2.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -706,7 +827,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_2.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -714,7 +840,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_2.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_2.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -744,7 +875,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_2.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -752,7 +888,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_2.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -760,7 +901,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_2.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_2.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -806,7 +952,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_3.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -814,7 +965,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_3.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -822,7 +978,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.estandar_3.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.estandar_3.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -852,7 +1013,12 @@
                 <div class="field">
                   <label for="" class="label">L*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.l" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_3.l"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -860,7 +1026,12 @@
                 <div class="field">
                   <label for="" class="label">a*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.a" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_3.a"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -868,7 +1039,12 @@
                 <div class="field">
                   <label for="" class="label">b*</label>
                   <div class="control">
-                    <input type="number" class="input" [(ngModel)]="Analisis.papel.muestra_3.b" (change)="recalcular()" />
+                    <input
+                      type="number"
+                      class="input"
+                      [(ngModel)]="Analisis.papel.muestra_3.b"
+                      (change)="recalcular()"
+                    />
                   </div>
                 </div>
               </td>
@@ -1181,7 +1357,9 @@
     <button class="delete red_cross cerrar" aria-label="close" (click)="RollDownModal = false"></button>
     <div class="rolldown-head">
       <span class="rolldown-title">Roll Down · {{ rollDownFuente }}</span>
-      <span class="rolldown-subtitle">Arrastra una muestra para compararla; al soltarla vuelve a su lugar</span>
+      <span class="rolldown-subtitle"
+        >Arrastra una muestra sobre un estándar para calcular el ΔE; al soltarla vuelve a su lugar</span
+      >
     </div>
     <div class="rolldown-body">
       <div class="paper-strip">
@@ -1190,6 +1368,7 @@
           <div
             class="swatch"
             *ngFor="let r of rollosEstandar; let i = index"
+            [attr.data-estandar]="i + 1"
             [style.background-color]="r.bg"
             (pointerdown)="onRollDown($event, r.id)"
             (pointermove)="onRollMove($event)"
@@ -1197,6 +1376,14 @@
           >
             <span class="swatch-index">Descarga {{ i + 1 }}</span>
             <span class="swatch-lab">{{ r.lab }}</span>
+            <span
+              class="swatch-compare-badge"
+              *ngIf="rollDownComparativas[r.id]"
+              [ngClass]="rollDownComparativas[r.id].badgeClass"
+            >
+              <span class="compare-badge-vs">vs {{ rollDownComparativas[r.id].muestraLabel }}</span>
+              <span class="compare-badge-value">ΔE {{ rollDownComparativas[r.id].value }}</span>
+            </span>
           </div>
         </div>
       </div>
@@ -1213,6 +1400,7 @@
           >
             <span class="swatch-index">Descarga {{ i + 1 }}</span>
             <span class="swatch-lab">{{ r.lab }}</span>
+            <span class="swatch-delta" [ngClass]="r.eClass">ΔE {{ r.e }}</span>
           </div>
         </div>
       </div>

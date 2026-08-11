@@ -67,6 +67,8 @@ export class AnalisisTintaComponent implements OnChanges {
   public rollosEstandar: any[] = [];
   public rollosMuestra: any[] = [];
   public rollDownFuente = '';
+  public rollDownComparativas: { [estandarId: string]: { muestraLabel: string; value: string; badgeClass: string } } =
+    {};
 
   public rollDrag = {
     id: null as string | null,
@@ -331,16 +333,25 @@ export class AnalisisTintaComponent implements OnChanges {
     const build = (est: any, mus: any, idx: number) => {
       const eRgb = lab2rgbSafe([est.l, est.a, est.b]);
       const mRgb = lab2rgbSafe([mus.l, mus.a, mus.b]);
+      const de = parseFloat(mus.e) || 0;
       return {
         estandar: {
           id: 'e' + idx,
           bg: 'rgb(' + eRgb[0] + ',' + eRgb[1] + ',' + eRgb[2] + ')',
           lab: 'L ' + fmt(est.l) + '   a ' + fmt(est.a) + '   b ' + fmt(est.b),
+          l: parseFloat(est.l) || 0,
+          a: parseFloat(est.a) || 0,
+          b: parseFloat(est.b) || 0,
         },
         muestra: {
           id: 'm' + idx,
           bg: 'rgb(' + mRgb[0] + ',' + mRgb[1] + ',' + mRgb[2] + ')',
           lab: 'L ' + fmt(mus.l) + '   a ' + fmt(mus.a) + '   b ' + fmt(mus.b),
+          l: parseFloat(mus.l) || 0,
+          a: parseFloat(mus.a) || 0,
+          b: parseFloat(mus.b) || 0,
+          e: de.toFixed(2),
+          eClass: this.claseTolerancia(de),
         },
       };
     };
@@ -353,8 +364,22 @@ export class AnalisisTintaComponent implements OnChanges {
     this.rollosMuestra = [r1.muestra, r2.muestra, r3.muestra];
 
     this.rollDrag = { id: null, active: false, el: null, startX: 0, startY: 0 };
+    this.rollDownComparativas = {};
 
     this.RollDownModal = true;
+  }
+
+  private claseTolerancia(de: number): string {
+    if (de < 2) return 'badge-success';
+    if (de <= 5) return 'badge-warning';
+    return 'badge-danger';
+  }
+
+  private computeDeltaE(est: any, mus: any): number {
+    if (this.deltaEMode === 'e2000') {
+      return deltaE2000(est.l, est.a, est.b, mus.l, mus.a, mus.b);
+    }
+    return deltaECMC(est.l, est.a, est.b, mus.l, mus.a, mus.b);
   }
 
   onRollDown(e: PointerEvent, id: string) {
@@ -382,6 +407,7 @@ export class AnalisisTintaComponent implements OnChanges {
       return;
     }
     const el = this.rollDrag.el;
+    const dragId = this.rollDrag.id;
     this.rollDrag.active = false;
     if (el) {
       el.classList.remove('dragging');
@@ -392,6 +418,32 @@ export class AnalisisTintaComponent implements OnChanges {
     }
     this.rollDrag.id = null;
     this.rollDrag.el = null;
+
+    if (e && dragId && dragId.startsWith('m')) {
+      this.compararRollDown(e, dragId);
+    }
+  }
+
+  private compararRollDown(e: PointerEvent, muestraId: string) {
+    const muestraIdx = parseInt(muestraId.replace('m', ''), 10) - 1;
+    const muestra = this.rollosMuestra[muestraIdx];
+    if (!muestra) return;
+
+    const target = document
+      .elementsFromPoint(e.clientX, e.clientY)
+      .find((el) => el.classList.contains('swatch') && el.hasAttribute('data-estandar'));
+    if (!target) return;
+
+    const estandarIdx = parseInt(target.getAttribute('data-estandar') || '', 10) - 1;
+    const estandar = this.rollosEstandar[estandarIdx];
+    if (!estandar) return;
+
+    const de = this.computeDeltaE(estandar, muestra);
+    this.rollDownComparativas[estandar.id] = {
+      muestraLabel: 'M' + (muestraIdx + 1),
+      value: de.toFixed(2),
+      badgeClass: this.claseTolerancia(de),
+    };
   }
 
   guardar(resultado?: string) {
