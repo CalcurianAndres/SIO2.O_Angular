@@ -1,6 +1,6 @@
 <div class="modal" [ngClass]="{ 'is-active': nueva }">
   <div class="modal-background"></div>
-  <div class="modal-card" style="width: 96vw; max-width: 1200px">
+  <div class="modal-card" [ngClass]="{ 'modal-card--wide': currentStep === 7, 'modal-card--normal': currentStep !== 7 }" [style.width.%]="currentStep === 7 ? 96 : 80" [style.max-width.px]="currentStep === 7 ? 1600 : 1400">
     <div class="modal-card-head">
       <p class="modal-card-title fuente"><i class="fas fa-industry mr-2"></i>Nueva Orden de Producción</p>
       <button class="delete red_cross" (click)="onCloseModal.emit()" [disabled]="guardando"></button>
@@ -168,11 +168,11 @@
                         <option value="#">Seleccionar Tinta</option>
                         <option
                           *ngFor="let tinta of colorEntry[1]"
-                          value="{{ tinta._id }}_{{ TintasPlanas[i]?.cantidad }}"
-                          [disabled]="isDisabled({cantidad: TintasPlanas[i]?.cantidad, tinta: tinta})"
+                          value="{{ tinta._id }}_{{ buscarCantidadTinta(tinta._id) }}"
+                          [disabled]="isDisabled({cantidad: buscarCantidadTinta(tinta._id), tinta: tinta})"
                         >
                           {{ tinta.nombre }} {{ tinta.serie }} - Necesario:
-                          {{ Necesario(TintasPlanas[i]?.cantidad) | number }}kg - Almacén:
+                          {{ Necesario(buscarCantidadTinta(tinta._id)) | number }}kg - Almacén:
                           {{ buscarEnAlmacenDirecto(tinta._id) | number }}kg
                         </option>
                       </select>
@@ -182,7 +182,7 @@
                     class="control"
                     *ngIf="
                       OP.tinta[i]?.tinta &&
-                      !isDisabled({ tinta: { tinta: { _id: OP.tinta[i].tinta } } })
+                      !isDisabled({ tinta: { _id: OP.tinta[i].tinta }, cantidad: buscarCantidadTinta(OP.tinta[i].tinta) })
                     "
                   >
                     <button class="button is-success is-light">
@@ -394,114 +394,20 @@
       <!-- Step 7: Planificación + Adicional -->
       <div *ngIf="currentStep === 7" class="step-panel animate__animated animate__fadeIn">
         <span class="section-label"><i class="fas fa-calendar-alt mr-1"></i>Planificación</span>
-        <div class="calendar mt-2" style="overflow-x: auto">
-          <div class="calendar-day day-info" style="min-width: 110px; max-width: 110px"></div>
-          <div
-            *ngFor="let day of generateDates(); let i = index"
-            class="calendar-day day-info"
-            [ngClass]="{
-              'gray-tenue': i % 2 == 0,
-              'no-laboral': formatearFecha_(generateDates()[i - 1]) === 'No laboral'
-            }"
-            style="min-width: 110px; max-width: 110px"
-          >
-            {{ formatearFecha(generateDates()[i - 1]) }}
-          </div>
+
+        <app-gantt-planificador
+          *ngIf="maquinasDestino.length > 0"
+          [maquinas]="maquinasDestino"
+          [horarioDefault]="horarioDefault"
+          [calendario]="horarios.calendario"
+          [ordenes]="api.orden"
+          [totalHojas]="OP.hojas + OP.demasia"
+          (planChange)="onPlanChange($event)"
+        ></app-gantt-planificador>
+
+        <div *ngIf="maquinasDestino.length === 0" class="notification is-warning is-light mt-3">
+          <p><i class="fas fa-exclamation-triangle mr-1"></i>No hay máquinas asignadas. Ve al paso <strong>Máquinas</strong> para agregar fases.</p>
         </div>
-        <ng-container *ngFor="let maquina of maquinasDestino; index as x">
-          <div class="calendar" *ngFor="let fase of maquina.fases; index as i" style="overflow-x: auto">
-            <div
-              class="calendar-color"
-              mwlResizable
-              [enableGhostResize]="true"
-              (resizeStart)="onResizeStart($event)"
-              (resizeEnd)="onResizeEnd($event, x, i)"
-              [ngStyle]="medidas[x].fases[i]"
-              cdkDrag
-              cdkDragLockAxis="x"
-              [cdkDragDisabled]="dragDisabled"
-              (cdkDragStarted)="onDragStarted($event)"
-              (cdkDragEnded)="onDragEnd($event, x, i)"
-              [style.background-color]="colores[x]"
-            >
-              <div class="fase" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
-              <div *ngFor="let reloj of [].constructor(ExtraerMedida(medidas[x].fases[i].width)); index as n">
-                <span
-                  style="
-                    position: absolute;
-                    display: block;
-                    width: 105px;
-                    text-align: center;
-                    top: -5px;
-                    max-height: 30px;
-                    min-height: 30px;
-                  "
-                  [ngStyle]="{ 'left.px': n * 110 }"
-                >
-                  <div class="config" [ngClass]="{ show: medidas[x].fases[i].date[n] }">
-                    <div class="field is-grouped">
-                      <div class="control">
-                        <label class="label">Inicio</label>
-                        <input
-                          type="time"
-                          class="input is-small"
-                          min="07:00:00"
-                          [value]="medidas[x].fases[i].inicio[n]"
-                          #inicio
-                        />
-                      </div>
-                      <div class="control">
-                        <label class="label">Fin</label>
-                        <input
-                          type="time"
-                          class="input is-small"
-                          min="07:00:00"
-                          [value]="medidas[x].fases[i].fin[n]"
-                          #fin
-                        />
-                      </div>
-                      <div class="control">
-                        <label class="label">&nbsp;</label>
-                        <button
-                          class="button is-small is-success is-light"
-                          (click)="ShowToolTip(x, i, n, inicio.value, fin.value)"
-                        >
-                          <span class="icon"><i class="fas fa-check"></i></span>
-                        </button>
-                        <button class="button is-small is-info is-light" (click)="returnData(x, i, n)">
-                          <span class="icon"><i class="fas fa-undo"></i></span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <span style="margin-top: -20px; cursor: pointer" (click)="ShowToolTip(x, i, n)">
-                    <span style="position: relative; top: 15px" *ngIf="NoCaeFeriado(CalcularPosicion(x, i, n))">
-                      {{ medidas[x].fases[i].inicio[n] }} - {{ medidas[x].fases[i].fin[n] }}
-                    </span>
-                    <span style="position: relative; top: 15px" *ngIf="!NoCaeFeriado(CalcularPosicion(x, i, n))">
-                      <i class="fas fa-ban"></i>
-                    </span>
-                  </span>
-                  <br />
-                </span>
-              </div>
-            </div>
-            <div class="day-info fase-name" style="border-top: solid 0.5px rgb(208, 208, 208)">
-              <span class="Nombre_Fase">{{ fase.nombre }} <br /></span>
-              <span class="maquina mostrada" style="font-size: xx-small">
-                {{ maquina.nombre }} <br />
-                {{ medidas[x].fases[i].fecha | date: 'dd/MM/yyyy' }} -
-                {{ medidas[x].fases[i].final | date: 'dd/MM/yyyy' }}
-              </span>
-            </div>
-            <div
-              *ngFor="let day of generateDates(); let i = index"
-              class="calendar-day day-info"
-              [ngClass]="{ 'gray-tenue': i % 2 == 0, 'no-laboral': !NoCaeFeriado(i) }"
-              style="min-width: 110px; max-width: 110px; max-height: 30px; min-height: 30px"
-            ></div>
-          </div>
-        </ng-container>
 
         <hr class="modal-divider" />
         <span class="section-label"><i class="fas fa-truck mr-1"></i>Despachos adicionales</span>

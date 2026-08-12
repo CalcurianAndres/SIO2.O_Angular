@@ -6,6 +6,22 @@
   gap: 0.5rem;
 }
 
+/* ── Wide modal for planning step ── */
+.modal-card--wide {
+  width: 96vw !important;
+  max-width: 1600px !important;
+}
+
+.modal-card--normal {
+  width: 80vw;
+  max-width: 1400px;
+}
+
+.modal-card--wide .modal-card-body,
+.modal-card--normal .modal-card-body {
+  max-height: 82vh;
+}
+
 /* ── Step panel ── */
 .step-panel {
   min-height: 200px;

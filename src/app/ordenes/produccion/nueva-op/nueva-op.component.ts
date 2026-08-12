@@ -313,6 +313,16 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     this.totalPads = this.usaPads ? this.OP.cantidad * padsPorUnidad : 0;
   }
 
+  get horarioDefault(): any {
+    return this.horarios?.horarios?.find((x: any) => x.default === true);
+  }
+
+  buscarCantidadTinta(tintaId: string): number {
+    if (!this.TintasPlanas) return 0;
+    const found = this.TintasPlanas.find((t) => t.tinta?._id === tintaId);
+    return found ? found.cantidad : 0;
+  }
+
   agregarColor() {
     this.tintas_added.push(this.producto.materia_prima.tintas[this.color_selected]);
     console.log(this.tintas_added);
@@ -1001,6 +1011,10 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     return dates;
   }
 
+  onPlanChange(planData: any[]): void {
+    this.medidas = planData;
+  }
+
   GuardarTrabajo = async () => {
     this.guardando = true;
     this.OP.fases = [];
@@ -1106,6 +1120,8 @@ export class NuevaOPComponent implements OnInit, OnChanges {
     this.cintaMaterial = null;
     this.TintasPlanas = [];
     this.colorIndexMap = {};
+    this.medidas = [];
+    this.maquinasDestino = [];
 
     this.onCloseModal.emit();
   };

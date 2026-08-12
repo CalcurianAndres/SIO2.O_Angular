@@ -14,6 +14,7 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { NewClienteComponent } from './clientes/new-cliente/new-cliente.component';
 import { NuevaGestionComponent } from './nueva-gestion/nueva-gestion.component';
 import { PlanificacionComponent } from './produccion/planificacion/planificacion.component';
+import { GanttPlanificadorComponent } from './produccion/nueva-op/gantt-planificador/gantt-planificador.component';
 import { DevolucionesComponent } from './produccion/devoluciones/devoluciones.component';
 import { AlmacenModule } from '../almacen/almacen.module';
 import { InformacionComponent } from './produccion/informacion/informacion.component';
@@ -33,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
     NewClienteComponent,
     NuevaGestionComponent,
     PlanificacionComponent,
+    GanttPlanificadorComponent,
     DevolucionesComponent,
     InformacionComponent,
     AsignacionesComponent,

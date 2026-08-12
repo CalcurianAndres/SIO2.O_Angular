@@ -1,0 +1,138 @@
+<div class="gantt-wrapper">
+  <div class="gantt-toolbar">
+    <div class="toolbar-left">
+      <span class="gantt-title">
+        <i class="fas fa-calendar-alt mr-1"></i>Cronograma de Producción
+      </span>
+      <span class="gantt-info">{{ dias.length }} días · {{ horasTrabajoLabel }}</span>
+    </div>
+    <div class="toolbar-right">
+      <span class="gantt-legend">
+        <span class="legend-item">
+          <span class="legend-dot is-today"></span>Hoy
+        </span>
+        <span class="legend-item">
+          <span class="legend-dot is-holiday"></span>Feriado
+        </span>
+        <span class="legend-item" *ngIf="hayColision">
+          <span class="legend-dot is-collision"></span>Colisión
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div class="gantt-scroll-container">
+    <div class="gantt-grid" [style.width.px]="250 + anchoTimeline">
+      <!-- Header row -->
+      <div class="gantt-header">
+        <div class="gantt-corner">Fase / Máquina</div>
+        <div class="gantt-days-header" [style.width.px]="anchoTimeline">
+          <div
+            *ngFor="let d of dias; let i = index"
+            class="day-header-cell"
+            [class.is-holiday]="d.esFeriado"
+            [class.is-weekend]="d.esFinDeSemana"
+            [class.is-today]="d.esHoy"
+            [style.width.px]="PX_DIA"
+            [title]="d.motivo || ''"
+          >
+            <span class="day-name">{{ d.nombreDia }}</span>
+            <span class="day-num">{{ d.numDia }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid background -->
+      <div class="gantt-grid-bg" [style.width.px]="250 + anchoTimeline">
+        <div class="grid-label-col" [style.width.px]="250"></div>
+        <div
+          *ngFor="let d of dias; let i = index"
+          class="grid-day-col"
+          [class.is-holiday]="d.esFeriado"
+          [class.is-weekend]="d.esFinDeSemana"
+          [class.is-today]="d.esHoy"
+          [style.width.px]="PX_DIA"
+        ></div>
+      </div>
+
+      <!-- Row for each machine+fase -->
+      <div *ngFor="let renglon of renglones; let r = index" class="gantt-row" [style.width.px]="250 + anchoTimeline">
+        <div class="gantt-label" [style.border-left-color]="renglon.color">
+          <span class="fase-label">{{ renglon.fase?.nombre || '—' }}</span>
+          <span class="maq-label">{{ renglon.maquina?.nombre }}</span>
+          <span class="date-range">{{ renglon.plan.startDate }} → {{ renglon.plan.endDate }}</span>
+        </div>
+
+        <div class="gantt-track" [style.width.px]="anchoTimeline">
+          <div
+            class="gantt-bar"
+            [style.left.px]="renglon.plan.leftPx"
+            [style.width.px]="renglon.plan.widthPx"
+            [style.background-color]="renglon.color"
+            [class.has-collision]="renglon.colision"
+            cdkDrag
+            cdkDragLockAxis="x"
+            [cdkDragDisabled]="dragDisabled"
+            (cdkDragEnded)="onBarDragEnd($event, r)"
+            mwlResizable
+            [enableGhostResize]="true"
+            (resizeStart)="dragDisabled = true"
+            (resizeEnd)="onBarResizeEnd($event, r)"
+          >
+            <div class="bar-resize-handle" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+
+            <div class="bar-content">
+              <span class="bar-name">{{ renglon.fase?.nombre }}</span>
+            </div>
+
+            <div *ngFor="let seg of renglon.plan.segments; let s = index" class="bar-day-segment" [style.left.px]="s * PX_DIA" [style.width.px]="PX_DIA">
+              <div
+                class="segment-time-toggle"
+                *ngIf="!seg.esFeriado"
+                (click)="toggleSegmento(r, s)"
+              >
+                <span>{{ seg.inicio }}</span>
+                <span class="time-dash">–</span>
+                <span>{{ seg.fin }}</span>
+              </div>
+              <div class="segment-holiday" *ngIf="seg.esFeriado">
+                <i class="fas fa-ban"></i>
+              </div>
+
+              <div class="time-edit-popup" *ngIf="seg.expandido && !seg.esFeriado">
+                <label class="popup-label">Inicio</label>
+                <input
+                  type="time"
+                  class="popup-input"
+                  [value]="seg.inicio"
+                  #inicioInput
+                />
+                <label class="popup-label">Fin</label>
+                <input
+                  type="time"
+                  class="popup-input"
+                  [value]="seg.fin"
+                  #finInput
+                />
+                <div class="popup-actions">
+                  <button class="button is-small is-success is-light" (click)="actualizarHorario(r, s, inicioInput.value, finInput.value)">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="button is-small is-info is-light" (click)="resetearHorario(r, s)">
+                    <i class="fas fa-undo"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="renglones.length === 0" class="gantt-empty">
+        <i class="fas fa-calendar-times"></i>
+        <p>No hay máquinas asignadas. Ve al paso <strong>Máquinas</strong> para agregar fases.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,388 @@
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { ResizeEvent } from 'angular-resizable-element';
+import * as moment from 'moment';
+
+interface DiaGantt {
+  fecha: moment.Moment;
+  esFeriado: boolean;
+  esFinDeSemana: boolean;
+  esHoy: boolean;
+  nombreDia: string;
+  numDia: string;
+  label: string;
+  motivo: string | null;
+}
+
+interface SegmentoDia {
+  fecha: string;
+  inicio: string;
+  fin: string;
+  esFeriado: boolean;
+  expandido: boolean;
+}
+
+interface PlanGantt {
+  startDate: string;
+  endDate: string;
+  startDayIndex: number;
+  durationDays: number;
+  leftPx: number;
+  widthPx: number;
+  segments: SegmentoDia[];
+}
+
+interface RenglonGantt {
+  maquina: any;
+  fase: any;
+  color: string;
+  plan: PlanGantt;
+  colision: boolean;
+}
+
+@Component({
+  selector: 'app-gantt-planificador',
+  standalone: false,
+  templateUrl: './gantt-planificador.component.html',
+  styleUrls: ['./gantt-planificador.component.scss'],
+})
+export class GanttPlanificadorComponent implements OnInit, OnChanges {
+  @Input() maquinas: any[] = [];
+  @Input() horarioDefault: any;
+  @Input() calendario: any[] = [];
+  @Input() ordenes: any[] = [];
+  @Input() totalHojas: number = 0;
+  @Output() planChange = new EventEmitter<any[]>();
+
+  readonly PX_DIA = 110;
+  readonly DIAS_A_MOSTRAR = 30;
+
+  dias: DiaGantt[] = [];
+  renglones: RenglonGantt[] = [];
+  dragDisabled = false;
+
+  private readonly paleta = [
+    '#3b82f6',
+    '#48c78e',
+    '#f59e0b',
+    '#ef4444',
+    '#8b5cf6',
+    '#ec4899',
+    '#14b8a6',
+    '#f97316',
+    '#06b6d4',
+    '#84cc16',
+  ];
+
+  ngOnInit(): void {
+    moment.locale('es');
+    this.generarTimeline();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['maquinas'] && this.maquinas && this.maquinas.length > 0) {
+      this.inicializarPlan();
+    }
+  }
+
+  generarTimeline(): void {
+    this.dias = [];
+    const inicio = moment().startOf('day');
+    for (let i = 0; i < this.DIAS_A_MOSTRAR; i++) {
+      const fecha = moment(inicio).add(i, 'day');
+      const motivo = this.buscarMotivoFeriado(fecha);
+      const esFeriado = motivo !== null;
+      const esFinDeSemana = fecha.day() === 0 || fecha.day() === 6;
+      this.dias.push({
+        fecha,
+        esFeriado,
+        esFinDeSemana,
+        esHoy: fecha.isSame(moment(), 'day'),
+        nombreDia: fecha.format('dd'),
+        numDia: fecha.format('D'),
+        label: fecha.format('dd D/M'),
+        motivo,
+      });
+    }
+  }
+
+  buscarMotivoFeriado(fecha: moment.Moment): string | null {
+    const year = fecha.year();
+    const month = fecha.month();
+    const day = fecha.date();
+    const cal = this.calendario?.find((c) => c.year === year);
+    if (!cal) return null;
+    const feriado = cal.dias?.find((d) => d.month === month && d.day === day);
+    return feriado ? feriado.motivo || 'Feriado' : null;
+  }
+
+  esFeriado(fecha: moment.Moment): boolean {
+    return this.buscarMotivoFeriado(fecha) !== null;
+  }
+
+  horasTrabajoPorDia(): number {
+    if (!this.horarioDefault) return 8;
+    const inicio = moment(this.horarioDefault.de, 'HH:mm');
+    const fin = moment(this.horarioDefault.a, 'HH:mm');
+    let horas = fin.diff(inicio, 'hours');
+    if (horas > 6) horas -= 1;
+    return Math.max(horas, 1);
+  }
+
+  inicializarPlan(): void {
+    this.renglones = [];
+
+    const horasTrabajo = this.horasTrabajoPorDia();
+
+    const ultimaFechaPorMaquina: { [key: string]: moment.Moment } = {};
+    this.ordenes?.forEach((op) => {
+      op.fases?.forEach((fase) => {
+        const maqId = fase.maquina?._id || fase.maquina;
+        const finStr = fase.fases?.[0]?.final || fase.fases?.[0]?.fecha;
+        if (finStr) {
+          const fin = moment(finStr);
+          if (fin.isValid()) {
+            if (!ultimaFechaPorMaquina[maqId] || fin.isAfter(ultimaFechaPorMaquina[maqId])) {
+              ultimaFechaPorMaquina[maqId] = fin;
+            }
+          }
+        }
+      });
+    });
+
+    let colorIdx = 0;
+
+    this.maquinas.forEach((maquina) => {
+      const color = this.paleta[colorIdx % this.paleta.length];
+      colorIdx++;
+
+      const maqId = maquina._id;
+      const inicioBase = ultimaFechaPorMaquina[maqId]
+        ? moment(ultimaFechaPorMaquina[maqId]).add(1, 'day')
+        : moment().startOf('day');
+
+      // Encontrar el primer dia laboral a partir de inicioBase
+      while (this.esFeriado(inicioBase) || inicioBase.day() === 0) {
+        inicioBase.add(1, 'day');
+      }
+
+      const produccionDiaria = Math.max((maquina.trabajo || 1) * horasTrabajo, 1);
+      const hojasTotales = Math.max(this.totalHojas, 1);
+      let diasLaboralesNecesarios = Math.ceil(hojasTotales / produccionDiaria);
+      diasLaboralesNecesarios = Math.max(diasLaboralesNecesarios, 1);
+
+      const startDayIndex = Math.max(0, inicioBase.diff(moment().startOf('day'), 'days'));
+
+      const segments: SegmentoDia[] = [];
+      const cursor = moment(inicioBase);
+      let diasValidos = 0;
+
+      while (diasValidos < diasLaboralesNecesarios) {
+        const feriado = this.esFeriado(cursor);
+        const domingo = cursor.day() === 0;
+
+        segments.push({
+          fecha: cursor.format('YYYY-MM-DD'),
+          inicio: feriado || domingo ? '' : this.horarioDefault?.de || '08:00',
+          fin: feriado || domingo ? '' : this.horarioDefault?.a || '17:00',
+          esFeriado: feriado || domingo,
+          expandido: false,
+        });
+
+        if (!feriado && !domingo) {
+          diasValidos++;
+        }
+        cursor.add(1, 'day');
+        if (diasValidos > 200) break;
+      }
+
+      const totalDiasCalendario = segments.length;
+      const endDate = moment(segments[totalDiasCalendario - 1].fecha);
+
+      const plan: PlanGantt = {
+        startDate: inicioBase.format('YYYY-MM-DD'),
+        endDate: endDate.format('YYYY-MM-DD'),
+        startDayIndex,
+        durationDays: totalDiasCalendario,
+        leftPx: startDayIndex * this.PX_DIA,
+        widthPx: totalDiasCalendario * this.PX_DIA,
+        segments,
+      };
+
+      maquina.fases?.forEach((fase) => {
+        this.renglones.push({
+          maquina,
+          fase,
+          color,
+          plan: this.clonarPlan(plan),
+          colision: false,
+        });
+      });
+    });
+
+    this.detectarColisiones();
+    this.emitirPlan();
+  }
+
+  clonarPlan(plan: PlanGantt): PlanGantt {
+    return {
+      ...plan,
+      segments: plan.segments.map((s) => ({ ...s })),
+    };
+  }
+
+  onBarDragEnd(event: CdkDragEnd, renglonIndex: number): void {
+    const renglon = this.renglones[renglonIndex];
+    const dragPos = event.source.getFreeDragPosition();
+
+    let newLeft = Math.round(dragPos.x / this.PX_DIA) * this.PX_DIA;
+    newLeft = Math.max(0, newLeft);
+
+    const maxLeft = (this.DIAS_A_MOSTRAR - renglon.plan.durationDays) * this.PX_DIA;
+    if (newLeft > maxLeft) newLeft = Math.max(0, maxLeft);
+
+    renglon.plan.leftPx = newLeft;
+    renglon.plan.startDayIndex = newLeft / this.PX_DIA;
+
+    const nuevaFechaInicio = moment().startOf('day').add(renglon.plan.startDayIndex, 'days');
+    renglon.plan.startDate = nuevaFechaInicio.format('YYYY-MM-DD');
+
+    this.reconstruirSegmentos(renglon);
+
+    event.source.setFreeDragPosition({ x: 0, y: 0 });
+
+    this.detectarColisiones();
+    this.emitirPlan();
+  }
+
+  onBarResizeEnd(event: ResizeEvent, renglonIndex: number): void {
+    this.dragDisabled = true;
+    const renglon = this.renglones[renglonIndex];
+
+    if (event.rectangle.width) {
+      let newWidth = Math.round(event.rectangle.width / this.PX_DIA) * this.PX_DIA;
+      newWidth = Math.max(this.PX_DIA, newWidth);
+
+      const maxRight = this.DIAS_A_MOSTRAR * this.PX_DIA;
+      if (renglon.plan.leftPx + newWidth > maxRight) {
+        newWidth = maxRight - renglon.plan.leftPx;
+      }
+
+      renglon.plan.widthPx = newWidth;
+      const nuevosDias = Math.round(newWidth / this.PX_DIA);
+      renglon.plan.durationDays = nuevosDias;
+
+      const fechaFin = moment(renglon.plan.startDate).add(nuevosDias - 1, 'days');
+      renglon.plan.endDate = fechaFin.format('YYYY-MM-DD');
+
+      this.reconstruirSegmentos(renglon);
+    }
+
+    this.dragDisabled = false;
+    this.detectarColisiones();
+    this.emitirPlan();
+  }
+
+  reconstruirSegmentos(renglon: RenglonGantt): void {
+    const fechaInicio = moment(renglon.plan.startDate);
+    const nuevosSegments: SegmentoDia[] = [];
+    const cursor = moment(fechaInicio);
+
+    for (let i = 0; i < renglon.plan.durationDays; i++) {
+      const feriado = this.esFeriado(cursor);
+      const domingo = cursor.day() === 0;
+      const existente = renglon.plan.segments.find((s) => s.fecha === cursor.format('YYYY-MM-DD'));
+
+      nuevosSegments.push({
+        fecha: cursor.format('YYYY-MM-DD'),
+        inicio: feriado || domingo ? '' : existente?.inicio || this.horarioDefault?.de || '08:00',
+        fin: feriado || domingo ? '' : existente?.fin || this.horarioDefault?.a || '17:00',
+        esFeriado: feriado || domingo,
+        expandido: existente?.expandido || false,
+      });
+      cursor.add(1, 'day');
+    }
+
+    renglon.plan.segments = nuevosSegments;
+  }
+
+  detectarColisiones(): void {
+    const porMaquina: { [key: string]: RenglonGantt[] } = {};
+    this.renglones.forEach((r) => {
+      const id = r.maquina._id || r.maquina.nombre;
+      if (!porMaquina[id]) porMaquina[id] = [];
+      porMaquina[id].push(r);
+    });
+
+    this.renglones.forEach((r) => (r.colision = false));
+
+    Object.values(porMaquina).forEach((grupo) => {
+      for (let i = 0; i < grupo.length; i++) {
+        for (let j = i + 1; j < grupo.length; j++) {
+          const a = grupo[i].plan;
+          const b = grupo[j].plan;
+          const aEnd = a.leftPx + a.widthPx;
+          const bEnd = b.leftPx + b.widthPx;
+          if (a.leftPx < bEnd && b.leftPx < aEnd) {
+            grupo[i].colision = true;
+            grupo[j].colision = true;
+          }
+        }
+      }
+    });
+  }
+
+  toggleSegmento(renglonIndex: number, segIndex: number): void {
+    const seg = this.renglones[renglonIndex].plan.segments[segIndex];
+    if (!seg.esFeriado) {
+      seg.expandido = !seg.expandido;
+    }
+  }
+
+  actualizarHorario(renglonIndex: number, segIndex: number, inicio: string, fin: string): void {
+    const seg = this.renglones[renglonIndex].plan.segments[segIndex];
+    seg.inicio = inicio;
+    seg.fin = fin;
+    seg.expandido = false;
+    this.emitirPlan();
+  }
+
+  resetearHorario(renglonIndex: number, segIndex: number): void {
+    const seg = this.renglones[renglonIndex].plan.segments[segIndex];
+    seg.inicio = this.horarioDefault?.de || '08:00';
+    seg.fin = this.horarioDefault?.a || '17:00';
+    seg.expandido = false;
+    this.emitirPlan();
+  }
+
+  emitirPlan(): void {
+    const resultado = this.renglones.map((r) => ({
+      maquina: r.maquina,
+      nombre: r.fase?.nombre || r.maquina.fases?.[0]?.nombre || '',
+      fases: [
+        {
+          width: `${r.plan.widthPx}px`,
+          fecha: r.plan.startDate,
+          final: r.plan.endDate,
+          inicio: r.plan.segments.map((s) => s.inicio),
+          fin: r.plan.segments.map((s) => s.fin),
+          date: r.plan.segments.map((s) => s.expandido),
+        },
+      ],
+    }));
+    this.planChange.emit(resultado);
+  }
+
+  get anchoTimeline(): number {
+    return this.DIAS_A_MOSTRAR * this.PX_DIA;
+  }
+
+  get hayColision(): boolean {
+    return this.renglones.some((r) => r.colision);
+  }
+
+  get horasTrabajoLabel(): string {
+    const h = this.horasTrabajoPorDia();
+    return `${h}h/día`;
+  }
+}
