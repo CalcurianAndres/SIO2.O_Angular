@@ -64,6 +64,17 @@
         </div>
 
         <div class="gantt-track" [style.width.px]="anchoTimelinePx">
+          <!-- Ghost blocks: occupied periods from existing orders -->
+          <div
+            *ngFor="let bloqueo of renglon.bloqueos"
+            class="gantt-ghost"
+            [style.left.px]="bloqueo.leftPx"
+            [style.width.px]="bloqueo.widthPx"
+            [title]="bloqueo.label + ': ' + bloqueo.fechaInicio + ' → ' + bloqueo.fechaFin"
+          >
+            <span class="ghost-label">{{ bloqueo.label }}</span>
+          </div>
+
           <div
             class="gantt-bar"
             [style.left.px]="renglon.plan.leftPx"

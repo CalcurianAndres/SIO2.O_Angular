@@ -226,6 +226,41 @@
   min-height: 56px;
 }
 
+/* Ghost blocks: occupied periods from existing orders */
+.gantt-ghost {
+  position: absolute;
+  top: 6px;
+  height: 44px;
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--text-muted) 18%, transparent),
+    color-mix(in srgb, var(--text-muted) 18%, transparent) 8px,
+    color-mix(in srgb, var(--text-muted) 10%, transparent) 8px,
+    color-mix(in srgb, var(--text-muted) 10%, transparent) 16px
+  );
+  border: 2px dashed var(--text-muted);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ghost-label {
+  font-size: 0.6rem;
+  font-family: 'Gilroy', sans-serif;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0.5rem;
+}
+
 /* Bar */
 .gantt-bar {
   position: absolute;

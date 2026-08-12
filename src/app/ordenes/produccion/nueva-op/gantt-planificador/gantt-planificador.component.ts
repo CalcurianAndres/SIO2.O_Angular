@@ -32,12 +32,22 @@ interface PlanGantt {
   segments: SegmentoDia[];
 }
 
+interface BloqueoOcupado {
+  leftPx: number;
+  widthPx: number;
+  label: string;
+  fechaInicio: string;
+  fechaFin: string;
+}
+
 interface RenglonGantt {
   maquina: any;
   fase: any;
   color: string;
   plan: PlanGantt;
   colision: boolean;
+  bloqueos: BloqueoOcupado[];
+  minLeftPx: number;
 }
 
 @Component({
@@ -135,18 +145,37 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
     this.renglones = [];
 
     const horasTrabajo = this.horasTrabajoPorDia();
+    const hoy = moment().startOf('day');
 
     const ultimaFechaPorMaquina: { [key: string]: moment.Moment } = {};
+    const bloqueosPorMaquina: { [key: string]: BloqueoOcupado[] } = {};
+
     this.ordenes?.forEach((op) => {
+      const opLabel = op.numero_op || 'OP';
       op.fases?.forEach((fase) => {
         const maqId = fase.maquina?._id || fase.maquina;
+        const fechaStr = fase.fases?.[0]?.fecha;
         const finStr = fase.fases?.[0]?.final || fase.fases?.[0]?.fecha;
-        if (finStr) {
+        if (finStr && fechaStr) {
+          const inicio = moment(fechaStr);
           const fin = moment(finStr);
-          if (fin.isValid()) {
+
+          if (inicio.isValid() && fin.isValid()) {
             if (!ultimaFechaPorMaquina[maqId] || fin.isAfter(ultimaFechaPorMaquina[maqId])) {
               ultimaFechaPorMaquina[maqId] = fin;
             }
+
+            const leftPx = Math.max(0, inicio.diff(hoy, 'days')) * this.PX_DIA;
+            const widthPx = Math.max(this.PX_DIA, (fin.diff(inicio, 'days') + 1) * this.PX_DIA);
+
+            if (!bloqueosPorMaquina[maqId]) bloqueosPorMaquina[maqId] = [];
+            bloqueosPorMaquina[maqId].push({
+              leftPx,
+              widthPx,
+              label: opLabel,
+              fechaInicio: inicio.format('YYYY-MM-DD'),
+              fechaFin: fin.format('YYYY-MM-DD'),
+            });
           }
         }
       });
@@ -154,21 +183,24 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
 
     let colorIdx = 0;
 
-    this.maquinas.forEach((maquina) => {
+    this.maquinas.forEach((maquina, maqIdx) => {
       const color = this.colores && this.colores[colorIdx]
         ? this.colores[colorIdx]
         : this.paleta[colorIdx % this.paleta.length];
       colorIdx++;
 
       const maqId = maquina._id;
-      const inicioBase = ultimaFechaPorMaquina[maqId]
+      const bloqueosMaquina = bloqueosPorMaquina[maqId] || [];
+
+      let inicioBase = ultimaFechaPorMaquina[maqId]
         ? moment(ultimaFechaPorMaquina[maqId]).add(1, 'day')
         : moment().startOf('day');
 
-      // Encontrar el primer dia laboral a partir de inicioBase
       while (this.esFeriado(inicioBase) || inicioBase.day() === 0) {
         inicioBase.add(1, 'day');
       }
+
+      const minLeftPx = Math.max(0, inicioBase.diff(hoy, 'days')) * this.PX_DIA;
 
       const produccionDiaria = Math.max((maquina.trabajo || 1) * horasTrabajo, 1);
       const hojasTotales = Math.max(this.totalHojas, 1);
@@ -220,6 +252,8 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
           color,
           plan: this.clonarPlan(plan),
           colision: false,
+          bloqueos: bloqueosMaquina,
+          minLeftPx,
         });
       });
     });
@@ -242,12 +276,18 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
   onBarDragEnd(event: CdkDragEnd, renglonIndex: number): void {
     const renglon = this.renglones[renglonIndex];
     const dragPos = event.source.getFreeDragPosition();
+    const currentLeft = renglon.plan.leftPx;
 
-    let newLeft = Math.round(dragPos.x / this.PX_DIA) * this.PX_DIA;
-    newLeft = Math.max(0, newLeft);
+    let newLeft = currentLeft + Math.round(dragPos.x / this.PX_DIA) * this.PX_DIA;
+    newLeft = Math.max(renglon.minLeftPx, newLeft);
 
     const maxLeft = (this.totalDiasTimeline - renglon.plan.durationDays) * this.PX_DIA;
-    if (newLeft > maxLeft) newLeft = Math.max(0, maxLeft);
+    if (newLeft > maxLeft) newLeft = Math.max(renglon.minLeftPx, maxLeft);
+
+    const blocked = this.calcularBloqueos(renglonIndex);
+    if (blocked.length > 0) {
+      newLeft = this.resolverColisionArrastre(newLeft, renglon.plan.widthPx, blocked);
+    }
 
     renglon.plan.leftPx = newLeft;
     renglon.plan.startDayIndex = newLeft / this.PX_DIA;
@@ -276,6 +316,11 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
         newWidth = maxRight - renglon.plan.leftPx;
       }
 
+      const blocked = this.calcularBloqueos(renglonIndex);
+      if (blocked.length > 0) {
+        newWidth = this.resolverColisionResize(renglon.plan.leftPx, newWidth, blocked);
+      }
+
       renglon.plan.widthPx = newWidth;
       const nuevosDias = Math.round(newWidth / this.PX_DIA);
       renglon.plan.durationDays = nuevosDias;
@@ -289,6 +334,67 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
     this.dragDisabled = false;
     this.detectarColisiones();
     this.emitirPlan();
+  }
+
+  calcularBloqueos(renglonIndex: number): { leftPx: number; widthPx: number }[] {
+    const renglon = this.renglones[renglonIndex];
+    const maqId = renglon.maquina._id || renglon.maquina.nombre;
+    const bloqueos: { leftPx: number; widthPx: number }[] = [];
+
+    renglon.bloqueos?.forEach((b) => bloqueos.push({ leftPx: b.leftPx, widthPx: b.widthPx }));
+
+    this.renglones.forEach((r, idx) => {
+      if (idx !== renglonIndex) {
+        const rMaqId = r.maquina._id || r.maquina.nombre;
+        if (rMaqId === maqId) {
+          bloqueos.push({ leftPx: r.plan.leftPx, widthPx: r.plan.widthPx });
+        }
+      }
+    });
+
+    return bloqueos;
+  }
+
+  resolverColisionArrastre(newLeft: number, width: number, bloqueos: { leftPx: number; widthPx: number }[]): number {
+    let resolved = newLeft;
+    let changed = true;
+    let iterations = 0;
+
+    while (changed && iterations < 50) {
+      changed = false;
+      for (const b of bloqueos) {
+        const bEnd = b.leftPx + b.widthPx;
+        const rEnd = resolved + width;
+        if (resolved < bEnd && b.leftPx < rEnd) {
+          resolved = bEnd;
+          changed = true;
+        }
+      }
+      iterations++;
+    }
+
+    return resolved;
+  }
+
+  resolverColisionResize(leftPx: number, width: number, bloqueos: { leftPx: number; widthPx: number }[]): number {
+    let resolved = width;
+    let changed = true;
+    let iterations = 0;
+
+    while (changed && iterations < 50) {
+      changed = false;
+      for (const b of bloqueos) {
+        const bEnd = b.leftPx + b.widthPx;
+        const rEnd = leftPx + resolved;
+        if (leftPx < bEnd && b.leftPx < rEnd) {
+          resolved = Math.max(this.PX_DIA, b.leftPx - leftPx);
+          changed = true;
+        }
+      }
+      iterations++;
+    }
+
+    return resolved;
   }
 
   reconstruirSegmentos(renglon: RenglonGantt): void {
