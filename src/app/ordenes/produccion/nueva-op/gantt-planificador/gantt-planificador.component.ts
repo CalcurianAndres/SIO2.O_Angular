@@ -52,6 +52,7 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
   @Input() calendario: any[] = [];
   @Input() ordenes: any[] = [];
   @Input() totalHojas: number = 0;
+  @Input() colores: string[] = [];
   @Output() planChange = new EventEmitter<any[]>();
 
   readonly PX_DIA = 110;
@@ -88,7 +89,8 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
   generarTimeline(): void {
     this.dias = [];
     const inicio = moment().startOf('day');
-    for (let i = 0; i < this.DIAS_A_MOSTRAR; i++) {
+    const totalDias = this.DIAS_A_MOSTRAR + 15;
+    for (let i = 0; i < totalDias; i++) {
       const fecha = moment(inicio).add(i, 'day');
       const motivo = this.buscarMotivoFeriado(fecha);
       const esFeriado = motivo !== null;
@@ -153,7 +155,9 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
     let colorIdx = 0;
 
     this.maquinas.forEach((maquina) => {
-      const color = this.paleta[colorIdx % this.paleta.length];
+      const color = this.colores && this.colores[colorIdx]
+        ? this.colores[colorIdx]
+        : this.paleta[colorIdx % this.paleta.length];
       colorIdx++;
 
       const maqId = maquina._id;
@@ -231,6 +235,10 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
     };
   }
 
+  get totalDiasTimeline(): number {
+    return this.dias.length;
+  }
+
   onBarDragEnd(event: CdkDragEnd, renglonIndex: number): void {
     const renglon = this.renglones[renglonIndex];
     const dragPos = event.source.getFreeDragPosition();
@@ -238,7 +246,7 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
     let newLeft = Math.round(dragPos.x / this.PX_DIA) * this.PX_DIA;
     newLeft = Math.max(0, newLeft);
 
-    const maxLeft = (this.DIAS_A_MOSTRAR - renglon.plan.durationDays) * this.PX_DIA;
+    const maxLeft = (this.totalDiasTimeline - renglon.plan.durationDays) * this.PX_DIA;
     if (newLeft > maxLeft) newLeft = Math.max(0, maxLeft);
 
     renglon.plan.leftPx = newLeft;
@@ -263,7 +271,7 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
       let newWidth = Math.round(event.rectangle.width / this.PX_DIA) * this.PX_DIA;
       newWidth = Math.max(this.PX_DIA, newWidth);
 
-      const maxRight = this.DIAS_A_MOSTRAR * this.PX_DIA;
+      const maxRight = this.totalDiasTimeline * this.PX_DIA;
       if (renglon.plan.leftPx + newWidth > maxRight) {
         newWidth = maxRight - renglon.plan.leftPx;
       }
@@ -374,7 +382,16 @@ export class GanttPlanificadorComponent implements OnInit, OnChanges {
   }
 
   get anchoTimeline(): number {
-    return this.DIAS_A_MOSTRAR * this.PX_DIA;
+    let maxRight = this.DIAS_A_MOSTRAR * this.PX_DIA;
+    this.renglones.forEach((r) => {
+      const right = r.plan.leftPx + r.plan.widthPx;
+      if (right > maxRight) maxRight = right;
+    });
+    return maxRight;
+  }
+
+  get anchoTimelinePx(): number {
+    return this.anchoTimeline + this.PX_DIA;
   }
 
   get hayColision(): boolean {

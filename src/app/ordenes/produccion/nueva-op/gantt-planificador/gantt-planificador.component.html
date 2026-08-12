@@ -22,11 +22,11 @@
   </div>
 
   <div class="gantt-scroll-container">
-    <div class="gantt-grid" [style.width.px]="250 + anchoTimeline">
+    <div class="gantt-grid" [style.width.px]="250 + anchoTimelinePx">
       <!-- Header row -->
       <div class="gantt-header">
         <div class="gantt-corner">Fase / Máquina</div>
-        <div class="gantt-days-header" [style.width.px]="anchoTimeline">
+        <div class="gantt-days-header" [style.width.px]="anchoTimelinePx">
           <div
             *ngFor="let d of dias; let i = index"
             class="day-header-cell"
@@ -43,7 +43,7 @@
       </div>
 
       <!-- Grid background -->
-      <div class="gantt-grid-bg" [style.width.px]="250 + anchoTimeline">
+      <div class="gantt-grid-bg" [style.width.px]="250 + anchoTimelinePx">
         <div class="grid-label-col" [style.width.px]="250"></div>
         <div
           *ngFor="let d of dias; let i = index"
@@ -56,14 +56,14 @@
       </div>
 
       <!-- Row for each machine+fase -->
-      <div *ngFor="let renglon of renglones; let r = index" class="gantt-row" [style.width.px]="250 + anchoTimeline">
+      <div *ngFor="let renglon of renglones; let r = index" class="gantt-row" [style.width.px]="250 + anchoTimelinePx">
         <div class="gantt-label" [style.border-left-color]="renglon.color">
           <span class="fase-label">{{ renglon.fase?.nombre || '—' }}</span>
           <span class="maq-label">{{ renglon.maquina?.nombre }}</span>
           <span class="date-range">{{ renglon.plan.startDate }} → {{ renglon.plan.endDate }}</span>
         </div>
 
-        <div class="gantt-track" [style.width.px]="anchoTimeline">
+        <div class="gantt-track" [style.width.px]="anchoTimelinePx">
           <div
             class="gantt-bar"
             [style.left.px]="renglon.plan.leftPx"
