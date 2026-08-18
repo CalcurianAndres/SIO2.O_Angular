@@ -7,6 +7,65 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 PdfMakeWrapper.setFonts(pdfFonts);
 
 const STORAGE_KEY = '_mis_trabajos_';
+const STORAGE_VERSION_KEY = '_mis_trabajos_version_';
+const SEED_VERSION = 2; // Bump this when seed data changes to auto-merge new entries
+
+const SEED_DATA: any[] = [
+  { fecha: '25/05/2026', horas: 8, descripcion: 'Registro de productos en el sistema' },
+  { fecha: '26/05/2026', horas: 8, descripcion: 'Organización del módulo de compras y proveedores' },
+  { fecha: '29/05/2026', horas: 8, descripcion: 'Mejoras en tablas y orden de información del sistema' },
+  { fecha: '05/06/2026', horas: 8, descripcion: 'Especificaciones, clientes, proveedores, países por API' },
+  { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de OCP' },
+  { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en OCP' },
+  { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama empleados, departamentos/cargos, +58, wizard' },
+  { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones filtros, cierre tareas, manual de diseño' },
+  { fecha: '17/06/2026', horas: 8, descripcion: 'Wizard empleados, calendario SEM, sistema Pantone' },
+  { fecha: '19/06/2026', horas: 8, descripcion: 'Devaluación salarial, cascada unidad/subunidad, tasa del día' },
+  { fecha: '23/06/2026', horas: 8, descripcion: 'Bug modal empleado + tasa BCV directa de API' },
+  { fecha: '03/07/2026', horas: 8, descripcion: 'Formato numérico global, ordenamiento cargos, calendario' },
+  { fecha: '07/07/2026', horas: 8, descripcion: 'Correcciones UI laboratorio + duplicidad NE SIO v1' },
+  { fecha: '08/07/2026', horas: 8, descripcion: 'OCP rediseño + recepción: skip-lab, tabs almacenes, soft-delete' },
+  { fecha: '09/07/2026', horas: 8, descripcion: 'Secciones del almacén principal sin crear documento nuevo' },
+  { fecha: '14/07/2026', horas: 8, descripcion: 'Secciones del almacén principal + bobinas agrupadas por almacén' },
+  { fecha: '16/07/2026', horas: 8, descripcion: 'Nuevo flujo de estados recepción (Verificado, revertir)' },
+  { fecha: '17/07/2026', horas: 8, descripcion: 'Simplificar recibos, guardar detalles recepción, fix SweetAlert2' },
+  { fecha: '21/07/2026', horas: 8, descripcion: 'Reestructura conversiones/convertidoras + módulo servicios + design system' },
+  { fecha: '22/07/2026', horas: 8, descripcion: 'Conversión de convertidoras a proveedores con servicio + fix cálculo peso' },
+  { fecha: '30/07/2026', horas: 8, descripcion: 'Conversión de convertidoras a proveedores + fix cálculo peso y race condition' },
+  { fecha: '31/07/2026', horas: 8, descripcion: 'Descuento de bobina con histórico y mejoras en UI de módulos' },
+  { fecha: '04/08/2026', horas: 8, descripcion: 'Mejoras en módulo de laboratorio y bobinas' },
+  { fecha: '05/08/2026', horas: 8, descripcion: 'Desarrollo de análisis de tinta interactivo con comparación de colores' },
+  { fecha: '07/08/2026', horas: 8, descripcion: 'Análisis de tinta: comparación ΔE en rollos y configuración de usuario admin' },
+  { fecha: '11/08/2026', horas: 8, descripcion: 'Fix tintas wizard OP + diseño planificador Gantt interactivo' },
+  { fecha: '12/08/2026', horas: 8, descripcion: 'Implementación Gantt: drag & drop, resize, ghosts y colisiones' },
+];
+
+function loadTareas(): any[] {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  const storedVersion = parseInt(localStorage.getItem(STORAGE_VERSION_KEY) || '0', 10);
+
+  if (!stored) {
+    // First time: save seed data with current version
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_DATA));
+    localStorage.setItem(STORAGE_VERSION_KEY, String(SEED_VERSION));
+    return [...SEED_DATA];
+  }
+
+  const tareas: any[] = JSON.parse(stored);
+
+  if (storedVersion < SEED_VERSION) {
+    // Merge: append seed entries whose fecha doesn't exist in stored data
+    const existingDates = new Set(tareas.map((t: any) => t.fecha));
+    const newEntries = SEED_DATA.filter((s: any) => !existingDates.has(s.fecha));
+    if (newEntries.length > 0) {
+      tareas.push(...newEntries);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tareas));
+    }
+    localStorage.setItem(STORAGE_VERSION_KEY, String(SEED_VERSION));
+  }
+
+  return tareas;
+}
 
 @Component({
   selector: 'app-recibos',
@@ -16,76 +75,7 @@ const STORAGE_KEY = '_mis_trabajos_';
   imports: [CommonModule, FormsModule],
 })
 export class RecibosComponent {
-  tareas: any[] = JSON.parse(
-    localStorage.getItem(STORAGE_KEY) ||
-      JSON.stringify([
-        { fecha: '25/05/2026', horas: 8, descripcion: 'Registro de productos en el sistema' },
-        { fecha: '26/05/2026', horas: 8, descripcion: 'Organización del módulo de compras y proveedores' },
-        { fecha: '29/05/2026', horas: 8, descripcion: 'Mejoras en tablas y orden de información del sistema' },
-        { fecha: '05/06/2026', horas: 8, descripcion: 'Especificaciones, clientes, proveedores, países por API' },
-        { fecha: '09/06/2026', horas: 8, descripcion: 'Diseño e implementación del formato de OCP' },
-        { fecha: '10/06/2026', horas: 8, descripcion: 'Ajustes finales de diseño y totales en OCP' },
-        { fecha: '12/06/2026', horas: 8, descripcion: 'Organigrama empleados, departamentos/cargos, +58, wizard' },
-        { fecha: '16/06/2026', horas: 8, descripcion: 'Correcciones filtros, cierre tareas, manual de diseño' },
-        { fecha: '17/06/2026', horas: 8, descripcion: 'Wizard empleados, calendario SEM, sistema Pantone' },
-        { fecha: '19/06/2026', horas: 8, descripcion: 'Devaluación salarial, cascada unidad/subunidad, tasa del día' },
-        { fecha: '23/06/2026', horas: 8, descripcion: 'Bug modal empleado + tasa BCV directa de API' },
-        { fecha: '03/07/2026', horas: 8, descripcion: 'Formato numérico global, ordenamiento cargos, calendario' },
-        { fecha: '07/07/2026', horas: 8, descripcion: 'Correcciones UI laboratorio + duplicidad NE SIO v1' },
-        {
-          fecha: '08/07/2026',
-          horas: 8,
-          descripcion: 'OCP rediseño + recepción: skip-lab, tabs almacenes, soft-delete',
-        },
-        { fecha: '09/07/2026', horas: 8, descripcion: 'Secciones del almacén principal sin crear documento nuevo' },
-        {
-          fecha: '14/07/2026',
-          horas: 8,
-          descripcion: 'Secciones del almacén principal + bobinas agrupadas por almacén',
-        },
-        { fecha: '16/07/2026', horas: 8, descripcion: 'Nuevo flujo de estados recepción (Verificado, revertir)' },
-        {
-          fecha: '17/07/2026',
-          horas: 8,
-          descripcion: 'Simplificar recibos, guardar detalles recepción, fix SweetAlert2',
-        },
-        {
-          fecha: '21/07/2026',
-          horas: 8,
-          descripcion: 'Reestructura conversiones/convertidoras + módulo servicios + design system',
-        },
-        {
-          fecha: '22/07/2026',
-          horas: 8,
-          descripcion: 'Conversión de convertidoras a proveedores con servicio + fix cálculo peso',
-        },
-        {
-          fecha: '30/07/2026',
-          horas: 8,
-          descripcion: 'Conversión de convertidoras a proveedores + fix cálculo peso y race condition',
-        },
-        {
-          fecha: '31/07/2026',
-          horas: 8,
-          descripcion: 'Descuento de bobina con histórico y mejoras en UI de módulos',
-        },
-        {
-          fecha: '04/08/2026',
-          horas: 8,
-          descripcion: 'Mejoras en módulo de laboratorio y bobinas',
-        },
-        {
-          fecha: '05/08/2026',
-          horas: 8,
-          descripcion: 'Desarrollo de análisis de tinta interactivo con comparación de colores',
-        },
-        {
-          fecha: '07/08/2026',
-          horas: 8,
-          descripcion: 'Análisis de tinta: comparación ΔE en rollos y configuración de usuario admin',
-        },
-      ]),
-  );
+  tareas: any[] = loadTareas();
 
   nuevaTarea = { fecha: '', horas: 8, descripcion: '' };
   tarifaHora = 8;
