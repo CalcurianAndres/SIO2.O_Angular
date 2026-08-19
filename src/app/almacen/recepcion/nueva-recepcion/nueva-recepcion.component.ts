@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { OpoligraficaService } from 'src/app/services/opoligrafica.service';
 import * as XLSX from 'xlsx';
 import { BobinasService } from 'src/app/services/bobinas.service';
+import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
 
 @Component({
   selector: 'app-nueva-recepcion',
@@ -20,13 +21,29 @@ import { BobinasService } from 'src/app/services/bobinas.service';
 })
 export class NuevaRecepcionComponent implements OnChanges {
   @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('documentoInput') documentoInput!: ElementRef;
 
   triggerFileInputClick() {
     this.fileInput.nativeElement.click();
   }
 
+  triggerDocumentoInputClick(capture: boolean = false) {
+    if (capture) {
+      this.documentoInput.nativeElement.setAttribute('capture', 'environment');
+    } else {
+      this.documentoInput.nativeElement.removeAttribute('capture');
+    }
+    this.documentoInput.nativeElement.click();
+  }
+
   public opcionesProveedor;
   public guardando: boolean = false;
+
+  public documentosArchivos: File[] = [];
+  public documentosPreview: string[] = [];
+  get tieneCamara(): boolean {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  }
 
   public infoTexto: string = '';
   public sobranteTexto: string = '';
@@ -57,6 +74,8 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.guardando = false;
     this.infoTexto = '';
     this.sobranteTexto = '';
+    this.documentosArchivos = [];
+    this.documentosPreview = [];
   }
 
   constructor(
@@ -67,6 +86,7 @@ export class NuevaRecepcionComponent implements OnChanges {
     public api: RecepcionService,
     public bobinas: BobinasService,
     public almacenService: AlmacenService,
+    private subirArchivos: SubirArchivosService,
   ) {}
 
   @Input() nueva!: boolean;
@@ -427,6 +447,16 @@ export class NuevaRecepcionComponent implements OnChanges {
       }),
     };
 
+    this.guardando = true;
+    const recepcionId = await this.api.GuardarRecepcion(data);
+
+    if (recepcionId && this.documentosArchivos.length > 0) {
+      const filenames = await this.subirDocumentos(recepcionId);
+      if (filenames.length > 0) {
+        await this.api.GuardarRecepcion({ _id: recepcionId, documentos: filenames });
+      }
+    }
+
     this.proveedor_ = '';
     this.tipo_documento = 'F - ';
     this.documento_ = '';
@@ -436,8 +466,8 @@ export class NuevaRecepcionComponent implements OnChanges {
     this.selectedSeccionId = '';
     this.f_recepcion = '';
     this.transportista_ = '';
-    this.guardando = true;
-    await this.api.GuardarRecepcion(data);
+    this.documentosArchivos = [];
+    this.documentosPreview = [];
     this.guardando = false;
     this.onCloseModal.emit();
 
@@ -563,7 +593,38 @@ export class NuevaRecepcionComponent implements OnChanges {
     }, 1000);
   };
 
+  onDocumentoSelected(event: any) {
+    const files: FileList = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file.type.match(/^image\/(png|jpe?g)|application\/pdf$/)) continue;
+      this.documentosArchivos.push(file);
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.documentosPreview.push(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    event.target.value = '';
+  }
+
+  eliminarDocumento(index: number) {
+    this.documentosArchivos.splice(index, 1);
+    this.documentosPreview.splice(index, 1);
+  }
+
+  private async subirDocumentos(recepcionId: string): Promise<string[]> {
+    const filenames: string[] = [];
+    for (const archivo of this.documentosArchivos) {
+      const img = await this.subirArchivos.actualizarFoto(archivo, 'recepcion', recepcionId);
+      if (img) filenames.push(img);
+    }
+    return filenames;
+  }
+
   cerrar() {
+    this.documentosArchivos = [];
+    this.documentosPreview = [];
     this.onCloseModal.emit();
   }
 

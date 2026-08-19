@@ -75,8 +75,20 @@ export class RecepcionService {
     this.socket.io.emit('CLIENTE:NuevoReclamo', data);
   }
 
-  GuardarRecepcion(data: any) {
-    this.socket.io.emit('CLIENTE:NuevaRecepcion', data);
+  GuardarRecepcion(data: any): Promise<string | null> {
+    return new Promise((resolve) => {
+      const handler = (resp: any) => {
+        this.socket.io.off('SERVIDOR:RecepcionCreada', handler);
+        resolve(resp?._id || null);
+      };
+      this.socket.io.on('SERVIDOR:RecepcionCreada', handler);
+      this.socket.io.emit('CLIENTE:NuevaRecepcion', data);
+      // Si es edición (data._id existe), no esperamos RecepcionCreada
+      if (data._id) {
+        this.socket.io.off('SERVIDOR:RecepcionCreada', handler);
+        resolve(data._id);
+      }
+    });
   }
 
   NoticarRecepcion(id: string) {

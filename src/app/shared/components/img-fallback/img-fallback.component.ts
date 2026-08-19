@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ImgFallbackComponent {
   @Input() src: string | undefined;
-  @Input() tipo: 'empleado' | 'producto' | 'analisis' | 'plan' | undefined;
+  @Input() tipo: 'empleado' | 'producto' | 'analisis' | 'plan' | 'recepcion' | undefined;
   @Input() filename: string | undefined;
   @Input() cssClass = '';
   @Input() width: string | undefined;

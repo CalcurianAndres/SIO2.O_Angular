@@ -26,6 +26,8 @@ export class RecepcionComponent implements OnInit {
   public convertidora = '';
   public almacenar = false;
   public cargando: boolean = true;
+  public documentosVisibles: boolean = false;
+  public recepcionDocActual: any = null;
 
   public filterMode: string = 'home';
   public currentPage: number = 1;
@@ -604,6 +606,20 @@ export class RecepcionComponent implements OnInit {
     this.edicion = true; // Indica que se va a editar un material
     this.Material_selected = this.api.recepciones[x]; // Asigna el material seleccionado para editar
     this.n_word = y; // Asigna un valor a la variable n_word
+  }
+
+  verDocumentos(recepcion: any) {
+    this.recepcionDocActual = recepcion;
+    this.documentosVisibles = true;
+  }
+
+  cerrarDocumentos() {
+    this.documentosVisibles = false;
+    this.recepcionDocActual = null;
+  }
+
+  abrirDocumento(doc: string) {
+    window.open(`api/imagen/recepcion/${doc}`, '_blank');
   }
 
   // Función para notificar una recepción

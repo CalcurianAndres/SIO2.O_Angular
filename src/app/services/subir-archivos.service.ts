@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 export class SubirArchivosService {
   constructor() {}
 
-  async actualizarFoto(archivo: File, tipo: 'analisis' | 'producto' | 'empleado' | 'plan', id: string) {
+  async actualizarFoto(archivo: File, tipo: 'analisis' | 'producto' | 'empleado' | 'plan' | 'recepcion', id: string) {
     try {
       const url = `${environment.apiUrl}/upload/${tipo}/${id}`;
       const formData = new FormData();

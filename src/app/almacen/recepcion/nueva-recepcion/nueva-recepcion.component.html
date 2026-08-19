@@ -456,6 +456,38 @@
             </tbody>
           </table>
         </div>
+
+        <!-- ==================== SECCIÓN: DOCUMENTOS ==================== -->
+        <div style="padding: 0.75rem 1rem; border-top: 1px solid var(--border-color, #e0e0e0)">
+          <p class="has-text-weight-semibold is-size-7 mb-2">
+            <i class="fas fa-paperclip"></i> Factura y documentos financieros
+          </p>
+          <div class="buttons are-small">
+            <button class="button is-link is-outlined" (click)="triggerDocumentoInputClick(true)" *ngIf="tieneCamara">
+              <span class="icon"><i class="fas fa-camera"></i></span>
+              <span>Tomar foto</span>
+            </button>
+            <button class="button is-link is-outlined" (click)="triggerDocumentoInputClick(false)">
+              <span class="icon"><i class="fas fa-image"></i></span>
+              <span>Subir imagen</span>
+            </button>
+          </div>
+          <input
+            type="file"
+            #documentoInput
+            accept="image/*"
+            multiple
+            style="display: none"
+            (change)="onDocumentoSelected($event)"
+          />
+          <div class="documentos-preview" *ngIf="documentosPreview.length > 0">
+            <div class="documento-thumb" *ngFor="let preview of documentosPreview; index as i">
+              <img [src]="preview" alt="Documento {{ i + 1 }}" />
+              <button class="delete is-small documento-remove" (click)="eliminarDocumento(i)" title="Eliminar"></button>
+            </div>
+          </div>
+        </div>
+
         <div class="card-footer" style="padding: 0.75rem 1rem; justify-content: flex-end; gap: 0.5rem">
           <button class="button is-success" (click)="NuevoGuardarRegistro()" *ngIf="!conversion" [disabled]="guardando">
             <span class="icon"><i class="fas" [ngClass]="guardando ? 'fa-spinner fa-pulse' : 'fa-save'"></i></span>

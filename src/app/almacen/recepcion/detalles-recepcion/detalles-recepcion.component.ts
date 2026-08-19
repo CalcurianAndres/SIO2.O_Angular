@@ -33,6 +33,10 @@ export class DetallesRecepcionComponent {
     this.onCloseModal.emit();
   }
 
+  abrirDocumento(doc: string) {
+    window.open(`api/imagen/recepcion/${doc}`, '_blank');
+  }
+
   async guardar() {
     this.guardando = true;
     this.api.GuardarRecepcion(this.recepcion);

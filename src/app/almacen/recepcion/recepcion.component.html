@@ -15,6 +15,33 @@
 <app-comentarios [comentarios]="comentarios" [recepcion_id]="recepcion_id" (onCloseModal)="comentarios = false">
 </app-comentarios>
 
+<!-- ==================== MODAL: DOCUMENTOS ADJUNTOS ==================== -->
+<div class="modal" [ngClass]="{ 'is-active': documentosVisibles }">
+  <div class="modal-background" (click)="cerrarDocumentos()"></div>
+  <div class="modal-card" style="max-width: 700px">
+    <div class="modal-card-head">
+      <p class="modal-card-title fuente"><i class="fas fa-paperclip"></i> Documentos adjuntos</p>
+      <button class="delete red_cross" aria-label="close" (click)="cerrarDocumentos()"></button>
+    </div>
+    <div class="modal-card-body">
+      <p class="has-text-grey is-size-7 mb-3" *ngIf="recepcionDocActual">
+        {{ recepcionDocActual.proveedor?.nombre }} — Doc: {{ recepcionDocActual.documento }}
+      </p>
+      <div class="documentos-grid" *ngIf="recepcionDocActual?.documentos?.length > 0">
+        <div class="documento-card" *ngFor="let doc of recepcionDocActual.documentos; index as i">
+          <img [src]="'api/imagen/recepcion/' + doc" alt="Documento {{ i + 1 }}" (click)="abrirDocumento(doc)" />
+        </div>
+      </div>
+      <p class="has-text-centered has-text-grey" *ngIf="!recepcionDocActual?.documentos?.length">
+        No hay documentos adjuntos
+      </p>
+    </div>
+    <footer class="modal-card-foot" style="justify-content: flex-end">
+      <button class="button" (click)="cerrarDocumentos()">Cerrar</button>
+    </footer>
+  </div>
+</div>
+
 <app-page-layout>
   <app-section-header
     title="Recepción"
@@ -130,6 +157,13 @@
             </div>
           </div>
           <div class="order-header-actions">
+            <i
+              class="fas fa-paperclip"
+              style="color: var(--accent-blue); cursor: pointer; padding: 0.25rem"
+              (click)="$event.stopPropagation(); verDocumentos(recepcion)"
+              *ngIf="recepcion.documentos?.length > 0"
+              title="Documentos adjuntos"
+            ></i>
             <i
               class="fas fa-bell"
               style="color: var(--status-warning); cursor: pointer; padding: 0.25rem"
